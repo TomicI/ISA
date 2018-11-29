@@ -1,9 +1,24 @@
 package com.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Soba {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="soba_id")
+	private Long id;
+	@Column
 	private String oznakaSobe;
+	@Column
 	private Integer brojOsoba;
+	@Column
 	private Boolean zauzeta;
+	@Column
 	private Double cena;
 	
 	public Soba() {
@@ -32,5 +47,11 @@ public class Soba {
 	}
 	public void setCena(Double cena) {
 		this.cena = cena;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	} 
 }

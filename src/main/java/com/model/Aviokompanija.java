@@ -1,14 +1,32 @@
 package com.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+@Entity
 public class Aviokompanija {
+	@Column
 	private String naziv;
+	@Column
 	private String adresa;
+	@Column
 	private String opis;
+	@Column
 	private Double prosecnaOcena;
-	private ArrayList<Let> destinacije;
+	@OneToMany(mappedBy = "sediste")
+	private Set<Let> vozila = new HashSet<Let>();
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="aviokom_id")
+	private Long id;
 	
 	public Aviokompanija() {
 		super();
@@ -38,11 +56,22 @@ public class Aviokompanija {
 	public void setProsecnaOcena(Double prosecnaOcena) {
 		this.prosecnaOcena = prosecnaOcena;
 	}
-	public ArrayList<Let> getDestinacije() {
-		return destinacije;
+	
+
+	public Long getId() {
+		return id;
 	}
-	public void setDestinacije(ArrayList<Let> destinacije) {
-		this.destinacije = destinacije;
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Set<Let> getVozila() {
+		return vozila;
+	}
+
+	public void setVozila(Set<Let> vozila) {
+		this.vozila = vozila;
 	}
 	
 	

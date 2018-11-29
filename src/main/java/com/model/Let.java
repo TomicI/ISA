@@ -1,15 +1,33 @@
 package com.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+@Entity
 public class Let {
+	@Column
 	private String datum;
+	@Column
 	private Integer vreme;
+	@Column
 	private String polazak;
+	@Column
 	private String dolazak;
+	@Column
 	private Double cena;
-	private ArrayList<Sediste> sedista;
-
+	@OneToMany(mappedBy = "sediste")
+	private Set<Sediste> vozila = new HashSet<Sediste>();
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="let_id")
+	private Long id;
 	public Let() {
 		super();
 	}
@@ -26,12 +44,7 @@ public class Let {
 		this.vreme = vreme;
 	}
 
-	public ArrayList<Sediste> getSedista() {
-		return sedista;
-	}
-	public void setSedista(ArrayList<Sediste> sedista) {
-		this.sedista = sedista;
-	}
+	
 	public String getPolazak() {
 		return polazak;
 	}
@@ -50,6 +63,19 @@ public class Let {
 	public void setCena(Double cena) {
 		this.cena = cena;
 	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Set<Sediste> getVozila() {
+		return vozila;
+	}
+	public void setVozila(Set<Sediste> vozila) {
+		this.vozila = vozila;
+	}
+	
 	
 	
 }
