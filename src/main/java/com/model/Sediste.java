@@ -1,10 +1,13 @@
 package com.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Sediste {
@@ -18,6 +21,9 @@ public class Sediste {
 	private Integer red;
 	@Column
 	private Boolean zauzeto;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Let sedista;
 	
 	public Sediste() {
 		super();

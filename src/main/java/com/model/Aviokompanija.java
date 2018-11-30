@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,8 +22,9 @@ public class Aviokompanija {
 	private String opis;
 	@Column
 	private Double prosecnaOcena;
-	@OneToMany(mappedBy = "sediste")
-	private Set<Let> vozila = new HashSet<Let>();
+	
+	@OneToMany(mappedBy = "letovi",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Let> letovi = new HashSet<Let>();
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -67,11 +70,11 @@ public class Aviokompanija {
 	}
 
 	public Set<Let> getVozila() {
-		return vozila;
+		return letovi;
 	}
 
-	public void setVozila(Set<Let> vozila) {
-		this.vozila = vozila;
+	public void setVozila(Set<Let> letovi) {
+		this.letovi = letovi;
 	}
 	
 	

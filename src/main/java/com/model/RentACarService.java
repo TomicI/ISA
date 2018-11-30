@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,7 +25,7 @@ public class RentACarService {
 	private String opis;
 	@Column
 	private Double prosecnaOcena;
-	@OneToMany(mappedBy = "vozilo")
+	@OneToMany(mappedBy = "vozilo",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Vozilo> vozila = new HashSet<Vozilo>();
 	@Column
 	private ArrayList<String> filijale;

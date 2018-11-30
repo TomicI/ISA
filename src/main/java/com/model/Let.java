@@ -1,14 +1,16 @@
 package com.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 @Entity
 public class Let {
@@ -22,8 +24,13 @@ public class Let {
 	private String dolazak;
 	@Column
 	private Double cena;
-	@OneToMany(mappedBy = "sediste")
-	private Set<Sediste> vozila = new HashSet<Sediste>();
+	
+	@OneToMany(mappedBy = "sedista",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Sediste> sedista = new HashSet<Sediste>();
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Aviokompanija letovi;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="let_id")
@@ -70,10 +77,10 @@ public class Let {
 		this.id = id;
 	}
 	public Set<Sediste> getVozila() {
-		return vozila;
+		return sedista;
 	}
-	public void setVozila(Set<Sediste> vozila) {
-		this.vozila = vozila;
+	public void setVozila(Set<Sediste> sedista) {
+		this.sedista = sedista;
 	}
 	
 	
