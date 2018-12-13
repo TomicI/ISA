@@ -24,12 +24,15 @@ public class Hotel {
 	private String opis;
 	@Column
 	private Double prosecnaOcena;
+	
 	@OneToMany(mappedBy = "soba",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Soba> soba = new HashSet<Soba>();
 	
-	//private Map<String, Double> cenovnik;
+	@OneToMany(mappedBy = "hotel",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<CenovnikHotel> cenovnik = new HashSet<CenovnikHotel>();
 	
-	//private ArrayList<String> dodatneUsluge;
+	@OneToMany(mappedBy = "hotelDU",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<DodatneUslugeHotel> dodatneUsluge = new HashSet<DodatneUslugeHotel>();
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -64,19 +67,6 @@ public class Hotel {
 		this.prosecnaOcena = prosecnaOcena;
 	}
 
-//	public ArrayList<String> getDodatneUsluge() {
-//		return dodatneUsluge;
-//	}
-//	public void setDodatneUsluge(ArrayList<String> dodatneUsluge) {
-//		this.dodatneUsluge = dodatneUsluge;
-//	}
-//	
-//	public Map<String, Double> getCenovnik() {
-//		return cenovnik;
-//	}
-//	public void setCenovnik(Map<String, Double> cenovnik) {
-//		this.cenovnik = cenovnik;
-//	}
 	public Long getId() {
 		return id;
 	}

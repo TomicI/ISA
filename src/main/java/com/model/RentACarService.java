@@ -11,12 +11,19 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 
 @Entity
 public class RentACarService {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="rac_id")
+	private Long id;
+	
 	@Column
 	private String naziv;
 	@Column
@@ -25,14 +32,22 @@ public class RentACarService {
 	private String opis;
 	@Column
 	private Double prosecnaOcena;
+	
 	@OneToMany(mappedBy = "vozilo",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Vozilo> vozila = new HashSet<Vozilo>();
-	@Column
-	private ArrayList<String> filijale;
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="rac_id")
-	private Long id;
+	
+	@OneToMany(mappedBy = "cenovnik",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<CenovnikRentACar> cenovnik = new HashSet<CenovnikRentACar>();
+	
+	@OneToMany(mappedBy = "filijala")
+	private Set<RentACarService> filijale = new HashSet<RentACarService>();
+	
+	@ManyToOne( cascade = CascadeType.ALL)
+	@JoinColumn(name="fRac_id")
+	private RentACarService filijala;
+
+	
+	
 	public RentACarService() {
 		super();
 	}
@@ -60,12 +75,7 @@ public class RentACarService {
 	public void setProsecnaOcena(Double prosecnaOcena) {
 		this.prosecnaOcena = prosecnaOcena;
 	}
-	public ArrayList<String> getFilijale() {
-		return filijale;
-	}
-	public void setFilijale(ArrayList<String> filijale) {
-		this.filijale = filijale;
-	}
+	
 
 	public Long getId() {
 		return id;
@@ -78,6 +88,12 @@ public class RentACarService {
 	}
 	public void setVozila(Set<Vozilo> vozila) {
 		this.vozila = vozila;
+	}
+	public Set<CenovnikRentACar> getCenovnik() {
+		return cenovnik;
+	}
+	public void setCenovnik(Set<CenovnikRentACar> cenovnik) {
+		this.cenovnik = cenovnik;
 	}
 	
 	

@@ -14,56 +14,44 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 @Entity
 public class Let {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="let_id")
+	private Long id;
+	
 	@Column
-	private String datum;
+	private String datumP;
 	@Column
-	private Integer vreme;
+	private String vremeP;
 	@Column
-	private String polazak;
+	private String datumS;
 	@Column
-	private String dolazak;
+	private String vremeS;
+	@Column
+	private Double vremePutovanja;
+	@Column
+	private Double duzinaPutovanja;
+	@Column
+	private Integer brojPresedanja;
 	@Column
 	private Double cena;
+	@Column
+	private Double prosecnaOcena;
 	
 	@OneToMany(mappedBy = "sedista",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Sediste> sedista = new HashSet<Sediste>();
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Aviokompanija letovi;
+
+	@OneToMany(mappedBy = "karte",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Karta> karte = new HashSet<Karta>();
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="let_id")
-	private Long id;
 	public Let() {
 		super();
 	}
-	public String getDatum() {
-		return datum;
-	}
-	public void setDatum(String datum) {
-		this.datum = datum;
-	}
-	public Integer getVreme() {
-		return vreme;
-	}
-	public void setVreme(Integer vreme) {
-		this.vreme = vreme;
-	}
-
 	
-	public String getPolazak() {
-		return polazak;
-	}
-	public void setPolazak(String polazak) {
-		this.polazak = polazak;
-	}
-	public String getDolazak() {
-		return dolazak;
-	}
-	public void setDolazak(String dolazak) {
-		this.dolazak = dolazak;
-	}
+	
 	public Double getCena() {
 		return cena;
 	}
@@ -81,6 +69,116 @@ public class Let {
 	}
 	public void setVozila(Set<Sediste> sedista) {
 		this.sedista = sedista;
+	}
+
+
+	public String getDatumP() {
+		return datumP;
+	}
+
+
+	public void setDatumP(String datumP) {
+		this.datumP = datumP;
+	}
+
+
+	public String getVremeP() {
+		return vremeP;
+	}
+
+
+	public void setVremeP(String vremeP) {
+		this.vremeP = vremeP;
+	}
+
+
+	public String getDatumS() {
+		return datumS;
+	}
+
+
+	public void setDatumS(String datumS) {
+		this.datumS = datumS;
+	}
+
+
+	public String getVremeS() {
+		return vremeS;
+	}
+
+
+	public void setVremeS(String vremeS) {
+		this.vremeS = vremeS;
+	}
+
+
+	public Double getVremePutovanja() {
+		return vremePutovanja;
+	}
+
+
+	public void setVremePutovanja(Double vremePutovanja) {
+		this.vremePutovanja = vremePutovanja;
+	}
+
+
+	public Double getDuzinaPutovanja() {
+		return duzinaPutovanja;
+	}
+
+
+	public void setDuzinaPutovanja(Double duzinaPutovanja) {
+		this.duzinaPutovanja = duzinaPutovanja;
+	}
+
+
+	public Integer getBrojPresedanja() {
+		return brojPresedanja;
+	}
+
+
+	public void setBrojPresedanja(Integer brojPresedanja) {
+		this.brojPresedanja = brojPresedanja;
+	}
+
+
+	public Double getProsecnaOcena() {
+		return prosecnaOcena;
+	}
+
+
+	public void setProsecnaOcena(Double prosecnaOcena) {
+		this.prosecnaOcena = prosecnaOcena;
+	}
+
+
+	public Set<Sediste> getSedista() {
+		return sedista;
+	}
+
+
+	public void setSedista(Set<Sediste> sedista) {
+		this.sedista = sedista;
+	}
+
+
+	public Aviokompanija getLetovi() {
+		return letovi;
+	}
+
+
+	public void setLetovi(Aviokompanija letovi) {
+		this.letovi = letovi;
+	}
+
+
+	public Set<Karta> getKarte() {
+		return karte;
+	}
+
+
+	public void setKarte(Set<Karta> karte) {
+		this.karte = karte;
 	}
 	
 	

@@ -11,7 +11,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+
+import org.springframework.beans.factory.annotation.Autowired;
 @Entity
 public class Aviokompanija {
 	@Column
@@ -25,6 +30,14 @@ public class Aviokompanija {
 	
 	@OneToMany(mappedBy = "letovi",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Let> letovi = new HashSet<Let>();
+	
+	
+	@ManyToMany
+	@JoinTable(name="avioDest", joinColumns= { @JoinColumn(name="aviokom_id") }, 
+	inverseJoinColumns= {@JoinColumn(name="dest_id")})
+	private Set<Destinacija> avioDest = new HashSet<Destinacija>();
+	
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
