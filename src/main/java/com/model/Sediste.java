@@ -21,7 +21,7 @@ public class Sediste {
 	private Integer red;
 	@Column
 	private Boolean zauzeto;
-	
+
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Let sedista;
 	
@@ -51,6 +51,12 @@ public class Sediste {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public Let getSedista() {
+		return sedista;
+	}
+	public void setSedista(Let sedista) {
+		this.sedista = sedista;
 	}
 	
 	

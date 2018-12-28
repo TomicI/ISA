@@ -23,14 +23,9 @@ public class Destinacija {
 	@Column
 	private String nazivDestinacije;
 	
-	@ManyToMany(mappedBy = "avioDest",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Aviokompanija> avioDest = new HashSet<Aviokompanija>();
+	@OneToMany(mappedBy = "destinacija",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Aerodrom> aerodoromi = new HashSet<Aerodrom>();
 	
-	@OneToMany(mappedBy = "letoviD",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Karta> letoviD = new HashSet<Karta>();
-	
-	@OneToMany(mappedBy = "letoviP",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Karta> letoviP = new HashSet<Karta>();
 
 	public Destinacija() {
 		super();
@@ -52,29 +47,15 @@ public class Destinacija {
 		this.nazivDestinacije = nazivDestinacije;
 	}
 
-	public Set<Karta> getLetoviD() {
-		return letoviD;
+	public Set<Aerodrom> getAerodoromi() {
+		return aerodoromi;
 	}
 
-	public void setLetoviD(Set<Karta> letoviD) {
-		this.letoviD = letoviD;
+	public void setAerodoromi(Set<Aerodrom> aerodoromi) {
+		this.aerodoromi = aerodoromi;
 	}
 
-	public Set<Karta> getLetoviP() {
-		return letoviP;
-	}
-
-	public void setLetoviP(Set<Karta> letoviP) {
-		this.letoviP = letoviP;
-	}
-
-	public Set<Aviokompanija> getAvioDest() {
-		return avioDest;
-	}
-
-	public void setAvioDest(Set<Aviokompanija> avioDest) {
-		this.avioDest = avioDest;
-	}
+	
 	
 	
 }
