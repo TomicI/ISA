@@ -1,6 +1,5 @@
 package com.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,14 +10,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.JoinColumn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 @Entity
 public class Aviokompanija {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="aviokom_id")
+	private Long id;
+	
 	@Column
 	private String naziv;
 	@Column
@@ -27,22 +28,12 @@ public class Aviokompanija {
 	private String opis;
 	@Column
 	private Double prosecnaOcena;
+
+	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<VezaAA> veza = new HashSet<VezaAA>();
 	
-	@OneToMany(mappedBy = "letovi",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Let> letovi = new HashSet<Let>();
-	
-	
-	@ManyToMany
-	@JoinTable(name="avioDest", joinColumns= { @JoinColumn(name="aviokom_id") }, 
-	inverseJoinColumns= {@JoinColumn(name="dest_id")})
-	private Set<Destinacija> avioDest = new HashSet<Destinacija>();
-	
-	
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="aviokom_id")
-	private Long id;
+	@OneToMany(mappedBy = "aviokom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Karta> karta = new HashSet<Karta>();
 	
 	public Aviokompanija() {
 		super();
@@ -82,14 +73,13 @@ public class Aviokompanija {
 		this.id = id;
 	}
 
-	public Set<Let> getVozila() {
-		return letovi;
+	public Set<VezaAA> getVeza() {
+		return veza;
 	}
 
-	public void setVozila(Set<Let> letovi) {
-		this.letovi = letovi;
+	public void setVeza(Set<VezaAA> veza) {
+		this.veza = veza;
 	}
-	
-	
+
 	
 }
