@@ -30,6 +30,22 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { DataTablesModule } from 'angular-datatables';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AviokomListComponent } from './aviokom-list/aviokom-list.component';
+import { AvioEditComponent } from './avio-edit/avio-edit.component';
+import { FormAKUpdateComponent } from './form-akupdate/form-akupdate.component';
+import { LetComponent } from './let/let.component';
+import { KartaComponent } from './karta/karta.component';
+import { FormAddKartaComponent } from './form-add-karta/form-add-karta.component';
+import { FormAddAerodromComponent } from './form-add-aerodrom/form-add-aerodrom.component';
+import { AerodromComponent } from './aerodrom/aerodrom.component';
+import { DestinacijaComponent } from './destinacija/destinacija.component';
+import { FormAddDestinacijaComponent } from './form-add-destinacija/form-add-destinacija.component';
+import { FormUpdateAerodromComponent } from './form-update-aerodrom/form-update-aerodrom.component';
+import { AddAviokAerComponent } from './add-aviok-aer/add-aviok-aer.component';
+import { FormAddLetComponent } from './form-add-let/form-add-let.component';
+import { FormUpdateLetComponent } from './form-update-let/form-update-let.component';
+import { FormDodajAviokomComponent } from './form-dodaj-aviokom/form-dodaj-aviokom.component';
+
 
 
 @NgModule({
@@ -50,6 +66,22 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SignUpModalComponent,
     NavigationComponent,
     PanelAdminRentComponent,
+    AppComponent,
+    AviokomListComponent,
+    AvioEditComponent,
+    FormAKUpdateComponent,
+    LetComponent,
+    KartaComponent,
+    FormAddKartaComponent,
+    FormAddAerodromComponent,
+    AerodromComponent,
+    DestinacijaComponent,
+    FormAddDestinacijaComponent,
+    FormUpdateAerodromComponent,
+    AddAviokAerComponent,
+    FormAddLetComponent,
+    FormUpdateLetComponent,
+    FormDodajAviokomComponent
 
 
 

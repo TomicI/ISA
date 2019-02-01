@@ -1,0 +1,6 @@
+<div class="container">
+  <h1>Aviokompanija</h1>
+  <div *ngFor="let avio of aviokompanije | async" style="width: 300px;">
+    <app-avio-edit [(aviokompanija)]="avio"></app-avio-edit>
+  </div>
+</div>

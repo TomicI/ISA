@@ -1,0 +1,10 @@
+divMapa{
+    height: 600.00px;
+    width: 600.00px;
+}
+
+divMapa.mapboxgl-canary{
+    height: 600.00px;
+    width: 600.00px;
+    visibility: show;
+}

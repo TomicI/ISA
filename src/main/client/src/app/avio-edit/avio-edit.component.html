@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <title>Profil aviokompanija</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+ 
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body >
+  <h1>{{aviokompanija.naziv}}</h1>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#"></a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="form-akupdate/{{aviokompanija.id}}">Update</a></li>
+            <li><a href="letAdd/{{aviokompanija.id}}">Dodaj let</a></li>
+            <li><a href="letovi/{{aviokompanija.id}}">Letovi</a></li>
+          </ul>
+        </div>
+      </nav>
+
+
+      
+
+      
+      <div class="jumbotron container">
+          <div class="row ">
+            <div class="col-sm-6"> 
+                <div class="panel panel-default">
+                    <div class="panel-heading">Opis:</div>
+                    <div class="panel-body">{{aviokompanija.opis}}</div>
+                </div>
+            </div>
+            <div class="col-sm-6"> 
+                <div class="panel panel-default">
+                    <div class="panel-heading">Prosecna ocena:</div>
+                    <div class="panel-body">{{aviokompanija.prosecnaOcena}}</div>
+                </div>
+            </div>
+          </div>
+          <!--
+          <div class="row ">
+          <div class="col-sm-8 offset-md-3">
+              <agm-map [latitude]="location.latitude" [longitude]="location.longitude" >
+                <agm-marker id="mark" name="mark" [latitude]="location.marker.latitude" [longitude]="location.marker.longitude"></agm-marker>
+              </agm-map>
+            </div>
+          </div>-->
+         
+    </div>
+    <div id="divMapa"></div>
+    </body>
+    </html>

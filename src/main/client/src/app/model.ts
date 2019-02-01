@@ -100,3 +100,48 @@ export enum Gorivo {
     BENZIN,
     DIZEL
 }
+
+
+export class Aviokompanija {
+    constructor(
+        public id?: number,
+        public naziv?: string,
+        public adresa?: string,
+        public opis?: string,
+        public prosecnaOcena?: number) { }
+
+}
+
+export class Aerodrom {
+    constructor(
+        public id?: number,
+        public nazivAerodroma?: string,
+        public destinacijaID?: number) { }
+
+}
+
+export class Destinacija {
+    constructor(
+        public id?: number,
+        public nazivDestinacije?: string) { }
+
+}
+
+export class Let{
+    constructor(
+        public id?: number,
+        public aerodromP?: Aerodrom,
+        public aerodromS?: Aerodrom,
+        public brojSedista?: number, 
+        public datumP?: Date,
+        public datumS?: Date,
+        public vremeP?: String,
+        public vremeS?: String,
+        public aviokompanijaID?: number,
+        public presedanje?: Let,
+        public imaPresedanje?: Boolean,
+        public vremePutovanja?: String,
+        public duzinaPutovanja?: Number
+    ){}
+}
+

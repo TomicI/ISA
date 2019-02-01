@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Letovi</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <h1></h1>
+<div class="container">       
+  <table class="table table-dark">
+    <thead>
+      <tr>
+        <th>Datum polaska</th>
+        <th>Vreme polaska</th>
+        <th>Datum dolaska</th>
+        <th>Vreme dolaska</th>
+        <th>Aerodrom polazak</th>
+        <th>Aerodrom dolazak</th>
+        <th>Broj sedista</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr *ngFor="let l of letovi | async" style="width: 300px"> 
+        
+              <td>{{l.datumP}}</td>
+              <td>{{l.vremeP}}</td>
+              <td>{{l.datumS}}</td>
+              <td>{{l.vremeS}}</td>
+              <td>{{l.aerodromP.nazivAerodroma}}</td>
+              <td>{{l.aerodromS.nazivAerodroma}}</td>
+              <td>{{l.brojSedista}}</td>
+              <td><a href="letUpdate/{{l.id}}">Update</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+</body>
+</html>

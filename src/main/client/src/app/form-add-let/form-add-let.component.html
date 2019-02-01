@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Dodavanje leta</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <br/>
+<div class="jumbotron container text-center col-sm-6">
+    <h2 class="text-center" >Dodavanje leta</h2>
+  <form [formGroup]="regFormA" (ngSubmit)="onSubmit()" >
+
+    <div class="form-group form-inline">
+      <label for="dP" class="control-label col-sm-4">Datum polaska: </label>
+      <div class="col-sm-8 text-left">
+      <input class="form-control shadow" name="datumP" id="datumP" type="date" formControlName="datumP">
+        </div>
+    </div>
+
+    <div class="form-group form-inline">
+        <label for="vP" class="control-label col-sm-4">Vreme polaska: </label>
+        <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="vremeP" id="vremeP" type="text" formControlName="vremeP">
+          </div>
+      </div>
+    
+    <div class="form-group form-inline">
+        <label for="dS" class="control-label col-sm-4">Datum dolaska: </label>
+        <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="datumS" id="datumS" type="date" formControlName="datumS">
+          </div>
+      </div>
+
+      <div class="form-group form-inline">
+          <label for="vS" class="control-label col-sm-4">Vreme dolaska: </label>
+          <div class="col-sm-8 text-left">
+          <input class="form-control shadow" name="vremeS" id="vremeS" type="text" formControlName="vremeS">
+            </div>
+        </div>
+      
+
+    <div class="form-group form-inline">
+      <label for="aerP" class="control-label col-sm-4">Polazi sa: </label>
+      <div class="col-sm-8 text-left">
+    <select  class="form-control" name="aerodromP" (change)="onChange($event.target.value)">
+           
+            <option *ngFor="let aer of aerodromi | async" [value]="aer.id">{{aer.nazivAerodroma}}</option>
+    </select></div>
+  </div>
+    
+  <div class="form-group form-inline">
+      <label for="aerS" class="control-label col-sm-4">Dolazi na: </label>
+      <div class="col-sm-8 text-left">
+    <select  class="form-control" name="aerodromS" (change)="onChange1($event.target.value)">
+           
+            <option *ngFor="let aer of aerodromi | async" [value]="aer.id">{{aer.nazivAerodroma}}</option>
+    </select></div>
+  </div>
+    
+
+  <div class="form-group form-inline">
+      <label for="brP" class="control-label col-sm-4">Broj putnika: </label>
+      <div class="col-sm-8 text-left">
+      <input class="form-control shadow" name="brojSedista" id="brojSedista" type="number" formControlName="brojSedista">
+        </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label for="brP" class="control-label col-sm-4">VP: </label>
+      <div class="col-sm-8 text-left">
+      <input class="form-control shadow" name="vremePutovanja" id="vremePutovanja" type="String" formControlName="vremePutovanja">
+        </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label for="brP" class="control-label col-sm-4">Duzina putovanja: </label>
+      <div class="col-sm-8 text-left">
+      <input class="form-control shadow" name="duzinaPutovanja" id="duzinaPutovanja" type="number" formControlName="duzinaPutovanja">
+        </div>
+    </div>
+    
+    <div class="col-sm-offset-2"> 
+      <button (click)="dodajP()" class="btn btn-primary">Dodaj presedanje</button>
+    </div>
+    <div class="col-sm-offset-2"> 
+        <button type="submit" class="btn btn-primary">Sacuvaj</button>
+      </div>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Unos nove destinacije</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <br/>
+<div class="jumbotron container text-center col-sm-6">
+    <h2 class="text-center" >Unos nove destinacije</h2>
+  <form [formGroup]="regFormD" (ngSubmit)="onSubmit()" >
+
+    <div class="form-group form-inline">
+      <label for="naziv" class="control-label col-sm-4">Naziv </label>
+      <div class="col-sm-8 text-left">
+      <input class="form-control shadow" name="nazivDestinacije" id="nazivDestinacije" type="text" formControlName="nazivDestinacije">
+    </div>
+    
+    </div>
+    <div class="col-sm-offset-2"> 
+        <button type="submit" class="btn btn-primary">Sacuvaj</button>
+      </div>
+  </form>
+</div>
+</body>
+</html>
