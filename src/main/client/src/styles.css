@@ -1,0 +1,62 @@
+/* You can add global styles to this file, and also import other style files */
+
+.panelAdminColor{
+    
+    background-color: rgb(240, 240, 240) ;
+    height: 100%;
+}
+
+.no-border {
+    border: 0;
+    outline: 0;
+    
+}
+
+.navPar{
+    font-size: 20px;
+}
+
+.navPar :hover{
+    color: rgb(105, 101, 101);
+}
+
+.hrefColor{
+    color: rgb(36, 39, 41);
+}
+
+.fontTable{
+    font-size: 11px;
+}
+
+table {
+    width: 100%;
+}
+
+.mat-column-naziv,
+.mat-column-marka 
+.mat-column-model
+.mat-column-brojSedista 
+.mat-column-brojVrata
+.mat-column-brojTorbi
+.mat-column-gorivo 
+.mat-column-menjac
+.mat-column-klima 
+.mat-column-rezervoar 
+.mat-column-potrosnja
+.mat-column-dodatniopis 
+.mat-column-prosecnaOcena{
+  flex: 0 0 100px;
+   
+}
+
+                
+
+.matchip {
+   transition: none;
+    box-shadow: none !important;
+}
+
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

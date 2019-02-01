@@ -1,0 +1,53 @@
+<div class="container">
+  <h1>RentACar</h1>
+  <!-- <div *ngFor="let rnt of rentACars | async" style="width: 300px;">
+    <app-rentacar [(rentacar)]="rnt"></app-rentacar>
+    <app-filijala-list [(id)]="rnt.id"></app-filijala-list>
+  </div> -->
+
+  <table class="table table-striped table-bordered text-center">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Naziv</th>
+        <th scope="col">Opis</th>
+        <th scope="col">Akcija</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let rnt of rentACars | async ; let i = index ">
+        <th scope="row">
+          {{i+1}}
+        </th>
+        <td>
+          {{rnt.naziv}}
+        </td>
+        <td>
+          {{rnt.opis}}
+        </td>
+        <td>
+          <button class="btn btn-primary" type="button" (click)="getFilijala(rnt.id)">Show</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngFor="let fil of filijala | async" style="width: 300px;">
+    <app-filijala [(filijala)]="fil"></app-filijala>
+  </div>
+
+  
+  <div class="card-deck">
+        <div *ngFor="let rnt of rentACars | async">
+        <div class="card mt-4" style="width: 16rem;height: 18rem">
+          <div class="card-body">
+            <h5 class="card-title">{{rnt.naziv}}</h5>
+            <p class="card-text">{{rnt.opis}}</p>
+          </div>
+        </div>
+      </div> 
+
+      
+    
+
+  </div>

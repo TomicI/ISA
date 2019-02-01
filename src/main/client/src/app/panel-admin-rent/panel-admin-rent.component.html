@@ -1,0 +1,318 @@
+<div class="container">
+
+    <div *ngIf="rentACar">
+
+        <h4>Welcome {{rentACar.naziv}}</h4>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-7">
+
+
+
+                <div class="card">
+
+                        <div class="card-header">
+                                <div class="d-flex">
+                                        <div>
+                                          Branches
+                                        </div>
+                                        <div class="ml-auto">
+                                                <a class="link" href="#"><i class="fas fa-plus-circle"></i>
+                                        </a>
+                                        </div>
+                                   </div>
+                        </div>
+
+                    <table mat-table [dataSource]="filijalaSource" class="mat-elevation-z8 matchip mb-0">
+
+                        <ng-container matColumnDef="no">
+                            <th mat-header-cell *matHeaderCellDef> No. </th>
+                            <td mat-cell *matCellDef="let filijala;let i=index">{{i+1}}</td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="adresa">
+                            <th mat-header-cell *matHeaderCellDef> Adress </th>
+                            <td mat-cell *matCellDef="let filijala"> {{filijala.adresa}} </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="prosecnaOcena">
+                            <th mat-header-cell *matHeaderCellDef>Average Score </th>
+                            <td mat-cell *matCellDef="let filijala"> {{filijala.prosecnaOcena}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="vehicles">
+                            <th mat-header-cell *matHeaderCellDef>Vehicles</th>
+                            <td mat-cell *matCellDef="let filijala">
+                                <button class="btn" type="button" (click)="showVehicles(filijala)"><i class="far fa-arrow-alt-circle-down"></i>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="edit">
+                            <th mat-header-cell *matHeaderCellDef>Edit</th>
+                            <td mat-cell *matCellDef="let filijala">
+                                <button class="btn" type="button" (click)="editFilijala(filijala)"><i class="far fa-edit"></i></button>
+                            </td>
+                        </ng-container>
+
+
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsFil"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsFil;"></tr>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+
+                    </table>
+
+                    </div>
+                    
+
+
+               
+          
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+    </div>
+
+
+    <!-- <div *ngIf="filijale">
+
+        <table id="filijalaTable" class="table table-hover table-bordered ">
+            <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Adress</th>
+                    <th scope="col">Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let filijala of filijale | async ; let i = index " (click)="clickedRow(filijala.id)">
+                    <th scope="row">
+                        {{i+1}}
+                    </th>
+                    <td>
+                        {{filijala.adresa}}
+                    </td>
+                    <td>
+                        {{filijala.prosecnaOcena}}
+                    </td>
+
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div> -->
+
+
+
+    <!-- <table *ngIf="voz" id="my-table" datatable class="table table-hover table-bordered ">
+        <thead>
+            <tr>
+                <th scope="col">No.</th>
+                <th scope="col">Name</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Model</th>
+                <th scope="col">Seats</th>
+                <th scope="col">Doors</th>
+                <th scope="col">Bags</th>
+                <th scope="col">Gas</th>
+                <th scope="col">Gear</th>
+                <th scope="col">AC</th>
+                <th scope="col">Tank</th>
+                <th scope="col">Consumption</th>
+                <th scope="col">Description</th>
+                <th scope="col">Average score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let vozilo of voz">
+                <th scope="row">
+                    {{i+1}}
+                </th>
+                <td>
+                    {{vozilo.naziv}}
+                </td>
+                <td>
+                    {{vozilo.marka}}
+                </td>
+                <td>
+                    {{vozilo.model}}
+                </td>
+                <td>
+                    {{vozilo.brojSedista}}
+                </td>
+                <td>
+                    {{vozilo.brojVrata}}
+                </td>
+                <td>
+                    {{vozilo.brojTorbi}}
+                </td>
+                <td>
+                    {{vozilo.gorivo}}
+                </td>
+                <td>
+                    {{vozilo.menjac}}
+                </td>
+                <td>
+                    {{vozilo.klima}}
+                </td>
+                <td>
+                    {{vozilo.rezervoar}}
+                </td>
+                <td>
+                    {{vozilo.potrosnja}}
+                </td>
+                <td>
+                    {{vozilo.dodatniopis}}
+                </td>
+                <td>
+                    {{vozilo.prosecnaOcena}}
+                </td>
+
+            </tr>
+
+        </tbody>
+    </table> -->
+
+    <div class="row">
+
+        <div class="mt-2 col-md-12"></div>
+
+        <div class="col-md-12">
+
+            <div class="input-group">
+                <input type="text" class="form-control no-border" id="searchFilter" aria-describedby="searchFilter"
+                    (keyup)="applyFilter($event.target.value)" placeholder="Vehicle search...">
+            </div>
+
+            <div class="mt-2 col-md-12"></div>
+
+            <table *ngIf="data" mat-table [dataSource]="dataSource" class="mat-elevation-z8 matchip">
+
+                <ng-container matColumnDef="no">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let vozilo;let i=index">{{i+1}}</td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="naziv">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let vozilo"> {{vozilo.naziv}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="marka">
+                    <th mat-header-cell *matHeaderCellDef> Brand </th>
+                    <td mat-cell *matCellDef="let vozilo"> {{vozilo.marka}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="model">
+                    <th mat-header-cell *matHeaderCellDef> Model </th>
+                    <td mat-cell *matCellDef="let vozilo"> {{vozilo.model}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="brojSedista">
+                    <th mat-header-cell *matHeaderCellDef>Seats </th>
+                    <td mat-cell *matCellDef="let vozilo"> {{vozilo.brojSedista}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="brojVrata">
+                    <th mat-header-cell *matHeaderCellDef> Doors </th>
+                    <td mat-cell *matCellDef="let vozilo"> {{vozilo.brojVrata}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="brojTorbi">
+                    <th mat-header-cell *matHeaderCellDef> Luggage </th>
+                    <td mat-cell *matCellDef="let vozilo"> {{vozilo.brojTorbi}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="gorivo">
+                    <th mat-header-cell *matHeaderCellDef> Gas </th>
+                    <td mat-cell *matCellDef="let vozilo"> {{vozilo.gorivo}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="menjac">
+                    <th mat-header-cell *matHeaderCellDef> Gear </th>
+                    <td mat-cell *matCellDef="let vozilo"> {{vozilo.menjac}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="klima">
+                    <th mat-header-cell *matHeaderCellDef> AC </th>
+                    <td mat-cell *matCellDef="let vozilo"> {{vozilo.klima}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="rezervoar">
+                    <th mat-header-cell *matHeaderCellDef> Tank </th>
+                    <td mat-cell *matCellDef="let vozilo"> {{vozilo.rezervoar}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="potrosnja">
+                    <th mat-header-cell *matHeaderCellDef> Consumption </th>
+                    <td mat-cell *matCellDef="let vozilo"> {{vozilo.potrosnja}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="dodatniopis">
+                    <th mat-header-cell *matHeaderCellDef>Description </th>
+                    <td mat-cell *matCellDef="let vozilo"> {{vozilo.dodatniopis}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="prosecnaOcena">
+                    <th mat-header-cell *matHeaderCellDef>Average sum </th>
+                    <td mat-cell *matCellDef="let vozilo"> {{vozilo.prosecnaOcena}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let vozilo">
+
+                        <button class="btn" type="button"><i class="far fa-edit"></i></button>
+
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </table>
+        </div>
+
+
+    </div>
+    <!-- Modal -->
+
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <app-form-fil *ngIf="proslo" [(filijalaFormGroup)]="filijalaFormGroup" [(edit)]="edit" (clicked)="onCliked($event)"></app-form-fil>
+        </div>
+        <div class="modal-footer">
+
+
+        </div>
+    </ng-template>
+
+   
+</div>

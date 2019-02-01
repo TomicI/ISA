@@ -1,0 +1,58 @@
+<nav class="navbar navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand">Navbar</a>
+      <form class="form-inline">
+        <button *ngIf="!isLoggedIn" class="btn btn-outline-primary" (click)="open(content)"> {{ isLoggedIn == true ? 'Logout' : 'Login' }}
+        </button>
+
+        <div *ngIf="isLoggedIn" class="dropdown">
+          <a id="showUsername" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+						 aria-haspopup="true" aria-expanded="false" href="#">{{username}}
+            
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Profile</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" [routerLink]="['panel']">Administration panel</a>
+            <a class="dropdown-item" href="#">Account</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" (click)="open(content)">Log out</a>
+          </div>
+        </div>
+        
+      </form>
+    </div>
+  </nav>
+  
+  <div class="container">
+  
+    <ng-template #content let-modal let-d="dismiss">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{name}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+  
+        <div *ngIf="loginDiv; else signupDiv ">
+            <app-login></app-login>
+        </div>
+  
+        <ng-template #signupDiv>
+  
+          <app-sign-up-modal></app-sign-up-modal>
+  
+        </ng-template>
+  
+        <div class="col align-self-center">
+            <a class="btn btn-link" (click)="clickEvent()">{{buttonName}}</a>
+        </div>
+       
+  
+      </div>
+  
+    </ng-template>
+  
+  
+  </div>
