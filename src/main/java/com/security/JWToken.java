@@ -25,7 +25,7 @@ public class JWToken {
 	@Value("secret")
 	private String secret;
 	
-	@Value("1000")
+	@Value("6000")
 	private int expires;
 	
 	

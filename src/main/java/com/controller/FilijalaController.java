@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,7 @@ import com.model.RentACar;
 import com.model.Vozilo;
 import com.service.FilijalaService;
 import com.service.RentACarService;
+import com.sun.mail.iap.Response;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -36,7 +38,9 @@ public class FilijalaController {
 
 
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
+	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<FilijalaDTO> insertFilijala(@RequestBody FilijalaDTO filijalaDTO){
+		System.out.println(filijalaDTO);
 		
 		if (filijalaDTO.getRentACarDTO()==null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -83,7 +87,10 @@ public class FilijalaController {
 	
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<Void> deleteFilijala(@PathVariable Long id) {
+		
+		System.out.println("Brisnjae");
 		
 		Optional<Filijala> filijalaOptional = filijalaService.findOne(id);
 		
@@ -95,6 +102,27 @@ public class FilijalaController {
 		}
 	}
 	
+	@RequestMapping(method=RequestMethod.PUT,consumes = "application/json" )
+	@PreAuthorize("hasRole('ADMIN_RENT')")
+	public ResponseEntity<FilijalaDTO> updateFilijala(@RequestBody FilijalaDTO filijalaDTO){
+		
+		
+		Optional<Filijala> optFilijala = filijalaService.findOne(filijalaDTO.getId());
+		
+		if (!optFilijala.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		Filijala filijala = optFilijala.get();
+		
+		filijala.setAdresa(filijalaDTO.getAdresa());
+		
+		filijala = filijalaService.save(filijala);
+		
+		return new ResponseEntity<>(new FilijalaDTO(filijala),HttpStatus.OK);
+		
+		
+	}
 	
 
 }

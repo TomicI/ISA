@@ -7,8 +7,9 @@ import { RentacarService } from '../services/rentacar.service';
 import { FilijalaService } from '../services/filijala.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormVozComponent } from '../form/form-voz/form-voz.component';
 
 
 
@@ -21,29 +22,31 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class PanelAdminRentComponent implements OnInit {
 
-  @Input() showModal: boolean;
-  @Input() title: string;
-  @Input() subTitle: string;
-  @Input() cancelLabel: string;
-  @Input() positiveLabel: string;
-
-
   @ViewChild('content') private content;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('vehDiv') formVeh: FormVozComponent;
+  @ViewChild('paginator1') paginator: MatPaginator;
+  @ViewChild('paginator2') paginator2: MatPaginator;
 
   filijalaFormGroup: FormGroup;
+  voziloFormGroup: FormGroup;
 
   string: any;
 
+  modalRef: any;
+
   proslo = false;
+  openVeh = false;
 
   edit = false;
+  editVeh = false;
 
   rentACar: RentACar;
 
   filijale: Observable<Object>;
 
-  vozila: Observable<any>;
+  vozila: Observable<Object>;
+
+  filijala: Filijala;
 
   broj: number;
 
@@ -91,7 +94,7 @@ export class PanelAdminRentComponent implements OnInit {
     private filijalaService: FilijalaService,
     private fb: FormBuilder,
     private modalService: NgbModal
-  ) {}
+  ) { }
 
 
   getMyTables(id: number) {
@@ -101,8 +104,11 @@ export class PanelAdminRentComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.tableInit();
+  }
 
-    this.dataSource.paginator = this.paginator;
+  tableInit() {
+
 
     this.userServise.getUserRentACar().subscribe((rentacar: any) => {
       if (rentacar) {
@@ -114,6 +120,7 @@ export class PanelAdminRentComponent implements OnInit {
             this.filData = data;
             console.log(data);
             this.filijalaSource = new MatTableDataSource(this.filData);
+            this.filijalaSource.paginator = this.paginator;
           } else {
             console.log('Filijale not found!');
           }
@@ -125,14 +132,6 @@ export class PanelAdminRentComponent implements OnInit {
         console.log('RentACar not found!');
       }
     });
-
-
-
-  }
-
-  clickedRow(id: number) {
-
-    
 
   }
 
@@ -146,38 +145,99 @@ export class PanelAdminRentComponent implements OnInit {
 
   }
 
-  showVehicles(filijala){
+  showVehicles(filijala) {
+    this.filijala = filijala;
     console.log(filijala.id);
     this.filijalaService.getVozilaTabela(filijala.id).subscribe(data => {
       console.log(data);
       this.data = data;
       this.dataSource = new MatTableDataSource(this.data);
-
+      this.dataSource.paginator = this.paginator2;
     });
   }
 
   editFilijala(filijala) {
     console.log(filijala);
 
+    this.edit = true;
+
     this.filijalaFormGroup = this.fb.group({
-      adresa: [filijala.adresa]
+      filijala: this.fb.group(filijala)
     });
-
-
+    this.openVeh = false;
     this.proslo = true;
-    this.modalService.open(this.content);
+    this.modalRef = this.modalService.open(this.content);
   }
 
-  addFilijala(){
+  addFilijala() {
 
-  
+    console.log('Add');
+
+    this.edit = false;
+
+    this.filijalaFormGroup = this.fb.group({
+      filijala: this.fb.group(new Filijala(null, null, null, this.rentACar))
+    });
+    this.openVeh = false;
+    this.proslo = true;
+    this.modalRef = this.modalService.open(this.content);
+  }
+
+  editVozilo(vozilo) {
+    console.log(vozilo);
+    console.log(this.filijala);
+
+    this.editVeh = true;
+
+
+    this.voziloFormGroup = this.fb.group({
+      vozilo: this.fb.group(vozilo)
+    });
+
+    this.proslo = false;
+    this.openVeh = true;
+    this.modalRef = this.modalService.open(this.content);
+  }
+
+  addVozilo() {
+
+    this.editVeh = false;
+
+    this.voziloFormGroup = this.fb.group({
+      vozilo: this.fb.group(new Vozilo(
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null, null, null, null, null, this.filijala))
+    });
+    this.proslo = false;
+    this.openVeh = true;
+    this.modalRef = this.modalService.open(this.content);
   }
 
   onCliked() {
     console.log('Submit kliknut!');
-    console.log(this.filijalaFormGroup);
+    this.modalRef.close();
+    this.tableInit();
+    
   }
 
-  
+
+  onClickedVozilo() {
+    console.log('Submit kliknut vozilo!');
+    this.modalRef.close();
+    this.showVehicles(this.filijala);
+    
+  }
+
+
+
+
 
 }

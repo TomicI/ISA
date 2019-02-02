@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output ,EventEmitter} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { RentacarService } from '../../services/rentacar.service';
 import { Filijala } from 'src/app/model';
+import { FilijalaService } from 'src/app/services/filijala.service';
 
 
 
@@ -13,6 +14,7 @@ import { Filijala } from 'src/app/model';
 })
 export class FormFilComponent implements OnInit {
   @Input() filijalaFormGroup: FormGroup;
+  @Input() edit: boolean;
   @Output() clicked = new EventEmitter<boolean>();
 
   filForm: FormGroup;
@@ -20,7 +22,8 @@ export class FormFilComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private rentaCarService: RentacarService) { }
+    private rentaCarService: RentacarService,
+    private filijalaService: FilijalaService) { }
 
   ngOnInit() {
 
@@ -28,17 +31,33 @@ export class FormFilComponent implements OnInit {
       adresaFilInput: null
     });
 
-
   }
-  onSubmit() {
+  async submit() {
+    console.log(JSON.stringify(this.filijalaFormGroup.get('filijala').value));
+    if (this.edit === true) {
+      console.log('Edit mode');
+
+     await this.filijalaService.updateFilijala(this.filijalaFormGroup.get('filijala').value);
+ 
+    } else {
+     await this.filijalaService.saveFilijala(this.filijalaFormGroup.get('filijala').value);
+    }
+
     console.log('Kliknuo unutar forme!');
     this.clicked.emit(true);
   }
 
-  nesto(){
-    console.log('nesto');
-    this.clicked.emit(true);
+
+
+  async delete() {
+    const pom = this.filijalaFormGroup.get('filijala').get('id').value;
+    if (this.edit === true) {
+      console.log('Edit mode');
+
+      await this.filijalaService.removeFilijala(pom);
+      this.clicked.emit(true);
+    }
+
   }
-  
 
 }

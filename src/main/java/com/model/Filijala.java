@@ -27,14 +27,14 @@ public class Filijala {
 	@Column
 	private Double prosecnaOcena;
 	
-	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "rentacar_id",nullable=false)
 	private RentACar filijala;
 	
-	@OneToMany(mappedBy = "vozilo",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "vozilo",fetch = FetchType.LAZY)
 	private Set<Vozilo> vozila = new HashSet<Vozilo>();
 	
-	@OneToMany(mappedBy = "rezervacija",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "rezervacija",fetch = FetchType.LAZY)
 	private Set<RezervacijaRentACar> rezervacije = new HashSet<RezervacijaRentACar>();
 
 	public Filijala() {

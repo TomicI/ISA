@@ -1,3 +1,47 @@
+
+export class Aviokompanija {
+    constructor(
+        public id?: number,
+        public naziv?: string,
+        public adresa?: string,
+        public opis?: string,
+        public prosecnaOcena?: number) { }
+
+}
+
+export class Aerodrom {
+    constructor(
+        public id?: number,
+        public nazivAerodroma?: string,
+        public destinacijaID?: number) { }
+
+}
+
+export class Destinacija {
+    constructor(
+        public id?: number,
+        public nazivDestinacije?: string) { }
+
+}
+
+export class Let {
+    constructor(
+        public id?: number,
+        public aerodromP?: Aerodrom,
+        public aerodromS?: Aerodrom,
+        public brojSedista?: number,
+        public datumP?: Date,
+        public datumS?: Date,
+        public vremeP?: String,
+        public vremeS?: String,
+        public aviokompanijaID?: number,
+        public presedanje?: Let,
+        public imaPresedanje?: Boolean,
+        public vremePutovanja?: String,
+        public duzinaPutovanja?: Number
+    ) { }
+}
+
 export class RentACar {
     id: number;
     naziv: string;
@@ -18,29 +62,59 @@ export class Filijala {
         public id: number,
         public adresa: string,
         public prosecnaOcena: string,
-        public rentACarDTO = RentACar) { }
+        public rentACarDTO: RentACar) { }
 }
 
 export class Vozilo {
+    id: number;
+    naziv: string;
+    marka: string;
+    model: string;
+    brojSedista: number;
+    brojVrata: number;
+    brojTorbi: number;
+    gorivo: Gorivo;
+    menjac: Menjac;
+    klima: boolean;
+    rezervoar: number;
+    potrosnja: number;
+    dodatniopis: string;
+    prosecnaOcena: number;
+    filijalaDTO: Filijala;
+
     constructor(
-
-        public id: number,
-        public naziv: string,
-        public marka: string,
-        public model: string,
-        public brojSedista: number,
-        public brojVrata: number,
-        public brojTorbi: number,
-        public gorivo: Gorivo,
-        public menjac: Menjac,
-        public klima: boolean,
-        public rezervoar: number,
-        public potrosnja: number,
-        public dodatniopis: string,
-        public prosecnaOcena: number,
-        public filijalaDTO: Filijala
-
-    ) { }
+        id: number,
+        naziv: string,
+        marka: string,
+        model: string,
+        brojSedista: number,
+        brojVrata: number,
+        brojTorbi: number,
+        gorivo: Gorivo,
+        menjac: Menjac,
+        klima: boolean,
+        rezervoar: number,
+        potrosnja: number,
+        dodatniopis: string,
+        prosecnaOcena: number,
+        filijalaDTO: Filijala
+    ) {
+        this.id = id;
+        this.naziv = naziv;
+        this.marka = marka;
+        this.model = model;
+        this.brojSedista = brojSedista;
+        this.brojVrata = brojVrata;
+        this.brojTorbi = brojTorbi;
+        this.gorivo = gorivo;
+        this.menjac = menjac;
+        this.klima = klima;
+        this.rezervoar = rezervoar;
+        this.potrosnja = potrosnja;
+        this.dodatniopis = dodatniopis;
+        this.prosecnaOcena = prosecnaOcena;
+        this.filijalaDTO = filijalaDTO;
+    }
 }
 
 export class CenovnikRent {
@@ -100,48 +174,3 @@ export enum Gorivo {
     BENZIN,
     DIZEL
 }
-
-
-export class Aviokompanija {
-    constructor(
-        public id?: number,
-        public naziv?: string,
-        public adresa?: string,
-        public opis?: string,
-        public prosecnaOcena?: number) { }
-
-}
-
-export class Aerodrom {
-    constructor(
-        public id?: number,
-        public nazivAerodroma?: string,
-        public destinacijaID?: number) { }
-
-}
-
-export class Destinacija {
-    constructor(
-        public id?: number,
-        public nazivDestinacije?: string) { }
-
-}
-
-export class Let{
-    constructor(
-        public id?: number,
-        public aerodromP?: Aerodrom,
-        public aerodromS?: Aerodrom,
-        public brojSedista?: number, 
-        public datumP?: Date,
-        public datumS?: Date,
-        public vremeP?: String,
-        public vremeS?: String,
-        public aviokompanijaID?: number,
-        public presedanje?: Let,
-        public imaPresedanje?: Boolean,
-        public vremePutovanja?: String,
-        public duzinaPutovanja?: Number
-    ){}
-}
-

@@ -1,20 +1,21 @@
-<form [formGroup]="regVoz" (ngSubmit)="onSubmit()">
+<form class="form-group" [formGroup]="voziloFormGroup" >
+  <div formGroupName="vozilo">
     <div class="form-group">
-      <label for="nazivVoz">Naziv</label>
-      <input type="text" class="form-control" id="nazivVozInput" placeholder="">
+      <label for="nazivVoz">Name</label>
+      <input type="text" class="form-control form-control-sm" id="nazivVozInput" [formControlName]="'naziv'" placeholder="">
     </div>
     <div class="form-group">
-      <label for="markaVoz">Marka</label>
-      <input type="text" class="form-control" id="markaVozInput" placeholder="">
+      <label for="markaVoz">Brand</label>
+      <input type="text" class="form-control form-control-sm" id="markaVozInput" [formControlName]="'marka'" placeholder="">
     </div>
     <div class="form-group">
       <label for="modelVoz">Model</label>
-      <input type="text" class="form-control" id="modelVozInput" placeholder="">
+      <input type="text" class="form-control form-control-sm" id="modelVozInput" [formControlName]="'model'" placeholder="">
     </div>
 
     <div class="form-group">
-      <label for="sedVoz">Broj sedišta</label>
-      <select class="form-control" id="sedVozSelect">
+      <label for="sedVoz">Number of seats</label>
+      <select class="form-control form-control-sm" id="sedVozSelect" [formControlName]="'brojSedista'">
         <option>2</option>
         <option>3</option>
         <option>4</option>
@@ -25,8 +26,8 @@
     </div>
 
     <div class="form-group">
-      <label for="vrataVoz">Broj vrata</label>
-      <select class="form-control" id="vrataVozSelect">
+      <label for="vrataVoz">Number of doors</label>
+      <select class="form-control form-control-sm" id="vrataVozSelect" [formControlName]="'brojVrata'">
         <option>2</option>
         <option>3</option>
         <option>4</option>
@@ -37,8 +38,8 @@
     </div>
 
     <div class="form-group">
-      <label for="torVoz">Broj torbi</label>
-      <select class="form-control" id="torVozSelect">
+      <label for="torVoz">Luggage</label>
+      <select class="form-control form-control-sm" id="torVozSelect" [formControlName]="'brojTorbi'">
         <option>1</option>
         <option>2</option>
         <option>3</option>
@@ -48,27 +49,27 @@
     </div>
 
     <div class="form-group">
-      <label for="menjacVoz">Menjač</label>
-      <select class="form-control" id="menjacVozSelect">
-        <option>Automatski</option>
-        <option>Manuelni</option>
+      <label for="menjacVoz">Gear</label>
+      <select class="form-control form-control-sm" id="menjacVozSelect" [formControlName]="'menjac'">
+        <option value="AUTO">Automatic</option>
+        <option value="MANU">Manual</option>
       </select>
     </div>
 
 
     <div class="form-group">
-      <label for="gorivoVoz">Tip goriva</label>
-      <select class="form-control" id="gorivoVozSelect">
-        <option>Benzin</option>
-        <option>Dizel</option>
-        <option>Gas</option>
+      <label for="gorivoVoz">Gas</label>
+      <select class="form-control form-control-sm" id="gorivoVozSelect" [formControlName]="'gorivo'">
+        <option value="BENZIN" >Petrol</option>
+        <option value="DIZEL">Diesel</option>
+        <option value="GAS">Gas</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label for="rezVoz">Rezervoar</label>
-      <div class="input-group">
-        <input type="number" class="form-control" id="rezVozInput" aria-label="rezVozAria">
+      <label for="rezVoz">Tank</label>
+      <div class="input-group input-group-sm">
+        <input type="number" class="form-control" id="rezVozInput" aria-label="rezVozAria" [formControlName]="'rezervoar'">
         <div class="input-group-append">
           <span class="input-group-text">l</span>
         </div>
@@ -76,9 +77,9 @@
     </div>
 
     <div class="form-group">
-      <label for="potVoz">Potrošnja</label>
-      <div class="input-group">
-          <input type="number" class="form-control" id="potVozInput" placeholder="" aria-label="potVozAria">
+      <label for="potVoz">Consumption</label>
+      <div class="input-group input-group-sm">
+          <input type="number" class="form-control" id="potVozInput" placeholder="" aria-label="potVozAria" [formControlName]="'potrosnja'">
           <div class="input-group-append">
             <span class="input-group-text">l</span>
           </div>
@@ -86,19 +87,24 @@
     </div>
 
     <div class="form-group">
-      <label for="klimaVoz">Klima</label>
-      <select class="form-control" id="klimaVozSelect">
-        <option>Da</option>
-        <option>Ne</option>
+      <label for="klimaVoz">AC</label>
+      <select class="form-control form-control-sm" id="klimaVozSelect" [formControlName]="'klima'">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label for="dodVoz">Opis</label>
-      <textarea class="form-control" id="dodVozText" rows="5"></textarea>
+      <label for="dodVoz">Description</label>
+      <textarea class="form-control form-control-sm" id="dodVozText" rows="5" [formControlName]="'dodatniopis'"></textarea>
     </div>
 
+    <div class="btn-group">
+      <button type="button"  class="btn btn-primary btn-sm" (click)="submit()">Submit</button>
+      <button *ngIf="edit" type="button" class="btn btn-primary btn-sm" (click)="delete()">Delete</button>
+    </div>
 
+  </div>
 
 
 

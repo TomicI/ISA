@@ -40,7 +40,7 @@ import com.security.JwtResponse;
 import com.security.ResponseMessage;
 import com.service.UserService;
 
-@CrossOrigin(origins ="http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins ="http://localhost:4200")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthRestAPIs {

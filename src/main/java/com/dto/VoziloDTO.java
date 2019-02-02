@@ -1,6 +1,8 @@
 package com.dto;
 
 
+import javax.persistence.Column;
+
 import com.model.Gorivo;
 import com.model.Menjac;
 import com.model.Vozilo;
@@ -29,6 +31,12 @@ public class VoziloDTO {
 
 	private Double prosecnaOcena;
 	
+	private Integer rezervoar;
+
+	private Double potrosnja;
+	
+	private String dodatniopis;
+
 	private FilijalaDTO filijalaDTO;
 	
 	
@@ -38,7 +46,7 @@ public class VoziloDTO {
 	
 
 	public VoziloDTO(Long id, String naziv, String marka, String model, Integer brojSedista, Integer brojVrata,
-			Double brojTorbi, Gorivo gorivo, Menjac menjac, Boolean klima, Double prosecnaOcena,
+			Double brojTorbi, Gorivo gorivo, Menjac menjac, Boolean klima, Double prosecnaOcena,Integer rezervoar,Double potrosnja,String dodatniopis,
 			FilijalaDTO filijalaDTO) {
 		super();
 		this.id = id;
@@ -52,6 +60,9 @@ public class VoziloDTO {
 		this.menjac = menjac;
 		this.klima = klima;
 		this.prosecnaOcena = prosecnaOcena;
+		this.rezervoar = rezervoar;
+		this.potrosnja =potrosnja;
+		this.dodatniopis = dodatniopis;
 		this.filijalaDTO = filijalaDTO;
 	}
 
@@ -68,6 +79,9 @@ public class VoziloDTO {
 		this.menjac = v.getMenjac();
 		this.klima = v.getKlima();
 		this.prosecnaOcena = v.getProsecnaOcena();
+		this.rezervoar=v.getRezervoar();
+		this.potrosnja= v.getPotrosnja();
+		this.dodatniopis = v.getDodatniopis();
 		this.filijalaDTO = new FilijalaDTO(v.getVozilo());
 
 	}
@@ -166,6 +180,36 @@ public class VoziloDTO {
 
 	public void setFilijalaDTO(FilijalaDTO filijalaDTO) {
 		this.filijalaDTO = filijalaDTO;
+	}
+
+
+	public Integer getRezervoar() {
+		return rezervoar;
+	}
+
+
+	public void setRezervoar(Integer rezervoar) {
+		this.rezervoar = rezervoar;
+	}
+
+
+	public Double getPotrosnja() {
+		return potrosnja;
+	}
+
+
+	public void setPotrosnja(Double potrosnja) {
+		this.potrosnja = potrosnja;
+	}
+
+
+	public String getDodatniopis() {
+		return dodatniopis;
+	}
+
+
+	public void setDodatniopis(String dodatniopis) {
+		this.dodatniopis = dodatniopis;
 	}
 
 	

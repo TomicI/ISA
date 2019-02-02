@@ -47,11 +47,11 @@ public class Vozilo {
 	@Column
 	private Double prosecnaOcena;
 	
-	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "filijala_id",nullable=false)
 	private Filijala vozilo;
 	
-	@OneToMany(mappedBy = "cenovnik",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "cenovnik",fetch = FetchType.LAZY)
 	private Set<CenovnikRentACar> cenovnik = new HashSet<CenovnikRentACar>();
 	
 	
@@ -162,6 +162,30 @@ public class Vozilo {
 
 	public void setGorivo(Gorivo gorivo) {
 		this.gorivo = gorivo;
+	}
+
+	public Integer getRezervoar() {
+		return rezervoar;
+	}
+
+	public void setRezervoar(Integer rezervoar) {
+		this.rezervoar = rezervoar;
+	}
+
+	public Double getPotrosnja() {
+		return potrosnja;
+	}
+
+	public void setPotrosnja(Double potrosnja) {
+		this.potrosnja = potrosnja;
+	}
+
+	public String getDodatniopis() {
+		return dodatniopis;
+	}
+
+	public void setDodatniopis(String dodatniopis) {
+		this.dodatniopis = dodatniopis;
 	}
 	
 

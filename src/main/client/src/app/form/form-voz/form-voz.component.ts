@@ -1,7 +1,9 @@
-import { Component, OnInit , Input} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import {RentacarService } from '../../services/rentacar.service';
+import { RentacarService } from '../../services/rentacar.service';
 import { Vozilo } from '../../model';
+import { VehicleService } from 'src/app/services/vehicle.service';
+
 
 
 @Component({
@@ -10,15 +12,18 @@ import { Vozilo } from '../../model';
   styleUrls: ['./form-voz.component.css'],
 })
 export class FormVozComponent implements OnInit {
-  @Input() vozilo: Vozilo;
+  @Input() voziloFormGroup: FormGroup;
+  @Input() edit: boolean;
+  @Output() clickedVeh = new EventEmitter<boolean>();
 
   regVoz: FormGroup;
   submitted = false;
 
   constructor(
-    private formBuilder: FormBuilder ,
-    private rentaCarService: RentacarService
-    ) {}
+    private formBuilder: FormBuilder,
+    private rentaCarService: RentacarService,
+    private vehicleService: VehicleService
+  ) { }
 
   ngOnInit() {
     this.regVoz = this.formBuilder.group({
@@ -36,5 +41,29 @@ export class FormVozComponent implements OnInit {
     });
 
   }
+
+  async submit() {
+    console.log(JSON.stringify(this.voziloFormGroup.get('vozilo').value));
+
+    if (this.edit === true) {
+      console.log('Edit VEH');
+      await this.vehicleService.updateVehicle(this.voziloFormGroup.get('vozilo').value);
+    } else {
+      await this.vehicleService.saveVehicle(this.voziloFormGroup.get('vozilo').value);
+
+    }
+
+    this.clickedVeh.emit(true);
+  }
+
+  async delete() {
+    const pom = this.voziloFormGroup.get('vozilo').get('id').value;
+    if (this.edit === true) {
+      await this.vehicleService.removeVehicle(pom);
+    }
+    this.clickedVeh.emit(true);
+  }
+
+  
 
 }
