@@ -6,17 +6,17 @@ import com.model.VezaAA;
 
 public class VezaAADTO {
 	private Long id;
-	private Aerodrom aerodrom;
-	private Aviokompanija aviokompanija;
+	private Long aerodrom;
+	private Long aviokompanija;
 	
 	public VezaAADTO() {
 	}
 	
 	public VezaAADTO(VezaAA v) {
-		this(v.getId(), v.getAerodrom(), v.getAviokompanija());
+		this(v.getId(), v.getAerodrom().getId(), v.getAviokompanija().getId());
 	}
 	
-	public VezaAADTO(Long id, Aerodrom aerodrom, Aviokompanija aviokompanija) {
+	public VezaAADTO(Long id, Long aerodrom, Long aviokompanija) {
 		this.id = id;
 		this.aerodrom = aerodrom;
 		this.aviokompanija = aviokompanija;
@@ -29,19 +29,19 @@ public class VezaAADTO {
 		this.id = id;
 	}
 
-	public Aerodrom getAerodrom() {
+	public Long getAerodrom() {
 		return aerodrom;
 	}
 
-	public void setAerodrom(Aerodrom aerodrom) {
+	public void setAerodrom(Long aerodrom) {
 		this.aerodrom = aerodrom;
 	}
 
-	public Aviokompanija getAviokompanija() {
+	public Long getAviokompanija() {
 		return aviokompanija;
 	}
 
-	public void setAviokompanija(Aviokompanija aviokompanija) {
+	public void setAviokompanija(Long aviokompanija) {
 		this.aviokompanija = aviokompanija;
 	}
 

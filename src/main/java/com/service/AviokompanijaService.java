@@ -18,6 +18,7 @@ public class AviokompanijaService {
 	private AviokompanijaRepository aviokompanijaRepository;
 	
 	public Optional<Aviokompanija> findById(Long id) {
+		
 		return aviokompanijaRepository.findById(id);
 	}
 	
@@ -28,6 +29,7 @@ public class AviokompanijaService {
 	public Aviokompanija save(Aviokompanija aviokompanija) {
 		return aviokompanijaRepository.save(aviokompanija);
 	}
+	
 	
 	public void remove(Long id) {
 		aviokompanijaRepository.deleteById(id);

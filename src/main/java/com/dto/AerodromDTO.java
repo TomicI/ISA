@@ -6,18 +6,20 @@ public class AerodromDTO {
 
 	private Long id;
 	private String nazivAerodroma;
+	private Long destinacijaID;
 	
 	public AerodromDTO() {
 	}
 	
 	public AerodromDTO(Aerodrom a) {
-		this(a.getId(), a.getNazivAerodroma());
+		this(a.getId(), a.getNazivAerodroma(), a.getDestinacija().getId());
 	} 
 	
-	public AerodromDTO(Long id, String nazivAerodroma) {
+	public AerodromDTO(Long id, String nazivAerodroma, Long destinacijaID) {
 		super();
 		this.id = id;
 		this.nazivAerodroma = nazivAerodroma;
+		this.destinacijaID=destinacijaID;
 	}
 
 	public Long getId() {
@@ -34,6 +36,14 @@ public class AerodromDTO {
 
 	public void setNazivAerodroma(String nazivAerodroma) {
 		this.nazivAerodroma = nazivAerodroma;
+	}
+
+	public Long getDestinacijaID() {
+		return destinacijaID;
+	}
+
+	public void setDestinacijaID(Long destinacijaID) {
+		this.destinacijaID = destinacijaID;
 	}
 	
 	

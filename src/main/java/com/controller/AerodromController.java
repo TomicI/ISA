@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dto.AerodromDTO;
+import com.dto.DestinacijaDTO;
 import com.model.Aerodrom;
+import com.model.Destinacija;
 import com.service.AerodromService;
+import com.service.DestinacijaService;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -24,13 +27,18 @@ import com.service.AerodromService;
 public class AerodromController {
 	@Autowired
 	private AerodromService as;
+	
+	@Autowired
+	private DestinacijaService ds;
 
 	 @RequestMapping(value="/lista",method=RequestMethod.GET)
 	 public ResponseEntity<List<AerodromDTO>> getAll(){
 
+			System.out.println( " FAC " );
 	 List<Aerodrom> aerodrom = as.findAll();
 	 List<AerodromDTO> aerodromDTO = new ArrayList<>();
 		for (Aerodrom s : aerodrom) {
+			System.out.println("Dodaje a " + s.getNazivAerodroma());
 			aerodromDTO.add(new AerodromDTO(s));
 		}
 		
@@ -40,8 +48,8 @@ public class AerodromController {
  @RequestMapping(value="/{id}",method = RequestMethod.GET)
  public ResponseEntity<AerodromDTO> getAerodrom(@PathVariable Long id){
 
+	 System.out.println(" GAC " + id);
  Optional<Aerodrom> aerodrom = as.findById(id);
-
 	 if (aerodrom.isPresent()) {	
 		 return new ResponseEntity<>(new AerodromDTO(aerodrom.get()),HttpStatus.OK);
 	 }else {
@@ -54,8 +62,11 @@ public class AerodromController {
 	public ResponseEntity<AerodromDTO> saveAerodrom(@RequestBody AerodromDTO avioDTO){
 		
 	 Aerodrom aerodrom = new Aerodrom();
+	 System.out.println("Naziv aerodroma " + avioDTO.getNazivAerodroma());
 	 aerodrom.setNazivAerodroma(avioDTO.getNazivAerodroma());
-	
+	Optional<Destinacija> des=ds.findById(avioDTO.getDestinacijaID());
+	if(des.isPresent())
+		aerodrom.setDestinacija(des.get());
 	 aerodrom = as.save(aerodrom);
 		return new ResponseEntity<>(new AerodromDTO(aerodrom), HttpStatus.CREATED);	
 	}
@@ -88,6 +99,6 @@ public class AerodromController {
 		}
 	}
  
+
  
-	
 }

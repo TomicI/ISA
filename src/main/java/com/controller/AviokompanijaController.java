@@ -20,6 +20,7 @@ import com.dto.AviokompanijaDTO;
 import com.dto.VezaAADTO;
 import com.model.Aviokompanija;
 import com.model.VezaAA;
+import com.service.AerodromService;
 import com.service.AviokompanijaService;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -31,7 +32,7 @@ public class AviokompanijaController {
 	
 	 @RequestMapping(value="/lista",method=RequestMethod.GET)
 		 public ResponseEntity<List<AviokompanijaDTO>> getAll(){
-	
+		 System.out.println("Uslo u lista");
 		 List<Aviokompanija> aviokompanija = avios.findAll();
 		 List<AviokompanijaDTO> aviokompanijaDTO = new ArrayList<>();
 			for (Aviokompanija s : aviokompanija) {
@@ -43,9 +44,8 @@ public class AviokompanijaController {
 	 
 	 @RequestMapping(value="/{id}",method = RequestMethod.GET)
 	 public ResponseEntity<AviokompanijaDTO> getAviokompanijas(@PathVariable Long id){
-
+		 System.out.println("USLO u get");
 	 Optional<Aviokompanija> aviokompanija = avios.findById(id);
-
 		 if (aviokompanija.isPresent()) {	
 			 return new ResponseEntity<>(new AviokompanijaDTO(aviokompanija.get()),HttpStatus.OK);
 		 }else {
@@ -56,10 +56,12 @@ public class AviokompanijaController {
 	 
 	 @RequestMapping(method=RequestMethod.POST, consumes="application/json")
 		public ResponseEntity<AviokompanijaDTO> saveAviokompanija(@RequestBody AviokompanijaDTO aviokompanijaDTO){
-			
+		 	System.out.println("USLO U SAVE");
 		 	Aviokompanija aviokompanija = new Aviokompanija();
 		 	aviokompanija.setNaziv(aviokompanijaDTO.getNaziv());
-		
+		 	aviokompanija.setAdresa(aviokompanijaDTO.getAdresa());
+		 	aviokompanija.setOpis(aviokompanijaDTO.getOpis());
+		 	aviokompanija.setProsecnaOcena(aviokompanijaDTO.getProsecnaOcena());
 		 	aviokompanija = avios.save(aviokompanija);
 			return new ResponseEntity<>(new AviokompanijaDTO(aviokompanija), HttpStatus.CREATED);	
 		}
@@ -69,11 +71,10 @@ public class AviokompanijaController {
 			
 			//a course must exist
 		 Optional<Aviokompanija> avio = avios.findById(avioDTO.getId()); 
-			
+			System.out.println("USLOOOOOOOOO UPDATE");
 			if (avio == null) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
-			
 			avio.get().setNaziv(avioDTO.getNaziv());
 			avio.get().setAdresa(avioDTO.getAdresa());
 			avio.get().setOpis(avioDTO.getOpis());
@@ -84,10 +85,11 @@ public class AviokompanijaController {
 	 
 	 @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
 		public ResponseEntity<Void> deleteAviokompanija(@PathVariable Long id){
-			
+			System.out.print("Obrisi id " + id);
 		 Optional<Aviokompanija> avio = avios.findById(id);
 			
 			if (avio != null){
+				System.out.println("Naslo za brisanje ");
 				avios.remove(id);
 				return new ResponseEntity<>(HttpStatus.OK);
 			} else {		
@@ -108,8 +110,8 @@ public class AviokompanijaController {
 			for (VezaAA v: veze) {
 				VezaAADTO vezaDTO = new VezaAADTO();
 				vezaDTO.setId(v.getId());
-				vezaDTO.setAerodrom(v.getAerodrom());
-				vezaDTO.setAviokompanija(v.getAviokompanija());
+				vezaDTO.setAerodrom(v.getAerodrom().getId());
+				vezaDTO.setAviokompanija(v.getAviokompanija().getId());
 			
 				vezeDTO.add(vezaDTO);
 			}

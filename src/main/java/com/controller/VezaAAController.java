@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dto.VezaAADTO;
+import com.model.Aerodrom;
+import com.model.Aviokompanija;
 import com.model.VezaAA;
+import com.service.AerodromService;
+import com.service.AviokompanijaService;
 import com.service.VezaAAService;
 
 
@@ -25,6 +29,8 @@ import com.service.VezaAAService;
 public class VezaAAController {
 	@Autowired
 	private VezaAAService as;
+	private AerodromService aes;
+	private AviokompanijaService aks;
 
 	 @RequestMapping(value="/lista",method=RequestMethod.GET)
 	 public ResponseEntity<List<VezaAADTO>> getAll(){
@@ -55,8 +61,10 @@ public class VezaAAController {
 	public ResponseEntity<VezaAADTO> saveVeza(@RequestBody VezaAADTO vezaDTO){
 		
 	 VezaAA veza = new VezaAA();
-	 veza.setAerodrom(vezaDTO.getAerodrom());
-	 veza.setAviokompanija(vezaDTO.getAviokompanija());
+	 Optional<Aerodrom> a=aes.findById(vezaDTO.getAerodrom());
+	 Optional<Aviokompanija> av=aks.findById(vezaDTO.getAviokompanija());
+	 veza.setAerodrom(a.get());
+	 veza.setAviokompanija(av.get());
 	 
 	 veza = as.save(veza);
 		return new ResponseEntity<>(new VezaAADTO(veza), HttpStatus.CREATED);	
@@ -71,9 +79,10 @@ public class VezaAAController {
 		if (veza == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-
-		veza.get().setAerodrom(vezaDTO.getAerodrom());
-		veza.get().setAviokompanija(vezaDTO.getAviokompanija());
+		Optional<Aerodrom> a=aes.findById(vezaDTO.getAerodrom());
+		 Optional<Aviokompanija> av=aks.findById(vezaDTO.getAviokompanija());
+		veza.get().setAerodrom(a.get());
+		veza.get().setAviokompanija(av.get());
 		return new ResponseEntity<>(new VezaAADTO(as.save(veza.get())), HttpStatus.OK);	
 	}
  

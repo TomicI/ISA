@@ -29,10 +29,11 @@ public class DestinacijaController {
 
 	 @RequestMapping(value="/lista",method=RequestMethod.GET)
 	 public ResponseEntity<List<DestinacijaDTO>> getAll(){
-
+		 System.out.println(" LD ");
 	 List<Destinacija> destinacija = as.findAll();
 	 List<DestinacijaDTO> destinacijaDTO = new ArrayList<>();
 		for (Destinacija s : destinacija) {
+			System.out.println(" dodaje " + s.getNazivDestinacije());
 			destinacijaDTO.add(new DestinacijaDTO(s));
 		}
 		

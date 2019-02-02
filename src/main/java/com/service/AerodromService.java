@@ -16,10 +16,12 @@ public class AerodromService {
 	private AerodromRepository aerodromRepository;
 	
 	public Optional<Aerodrom> findById(Long id) {
+		System.out.println( " GAS " + id);
 		return aerodromRepository.findById(id);
 	}
 	
 	public List<Aerodrom> findAll(){
+		System.out.println( " FAS " );
 		return aerodromRepository.findAll();
 	}
 	
