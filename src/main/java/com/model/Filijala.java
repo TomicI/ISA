@@ -3,7 +3,6 @@ package com.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,6 +35,7 @@ public class Filijala {
 	
 	@OneToMany(mappedBy = "rezervacija",fetch = FetchType.LAZY)
 	private Set<RezervacijaRentACar> rezervacije = new HashSet<RezervacijaRentACar>();
+
 
 	public Filijala() {
 		super();
@@ -82,6 +82,22 @@ public class Filijala {
 	public void setVozila(Set<Vozilo> vozila) {
 		this.vozila = vozila;
 	}
+
+	/**
+	 * @return the rezervacije
+	 */
+	public Set<RezervacijaRentACar> getRezervacije() {
+		return rezervacije;
+	}
+
+	/**
+	 * @param rezervacije the rezervacije to set
+	 */
+	public void setRezervacije(Set<RezervacijaRentACar> rezervacije) {
+		this.rezervacije = rezervacije;
+	}
+
+
 	
 
 }

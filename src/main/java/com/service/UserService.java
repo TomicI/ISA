@@ -1,5 +1,7 @@
 package com.service;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +52,11 @@ public class UserService {
         tokenRepository.save(myToken);
     }
 
-    
+
+    public Optional<User> findOne(Long id) {
+       return userRepository.findById(id);
+        
+    }
      
     
 	

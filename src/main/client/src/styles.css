@@ -1,5 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+
+    .custom-day {
+      text-align: center;
+      padding: 0.185rem 0.25rem;
+      display: inline-block;
+      height: 2rem;
+      width: 2rem;
+    }
+    .custom-day.focused {
+      background-color: #e6e6e6;
+    }
+    .custom-day.range, .custom-day:hover {
+      background-color: rgb(2, 117, 216);
+      color: white;
+    }
+    .custom-day.faded {
+      background-color: rgba(2, 117, 216, 0.5);
+    }
+
 .panelAdminColor{
     
     background-color: rgb(240, 240, 240) ;
@@ -24,32 +45,20 @@
     color: rgb(36, 39, 41);
 }
 
-.fontTable{
-    font-size: 11px;
-}
 
-table {
-    width: 100%;
-}
-
-.mat-column-naziv,
-.mat-column-marka 
-.mat-column-model
-.mat-column-brojSedista 
-.mat-column-brojVrata
-.mat-column-brojTorbi
-.mat-column-gorivo 
-.mat-column-menjac
-.mat-column-klima 
-.mat-column-rezervoar 
-.mat-column-potrosnja
-.mat-column-dodatniopis 
-.mat-column-prosecnaOcena{
-  flex: 0 0 100px;
+  
+  
+  .mat-cell{
    
-}
-
-                
+    justify-content:center!important;
+    
+  }
+  
+  .mat-header-cell {
+    
+    justify-content:center;
+  }
+  
 
 .matchip {
    transition: none;
@@ -60,3 +69,4 @@ table {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+

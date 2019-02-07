@@ -46,14 +46,17 @@ export class RentACar {
     id: number;
     naziv: string;
     opis: string;
+    adresa: string;
 
     constructor(
         id?: number,
         naziv?: string,
-        opis?: string) {
+        opis?: string,
+        adresa?: string) {
         this.id = id;
         this.naziv = naziv;
         this.opis = opis;
+        this.adresa = adresa;
     }
 }
 
@@ -118,14 +121,29 @@ export class Vozilo {
 }
 
 export class CenovnikRent {
+    id: number;
+    odDatuma: Date;
+    doDatuma: Date;
+    cena: number;
+    voziloDTO: Vozilo;
+    filijalaDTO: Filijala;
+    rentACarDTO: RentACar;
+
     constructor(
-        public id: number,
-        public odDatuma: Date,
-        public doDatuma: Date,
-        public cena: number,
-        public slobodan: boolean,
-        public voziloDTO: Vozilo
-    ) { }
+        id: number,
+        odDatuma: Date,
+        doDatuma: Date,
+        cena: number,
+        voziloDTO: Vozilo,
+        rentACarDTO: RentACar
+    ) {
+        this.id = id;
+        this.odDatuma = odDatuma;
+        this.doDatuma = doDatuma;
+        this.cena = cena;
+        this.voziloDTO = voziloDTO;
+        this.rentACarDTO = rentACarDTO;
+    }
 }
 
 export class RezervacijaRent {
@@ -137,6 +155,7 @@ export class RezervacijaRent {
         public cena: number,
         public FilijalaDTO: Filijala,
         public VoziloDTO: Vozilo,
+        public UserDTO: User,
     ) { }
 
 }
@@ -160,7 +179,24 @@ export class User {
     email: string;
     password: string;
 
-    constructor(firstName: string, lastName: string, username: string, email: string, password: string) { };
+    constructor(firstName: string, lastName: string, username: string, email: string, password: string) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+}
+
+export class NewPass {
+    oldPass: string;
+    newPass: string;
+
+    constructor(oldPass: string,newPass: string){
+        this.oldPass = oldPass;
+        this.newPass = newPass;
+    }
 
 }
 

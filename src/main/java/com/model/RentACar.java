@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,9 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-
-import com.model.user.User;
 
 
 @Entity
@@ -29,11 +25,16 @@ public class RentACar {
 	private String naziv;
 	@Column
 	private String opis;
+	@Column(nullable = false)
+	private String adresa;
 	
 	//cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
 
 	@OneToMany(mappedBy = "filijala",fetch = FetchType.LAZY)
 	private Set<Filijala> filijale = new HashSet<Filijala>();
+
+	@OneToMany(mappedBy = "servis",fetch = FetchType.LAZY)
+	private Set<CenovnikRentACar> cenovnici = new HashSet<CenovnikRentACar>();
 	
 
 	public RentACar() {
@@ -101,6 +102,34 @@ public class RentACar {
 
 	public void setFilijale(Set<Filijala> filijale) {
 		this.filijale = filijale;
+	}
+
+	/**
+	 * @return the adresa
+	 */
+	public String getAdresa() {
+		return adresa;
+	}
+
+	/**
+	 * @param adresa the adresa to set
+	 */
+	public void setAdresa(String adresa) {
+		this.adresa = adresa;
+	}
+
+	/**
+	 * @return the cenovnici
+	 */
+	public Set<CenovnikRentACar> getCenovnici() {
+		return cenovnici;
+	}
+
+	/**
+	 * @param cenovnici the cenovnici to set
+	 */
+	public void setCenovnici(Set<CenovnikRentACar> cenovnici) {
+		this.cenovnici = cenovnici;
 	}
 	
 	

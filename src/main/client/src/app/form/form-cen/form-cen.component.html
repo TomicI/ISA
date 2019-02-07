@@ -1,0 +1,48 @@
+<form class="form-group" [formGroup]="cenovnikFormGroup">
+  <div formGroupName="CenovnikRent">
+    <div class="form-group">
+      <label for="fromDate">From</label>
+
+      <div class="input-group input-group-sm">
+        <input class="form-control"  [readonly]="true" placeholder="yyyy-mm-dd" name="dp" [formControlName]="'odDatuma'"
+        [minDate]="minDatum" ngbDatepicker #d="ngbDatepicker" >
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button"><i class="fas fa-calendar-week"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <label for="toDate">To</label>
+
+    <div class="input-group input-group-sm">
+      <input class="form-control" required="required" [readonly]="true" placeholder="yyyy-mm-dd" name="dp" [formControlName]="'doDatuma'"
+      [minDate]="minDatum" ngbDatepicker #d2="ngbDatepicker">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button"><i class="fas fa-calendar-week"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="price">Price</label>
+      <input type="number" min="0" class="form-control form-control-sm" id="priceInput" [formControlName]="'cena'"
+        placeholder="">
+    </div>
+
+    <!-- <div class="form-group">
+      <label for="open">Open</label>
+      <select class="form-control form-control-sm" id="openSelect" [formControlName]="'slobodan'">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      </select>
+    </div> -->
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary btn-sm" (click)="submit()">Submit</button>
+      <button *ngIf="edit" type="button" class="btn btn-primary btn-sm" (click)="delete()">Delete</button>
+    </div>
+
+  </div>
+
+
+
+
+</form>

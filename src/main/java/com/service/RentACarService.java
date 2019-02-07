@@ -34,6 +34,11 @@ public class RentACarService {
 	public void remove(Long id) {
 		rentACarRepository.deleteById(id);
 	}
+
+	public boolean exists(String name){
+		return rentACarRepository.existsByNaziv(name);
+	}
+
 	
 	
 

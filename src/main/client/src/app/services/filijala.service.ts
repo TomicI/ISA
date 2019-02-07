@@ -24,12 +24,11 @@ export class FilijalaService {
   getAllVozila(id: number): Observable<any> {
     return this.http.get(`${this.FilijalaURL}/${id}/vozila`);
   }
-
   async removeFilijala(id: number): Promise<Object> {
     return await this.http.delete(`${this.FilijalaURL}/${id}`).toPromise();
   }
 
-  async updateFilijala(filijala: Object): Promise<Object>{
+  async updateFilijala(filijala: Object): Promise<Object> {
     console.log('PUT');
     return await this.http.put(`${this.FilijalaURL}`, filijala).toPromise();
   }

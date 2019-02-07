@@ -97,25 +97,25 @@ export class AvioEditComponent implements OnInit {
     mapboxgl.accessToken = 'pk.eyJ1IjoiaXYzIiwiYSI6ImNqcmw4dTFkZzA1a2E0M280cmN5ZzB2azcifQ.onqhM8uoPAXAYdE9JRJX0g';
    // geo.setAccessToken('pk.eyJ1IjoiaXYzIiwiYSI6ImNqcmw4dTFkZzA1a2E0M280cmN5ZzB2azcifQ.onqhM8uoPAXAYdE9JRJX0g');
    this.aviokompanija=new Aviokompanija();
-   this.route.params.subscribe
-      ( params =>  { const id = params['id'];
-      if (id) {
-        console.log(`Avikompanija with id '${id}' `);
-        this.aviokompanijaService.getAviokompanija(id).subscribe((aviokompanija: any) => {
-          if (aviokompanija) {
-            this.aviokompanija = aviokompanija;
-            console.log(`Pronadjeno '${aviokompanija.naziv}' `);
+  //  this.route.params.subscribe
+  //     ( params =>  { const id = params['id'];
+  //     if (id) {
+  //       console.log(`Avikompanija with id '${id}' `);
+  //       this.aviokompanijaService.getAviokompanija(id).subscribe((aviokompanija: any) => {
+  //         if (aviokompanija) {
+  //           this.aviokompanija = aviokompanija;
+  //           console.log(`Pronadjeno '${aviokompanija.naziv}' `);
             
-            console.log('Adresa  '+ this.aviokompanija.adresa );
-            //this.findLocation(this.aviokompanija.adresa);
-            this.ucitajC();
-          } else {
-            console.log(`Avikompanija with id '${id}' not found `);
-          }
+  //           console.log('Adresa  '+ this.aviokompanija.adresa );
+  //           //this.findLocation(this.aviokompanija.adresa);
+  //           this.ucitajC();
+  //         } else {
+  //           console.log(`Avikompanija with id '${id}' not found `);
+  //         }
 
-        });
-      }
-    });
+  //       });
+  //     }
+  //   });
     //console.log(geo.geocode('mapbox.places', 'Jevrjska, Novi Sad'));
    
 

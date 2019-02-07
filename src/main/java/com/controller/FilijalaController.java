@@ -106,7 +106,6 @@ public class FilijalaController {
 	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<FilijalaDTO> updateFilijala(@RequestBody FilijalaDTO filijalaDTO){
 		
-		
 		Optional<Filijala> optFilijala = filijalaService.findOne(filijalaDTO.getId());
 		
 		if (!optFilijala.isPresent()) {

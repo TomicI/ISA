@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { RentACar, Filijala, Vozilo } from '../model';
+import { RentACar, Filijala, Vozilo, CenovnikRent } from '../model';
 
 import { UserService } from '../services/user.service';
 import { RentacarService } from '../services/rentacar.service';
@@ -10,8 +10,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormVozComponent } from '../form/form-voz/form-voz.component';
-
-
+import { DataSource } from '@angular/cdk/table';
 
 
 @Component({
@@ -26,9 +25,14 @@ export class PanelAdminRentComponent implements OnInit {
   @ViewChild('vehDiv') formVeh: FormVozComponent;
   @ViewChild('paginator1') paginator: MatPaginator;
   @ViewChild('paginator2') paginator2: MatPaginator;
+  @ViewChild('paginator3') paginator3: MatPaginator;
 
   filijalaFormGroup: FormGroup;
   voziloFormGroup: FormGroup;
+  cenovnikFormGroup: FormGroup;
+  rentFormGroup: FormGroup;
+
+  modal = '';
 
   string: any;
 
@@ -36,9 +40,15 @@ export class PanelAdminRentComponent implements OnInit {
 
   proslo = false;
   openVeh = false;
+  openCen = false;
+
+  opcija = 0;
 
   edit = false;
   editVeh = false;
+  editCen = false;
+
+  minDate;
 
   rentACar: RentACar;
 
@@ -71,7 +81,8 @@ export class PanelAdminRentComponent implements OnInit {
     'potrosnja',
     'dodatniopis',
     'prosecnaOcena',
-    'action'];
+    'edit',
+    'rate'];
 
   displayedColumnsFil: string[] = [
     'no',
@@ -80,13 +91,31 @@ export class PanelAdminRentComponent implements OnInit {
     'vehicles',
     'edit'];
 
-  data: Vozilo[] = [];
+  displayedColumnsCenovnik: string[] = [
+    'no',
+    'name',
+    'odDatuma',
+    'doDatuma',
+    'price',
+    'edit'];
 
-  dataSource = new MatTableDataSource(this.data);
+  data: Vozilo[];
+
+  dataSource;
 
   filData: Filijala[] = [];
 
-  filijalaSource = new MatTableDataSource(this.filData);
+  filijalaSource;
+
+  cenData;
+
+  cenovnikSource;
+
+  allVozila: any[] = [];
+
+  allFilId: any[];
+
+  ob: Observable<any>;
 
   constructor(
     private userServise: UserService,
@@ -107,42 +136,68 @@ export class PanelAdminRentComponent implements OnInit {
     this.tableInit();
   }
 
-  tableInit() {
+  async tableInit() {
+
+    this.allVozila = [];
+
+    this.rentACar = await this.userServise.getUserRentACar().toPromise();
+
+    this.filData = await this.rentacarService.getAllFilijale(this.rentACar.id).toPromise();
+    this.filijalaSource = new MatTableDataSource(this.filData);
+    this.filijalaSource.paginator = this.paginator;
 
 
-    this.userServise.getUserRentACar().subscribe((rentacar: any) => {
-      if (rentacar) {
-        this.rentACar = rentacar;
+    await this.getAllVozila();
 
-        this.rentacarService.getAllFilijale(this.rentACar.id).subscribe(data => {
-
-          if (data) {
-            this.filData = data;
-            console.log(data);
-            this.filijalaSource = new MatTableDataSource(this.filData);
-            this.filijalaSource.paginator = this.paginator;
-          } else {
-            console.log('Filijale not found!');
-          }
-
-        });
+    await this.getRates();
 
 
-      } else {
-        console.log('RentACar not found!');
-      }
-    });
+    // this.userServise.getUserRentACar().subscribe((rentacar: any) => {
+    //   if (rentacar) {
+    //     this.rentACar = rentacar;
+
+    //     this.rentacarService.getAllFilijale(this.rentACar.id).subscribe(data => {
+
+    //       if (data) {
+    //         this.filData = data;
+    //         console.log(data);
+    //         this.filijalaSource = new MatTableDataSource(this.filData);
+    //         this.filijalaSource.paginator = this.paginator;
+
+    //       } else {
+    //         console.log('Filijale not found!');
+    //       }
+
+    //     });
+
+    //     this.rentacarService.getCenovnik(this.rentACar.id).subscribe(data => {
+
+    //       if (data) {
+
+    //         this.cenData = data;
+    //         console.log(data);
+    //         this.cenovnikSource = new MatTableDataSource(this.cenData);
+    //         this.cenovnikSource.paginator = this.paginator3;
+
+
+    //       } else {
+    //         console.log('Cenovnik not found');
+    //       }
+
+
+    //     });
+
+
+    //   } else {
+    //     console.log('RentACar not found!');
+    //   }
+
+    // });
 
   }
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  clickAction(id) {
-
-
-
   }
 
   showVehicles(filijala) {
@@ -157,6 +212,9 @@ export class PanelAdminRentComponent implements OnInit {
   }
 
   editFilijala(filijala) {
+
+    this.modal = 'Edit branch ' + filijala.adresa;
+
     console.log(filijala);
 
     this.edit = true;
@@ -166,10 +224,15 @@ export class PanelAdminRentComponent implements OnInit {
     });
     this.openVeh = false;
     this.proslo = true;
+    this.openCen = false;
+
     this.modalRef = this.modalService.open(this.content);
   }
 
+
   addFilijala() {
+
+    this.modal = 'New Branch';
 
     console.log('Add');
 
@@ -180,15 +243,46 @@ export class PanelAdminRentComponent implements OnInit {
     });
     this.openVeh = false;
     this.proslo = true;
+    this.openCen = false;
     this.modalRef = this.modalService.open(this.content);
   }
 
+  onCliked() {
+    console.log('Submit kliknut!');
+    this.modalRef.close();
+    this.tableInit();
+
+  }
+
+  async getAllVozila() {
+
+    for (const fil of this.filData) {
+      this.getVozLista(await this.filijalaService.getAllVozila(fil.id).toPromise());
+    }
+
+    this.data = this.allVozila;
+    this.dataSource = new MatTableDataSource(this.data);
+    this.dataSource.paginator = this.paginator2;
+
+  }
+
+  getVozLista(vozila) {
+    for (const vozilo of vozila) {
+      this.allVozila.push(vozilo);
+    }
+
+  }
+
+
+
   editVozilo(vozilo) {
+
+    this.modal = 'Edit vehicle ' + vozilo.naziv;
+
     console.log(vozilo);
     console.log(this.filijala);
 
     this.editVeh = true;
-
 
     this.voziloFormGroup = this.fb.group({
       vozilo: this.fb.group(vozilo)
@@ -196,10 +290,13 @@ export class PanelAdminRentComponent implements OnInit {
 
     this.proslo = false;
     this.openVeh = true;
+    this.openCen = false;
     this.modalRef = this.modalService.open(this.content);
   }
 
   addVozilo() {
+
+    this.modal = 'New vehicle';
 
     this.editVeh = false;
 
@@ -218,14 +315,8 @@ export class PanelAdminRentComponent implements OnInit {
     });
     this.proslo = false;
     this.openVeh = true;
+    this.openCen = false;
     this.modalRef = this.modalService.open(this.content);
-  }
-
-  onCliked() {
-    console.log('Submit kliknut!');
-    this.modalRef.close();
-    this.tableInit();
-    
   }
 
 
@@ -233,11 +324,71 @@ export class PanelAdminRentComponent implements OnInit {
     console.log('Submit kliknut vozilo!');
     this.modalRef.close();
     this.showVehicles(this.filijala);
-    
+
   }
 
+  async getRates() {
+
+    this.cenData = await this.rentacarService.getCenovnik(this.rentACar.id).toPromise();
+    this.cenovnikSource = new MatTableDataSource(this.cenData);
+    this.cenovnikSource.paginator = this.paginator3;
+
+  }
+
+  addCenovnik(vozilo) {
+    this.modal = 'New rate for ' + vozilo.naziv;
+
+    this.editCen = false;
+
+    this.cenovnikFormGroup = this.fb.group({
+      CenovnikRent: this.fb.group(new CenovnikRent(
+        null,
+        null,
+        null,
+        null,
+        vozilo,
+        this.rentACar
+      ))
+    });
+
+    this.proslo = false;
+    this.openVeh = false;
+    this.openCen = true;
+
+    this.modalRef = this.modalService.open(this.content);
+
+  }
+
+  editCenovnik(cenovnik) {
+
+    this.modal = 'Edit rate for ' + cenovnik.voziloDTO.naziv;
+
+    this.editCen = true;
+    this.cenovnikFormGroup = this.fb.group({
+      CenovnikRent: this.fb.group(new CenovnikRent(
+        cenovnik.id,
+        new Date(cenovnik.odDatuma),
+        new Date(cenovnik.doDatuma),
+        cenovnik.cena,
+        cenovnik.voziloDTO,
+        cenovnik.rentACarDTO
+      ))
+    });
 
 
+    this.proslo = false;
+    this.openVeh = false;
+    this.openCen = true;
+
+    this.modalRef = this.modalService.open(this.content);
+
+  }
+
+  onClickedCenovnik() {
+    console.log('Kliknut cenovnik');
+    this.modalRef.close();
+    this.getRates();
+  }
 
 
 }

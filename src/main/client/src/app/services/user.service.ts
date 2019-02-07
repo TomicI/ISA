@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RentACar } from '../model';
+import { RentACar, User, NewPass, RezervacijaRent } from '../model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,5 +16,16 @@ export class UserService {
     return this.http.get<RentACar>(`${this.userAccount}/getRentACar`);
   }
 
+  async getUser(): Promise<User> {
+    return await this.http.get<User>(`${this.userAccount}/getUser`).toPromise();
+  }
+
+  async getRes(): Promise<RezervacijaRent[]> {
+    return await this.http.get<RezervacijaRent[]>(`${this.userAccount}/getResVeh`).toPromise();
+  }
+
+  async getResHist(): Promise<RezervacijaRent[]> {
+    return await this.http.get<RezervacijaRent[]>(`${this.userAccount}/getResVehHist`).toPromise();
+  }
 
 }

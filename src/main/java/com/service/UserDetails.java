@@ -32,12 +32,14 @@ public class UserDetails implements org.springframework.security.core.userdetail
     @JsonIgnore
     private String password;
     
-    private boolean enabled;
+	private boolean enabled;
+	
+	private boolean reset;
  
     private Collection<? extends GrantedAuthority> authorities;
  
     public UserDetails(Long id, 
-			    		String username,String firstName,String lastName ,String email, String password, boolean enabled , 
+			    		String username,String firstName,String lastName ,String email, String password, boolean enabled , boolean reset,
 			    		Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
@@ -46,7 +48,8 @@ public class UserDetails implements org.springframework.security.core.userdetail
         this.email = email;
         this.password = password;
         this.enabled = enabled;
-        this.authorities = authorities;
+		this.authorities = authorities;
+		this.reset = reset;
     }
  
     public static UserDetails build(User user) {
@@ -60,7 +63,8 @@ public class UserDetails implements org.springframework.security.core.userdetail
                 user.getLastName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.isEnabled(),
+				user.isEnabled(),
+				user.isReset(),
                 authorities
         );
     }
@@ -132,5 +136,75 @@ public class UserDetails implements org.springframework.security.core.userdetail
         UserDetails user = (UserDetails) o;
         return Objects.equals(id, user.id);
     }
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
+	 * @param firstName the firstName to set
+	 */
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	/**
+	 * @param lastName the lastName to set
+	 */
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/**
+	 * @param enabled the enabled to set
+	 */
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	/**
+	 * @param authorities the authorities to set
+	 */
+	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+		this.authorities = authorities;
+	}
+
+	/**
+	 * @return the reset
+	 */
+	public boolean isReset() {
+		return reset;
+	}
+
+	/**
+	 * @param reset the reset to set
+	 */
+	public void setReset(boolean reset) {
+		this.reset = reset;
+	}
 
 }

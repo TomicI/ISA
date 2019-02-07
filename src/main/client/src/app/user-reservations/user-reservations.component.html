@@ -1,0 +1,110 @@
+<div class="container">
+  <div class="mt-2 "></div>
+  <div class="row">
+
+    <div class="col-md-4">
+
+      <div class="card">
+
+        <div class="card-header">
+          <h5>Flights</h5>
+        </div>
+
+        <div class="card-body">
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+      <div class="card">
+
+        <div class="card-header">
+          <h5>Hotels</h5>
+        </div>
+
+        <div class="card-body">
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+      <div class="card">
+
+        <div class="card-header">
+          <h5>Cars</h5>
+        </div>
+        <div class="list-group list-group-flush">
+
+          <li class="list-group-item">Old</li>
+
+      
+
+              <li  *ngFor="let rez of rentACarRezOld "class="list-group-item flex-column ">
+                <div class="d-flex justify-content-between">
+                  <h6 class="mb-1">{{rez.voziloDTO.naziv}}</h6>
+                  <p class="mb-1"> </p>
+                </div>
+                <small>{{rez.filijalaDTO.adresa}}</small>
+                <p class="mb-1">Pick-up : {{rez.datumPreuz | date: 'dd/MM/yyyy hh:mm'}} </p>
+                <p class="mb-1">Drop-off : {{rez.datumVracanja | date: 'dd/MM/yyyy hh:mm'}} </p>
+                <small *ngIf="!rez.otkazana">Reservation date : {{rez.datumRez | date: 'dd/MM/yyyy hh:mm' }}</small>
+                <small *ngIf="rez.otkazana">CANCELED</small>
+              </li>
+            
+          
+
+          <li class="list-group-item">New</li>
+
+          <div *ngIf="rentACarRezNew">
+              <div *ngFor="let rez of rentACarRezNew ">
+  
+                <li class="list-group-item flex-column ">
+                  <div class="d-flex justify-content-between">
+                    <h6 class="mb-1">{{rez.voziloDTO.naziv}}</h6>
+                    <p class="mb-1"><button class="btn" type="button" (click)="cancelRes(rez)"><i class="fas fa-ban"></i>
+
+                    </button> </p>
+                  </div>
+                  <small>{{rez.filijalaDTO.adresa}}</small>
+                  <p class="mb-1">Pick-up : {{rez.datumPreuz | date: 'dd/MM/yyyy hh:mm'}} </p>
+                  <p class="mb-1">Drop-off : {{rez.datumVracanja | date: 'dd/MM/yyyy hh:mm'}} </p>
+                  <small>Reservation date : {{rez.datumRez | date: 'dd/MM/yyyy hh:mm' }}</small>
+                </li>
+              </div>
+            </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <ng-template #content let-c="close" let-d="dismiss">
+
+    <div class="modal-body ">
+      <div class="justify-content-center text-center" >
+        <h5>{{message}}</h5>
+      
+      </div>
+
+      <div class="row">
+        <div class="col text-center">
+          <div *ngIf="cancelStatus" class="justify-content-center"><button type="button" class="btn btn-danger btn-sm" (click)="confirmCancel(rez)" >Confirm</button></div>
+        </div>
+      </div>
+
+      
+    </div>
+
+  </ng-template>
+
+
+</div>

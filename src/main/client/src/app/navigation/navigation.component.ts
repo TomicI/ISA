@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TokenService } from '../auth/token.service';
+import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 
 
@@ -16,6 +18,8 @@ export class NavigationComponent implements OnInit {
   loginDiv = true;
   signupDiv = false;
 
+ 
+
   isLoggedIn = false;
 
   roles: string[] = [];
@@ -24,14 +28,28 @@ export class NavigationComponent implements OnInit {
 
   username = '';
 
-  constructor(private modalService: NgbModal,  private tokenStorage: TokenService) { }
-
+  constructor(private modalService: NgbModal, 
+    private tokenStorage: TokenService, 
+    private authService: AuthService,
+    private router: Router) { }
   ngOnInit() {
     if (this.tokenStorage.getToken()) {
+      
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getAuthorities();
       this.username = this.tokenStorage.getUsername();
+
+      this.roles.forEach(function(x){
+        console.log(x);
+        if(x === 'ROLE_ADMIN_RENT' || 'ROLE_ADMIN_AVIO' || 'ROLE_ADMIN_HOTEL'){
+          
+        } 
+      });
+  
     }
+
+
+
   }
 
   clickEvent() {

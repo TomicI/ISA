@@ -1,11 +1,14 @@
 package com.controller;
 
+import java.util.Calendar;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,10 +20,14 @@ import com.dto.VoziloDTO;
 import com.model.Filijala;
 import com.model.RezervacijaRentACar;
 import com.model.Vozilo;
+import com.model.user.User;
+import com.security.ResponseMessage;
 import com.service.FilijalaService;
 import com.service.RezervacijaRentACarService;
+import com.service.UserService;
 import com.service.VoziloService;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping(value="api/rezervacijarent")
 public class RezervacijaRentACarController {
@@ -33,9 +40,12 @@ public class RezervacijaRentACarController {
 	
 	@Autowired
 	private VoziloService voziloService;
+
+	@Autowired
+	private UserService userService;
 	
 	@RequestMapping(method=RequestMethod.POST,consumes="application/json")
-	public ResponseEntity<RezervacijaRentACarDTO> saveRezervacija (@PathVariable RezervacijaRentACarDTO rezDTO){
+	public ResponseEntity<RezervacijaRentACarDTO> saveRezervacija (@RequestBody RezervacijaRentACarDTO rezDTO){
 		
 		if (rezDTO.getFilijalaDTO()==null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -86,7 +96,7 @@ public class RezervacijaRentACarController {
 	}
 	
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
-	public ResponseEntity<Void> deleteRezervacija(@PathVariable Long id){
+	public ResponseEntity<Void> deleteRezervacija(@RequestBody Long id){
 		
 		Optional<RezervacijaRentACar> rezOptional  = rezService.findOne(id);
 		
@@ -98,6 +108,80 @@ public class RezervacijaRentACarController {
 		}
 		
 	}
+
+	@RequestMapping(value="/cancel/{id}",method=RequestMethod.GET)
+	public ResponseEntity<?> cancelStatus(@PathVariable Long id){
+		
+		Optional<RezervacijaRentACar> rezOptional  = rezService.findOne(id);
+		
+		if (!rezOptional .isPresent()) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
+		Calendar cal = Calendar.getInstance();
+
+
+		if (( rezOptional.get().getDatumPreuz().getTime() - cal.getTime().getTime() ) <= 0) {
+			return new ResponseEntity<>(new ResponseMessage("Reservation can't be canceled , cancelation has to be made 48 h prior to the Pick-up date !"), HttpStatus.BAD_REQUEST);
+		}
+
+
+		return new ResponseEntity<>(new ResponseMessage(" Reservation can be canceled , cancelation has to be made 48 h prior to the Pick-up date !" ), HttpStatus.OK);
+		
+	}
+
+
+	@RequestMapping(value="/cancel",method=RequestMethod.PUT)
+	public ResponseEntity<?> cancel(@RequestBody RezervacijaRentACarDTO rezDTO){
+		
+		if (rezDTO.getFilijalaDTO()==null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		if (rezDTO.getVoziloDTO()==null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+		if (rezDTO.getUserDTO() == null){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		Optional<Filijala> filijalaOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
+		Optional<Vozilo> voziloOptional = voziloService.findOne(rezDTO.getVoziloDTO().getId());
+		Optional<User> userOptional = userService.findOne(rezDTO.getUserDTO().getId());
+		
+		if (!filijalaOptional.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+		if (!voziloOptional.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+		if (!userOptional.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}	
+
+		Optional<RezervacijaRentACar> rezOptional = rezService.findOne(rezDTO.getId());
+		
+		Calendar cal = Calendar.getInstance();
+
+
+		if (( rezOptional.get().getDatumPreuz().getTime() - cal.getTime().getTime() ) <= 0) {
+			return new ResponseEntity<>(new ResponseMessage("Reservation can't be canceled , cancelation has to be made 48 h prior to the Pick-up date !"), HttpStatus.BAD_REQUEST);
+		}
+
+		RezervacijaRentACar rez = rezOptional.get();
+
+		rez.setOtkazana(true);
+
+		rez = rezService.save(rez);
+
+		return new ResponseEntity<>(new ResponseMessage("Reservation canceled!"),HttpStatus.OK);
+
+	}
+
+
 	
 
 }

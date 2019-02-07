@@ -1,0 +1,175 @@
+<link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js">
+<div class="container">
+  <div class="mt-2 "></div>
+  <div class="row">
+
+    <div class="col-md-6">
+
+
+
+      <div class="card">
+
+        <div class="card-header">
+          <h4>Personal info</h4>
+        </div>
+
+        <div class="card-body">
+          <div *ngIf="user">
+
+            <div class="d-flex justify-content-between ">
+              <h5>Name </h5>
+              <p> {{user.firstName}} {{user.lastName}} </p>
+              <div>
+                <button class="btn" type="button" (click)="editName()"><i class="far fa-edit"></i></button>
+              </div>
+            </div>
+
+
+            <div class="d-flex justify-content-between ">
+              <h5>Username </h5>
+              <p>{{user.username}} </p>
+              <div>
+                <button class="btn" type="button" (click)="editUsername()"><i class="far fa-edit"></i></button>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between ">
+              <h5>Email </h5>
+              <p>{{ user.email }} </p>
+              <div>
+                <button class="btn" type="button" (click)="editEmail()"><i class="far fa-edit"></i></button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mt-2 "></div>
+
+      <div class="card">
+
+        <div class="card-header">
+          <h4>Security</h4>
+        </div>
+
+        <div class="card-body">
+
+          <div *ngIf="user">
+
+            <div class="d-flex justify-content-between ">
+              <h5>Password </h5>
+              <p> </p>
+              <div>
+                <button class="btn" type="button" (click)="editPass()"><i class="far fa-edit"></i></button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mt-2 "></div>
+
+    <div *ngIf="rent" class="col-md-6">
+
+      <div class="card">
+
+        <div class="card-header">
+          <div class="d-flex justify-content-between ">
+            <h4>{{rent.naziv}}</h4>
+            <button class="btn" type="button" (click)="editRent()"><i class="far fa-edit"></i></button>
+          </div>
+        </div>
+
+        <div class="card-body">
+
+
+          <div class="d-flex justify-content-between ">
+            <p>Description</p>
+            <p>{{rent.opis}}</p>
+          </div>
+
+          <div class="d-flex justify-content-between ">
+            <p>Adress</p>
+            <p> {{rent.adresa}}</p>
+          </div>
+
+
+
+          <!-- <div id="divMapa"></div> -->
+
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+
+
+  <ng-template #content let-c="close" let-d="dismiss">
+
+    <div class="modal-body">
+
+      <form *ngIf="userDetail" class="form-group" [formGroup]="profileFormGroup">
+        <div *ngIf="inp1" class="form-group">
+          <label for="input1">{{input1}}</label>
+          <input type="text" class="form-control form-control-sm" id="input1" [formControlName]="'input1'">
+        </div>
+
+        <div *ngIf="inp2" class="form-group">
+          <label for="input2">{{input2}}</label>
+          <input type="text" class="form-control form-control-sm" id="input2" [formControlName]="'input2'">
+        </div>
+
+        <button type="button" class="btn btn-primary btn-sm" (click)="submit()">Submit</button>
+      </form>
+
+      <form *ngIf="openPass" class="form-group" [formGroup]="passFormGroup">
+
+        <div class="form-group">
+          <label for="oldPassword">Old password</label>
+          <input id="oldPassword" type="password" class="form-control" placeholder="" name="oldPassword" required
+            minlength="6" formControlName="oldPassword" />
+        </div>
+
+        <div class="form-group">
+          <label for="password">New password</label>
+          <input id="password" type="password" class="form-control" placeholder="Password" name="password" required
+            minlength="6" formControlName="password" />
+        </div>
+        <div class="form-group">
+          <input id="passwordConfirm" type="password" placeholder="Confirm password" class="form-control" name="passwordConfirm"
+            required minlength="6" formControlName="passwordConfirm" />
+          <div class="alert alert-danger" *ngIf="passFormGroup.controls.passwordConfirm.errors?.required && passFormGroup.controls.passwordConfirm.touched">Repeat
+            password is required</div>
+          <div class="alert alert-danger" *ngIf="passFormGroup.errors?.doesMatchPassword">Password does not match</div>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-sm" (click)="changePass()" [disabled]="!passFormGroup.valid">Submit</button>
+      </form>
+
+      <div class="alert alert-danger alert-sm" *ngIf="submitError">{{errorSub}}</div>
+
+    </div>
+
+  </ng-template>
+
+  <ng-template #contentRent let-c="close" let-d="dismiss">
+
+    <div class="modal-body">
+
+      <app-form-rent [(rentFormGroup)]="rentFormGroup" (clicked)="onClicked($event)"></app-form-rent>
+
+    </div>
+  </ng-template>
+
+
+
+
+
+</div>

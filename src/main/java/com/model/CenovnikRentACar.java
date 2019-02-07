@@ -24,12 +24,14 @@ public class CenovnikRentACar {
 	private Date doDatuma;
 	@Column(nullable = false)
 	private Double cena;
-	@Column(nullable = false)
-	private Boolean slobodan;
-	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "vozilo_id",nullable=false)
-	private Vozilo cenovnik;
+	private Vozilo vozilo;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "servis_id",nullable=false)
+	private RentACar servis;
 	
 	public CenovnikRentACar() {
 		super();
@@ -67,21 +69,36 @@ public class CenovnikRentACar {
 		this.cena = cena;
 	}
 
-	public Boolean getSlobodan() {
-		return slobodan;
+
+	/**
+	 * @return the servis
+	 */
+	public RentACar getServis() {
+		return servis;
 	}
 
-	public void setSlobodan(Boolean slobodan) {
-		this.slobodan = slobodan;
+	/**
+	 * @param servis the servis to set
+	 */
+	public void setServis(RentACar servis) {
+		this.servis = servis;
 	}
 
-	public Vozilo getCenovnik() {
-		return cenovnik;
+	/**
+	 * @return the vozilo
+	 */
+	public Vozilo getVozilo() {
+		return vozilo;
 	}
 
-	public void setCenovnik(Vozilo cenovnik) {
-		this.cenovnik = cenovnik;
+	/**
+	 * @param vozilo the vozilo to set
+	 */
+	public void setVozilo(Vozilo vozilo) {
+		this.vozilo = vozilo;
 	}
+
+	
 
 	
 	

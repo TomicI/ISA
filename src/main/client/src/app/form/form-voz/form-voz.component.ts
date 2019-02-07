@@ -64,6 +64,4 @@ export class FormVozComponent implements OnInit {
     this.clickedVeh.emit(true);
   }
 
-  
-
 }

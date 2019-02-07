@@ -1,5 +1,6 @@
 package com.model.user;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,10 +13,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.model.Aviokompanija;
 import com.model.RentACar;
+import com.model.RezervacijaRentACar;
 
 @Entity
 @Table(name = "users")
@@ -44,6 +48,9 @@ public class User {
 	@Column(name = "enabled")
 	private boolean enabled;
 
+	@Column(name = "reset")
+	private boolean reset;
+
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private Set<Role> roles;
@@ -51,6 +58,13 @@ public class User {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "rent_id", unique = true)
 	private RentACar rentACar;
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "avio_id", unique = true)
+	private Aviokompanija aviokompanija;
+
+	@OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+	private Set<RezervacijaRentACar> rezervacije = new HashSet<RezervacijaRentACar>();
 
 	public User() {
 		super();
@@ -65,6 +79,7 @@ public class User {
 		this.lastName = lastName;
 		this.email = email;
 		this.enabled = false;
+		this.reset = false;
 	}
 
 	public Long getId() {
@@ -143,6 +158,48 @@ public class User {
 	 */
 	public void setRentACar(RentACar rentACar) {
 		this.rentACar = rentACar;
+	}
+
+	/**
+	 * @return the reset
+	 */
+	public boolean isReset() {
+		return reset;
+	}
+
+	/**
+	 * @param reset the reset to set
+	 */
+	public void setReset(boolean reset) {
+		this.reset = reset;
+	}
+
+	/**
+	 * @return the aviokompanija
+	 */
+	public Aviokompanija getAviokompanija() {
+		return aviokompanija;
+	}
+
+	/**
+	 * @param aviokompanija the aviokompanija to set
+	 */
+	public void setAviokompanija(Aviokompanija aviokompanija) {
+		this.aviokompanija = aviokompanija;
+	}
+
+	/**
+	 * @return the rezervacije
+	 */
+	public Set<RezervacijaRentACar> getRezervacije() {
+		return rezervacije;
+	}
+
+	/**
+	 * @param rezervacije the rezervacije to set
+	 */
+	public void setRezervacije(Set<RezervacijaRentACar> rezervacije) {
+		this.rezervacije = rezervacije;
 	}
 
 }

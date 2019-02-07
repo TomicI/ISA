@@ -3,7 +3,6 @@ package com.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -51,7 +50,7 @@ public class Vozilo {
 	@JoinColumn(name = "filijala_id",nullable=false)
 	private Filijala vozilo;
 	
-	@OneToMany(mappedBy = "cenovnik",fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "vozilo",fetch = FetchType.LAZY)
 	private Set<CenovnikRentACar> cenovnik = new HashSet<CenovnikRentACar>();
 	
 	

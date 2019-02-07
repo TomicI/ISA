@@ -18,10 +18,16 @@ import { FormAddAerodromComponent } from './form-add-aerodrom/form-add-aerodrom.
 import { DestinacijaComponent } from './destinacija/destinacija.component';
 import { FormAddDestinacijaComponent } from './form-add-destinacija/form-add-destinacija.component';
 import { FormUpdateAerodromComponent } from './form-update-aerodrom/form-update-aerodrom.component';
-import { FormAddLetComponent } from "./form-add-let/form-add-let.component";
-import { LetComponent } from "./let/let.component";
-import { FormUpdateLetComponent } from "./form-update-let/form-update-let.component";
+import { FormAddLetComponent } from './form-add-let/form-add-let.component';
+import { LetComponent } from './let/let.component';
+import { FormUpdateLetComponent } from './form-update-let/form-update-let.component';
 import { FormDodajAviokomComponent } from './form-dodaj-aviokom/form-dodaj-aviokom.component';
+import { PanelProfileComponent } from './panel-profile/panel-profile.component';
+import { PanelSettingsComponent } from './panel-settings/panel-settings.component';
+import { UserReservationsComponent } from './user-reservations/user-reservations.component';
+import { UserFriendsComponent } from './user-friends/user-friends.component';
+import { SearchGetComponent } from './search-get/search-get.component';
+
 
 
 const routes: Routes = [
@@ -38,20 +44,24 @@ const routes: Routes = [
       { path: 'vozForm', component: FormVozComponent },
       { path: 'rentForm', component: FormRentComponent }
     ]
-  },
+  }, { path: 'search', component: SearchGetComponent },
+  { path: 'profile', component: PanelProfileComponent },
+  { path: 'settings', component: PanelSettingsComponent },
   { path: 'signup', component: SignUpModalComponent },
-{path: 'aviokom-list', component: AviokomListComponent},
-{path: 'avio-edit/:id', component: AvioEditComponent},
-{path: 'form-akupdate/:id', component: FormAKUpdateComponent},
-{path: 'aerodrom/:id', component: AerodromComponent},
-{path: 'aerodromAdd', component: FormAddAerodromComponent},
-{path: 'aerodromUpdate/:id', component: FormUpdateAerodromComponent},
-{path: 'destinacije', component: DestinacijaComponent},
-{path: 'destinacijaAdd', component: FormAddDestinacijaComponent},
-{path: 'letUpdate/:id', component: FormUpdateLetComponent},
-{path: 'letAdd/:id', component: FormAddLetComponent},
-{path: 'letovi/:id', component: LetComponent},
-{path: 'addAvioKom', component: FormDodajAviokomComponent}
+  { path: 'reservations', component: UserReservationsComponent },
+  { path: 'friends', component: UserFriendsComponent },
+  { path: 'aviokom-list', component: AviokomListComponent },
+  { path: 'avio-edit/:id', component: AvioEditComponent },
+  { path: 'form-akupdate/:id', component: FormAKUpdateComponent },
+  { path: 'aerodrom/:id', component: AerodromComponent },
+  { path: 'aerodromAdd', component: FormAddAerodromComponent },
+  { path: 'aerodromUpdate/:id', component: FormUpdateAerodromComponent },
+  { path: 'destinacije', component: DestinacijaComponent },
+  { path: 'destinacijaAdd', component: FormAddDestinacijaComponent },
+  { path: 'letUpdate/:id', component: FormUpdateLetComponent },
+  { path: 'letAdd/:id', component: FormAddLetComponent },
+  { path: 'letovi/:id', component: LetComponent },
+  { path: 'addAvioKom', component: FormDodajAviokomComponent }
 ];
 
 @NgModule({

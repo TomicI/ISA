@@ -35,6 +35,8 @@ public class JWToken {
     public String generateJWToken(Authentication authentication) {
  
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        System.out.println(userDetails.getUsername());
  
         return Jwts.builder()
 		                .setSubject((userDetails.getUsername()))
@@ -49,13 +51,13 @@ public class JWToken {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(authToken);
             return true;
         } catch (MalformedJwtException e) {
-            logger.error("Invalid JWT token -> Message: {}", e);
+            logger.error("Invalid JWT token -> Message: ", e);
         } catch (ExpiredJwtException e) {
-            logger.error("Expired JWT token -> Message: {}", e);
+            logger.error("Expired JWT token -> Message: ", e);
         } catch (UnsupportedJwtException e) {
-            logger.error("Unsupported JWT token -> Message: {}", e);
+            logger.error("Unsupported JWT token -> Message: ", e);
         } catch (IllegalArgumentException e) {
-            logger.error("JWT claims string is empty -> Message: {}", e);
+            logger.error("JWT claims string is empty -> Message: ", e);
         } 
         
         return false;
