@@ -12,6 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -36,13 +39,17 @@ public class Let {
 	@Column
 	private Double prosecnaOcena;
 	@Column 
-	private Integer brojSedista;
+	private Integer brojSegmenata;
+	@Column 
+	private Integer brojKolona;
+	@Column 
+	private Integer brojRedova;
 	@Column
 	private String vremePutovanja;
 	@Column
-	private Double duzinaPutovanja;
+	private String opis;
 	@Column
-	private Boolean imaPresedanje;
+	private Double duzinaPutovanja;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Aviokompanija aviokompanija;
@@ -51,6 +58,12 @@ public class Let {
 	private Aerodrom aerodromP;
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Aerodrom aerodromS;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "presedanje",
+    joinColumns = { @JoinColumn(name = "let_id") },
+    inverseJoinColumns = { @JoinColumn(name = "aero_id") })
+	private Set<Aerodrom> presedanje=new HashSet<Aerodrom>();
 	
 	@OneToMany(mappedBy = "sedista", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Sediste> sedista=new HashSet<Sediste>();
@@ -122,13 +135,6 @@ public class Let {
 		this.prosecnaOcena = prosecnaOcena;
 	}
 
-	public Integer getBrojSedista() {
-		return brojSedista;
-	}
-
-	public void setBrojSedista(Integer brojSedista) {
-		this.brojSedista = brojSedista;
-	}
 
 	public Aerodrom getAerodromP() {
 		return aerodromP;
@@ -170,12 +176,44 @@ public class Let {
 		this.duzinaPutovanja = duzinaPutovanja;
 	}
 
-	public Boolean getImaPresedanje() {
-		return imaPresedanje;
+	public Set<Aerodrom> getPresedanje() {
+		return presedanje;
 	}
 
-	public void setImaPresedanje(Boolean imaPresedanje) {
-		this.imaPresedanje = imaPresedanje;
+	public void setPresedanje(Set<Aerodrom> presedanje) {
+		this.presedanje = presedanje;
+	}
+
+	public Integer getBrojSegmenata() {
+		return brojSegmenata;
+	}
+
+	public void setBrojSegmenata(Integer brojSegmenata) {
+		this.brojSegmenata = brojSegmenata;
+	}
+
+	public Integer getBrojKolona() {
+		return brojKolona;
+	}
+
+	public void setBrojKolona(Integer brojKolona) {
+		this.brojKolona = brojKolona;
+	}
+
+	public Integer getBrojRedova() {
+		return brojRedova;
+	}
+
+	public void setBrojRedova(Integer brojRedova) {
+		this.brojRedova = brojRedova;
+	}
+
+	public String getOpis() {
+		return opis;
+	}
+
+	public void setOpis(String opis) {
+		this.opis = opis;
 	}
 
 	

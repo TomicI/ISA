@@ -1,26 +1,30 @@
 package com.dto;
 
 import com.model.Sediste;
+import com.model.user.User;
 
 public class SedisteDTO {
 	private Long id;
 	private Integer kolona;
 	private Integer red;
 	private Boolean zauzeto;
+	private Integer segment;
+	private User user;
 	
 	public SedisteDTO() {
 	}
 
 	public SedisteDTO(Sediste s) {
-		this(s.getId(), s.getKolona(), s.getRed(), s.getZauzeto());
+		this(s.getId(), s.getKolona(), s.getRed(), s.getZauzeto(), s.getSegment());
 	}
 	
-	public SedisteDTO(Long id, Integer kolona, Integer red, Boolean zauzeto) {
+	public SedisteDTO(Long id, Integer kolona, Integer red, Boolean zauzeto, Integer segment) {
 		super();
 		this.id = id;
 		this.kolona = kolona;
 		this.red = red;
 		this.zauzeto = zauzeto;
+		this.segment=segment;
 	}
 
 	public Long getId() {
@@ -53,6 +57,22 @@ public class SedisteDTO {
 
 	public void setZauzeto(Boolean zauzeto) {
 		this.zauzeto = zauzeto;
+	}
+
+	public Integer getSegment() {
+		return segment;
+	}
+
+	public void setSegment(Integer segment) {
+		this.segment = segment;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	

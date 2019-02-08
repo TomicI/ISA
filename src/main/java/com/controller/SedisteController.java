@@ -57,7 +57,7 @@ public class SedisteController {
 	 sediste.setKolona(sedisteDTO.getKolona());
 	 sediste.setRed(sedisteDTO.getRed());
 	 sediste.setZauzeto(sedisteDTO.getZauzeto());
-	 
+	 sediste.setSegment(sedisteDTO.getSegment());
 	 sediste = as.save(sediste);
 		return new ResponseEntity<>(new SedisteDTO(sediste), HttpStatus.CREATED);	
 	}
@@ -75,6 +75,7 @@ public class SedisteController {
 		sediste.get().setKolona(sedisteDTO.getKolona());
 		sediste.get().setRed(sedisteDTO.getRed());
 		sediste.get().setZauzeto(sedisteDTO.getZauzeto());
+		sediste.get().setSegment(sedisteDTO.getSegment());
 		return new ResponseEntity<>(new SedisteDTO(as.save(sediste.get())), HttpStatus.OK);	
 	}
  

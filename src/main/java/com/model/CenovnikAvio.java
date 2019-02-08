@@ -26,8 +26,7 @@ public class CenovnikAvio {
 	@Column
 	private Double popust;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Karta cenaKarte;
+	
 	
 	public CenovnikAvio() {
 		super();
@@ -62,12 +61,7 @@ public class CenovnikAvio {
 	public void setPopust(Double popust) {
 		this.popust = popust;
 	}
-	public Karta getCenaKarte() {
-		return cenaKarte;
-	}
-	public void setCenaKarte(Karta cenaKarte) {
-		this.cenaKarte = cenaKarte;
-	}
+	
 	
 	
 }

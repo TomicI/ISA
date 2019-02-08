@@ -59,14 +59,6 @@
             <option *ngFor="let aer of aerodromi | async" [value]="aer.id" [selected]="aer.id == letP.aerodromS.id">{{aer.nazivAerodroma}}</option>
     </select></div>
   </div>
-    
-
-  <div class="form-group form-inline">
-      <label for="brP" class="control-label col-sm-4">Number of passengers: </label>
-      <div class="col-sm-8 text-left">
-      <input class="form-control shadow" name="brojSedista" id="brojSedista" type="number" formControlName="brojSedista">
-        </div>
-    </div>
 
     <div class="form-group form-inline">
       <label for="brP" class="control-label col-sm-4">VP: </label>
@@ -81,7 +73,43 @@
       <input class="form-control shadow" name="duzinaPutovanja" id="duzinaPutovanja" type="number" formControlName="duzinaPutovanja">
         </div>
     </div>
+
+    <div class="form-group form-inline">
+      <label for="bs" class="control-label col-sm-4">Broj segmenata: </label>
+      <div class="col-sm-8 text-left">
+      <input class="form-control shadow" name="brojSegmenata" id="brojSegmenata" type="number" formControlName="brojSegmenata">
+        </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label for="bk" class="control-label col-sm-4">Broj kolona: </label>
+      <div class="col-sm-8 text-left">
+      <input class="form-control shadow" name="brojKolona" id="brojKolona" type="number" formControlName="brojKolona">
+        </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label for="br" class="control-label col-sm-4">Broj redova: </label>
+      <div class="col-sm-8 text-left">
+      <input class="form-control shadow" name="brojRedova" id="brojRedova" type="number" formControlName="brojRedova">
+        </div>
+    </div>
     
+    <div class="form-group form-inline">
+      <label for="op" class="control-label col-sm-4">Opis: </label>
+      <div class="col-sm-8 text-left">
+      <input class="form-control shadow" name="opis" id="opis" type="String" formControlName="opis">
+        </div>
+    </div>
+
+    <div id="prs" class="container" >
+          <div *ngFor="let aer of checkedList1">
+            <input type="checkbox" value="{{aer.id}}" (change)="onCheckboxChange(aer,$event)" checked/> {{aer.nazivAerodroma}} 
+          </div>
+        <div *ngFor="let lis of lista">
+              <input type="checkbox" value="{{lis.id}}"  (change)="onCheckboxChange1(lis,$event)" /> {{lis.nazivAerodroma}} 
+        </div>
+    </div>
     <div class="col-sm-offset-2"> 
         <button type="submit" class="btn btn-primary">Update</button>
       </div>

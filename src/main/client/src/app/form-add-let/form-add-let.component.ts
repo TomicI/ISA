@@ -7,12 +7,13 @@
   import { Aviokompanija } from '../model';
   import { Let } from '../model';
   import { LetService } from '../letService/let.service';
+  import {AviokompanijaService } from '../aviokompanija/aviokompanija.service'
 
   @Component({
     selector: 'app-form-add-let',
     templateUrl: './form-add-let.component.html',
     styleUrls: ['./form-add-let.component.css'],
-    providers: [AerodromSService, LetService]
+    providers: [AerodromSService, LetService, AviokompanijaService]
   })
   export class FormAddLetComponent implements OnInit {
     @Input() avikompanija:number
@@ -22,12 +23,14 @@
     let: Let;
     pom: Let;
     pom1: any;
+    checkedList: Aerodrom[]=[];
     constructor(
       private router: Router,
       private route: ActivatedRoute,
       private formBuilder: FormBuilder ,
       private aerodromService: AerodromSService,
-      private letService:LetService
+      private letService:LetService,
+      private aviokompanijaSerivce: AviokompanijaService
     ) { }
 
     ngOnInit() {
@@ -42,21 +45,24 @@
       this.route.params.subscribe
         ( params =>  { const id = params['id'];
         if (id) {
-          this.let.aviokompanijaID=id;
+          this.aviokompanijaSerivce.getAviokompanija(id).subscribe(aviok=> this.let.aviokompanijaID=aviok);
+          
         }});
       this.regFormA=this.formBuilder.group({
         datumP: [''],
         datumS: [''],
         vremeP: [''],
         vremeS: [''],
-        brojSedista: [''],
         vremePutovanja: [''],
         duzinaPutovanja: [''],
         aerodromP:[''],
         aerodromS:[''],
         aviokompanijaID: [''],
         presedanje:[''],
-        imaPresedanje:['false']
+        brojSegmenata:[''],
+        brojKolona: [''],
+        brojRedova:[''],
+        opis:['']
       })
     }
 
@@ -66,14 +72,10 @@
       
       this.regFormA.value.aerodromP=this.let.aerodromP;
       this.regFormA.value.aerodromS=this.let.aerodromS;
-      console.log("presedanje " + this.pom1.id);
-      console.log(this.pom1);
-      this.regFormA.value.presedanje=this.pom1.id;
+      this.regFormA.value.presedanje=this.checkedList;
       this.regFormA.value.aviokompanijaID=this.let.aviokompanijaID;
       
       this.pom1=this.letService.saveLet(this.regFormA.value);
-      console.log(this.pom1);
-      console.log("ovoooo " + this.pom1.__zone_symbol__value.presedanje);
     }
 
     onChange(value: any){
@@ -86,13 +88,18 @@
       this.let.aerodromS.id=value;
     }
 
-    dodajP(){
-      console.log("ima presedanje ");
-      this.let.imaPresedanje=true;
-      this.regFormA.value.imaPresedanje="true";
-      this.onSubmit();
-      
-      this.router.navigateByUrl('letUpdate/'+(this.pom1.__zone_symbol__value.id-1));
-      
+    
+
+    onCheckboxChange(option, event) {
+      if(event.target.checked) {
+        this.checkedList.push(option);
+      } else {
+        for(var i=0 ; i < this.checkedList.length; i++) {
+          if(this.checkedList[i].id == option.id){
+            this.checkedList.splice(i,1);
+          }
+        }
+      }
+      console.log(this.checkedList);
     }
-  }
+}

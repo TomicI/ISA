@@ -127,21 +127,92 @@ export class Destinacija {
 
 }
 
+export class Sediste {
+    constructor(
+        public id?: number,
+        public red?: number,
+        public kolona?: number,
+        public segment?: number,
+        public zauzeto?: Boolean,
+        public user?: User) { }
+
+}
+
+export class Karta{
+    
+    let: Let;
+    constructor(
+        public id?: number,
+        public sediste?: Sediste,
+        public prtljag?: Prtljag[],
+        public user?: User,
+        public dodatneUsluge?: DodatneUslugeAvion[],
+        public cena?: CenovnikAvio,
+        public prosecnaOcena?: number){
+            this.let;
+        }
+}
+
+export class Prtljag{
+    constructor(
+        public id?: number,
+        public duzina?: number,
+        public sirina?: number,
+        public tezina?: number,
+        public cena?: number
+    ){}
+}
+
+export class DodatneUslugeAvion{
+    constructor(
+        public id: number,
+        public cena: number,
+        public opis: String
+    ){}
+}
+
+export class CenovnikAvio{
+    constructor(
+        public id: number,
+        public odDatuma: Date,
+        public doDatuma: Date,
+        public cena: number,
+        public popust: number
+    ){}
+}
+
 export class Let{
     constructor(
         public id?: number,
         public aerodromP?: Aerodrom,
         public aerodromS?: Aerodrom,
-        public brojSedista?: number, 
         public datumP?: Date,
         public datumS?: Date,
         public vremeP?: String,
         public vremeS?: String,
-        public aviokompanijaID?: number,
-        public presedanje?: Let,
-        public imaPresedanje?: Boolean,
+        public aviokompanijaID?: Aviokompanija,
         public vremePutovanja?: String,
-        public duzinaPutovanja?: Number
+        public duzinaPutovanja?: Number,
+        public presedanje?: Aerodrom[],
+        public brojSegmenata?: number,
+        public brojKolona?: number, 
+        public brojRedova?: number,
+        public opis?: String,
+        public sedista?: Sediste[]
     ){}
 }
+
+export class NewPass {
+    oldPass: string;
+    newPass: string;
+
+    constructor(oldPass: string,newPass: string){
+        this.oldPass = oldPass;
+        this.newPass = newPass;
+    }
+
+}
+
+
+
 

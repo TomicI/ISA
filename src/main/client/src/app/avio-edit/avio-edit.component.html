@@ -8,16 +8,16 @@
  
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  
 </head>
 <body >
   <h1>{{aviokompanija.naziv}}</h1>
-    <nav class="navbar navbar-inverse">
+    <nav class="sidebar-sticky">
         <div class="container-fluid">
           <div class="navbar-header">
             <a class="navbar-brand" href="#"></a>
           </div>
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
             <li><a href="form-akupdate/{{aviokompanija.id}}">Update</a></li>
             <li><a href="letAdd/{{aviokompanija.id}}">Dodaj let</a></li>
             <li><a href="letovi/{{aviokompanija.id}}">Letovi</a></li>

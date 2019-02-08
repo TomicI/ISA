@@ -45,7 +45,20 @@ import { AddAviokAerComponent } from './add-aviok-aer/add-aviok-aer.component';
 import { FormAddLetComponent } from './form-add-let/form-add-let.component';
 import { FormUpdateLetComponent } from './form-update-let/form-update-let.component';
 import { FormDodajAviokomComponent } from './form-dodaj-aviokom/form-dodaj-aviokom.component';
+import { FormCenComponent } from './form/form-cen/form-cen.component';
 
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { CalendarComponent } from './calendar/calendar.component';
+
+
+import { PanelReservationRentComponent } from './panel-reservation-rent/panel-reservation-rent.component';
+import { PanelProfileComponent } from './panel-profile/panel-profile.component';
+import { PanelResetpassComponent } from './panel-resetpass/panel-resetpass.component';
+import { PanelSettingsComponent } from './panel-settings/panel-settings.component';
+import { UserReservationsComponent } from './user-reservations/user-reservations.component';
+import { UserFriendsComponent } from './user-friends/user-friends.component';
+import { SearchGetComponent } from './search-get/search-get.component';
 
 
 @NgModule({
@@ -81,7 +94,16 @@ import { FormDodajAviokomComponent } from './form-dodaj-aviokom/form-dodaj-aviok
     AddAviokAerComponent,
     FormAddLetComponent,
     FormUpdateLetComponent,
-    FormDodajAviokomComponent
+    FormDodajAviokomComponent,
+    FormCenComponent,
+    CalendarComponent,
+    PanelReservationRentComponent,
+    PanelProfileComponent,
+    PanelResetpassComponent,
+    PanelSettingsComponent,
+    UserReservationsComponent,
+    UserFriendsComponent,
+    SearchGetComponent
 
 
 
@@ -96,7 +118,12 @@ import { FormDodajAviokomComponent } from './form-dodaj-aviokom/form-dodaj-aviok
     MatTableModule,
     MatPaginatorModule,
     NgbModule.forRoot(),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
+  
   ],
   providers: [httpInterceptorProviders],
   entryComponents: [SignupComponent],

@@ -1,10 +1,11 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
 <div class="container">
 
   <div class="mt-2 col-md-12"></div>
 
 <ul class="nav nav-pills">
     <li class="nav-item">
-      <a class="nav-link active" href="#">Flights</a>
+      <a class="nav-link " href="#">Flights</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="#">Hotels</a>
@@ -17,26 +18,96 @@
   <div class="mt-2 col-md-12"></div>
 
   <div class="jumbotron">
-      <h1 class="display-4">Hello, world!</h1>
-      <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+      <h1 class="display-4">Hello!</h1>
+      <p class="lead"></p>
       <hr class="my-4">
-      <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-      <div class="input-group">
-          <input class="form-control mr-sm-3" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </div>
-      <form class="form-inline">
-          <div class="form-group">
-            <div class="input-group">
-              <input class="form-control" placeholder="Pick-up date" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">Works also with buttons!<i class="far fa-edit"></i></button>
 
+      <form id="formSearch" class="form-row col-20" [formGroup]="searchFormGroup" (ngSubmit)="onSubmit()">
+      
+          <div class="form-group">
+              <div class="input-group col-sm-10">
+                <input class="form-control" placeholder="Depart" formControlName="datumP" name="datumP" [(ngModel)]="model"  type=date>
+                
               </div>
             </div>
-          </div>
-        </form>
+      
+            <div class="form-group">
+                <div class="input-group col-sm-10">
+                  <input class="form-control" placeholder="Return" formControlName="datumS" name="datumS" [(ngModel)]="model" type=date>
+                  
+                </div>
+              </div>
 
+              <div class="form-group form-inline">
+
+                  <div class="col-sm-8 text-left">
+                      <mat-form-field>
+                      <input class="form-control shadow" matInput [matAutocomplete]="auto" [formControl]="myControl" [(ngModel)]="vremeP"  name="vremeP" id="vremeP" type="text" formControlName="vremeP" placeholder="From">
+                      <mat-autocomplete #auto="matAutocomplete">
+                          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                            {{option}}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                  <div class="col-sm-8 text-left">
+                    <mat-form-field>
+                  <input class="form-control shadow" matInput [formControl]="myControl" [matAutocomplete]="auto" name="vremeS" [(ngModel)]="vremeS" id="vremeS" type="text" formControlName="vremeS" placeholder="To">
+                  
+                  <mat-autocomplete #auto="matAutocomplete">
+                      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                        {{option}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+                    
+              </div>
+              <div>
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </div>
+      </form>
+      
+
+      <table class="table table-dark" [hidden]="!tabela">
+          <thead>
+            <tr>
+              <th>Datum polaska</th>
+              <th>Vreme polaska</th>
+              <th>Datum dolaska</th>
+              <th>Vreme dolaska</th>
+              <th>Aerodrom polazak</th>
+              <th>Aerodrom dolazak</th>
+              <th>Aviokompanija</th>
+              <th>Broj presedanja</th>
+              <th>Opis leta</th>
+              <th>Presedanja</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr *ngFor="let l of rezultat | async" style="width: 300px"> 
+                    <td>{{l.datumP}}</td>
+                    <td>{{l.vremeP}}</td>
+                    <td>{{l.datumS}}</td>
+                    <td>{{l.vremeS}}</td>
+                    <td>{{l.aerodromP.nazivAerodroma}}</td>
+                    <td>{{l.aerodromS.nazivAerodroma}}</td>
+                    <td>{{l.aviokompanijaID.naziv}}</td>
+                    <td>{{l.presedanje.length}}</td>
+                    <td>{{l.opis}}</td>
+                    <td><ul *ngFor="let le of l.presedanje" style="width: 300px">
+                        <li> {{le.nazivAerodroma}}</li>
+                      </ul></td>
+                    <td><button (click)=sledeciKorak(l)>Buy ticket</button></td>
+            </tr>
+          </tbody>
+        </table>  
+
+
+        
+        
+        
 
 </div>
 

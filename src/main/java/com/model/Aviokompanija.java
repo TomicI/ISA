@@ -32,8 +32,7 @@ public class Aviokompanija {
 	@OneToMany(mappedBy = "aviokompanija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<VezaAA> veza = new HashSet<VezaAA>();
 	
-	@OneToMany(mappedBy = "aviokom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Karta> karta = new HashSet<Karta>();
+	
 	
 	public Aviokompanija() {
 		super();

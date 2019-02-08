@@ -19,12 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dto.AerodromDTO;
 import com.dto.LetDTO;
+import com.dto.SedisteDTO;
 import com.model.Aerodrom;
 import com.model.Aviokompanija;
 import com.model.Let;
+import com.model.Sediste;
 import com.service.AerodromService;
 import com.service.AviokompanijaService;
+import com.service.DestinacijaService;
 import com.service.LetService;
+import com.service.SedisteService;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -36,6 +40,12 @@ public class LetController {
 	private AerodromService aes;
 	@Autowired
 	private AviokompanijaService avs;
+	@Autowired
+	private DestinacijaService ds;
+	@Autowired
+	private SedisteService ss;
+	
+	
 	 @RequestMapping(value="/lista",method=RequestMethod.GET)
 	 public ResponseEntity<List<LetDTO>> getAll(){
 
@@ -54,7 +64,11 @@ public class LetController {
  Optional<Let> let = as.findById(id);
 
 	 if (let.isPresent()) {	
-		 return new ResponseEntity<>(new LetDTO(let.get()),HttpStatus.OK);
+		 System.out.println("LET presedanje " + let.get().getPresedanje().size());
+		 LetDTO l=new LetDTO(let.get());
+		 
+		
+		 return new ResponseEntity<>(l,HttpStatus.OK);
 	 }else {
 		 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	 }
@@ -68,22 +82,33 @@ public class LetController {
 	System.out.println(" v p " + letDTO.getVremeP());
 	System.out.println(" v s " + letDTO.getVremeS());
 	 Let let = new Let();
-	 LetDTO letP = new LetDTO();
 	 Optional<Aerodrom> a=aes.findById(letDTO.getAerodromP().getId());
 	 Optional<Aerodrom> s=aes.findById(letDTO.getAerodromS().getId());
-	 Optional<Aviokompanija> av=avs.findById(letDTO.getAviokompanijaID());
-	 System.out.println("ima presedanje " + letDTO.getImaPresedanje());
+	 Optional<Aviokompanija> av=avs.findById(letDTO.getAviokompanijaID().getId());
 	 
-			 
 	 
+	for(int k=0; k<letDTO.getBrojSegmenata(); k++) {
+		for(int j=0; j<letDTO.getBrojRedova();j++) {
+			for(int i=0; i< letDTO.getBrojKolona(); i++) {
+				Sediste sed=new Sediste();
+				sed.setKolona(i);
+				sed.setRed(j);
+				sed.setSegment(k);
+				sed.setZauzeto(false);
+				sed.setSedista(let);
+				let.getSedista().add(sed);
+			}
+		}
+	}
 	 let.setAerodromP(a.get());
 	 let.setAerodromS(s.get());
-	 let.setBrojSedista(letDTO.getBrojSedista());
 	 let.setProsecnaOcena(letDTO.getProsecnaOcena());
-	 
+	 let.setBrojKolona(letDTO.getBrojKolona());
+	 let.setBrojRedova(letDTO.getBrojRedova());
+	 let.setBrojSegmenata(letDTO.getBrojSegmenata());
+	 let.setOpis(letDTO.getOpis());
 	 let.setVremePutovanja(letDTO.getVremePutovanja());
 	 let.setDuzinaPutovanja(letDTO.getDuzinaPutovanja());
-	 let.setImaPresedanje(letDTO.getImaPresedanje());
 	 String st = letDTO.getVremeP();
 	 SimpleDateFormat sdf = new SimpleDateFormat("HH:MM");
 	 long ms;
@@ -131,21 +156,49 @@ public class LetController {
 		}
 		Optional<Aerodrom> a=aes.findById(letDTO.getAerodromP().getId());
 		 Optional<Aerodrom> s=aes.findById(letDTO.getAerodromS().getId());
-		 Optional<Aviokompanija> av=avs.findById(letDTO.getAviokompanijaID());
+		 Optional<Aviokompanija> av=avs.findById(letDTO.getAviokompanijaID().getId());
+		
+		 
+		 if(letDTO.getPresedanje().size()>0) {
+			 let.get().getPresedanje().clear();
+				for(int i=0; i<letDTO.getPresedanje().size(); i++) {
+					
+					Optional<Aerodrom> aerodrom=aes.findById(letDTO.getPresedanje().get(i).getId());
+					
+					let.get().getPresedanje().add(aerodrom.get());
+				}
+			}
+		 if(letDTO.getBrojSegmenata()!=let.get().getBrojSegmenata() || letDTO.getBrojKolona()!=let.get().getBrojKolona() || letDTO.getBrojRedova()!=let.get().getBrojRedova()) {
+			 for(int k=0; k<letDTO.getBrojSegmenata(); k++) {
+					for(int j=0; j<letDTO.getBrojRedova();j++) {
+						for(int i=0; i< letDTO.getBrojKolona(); i++) {
+							Sediste sed=new Sediste();
+							sed.setKolona(i);
+							sed.setRed(j);
+							sed.setSegment(k);
+							sed.setZauzeto(false);
+							sed.setSedista(let.get());
+							let.get().getSedista().add(sed);
+						}
+					}
+				}
+		 }
+			 
 		 
 		 let.get().setAerodromP(a.get());
 		 let.get().setAerodromS(s.get());
-		 let.get().setBrojSedista(letDTO.getBrojSedista());
 		 let.get().setProsecnaOcena(letDTO.getProsecnaOcena());
 		 let.get().setVremeP(java.sql.Time.valueOf(letDTO.getVremeP()));
 		 let.get().setVremeS(java.sql.Time.valueOf(letDTO.getVremeS()));
 		 let.get().setDatumP(letDTO.getDatumP());
 		 let.get().setDatumS(letDTO.getDatumS());
 		 let.get().setAviokompanija(av.get());
-		
+		 let.get().setBrojKolona(letDTO.getBrojKolona());
+		 let.get().setBrojRedova(letDTO.getBrojRedova());
+		 let.get().setBrojSegmenata(letDTO.getBrojSegmenata());
+		 let.get().setOpis(letDTO.getOpis());
 		 let.get().setVremePutovanja(letDTO.getVremePutovanja());
 		 let.get().setDuzinaPutovanja(letDTO.getDuzinaPutovanja());
-		 let.get().setImaPresedanje(letDTO.getImaPresedanje());
 		 LetDTO pom=new LetDTO(as.save(let.get()));
 		 
 		return new ResponseEntity<>(pom, HttpStatus.OK);	
@@ -179,4 +232,45 @@ public class LetController {
 		
 		return new ResponseEntity<List<LetDTO>>(letlDTO, HttpStatus.OK);
  	}
+ 	
+ 	@RequestMapping(value="/sediste",method=RequestMethod.PUT)
+	 public ResponseEntity<LetDTO> zauzmiSediste(@RequestBody LetDTO letDTO){
+		System.out.println(" letovi" + letDTO.getId());
+		Optional<Let> let = as.findById(letDTO.getId()); 
+		
+		if (let == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		if(letDTO.getSedista()!=null) {
+			 if(letDTO.getSedista().size()>0) {
+				 	let.get().getSedista().clear();
+					for(int i=0; i<letDTO.getSedista().size(); i++) {
+						System.out.println(" id sedista " +letDTO.getSedista().get(i).getId());
+						Optional<Sediste> sediste=ss.findById(letDTO.getSedista().get(i).getId());
+						sediste.get().setZauzeto(letDTO.getSedista().get(i).getZauzeto());
+						let.get().getSedista().add(sediste.get());
+					}
+			}
+		 }
+		LetDTO pom=new LetDTO(as.save(let.get()));
+		return new ResponseEntity<LetDTO>(pom, HttpStatus.OK);
+	}
+ 	
+ 	@RequestMapping(value="/pretraga",method=RequestMethod.PUT)
+	 public ResponseEntity<List<LetDTO>> pretraga(@RequestBody LetDTO pretraga){
+		System.out.println(" letovi " + pretraga.getDatumP() + "   " + pretraga.getDatumS()+ "   "+ pretraga.getVremeP() + "   "+pretraga.getVremeS());
+		List<LetDTO> letovi=new ArrayList<>();
+		List<Let> svi=as.findAll();
+		for(Let l: svi) {
+			
+			if(l.getAerodromP().getNazivAerodroma().equals(pretraga.getVremeP()) && l.getAerodromS().getNazivAerodroma().equals(pretraga.getVremeS()) && l.getDatumP().toString().equals(pretraga.getDatumP().toString()) ) {
+				LetDTO le=new LetDTO(l);
+				System.out.println(" poklapa se " + l.getId());
+				
+				letovi.add(le);
+			}
+		}
+		
+		return new ResponseEntity<List<LetDTO>>(letovi, HttpStatus.OK);
+	}
 }

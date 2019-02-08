@@ -22,7 +22,12 @@ import { FormAddLetComponent } from "./form-add-let/form-add-let.component";
 import { LetComponent } from "./let/let.component";
 import { FormUpdateLetComponent } from "./form-update-let/form-update-let.component";
 import { FormDodajAviokomComponent } from './form-dodaj-aviokom/form-dodaj-aviokom.component';
-
+import { KartaComponent } from './karta/karta.component';
+import { PanelProfileComponent } from './panel-profile/panel-profile.component';
+import { PanelSettingsComponent } from './panel-settings/panel-settings.component';
+import { UserReservationsComponent } from './user-reservations/user-reservations.component';
+import { UserFriendsComponent } from './user-friends/user-friends.component';
+import { MatAutocompleteModule, MatInputModule } from '@angular/material';
 
 const routes: Routes = [
   { path: '', redirectTo: '/rentacarall', pathMatch: 'full' },
@@ -51,11 +56,31 @@ const routes: Routes = [
 {path: 'letUpdate/:id', component: FormUpdateLetComponent},
 {path: 'letAdd/:id', component: FormAddLetComponent},
 {path: 'letovi/:id', component: LetComponent},
-{path: 'addAvioKom', component: FormDodajAviokomComponent}
+{path: 'addAvioKom', component: FormDodajAviokomComponent},
+{path: 'karta/:id', component: KartaComponent},
+  { path: 'reservations', component: UserReservationsComponent },
+  { path: 'friends', component: UserFriendsComponent },
+  { path: 'aviokom-list', component: AviokomListComponent },
+  { path: 'avio-edit/:id', component: AvioEditComponent },
+  { path: 'form-akupdate/:id', component: FormAKUpdateComponent },
+  { path: 'aerodrom/:id', component: AerodromComponent },
+  { path: 'aerodromAdd', component: FormAddAerodromComponent },
+  { path: 'aerodromUpdate/:id', component: FormUpdateAerodromComponent },
+  { path: 'destinacije', component: DestinacijaComponent },
+  { path: 'destinacijaAdd', component: FormAddDestinacijaComponent },
+  { path: 'letUpdate/:id', component: FormUpdateLetComponent },
+  { path: 'letAdd/:id', component: FormAddLetComponent },
+  { path: 'letovi/:id', component: LetComponent },
+  { path: 'addAvioKom', component: FormDodajAviokomComponent },
+  { path: 'profile', component: PanelProfileComponent },
+  { path: 'settings', component: PanelSettingsComponent },
+  { path: 'signup', component: SignUpModalComponent }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule,
+    MatAutocompleteModule,
+    MatInputModule]
 })
 export class AppRoutingModule { }

@@ -1,9 +1,13 @@
 package com.dto;
 
 import java.sql.Date;
-import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
+import com.model.Aerodrom;
 import com.model.Let;
+import com.model.Sediste;
 
 public class LetDTO {
 
@@ -12,27 +16,33 @@ public class LetDTO {
 	private Date datumS;
 	private String vremeP;
 	private String vremeS;
-	private Integer brojSedista;
+	private Integer brojSegmenata;
+	private Integer brojKolona;
+	private Integer brojRedova;
 	private AerodromDTO aerodromP;
 	private AerodromDTO aerodromS;
 	private Double prosecnaOcena;
-	private Long aviokompanijaID;
+	private AviokompanijaDTO aviokompanijaID;
 	private String vremePutovanja;
 	private Double duzinaPutovanja;
-	private Boolean imaPresedanje;
+	private List<AerodromDTO> presedanje;
+	private List<SedisteDTO> sedista;
+	private String opis;
 	
 	public LetDTO() {
 	}
 	
 	public LetDTO(Let l) {
-		this(l.getId(), l.getDatumP(), l.getDatumS(), l.getVremeP().toString(), l.getVremeS().toString(), l.getBrojSedista(), new AerodromDTO(l.getAerodromP()), new AerodromDTO(l.getAerodromS()), l.getProsecnaOcena(), l.getAviokompanija().getId(), l.getVremePutovanja(), l.getDuzinaPutovanja(), l.getImaPresedanje());
+		this(l.getId(), l.getDatumP(), l.getDatumS(), l.getVremeP().toString(), l.getVremeS().toString(), l.getBrojSegmenata() , new AerodromDTO(l.getAerodromP()), new AerodromDTO(l.getAerodromS()), l.getProsecnaOcena(), new AviokompanijaDTO(l.getAviokompanija()), l.getVremePutovanja(), l.getDuzinaPutovanja(), l.getBrojKolona() ,l.getBrojRedova(), l.getOpis(), getPresedanjeL(l.getPresedanje()), getSedistaL(l.getSedista()));
 	}
 	
-	public LetDTO(Long id, Date dP, Date dS, String vP, String vS, Integer bS, AerodromDTO aP, AerodromDTO aS, Double pO, Long aviID, String vremePutovanja, Double duzinaPutovanja, Boolean iP) {
+	public LetDTO(Long id, Date dP, Date dS, String vP, String vS, Integer bS, AerodromDTO aP, AerodromDTO aS, Double pO, AviokompanijaDTO aviID, String vremePutovanja, Double duzinaPutovanja,  Integer bK, Integer bR, String o, List<AerodromDTO> pr, List<SedisteDTO> s) {
 		super();
 		System.out.println("Dobijem " + id );
 		this.id = id;
-		this.brojSedista=bS;
+		this.brojSegmenata=bS;
+		this.brojKolona=bK;
+		this.brojRedova=bR;
 		this.datumP=dP;
 		this.datumS=dS;
 		this.vremeP=vP;
@@ -43,7 +53,9 @@ public class LetDTO {
 		this.aviokompanijaID=aviID;
 		this.vremePutovanja=vremePutovanja;
 		this.duzinaPutovanja=duzinaPutovanja;
-		this.imaPresedanje=iP;
+		this.setPresedanje(pr);
+		this.opis=o;
+		this.setSedista(s);
 	}
 	
 	
@@ -86,14 +98,6 @@ public class LetDTO {
 		this.vremeS = vremeS;
 	}
 
-	public Integer getBrojSedista() {
-		return brojSedista;
-	}
-
-	public void setBrojSedista(Integer brojSedista) {
-		this.brojSedista = brojSedista;
-	}
-
 	public AerodromDTO getAerodromP() {
 		return aerodromP;
 	}
@@ -118,11 +122,11 @@ public class LetDTO {
 		this.prosecnaOcena = prosecnaOcena;
 	}
 
-	public Long getAviokompanijaID() {
+	public AviokompanijaDTO getAviokompanijaID() {
 		return aviokompanijaID;
 	}
 
-	public void setAviokompanijaID(Long aviokompanijaID) {
+	public void setAviokompanijaID(AviokompanijaDTO aviokompanijaID) {
 		this.aviokompanijaID = aviokompanijaID;
 	}
 
@@ -142,13 +146,73 @@ public class LetDTO {
 		this.duzinaPutovanja = duzinaPutovanja;
 	}
 
-	public Boolean getImaPresedanje() {
-		return imaPresedanje;
+	public List<AerodromDTO> getPresedanje() {
+		return presedanje;
 	}
 
-	public void setImaPresedanje(Boolean imaPresedanje) {
-		this.imaPresedanje = imaPresedanje;
+	public void setPresedanje(List<AerodromDTO> aerodromi) {
+		this.presedanje = aerodromi;
+	}
+
+	public Integer getBrojSegmenata() {
+		return brojSegmenata;
+	}
+
+	public void setBrojSegmenata(Integer brojSegmenata) {
+		this.brojSegmenata = brojSegmenata;
+	}
+
+	public Integer getBrojKolona() {
+		return brojKolona;
+	}
+
+	public void setBrojKolona(Integer brojKolona) {
+		this.brojKolona = brojKolona;
+	}
+
+	public Integer getBrojRedova() {
+		return brojRedova;
+	}
+
+	public void setBrojRedova(Integer brojRedova) {
+		this.brojRedova = brojRedova;
+	}
+
+	public List<SedisteDTO> getSedista() {
+		return sedista;
+	}
+
+	public void setSedista(List<SedisteDTO> sedista) {
+		this.sedista = sedista;
+	}
+
+	public String getOpis() {
+		return opis;
+	}
+
+	public void setOpis(String opis) {
+		this.opis = opis;
 	}
 	
+	public static List<AerodromDTO> getPresedanjeL(Set<Aerodrom> let) {
+		List<AerodromDTO> l=new ArrayList<>();
+		if(let.size()>0) {
+			for (Aerodrom ae : let)  {
+				AerodromDTO a=new AerodromDTO(ae);
+				l.add(a);
+			}
+		}
+		return l;
+	}
 	
-}
+	public static List<SedisteDTO> getSedistaL(Set<Sediste> let){
+		List<SedisteDTO> l=new ArrayList<>();
+		if(let.size()>0) {
+			for (Sediste s : let)  {
+				SedisteDTO a=new SedisteDTO(s);
+				l.add(a);
+			}
+		}
+		return l;
+	}
+} 

@@ -1,7 +1,6 @@
 package com.model;
 
 
-import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.model.user.User;
+
 
 @Entity
 public class Karta {
@@ -23,32 +24,27 @@ public class Karta {
 	@Column(name="karta_id")
 	private Long id;
 	
-	@Column
-	private Date datumVremeP;
-	@Column
-	private Date datumVremeS;
+	
 	@Column
 	private Double prosecnaOcena;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Aerodrom aerodromP;
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Aerodrom aerodromS;
+	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Let let;
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Aviokompanija aviokom;
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Sediste> sediste=new HashSet<>();
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Prtljag> prtljag=new HashSet<>();
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Sediste sediste;
-	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Prtljag prtljag;
+	private User user;
 	
 	@OneToMany(mappedBy = "karta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<DodatneUslugeAvion> dodatneUsl = new HashSet<DodatneUslugeAvion>();
-	@OneToMany(mappedBy = "cenaKarte", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<CenovnikAvio> cena = new HashSet<CenovnikAvio>();
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private CenovnikAvio cena ;
 	
 	
 	public Long getId() {
@@ -65,22 +61,7 @@ public class Karta {
 		super();
 	}
 
-	public Date getDatumVremeP() {
-		return datumVremeP;
-	}
-
-	public void setDatumVremeP(Date datumVremeP) {
-		this.datumVremeP = datumVremeP;
-	}
-
-	public Date getDatumVremeS() {
-		return datumVremeS;
-	}
-
-	public void setDatumVremeS(Date datumVremeS) {
-		this.datumVremeS = datumVremeS;
-	}
-
+	
 	public Double getProsecnaOcena() {
 		return prosecnaOcena;
 	}
@@ -89,21 +70,7 @@ public class Karta {
 		this.prosecnaOcena = prosecnaOcena;
 	}
 
-	public Aerodrom getAerodromP() {
-		return aerodromP;
-	}
-
-	public void setAerodromP(Aerodrom aerodromP) {
-		this.aerodromP = aerodromP;
-	}
-
-	public Aerodrom getAerodromS() {
-		return aerodromS;
-	}
-
-	public void setAerodromS(Aerodrom aerodromS) {
-		this.aerodromS = aerodromS;
-	}
+	
 
 	public Set<DodatneUslugeAvion> getDodatneUsl() {
 		return dodatneUsl;
@@ -113,11 +80,11 @@ public class Karta {
 		this.dodatneUsl = dodatneUsl;
 	}
 
-	public Set<CenovnikAvio> getCena() {
+	public CenovnikAvio getCena() {
 		return cena;
 	}
 
-	public void setCena(Set<CenovnikAvio> cena) {
+	public void setCena(CenovnikAvio cena) {
 		this.cena = cena;
 	}
 
@@ -129,28 +96,30 @@ public class Karta {
 		this.let = let;
 	}
 
-	public Aviokompanija getAviokom() {
-		return aviokom;
-	}
+	
 
-	public void setAviokom(Aviokompanija aviokom) {
-		this.aviokom = aviokom;
-	}
-
-	public Sediste getSediste() {
+	public Set<Sediste> getSediste() {
 		return sediste;
 	}
 
-	public void setSediste(Sediste sediste) {
+	public void setSediste(Set<Sediste> sediste) {
 		this.sediste = sediste;
 	}
 
-	public Prtljag getPrtljag() {
+	public Set<Prtljag> getPrtljag() {
 		return prtljag;
 	}
 
-	public void setPrtljag(Prtljag prtljag) {
+	public void setPrtljag(Set<Prtljag> prtljag) {
 		this.prtljag = prtljag;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	

@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.model.user.User;
+
 @Entity
 public class Sediste {
 	@Id
@@ -20,7 +22,12 @@ public class Sediste {
 	@Column
 	private Integer red;
 	@Column
+	private Integer segment;
+	@Column
 	private Boolean zauzeto;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private User user;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Let sedista;
@@ -57,6 +64,18 @@ public class Sediste {
 	}
 	public void setSedista(Let sedista) {
 		this.sedista = sedista;
+	}
+	public Integer getSegment() {
+		return segment;
+	}
+	public void setSegment(Integer segment) {
+		this.segment = segment;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	
