@@ -2,6 +2,7 @@ package com.dto;
 
 import java.util.Date;
 import com.model.RezervacijaRentACar;
+import com.model.StatusRes;
 
 public class RezervacijaRentACarDTO {
 
@@ -11,7 +12,9 @@ public class RezervacijaRentACarDTO {
 	private Date datumVracanja;
 	private Double cena;
 	private Boolean otkazana;
+	private StatusRes status;
 	private FilijalaDTO filijalaDTO;
+	private FilijalaDTO filijalaDropDTO;
 	private VoziloDTO voziloDTO;
 	private UserDTO userDTO;
 
@@ -22,13 +25,15 @@ public class RezervacijaRentACarDTO {
 		this.datumVracanja = r.getDatumVracanja();
 		this.cena = r.getCena();
 		this.filijalaDTO = new FilijalaDTO(r.getRezervacija());
+		this.filijalaDropDTO=new FilijalaDTO(r.getRezervacijaDrop());
 		this.voziloDTO = new VoziloDTO(r.getVozilo());
 		this.userDTO = new UserDTO(r.getUser());
 		this.otkazana = r.getOtkazana();
+		this.status = r.getStatus();
 	}
 
 	public RezervacijaRentACarDTO(Long id, Date datumRez, Date datumPreuz, Date datumVracanja, Double cena, Boolean otkazana ,
-			FilijalaDTO filijalaDTO, VoziloDTO voziloDTO, UserDTO userDTO) {
+			StatusRes status ,FilijalaDTO filijalaDTO,FilijalaDTO filijalaDropDTO,VoziloDTO voziloDTO, UserDTO userDTO) {
 		super();
 		this.id = id;
 		this.datumRez = datumRez;
@@ -37,8 +42,10 @@ public class RezervacijaRentACarDTO {
 		this.cena = cena;
 		this.otkazana = otkazana;
 		this.filijalaDTO = filijalaDTO;
+		this.filijalaDropDTO = filijalaDropDTO;
 		this.voziloDTO = voziloDTO;
 		this.userDTO = userDTO;
+		this.status = status;
 	}
 
 	public Long getId() {
@@ -123,6 +130,22 @@ public class RezervacijaRentACarDTO {
 	 */
 	public void setOtkazana(Boolean otkazana) {
 		this.otkazana = otkazana;
+	}
+
+	public StatusRes getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusRes status) {
+		this.status = status;
+	}
+
+	public FilijalaDTO getFilijalaDropDTO() {
+		return filijalaDropDTO;
+	}
+
+	public void setFilijalaDropDTO(FilijalaDTO filijalaDropDTO) {
+		this.filijalaDropDTO = filijalaDropDTO;
 	}
 
 }

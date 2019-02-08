@@ -1,5 +1,6 @@
 package com.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,12 +18,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dto.FilijalaDTO;
+import com.dto.RezervacijaRentACarDTO;
 import com.dto.VoziloDTO;
 import com.model.Filijala;
 import com.model.RentACar;
+import com.model.RezervacijaRentACar;
 import com.model.Vozilo;
+import com.model.user.User;
 import com.service.FilijalaService;
 import com.service.RentACarService;
+import com.service.UserService;
 import com.sun.mail.iap.Response;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -35,7 +40,11 @@ public class FilijalaController {
 	
 	@Autowired
 	private RentACarService rentACarService;
-
+	
+	@Autowired
+	private UserService userService;
+	
+	
 
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	@PreAuthorize("hasRole('ADMIN_RENT')")
@@ -122,6 +131,37 @@ public class FilijalaController {
 		
 		
 	}
+	
+	@RequestMapping(value = "/rezadmin", method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ADMIN_RENT')")
+	public ResponseEntity<?> allRez(Principal user) {
+		
+		Optional<User> optionalUser = userService.findByUsername(user.getName());
+		
+		RentACar rtemp = optionalUser.get().getRentACar();
+		
+		Set<Filijala> filLista = rtemp.getFilijale();
+		
+		List<RezervacijaRentACarDTO> rezList = new ArrayList<RezervacijaRentACarDTO>();
+		
+		
+		
+		for (Filijala f : filLista) {
+			for(RezervacijaRentACar r : f.getRezervacije()) {
+				RezervacijaRentACarDTO reztemp = new RezervacijaRentACarDTO(r);
+				rezList.add(reztemp);
+			}
+		}
+
+		
+	
+		return new ResponseEntity<>(rezList,HttpStatus.OK);
+		
+	}
+	
+	
+	
+	
 	
 
 }

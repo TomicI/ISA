@@ -58,6 +58,7 @@ export class UserReservationsComponent implements OnInit {
       this.cancelStatus = true;
     }).catch(error => {
       this.message = error.error.message;
+      this.cancelStatus = false;
     });
 
     this.modalRef = this.modalService.open(this.content);

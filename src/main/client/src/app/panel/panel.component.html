@@ -2,28 +2,27 @@
     <div class="container">
 
         <div class="row">
+            <div id="navigation">
+                <nav class="nav navPar">
 
-            <div class="col-md-2 mt-2" id="navigation">
-                <nav class="nav flex-column navPar">
-
-                    <a class="nav-link active hrefColor" [routerLink]="['vozForm']" active>Account</a>
-                    <a class="nav-link active hrefColor" [routerLink]="['rentForm']">Admin</a>
+                    <a class="nav-link active hrefColor" [routerLink]="['adminpanel']" active>Admin panel</a>
+                    <a class="nav-link active hrefColor" [routerLink]="['adminres']">Reservations panel</a>
 
                 </nav>
             </div>
+        </div>
 
-            <div class="col-md-9 mt-2">
+        <div class="row">
 
-                <div class="row">
+            
 
-                    <router-outlet></router-outlet>
+                <router-outlet></router-outlet>
 
-                    <app-panel-admin-rent></app-panel-admin-rent>
+                
 
 
 
-                </div>
-            </div>
+            
         </div>
 
 

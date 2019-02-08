@@ -7,9 +7,6 @@ import { ConfirmPasswordValidator } from '../sign-up-modal/confirm-pass.validato
 import { AuthService } from '../auth/auth.service';
 import { TokenService } from '../auth/token.service';
 
-import * as mapboxgl from 'mapbox-gl';
-import { FeatureCollection } from 'mapbox-gl';
-import { AviokompanijaService } from '../aviokompanija/aviokompanija.service';
 
 @Component({
   selector: 'app-panel-settings',
@@ -22,17 +19,7 @@ export class PanelSettingsComponent implements OnInit {
   @ViewChild('content') private content;
   @ViewChild('contentRent') private contentRent;
 
-  map: mapboxgl.Map;
-  popup: any;
-  lat = 37.75;
-  lng = -122.41;
-
-  mapInfo;
-
-  pom: FeatureCollection;
-  markers: any;
-  adresa: any;
-
+  
   profileFormGroup: FormGroup;
   passFormGroup: FormGroup;
 
@@ -70,7 +57,7 @@ export class PanelSettingsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiaXYzIiwiYSI6ImNqcmw4dTFkZzA1a2E0M280cmN5ZzB2azcifQ.onqhM8uoPAXAYdE9JRJX0g';
+    
     this.initRent();
 
     this.initUser();
@@ -95,12 +82,7 @@ export class PanelSettingsComponent implements OnInit {
 
     });
 
-    // this.map = new mapboxgl.Map({
-    //   container: 'divMapa',
-    //   style: 'mapbox://styles/mapbox/streets-v11',
-    //   zoom: 13,
-    //   center: [this.lng, this.lat]
-    // });
+    
 
   }
 

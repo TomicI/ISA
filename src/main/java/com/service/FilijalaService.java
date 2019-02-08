@@ -31,8 +31,14 @@ public class FilijalaService {
 		filijalaRepository.deleteById(id);
 	}
 
-	public List<Filijala> find(String adresa){
+	public Filijala find(String adresa){
 		return filijalaRepository.findByAdresa(adresa);
 	}
+	
+	public boolean existsByAdresa(String adresa) {
+		return this.filijalaRepository.existsByAdresa(adresa);
+	}
+	
+	
 
 }

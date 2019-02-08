@@ -45,7 +45,8 @@ export class RentacarService {
 
   search(param): Observable<any> {
     let params = new HttpParams();
-    params = params.append('search',param.search);
+    params = params.append('locationp',param.locationp);
+    params = params.append('bring',param.bring);
     params = params.append('pickup',param.pickup);
     params = params.append('dropoff',param.dropoff);
 

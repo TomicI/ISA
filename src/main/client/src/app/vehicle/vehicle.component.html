@@ -1,0 +1,46 @@
+<div class="container">
+
+  <div *ngIf="vozila" class="row">
+
+      <div class="mt-2 "></div>
+    <h5>{{vozila[0].filijalaDTO.adresa}}</h5>
+
+    <div class="mt-2 "></div>
+
+    <div class="card-deck " >
+      <div *ngFor="let voz of vozila">
+        <div class="card " style="width: 30rem;">
+          <div class="card-header">
+            <div class="d-flex">
+              <h5>{{voz.naziv}} </h5>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <p>Brand: {{voz.marka}} </p>
+            <p>Model: {{voz.model}} </p>
+            <p> <i class="fas fa-user"></i> {{voz.brojSedista}}
+              <i class="fas fa-door-closed"></i> {{voz.brojVrata}}
+              <i class="fas fa-suitcase"></i> {{voz.brojTorbi}} </p>
+            <div *ngIf="voz.klima"> AC : Yes </div>
+            <div *ngIf="!voz.klima"> AC : No </div>
+            <p>Gear: {{voz.menjac}} </p>
+            <p>Gas: {{voz.gorivo}} </p>
+            <p>Tank: {{voz.rezervoar}} l</p>
+            <p>Consumption: {{voz.potrosnja}} l</p>
+            <p>Description: {{voz.dodatniOpis}} </p>
+          </div>
+
+          <div class="card-footer">
+            <div class="d-flex">
+              <div> <i class="fas fa-star"></i>{{voz.prosecnaOcena}}</div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -32,4 +32,9 @@ export class FilijalaService {
     console.log('PUT');
     return await this.http.put(`${this.FilijalaURL}`, filijala).toPromise();
   }
+
+  getallRez(): Observable<any>{
+    return this.http.get(`${this.FilijalaURL}/rezadmin`);
+  }
+
 }

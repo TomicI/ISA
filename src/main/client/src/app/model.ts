@@ -61,11 +61,22 @@ export class RentACar {
 }
 
 export class Filijala {
+    id: number;
+    adresa: string;
+    prosecnaOcena: number;
+    rentACarDTO: RentACar;
     constructor(
-        public id: number,
-        public adresa: string,
-        public prosecnaOcena: string,
-        public rentACarDTO: RentACar) { }
+        id: number,
+        adresa: string,
+        prosecnaOcena: number,
+        rentACarDTO: RentACar) {
+
+        this.id = id;
+        this.adresa = adresa;
+        this.prosecnaOcena = prosecnaOcena;
+        this.rentACarDTO = rentACarDTO;
+
+    }
 }
 
 export class Vozilo {
@@ -147,16 +158,44 @@ export class CenovnikRent {
 }
 
 export class RezervacijaRent {
+    id: number;
+    datumRez: Date;
+    datumPreuz: Date;
+    datumVracanja: Date;
+    cena: number;
+    FilijalaDTO: Filijala;
+    FilijalaDropDTO: Filijala;
+    status: StatusRes;
+    otkazana: boolean;
+    VoziloDTO: Vozilo;
+    UserDTO: User;
     constructor(
-        public id: number,
-        public datumRez: Date,
-        public datumPreuz: Date,
-        public datumVracanja: Date,
-        public cena: number,
-        public FilijalaDTO: Filijala,
-        public VoziloDTO: Vozilo,
-        public UserDTO: User,
-    ) { }
+        id: number,
+        datumRez: Date,
+        datumPreuz: Date,
+        datumVracanja: Date,
+        cena: number,
+        FilijalaDTO: Filijala,
+        FilijalaDropDTO: Filijala,
+        status: StatusRes,
+        otkazana: boolean,
+        VoziloDTO: Vozilo,
+        UserDTO: User,
+    ) {
+        this.id = id ;
+        this.datumRez = datumRez;
+        this.datumPreuz = datumPreuz;
+        this.datumVracanja = datumVracanja;
+        this.cena = cena;
+        this.FilijalaDTO = FilijalaDTO;
+        this.FilijalaDropDTO = FilijalaDTO;
+        this.status = status;
+        this.otkazana = otkazana;
+        this.VoziloDTO = VoziloDTO;
+        this.UserDTO = UserDTO;
+    
+    
+    }
 
 }
 
@@ -193,7 +232,7 @@ export class NewPass {
     oldPass: string;
     newPass: string;
 
-    constructor(oldPass: string,newPass: string){
+    constructor(oldPass: string, newPass: string) {
         this.oldPass = oldPass;
         this.newPass = newPass;
     }
@@ -209,4 +248,11 @@ export enum Menjac {
 export enum Gorivo {
     BENZIN,
     DIZEL
+}
+
+export enum StatusRes {
+    Reserved,
+    PickUp,
+    Canceled,
+    DropOff
 }

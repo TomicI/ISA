@@ -11,6 +11,10 @@ export class ReservationService {
 
   constructor(private http: HttpClient) { }
 
+  async saveRes(res: object):Promise<any>{
+    return await this.http.post(`${this.userAccount}`, res).toPromise();
+  }
+
   getResCancel(id: number): Promise<any> {
     return this.http.get(`${this.userAccount}/cancel/${id}`).toPromise();
   }

@@ -1,0 +1,60 @@
+<div class="container">
+
+  
+
+  <div *ngIf="res" class="row">
+
+    <div class="card-deck ">
+      <div class="card " style="width: 70rem">
+        <div class="card-header">
+          <div class="d-flex">
+            <h5>{{res.voziloDTO.naziv}} </h5>
+            <div class="ml-auto">
+              <h5> Total € {{res.cena}} </h5>
+            </div>
+          </div>
+          <h6>RentACar Name : {{res.filijalaDTO.rentACarDTO.naziv}} </h6>
+          <p>PickUp adress : {{res.filijalaDTO.adresa}} </p>
+          <p>DropOff adress : {{res.filijalaDropDTO.adresa}} </p>
+          <h6>Pick-up: {{res.datumPreuz | date: 'dd/MM/yyyy HH:mm' }} , Drop-off:
+            {{res.datumVracanja | date: 'dd/MM/yyyy HH:mm'}} </h6>
+
+        </div>
+
+        <div class="card-body">
+          <p>Brand: {{res.voziloDTO.marka}} </p>
+          <p>Model: {{res.voziloDTO.model}} </p>
+          <p> <i class="fas fa-user"></i>  {{res.voziloDTO.brojSedista}} 
+            <i class="fas fa-door-closed"></i> {{res.voziloDTO.brojVrata}}
+              <i class="fas fa-suitcase"></i>  {{res.voziloDTO.brojTorbi}} </p>
+          <div *ngIf="res.voziloDTO.klima"> AC : Yes </div>
+          <div *ngIf="!res.voziloDTO.klima"> AC : No </div>
+          <p>Gear: {{res.voziloDTO.menjac}} </p>
+          <p>Gas: {{res.voziloDTO.gorivo}} </p>
+          <p>Tank: {{res.voziloDTO.rezervoar}} l</p>
+          <p>Consumption: {{res.voziloDTO.potrosnja}} l</p>
+          <p>Description: {{res.voziloDTO.dodatniOpis}} </p>
+        </div>
+
+        <div class="card-footer">
+          <div class="d-flex">
+            <div> <i class="fas fa-star"></i>{{res.voziloDTO.prosecnaOcena}}</div>
+            <div class="ml-auto">
+              <button type="button" class="btn btn-outline-secondary btn-sm" (click)="rent()">Rent</button>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row d-flex justify-content-center">
+
+      <h3>{{message}}</h3>
+
+  </div>
+
+  </div>

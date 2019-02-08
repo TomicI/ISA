@@ -10,18 +10,55 @@ import { RentacarService } from '../services/rentacar.service';
 })
 export class SearchGetComponent implements OnInit {
 
+  resChoose: any;
+
+  resPass = true;
+
+  resView = true;
+
+  backBtn = false;
+
   params: any = {};
 
-  constructor(private route: ActivatedRoute,private rentService: RentacarService) { }
+  reservations: any;
+
+  message = '';
+
+  constructor(private route: ActivatedRoute, private rentService: RentacarService) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.params = params;
+      this.rentService.search(this.params).toPromise().then(data => { 
+        this.reservations = data ;
+      });
+      console.log(params);
     });
 
-    this.rentService.search(this.params).toPromise().then(data=>{
+  }
 
-    });
+
+  onCliked() {
+
+    this.resPass = false;
+    this.resView = true;
+    this.backBtn = false;
+
+  }
+
+  rent(reservation) {
+    this.resChoose = reservation;
+
+    this.resPass = true;
+    this.resView = false;
+    this.backBtn = true;
+  }
+
+  back() {
+
+    this.resPass = false;
+    this.resView = true;
+    this.backBtn=false;
 
   }
 

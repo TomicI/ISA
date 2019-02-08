@@ -35,9 +35,16 @@ public class RezervacijaRentACar {
 	@Column
 	private Boolean otkazana;
 	
+	@Column
+	private StatusRes status;
+	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "filijala_id",nullable=false)
 	private Filijala rezervacija;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name = "filijala_drop_id",nullable=false)
+	private Filijala rezervacijaDrop;
 	
 	@ManyToOne
 	@JoinColumn(name = "vozilo_id",nullable=false)
@@ -133,6 +140,22 @@ public class RezervacijaRentACar {
 	 */
 	public void setOtkazana(Boolean otkazana) {
 		this.otkazana = otkazana;
+	}
+
+	public StatusRes getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusRes status) {
+		this.status = status;
+	}
+
+	public Filijala getRezervacijaDrop() {
+		return rezervacijaDrop;
+	}
+
+	public void setRezervacijaDrop(Filijala rezervacijaDrop) {
+		this.rezervacijaDrop = rezervacijaDrop;
 	}
 	
 	

@@ -27,24 +27,35 @@ import { PanelSettingsComponent } from './panel-settings/panel-settings.componen
 import { UserReservationsComponent } from './user-reservations/user-reservations.component';
 import { UserFriendsComponent } from './user-friends/user-friends.component';
 import { SearchGetComponent } from './search-get/search-get.component';
+import { SearchRentComponent } from './search-rent/search-rent.component';
+import { PanelAdminRentComponent } from './panel-admin-rent/panel-admin-rent.component';
+import { PanelReservationRentComponent } from './panel-reservation-rent/panel-reservation-rent.component';
+import { VehicleComponent } from './vehicle/vehicle.component';
 
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/rentacarall', pathMatch: 'full' },
-  { path: 'rentacar/:id', component: RentacarComponent },
-  { path: 'filijala/:id', component: FilijalaComponent },
-  { path: 'rentacarall', component: RentacarListComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'rentacarform', component: FormsComponent },
   { path: 'home', component: HomeComponent },
+  {
+    path: 'rentacar', component: SearchRentComponent,
+    children: [
+      { path: '', component: RentacarListComponent },
+      { path: 'branch',  component: FilijalaComponent},
+      { path: 'search', component: SearchGetComponent },
+      { path: 'vehicle', component: VehicleComponent },
+    ]
+  },
   { path: 'login', component: LoginComponent },
   {
     path: 'panel', component: PanelComponent,
     children: [
-      { path: 'vozForm', component: FormVozComponent },
-      { path: 'rentForm', component: FormRentComponent }
+      { path: '', redirectTo: 'adminpanel', pathMatch: 'full'},
+      { path: 'adminpanel', component: PanelAdminRentComponent },
+      { path: 'adminres', component: PanelReservationRentComponent },
     ]
-  }, { path: 'search', component: SearchGetComponent },
+  },
   { path: 'profile', component: PanelProfileComponent },
   { path: 'settings', component: PanelSettingsComponent },
   { path: 'signup', component: SignUpModalComponent },

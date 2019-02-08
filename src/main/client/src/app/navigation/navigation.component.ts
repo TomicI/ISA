@@ -18,6 +18,7 @@ export class NavigationComponent implements OnInit {
   loginDiv = true;
   signupDiv = false;
 
+
  
 
   isLoggedIn = false;
@@ -33,6 +34,7 @@ export class NavigationComponent implements OnInit {
     private authService: AuthService,
     private router: Router) { }
   ngOnInit() {
+    
     if (this.tokenStorage.getToken()) {
       
       this.isLoggedIn = true;
@@ -42,9 +44,11 @@ export class NavigationComponent implements OnInit {
       this.roles.forEach(function(x){
         console.log(x);
         if(x === 'ROLE_ADMIN_RENT' || 'ROLE_ADMIN_AVIO' || 'ROLE_ADMIN_HOTEL'){
-          
+        
         } 
       });
+
+
   
     }
 

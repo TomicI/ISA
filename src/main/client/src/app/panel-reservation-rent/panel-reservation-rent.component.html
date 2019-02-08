@@ -1,21 +1,9 @@
 <div class="container">
 
-  <div *ngIf="rentACar">
-
-    <h4>Reservations {{rentACar.naziv}}</h4>
-
-  </div>
-
   <div class="row">
 
-    <div class="col-md-12">
 
-        <div class="input-group">
-            <input type="text" class="form-control no-border" id="searchRes" aria-describedby="searchRes"
-                (keyup)="applyFilter($event.target.value)" placeholder="Reservation search...">
-        </div>
-
-      <div class="card">
+      <div class="card" style="width: 45rem;">
 
         <div class="card-header">
           <div class="d-flex">
@@ -25,27 +13,27 @@
           </div>
         </div>
 
-        <table mat-table [dataSource]="resSource" class="mat-elevation-z8 matchip mb-0">
+        <table mat-table [dataSource]="resSource" class="mat-elevation-z8 matchip mb-0" >
 
             <ng-container matColumnDef="no">
-                <th mat-header-cell *matHeaderCellDef> ID </th>
-                <td mat-cell *matCellDef="let reservation">{{reservation.id}}</td>
+                <th mat-header-cell *matHeaderCellDef> NO. </th>
+                <td mat-cell *matCellDef="let reservation;let i=index">{{i+1}}</td>
             </ng-container>
 
 
             <ng-container matColumnDef="resdate">
                 <th mat-header-cell *matHeaderCellDef> Reservation date </th>
-                <td mat-cell *matCellDef="let reservation"> {{reservation.datumRez}} </td>
+                <td mat-cell *matCellDef="let reservation"> {{reservation.datumRez | date: 'dd/MM/yyyy hh:mm'}} </td>
             </ng-container>
 
             <ng-container matColumnDef="pickup">
                 <th mat-header-cell *matHeaderCellDef> Pick-up Date </th>
-                <td mat-cell *matCellDef="let reservation"> {{reservation.datumPreuz | date: 'dd/MM/yyyy'}} </td>
+                <td mat-cell *matCellDef="let reservation"> {{reservation.datumPreuz | date: 'dd/MM/yyyy hh:mm'}} </td>
             </ng-container>
 
             <ng-container matColumnDef="dropoff">
                 <th mat-header-cell *matHeaderCellDef> Drop-off Date </th>
-                <td mat-cell *matCellDef="let reservation"> {{reservation.datumVracanja | date: 'dd/MM/yyyy'}} </td>
+                <td mat-cell *matCellDef="let reservation"> {{reservation.datumVracanja | date: 'dd/MM/yyyy hh:mm'}} </td>
             </ng-container>
 
             <ng-container matColumnDef="price">
@@ -58,9 +46,9 @@
 
         </table>
 
-        <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+        <mat-paginator #paginator1 [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
 
       </div>
-    </div>
+    
   </div>
 </div>

@@ -27,10 +27,12 @@ import com.model.CenovnikRentACar;
 import com.model.Filijala;
 import com.model.RentACar;
 import com.model.RezervacijaRentACar;
+import com.model.StatusRes;
 import com.model.Vozilo;
 import com.repository.RentACarRepository;
 import com.security.ResponseMessage;
 import com.service.CenovnikRentACarService;
+import com.service.FilijalaService;
 import com.service.RentACarService;
 import com.service.RezervacijaRentACarService;
 import com.service.RezervacijaService;
@@ -45,6 +47,9 @@ public class RentACarController {
 	
 	@Autowired
 	private CenovnikRentACarService cenovnikService;
+	
+	@Autowired
+	private FilijalaService filijalaService;
 	
 	@Autowired
 	private RezervacijaRentACarService rezService;
@@ -180,29 +185,28 @@ public class RentACarController {
 
 	}
 	
-	@RequestMapping(value = "/searchFil", method = RequestMethod.GET)
-	public ResponseEntity<List<FilijalaDTO>> searchFilijala(@RequestParam(value = "name")String name){
-		
-		
-		
-		
-		
-		return null;
-		
-		
-	}
-	
-	
-	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public ResponseEntity<List<RezervacijaRentACarDTO>> search(@RequestParam(value = "search",required=false)String name,@RequestParam(value = "search") String search,@RequestParam(value = "pickup") Date pickUp , @RequestParam(value = "dropoff") Date dropOff) {
 
-			
-		if (!rentACarService.exists(search)){
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public ResponseEntity<?> search(@RequestParam(value="locationp")String locationp,@RequestParam(value = "bring") String bring,@RequestParam(value = "pickup") Date pickUp, @RequestParam(value = "dropoff") Date dropOff) {
+
+		System.out.println(pickUp);
+		System.out.println(bring);
+		
+		if (!filijalaService.existsByAdresa(locationp)) {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		
-		RentACar r = rentACarService.findByNaziv(search);
-
+		if (!filijalaService.existsByAdresa(bring)) {
+			
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		
+		Filijala filSearch = filijalaService.find(locationp);
+		
+		Filijala filBring = filijalaService.find(bring);
+		
+		RentACar r = rentACarService.findByNaziv(filSearch.getFilijala().getNaziv());
+		
 		
 		List<CenovnikRentACar> cenovnikServisa = cenovnikService.findByServis(r);
 		
@@ -222,6 +226,8 @@ public class RentACarController {
 			 if ( odDatuma == -1 || odDatuma == 0 ) {
 				 if ( doDatuma == 1 || doDatuma == 0 ) {
 					 System.out.println("Postoji cenovnik za dati RANGE");
+					 
+					 if (c.getVozilo().getVozilo().equals(filSearch)) {
 					 
 					 Vozilo v = c.getVozilo();
 					 
@@ -275,11 +281,13 @@ public class RentACarController {
 						
 						double cena = diffDana*c.getCena();
 						
-						RezervacijaRentACarDTO rezTemp = new RezervacijaRentACarDTO(null,null, pickUp, dropOff, cena, false, new FilijalaDTO(v.getVozilo()), new VoziloDTO(v) , null);
+						RezervacijaRentACarDTO rezTemp = new RezervacijaRentACarDTO(null,null,pickUp,dropOff,cena,false,StatusRes.Reserved,new FilijalaDTO(filSearch),new FilijalaDTO(filBring),new VoziloDTO(v), null);
+														
 						
 						rezervacijePretrage.add(rezTemp);
 					 }
 					 
+					}
 					 
 				 }
 			 }

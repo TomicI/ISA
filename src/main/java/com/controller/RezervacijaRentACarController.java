@@ -1,6 +1,8 @@
 package com.controller;
 
+import java.security.Principal;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +21,10 @@ import com.dto.RezervacijaRentACarDTO;
 import com.dto.VoziloDTO;
 import com.model.Filijala;
 import com.model.RezervacijaRentACar;
+import com.model.StatusRes;
 import com.model.Vozilo;
 import com.model.user.User;
+import com.repository.UserRepository;
 import com.security.ResponseMessage;
 import com.service.FilijalaService;
 import com.service.RezervacijaRentACarService;
@@ -45,7 +49,13 @@ public class RezervacijaRentACarController {
 	private UserService userService;
 	
 	@RequestMapping(method=RequestMethod.POST,consumes="application/json")
-	public ResponseEntity<RezervacijaRentACarDTO> saveRezervacija (@RequestBody RezervacijaRentACarDTO rezDTO){
+	public ResponseEntity<RezervacijaRentACarDTO> saveRezervacija (@RequestBody RezervacijaRentACarDTO rezDTO,Principal user){
+		
+		 Optional<User> optionalUser = userService.findByUsername(user.getName());
+		 
+		 if (!optionalUser.isPresent()) {
+			 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		 }
 		
 		if (rezDTO.getFilijalaDTO()==null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -58,6 +68,8 @@ public class RezervacijaRentACarController {
 		Optional<Filijala> filijalaOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
 		Optional<Vozilo> voziloOptional = voziloService.findOne(rezDTO.getVoziloDTO().getId());
 		
+		Optional<Filijala> filijalaDropOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
+		
 		if (!filijalaOptional.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -66,14 +78,22 @@ public class RezervacijaRentACarController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		RezervacijaRentACar rez = new RezervacijaRentACar();
+		if (!filijalaDropOptional.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		
-		rez.setId(rezDTO.getId());
-		rez.setDatumRez(rezDTO.getDatumRez());
+		
+		RezervacijaRentACar rez = new RezervacijaRentACar();
+				
+		rez.setDatumRez(new Date());
 		rez.setDatumPreuz (rezDTO.getDatumPreuz());
 		rez.setDatumVracanja (rezDTO.getDatumVracanja());
 		rez.setCena (rezDTO.getCena());
+		rez.setOtkazana(false);
 		rez.setRezervacija(filijalaOptional.get());
+		rez.setRezervacijaDrop(filijalaDropOptional.get());
+		rez.setUser(optionalUser.get());
+		rez.setStatus(StatusRes.Reserved);
 		rez.setVozilo(voziloOptional.get());
 		
 		rez = rezService.save(rez);

@@ -1,12 +1,29 @@
 <div class="container">
-  <div *ngIf="filijala">
-    <h4>Filijala:</h4>
-    <div>
-      <label>Adresa: </label> {{filijala.adresa}}
-    </div>
-    <div>
-      <label>Prosecna Ocena: </label> {{filijala.prosecnaOcena}}
-    </div>
-    <br>
-  </div>
+
+  <h4 >{{naziv}}</h4>
+   
+    <div *ngIf="filijale" class="card-deck">
+        <div *ngFor="let fil of filijale">
+          <div class="card mt-4" style="width: 18rem;height: 30rem">
+            <div class="card-body">
+              <h5 class="card-title">{{fil.naziv}}</h5>
+              <p class="card-text">{{fil.adresa}}</p>
+              <app-map [(adress)]='fil.adresa'></app-map>
+            </div>
+            <div class="card-footer">
+              <div class="d-flex">
+                <div> <i class="fas fa-star"></i>{{fil.prosecnaOcena}}</div>
+                <div class="ml-auto">
+                  <button type="button" class="btn btn-outline-secondary btn-sm"
+                    (click)="showVeh(fil)">Details</button>
+                </div>
+              </div>
+  
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      
 </div>

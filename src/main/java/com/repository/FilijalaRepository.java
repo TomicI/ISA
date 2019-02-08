@@ -7,5 +7,7 @@ import java.util.List;
 import com.model.Filijala;
 
 public interface FilijalaRepository extends JpaRepository<Filijala,Long> {
-    List<Filijala> findByAdresa(String adresa);
+    Filijala findByAdresa(String adresa);
+    
+    Boolean existsByAdresa(String adresa);
 }

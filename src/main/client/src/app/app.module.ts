@@ -27,6 +27,7 @@ import { PanelAdminRentComponent } from './panel-admin-rent/panel-admin-rent.com
 
 import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { DataTablesModule } from 'angular-datatables';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -59,6 +60,10 @@ import { PanelSettingsComponent } from './panel-settings/panel-settings.componen
 import { UserReservationsComponent } from './user-reservations/user-reservations.component';
 import { UserFriendsComponent } from './user-friends/user-friends.component';
 import { SearchGetComponent } from './search-get/search-get.component';
+import { SearchRentComponent } from './search-rent/search-rent.component';
+import { ResDetailComponent } from './res-detail/res-detail.component';
+import { MapComponent } from './map/map.component';
+import { VehicleComponent } from './vehicle/vehicle.component';
 
 
 @NgModule({
@@ -103,9 +108,11 @@ import { SearchGetComponent } from './search-get/search-get.component';
     PanelSettingsComponent,
     UserReservationsComponent,
     UserFriendsComponent,
-    SearchGetComponent
-
-
+    SearchGetComponent,
+    SearchRentComponent,
+    ResDetailComponent,
+    MapComponent,
+    VehicleComponent
 
   ],
   imports: [
@@ -117,6 +124,7 @@ import { SearchGetComponent } from './search-get/search-get.component';
     DataTablesModule,
     MatTableModule,
     MatPaginatorModule,
+    MatAutocompleteModule,
     NgbModule.forRoot(),
     BrowserAnimationsModule,
     CalendarModule.forRoot({

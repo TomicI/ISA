@@ -1,8 +1,51 @@
+
+
 <div class="container">
+
   <div class="row">
+    <button *ngIf="backBtn" type="button" class="btn btn-outline-secondary btn-sm" (click)="back()">Back</button>
+  </div>
+  <div class="row" *ngIf="resView" >
+    <div class="card-deck">
+      <div *ngFor="let res of reservations">
+        <div class="card mt-4" style="width: 18rem;height: 18rem">
+          <div class="card-header">
+            <div class="d-flex">
 
-    
+              <h6 class="card-title">{{res.voziloDTO.naziv}} </h6>
+              <div class="ml-auto">
+                <h6> € {{res.cena}} </h6>
+              </div>
+            </div>
+          </div>
 
+          <div class="card-body">
+            <p> <i class="fas fa-user"></i> {{res.voziloDTO.brojSedista}} {{res.voziloDTO.brojVrata}} <i
+                class="fas fa-suitcase"></i> {{res.voziloDTO.brojTorbi}} </p>
+            <div *ngIf="res.voziloDTO.klima"> Yes </div>
+              <p>{{res.voziloDTO.dodatniOpis}}</p>
+          </div>
+
+          <div class="card-footer">
+            <div class="d-flex">
+              <div> <i class="fas fa-star"></i>{{res.voziloDTO.prosecnaOcena}}</div>
+              <div class="ml-auto">
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="rent(res)">Rent</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" > 
+
+     <app-res-detail *ngIf="resPass" [(res)]="resChoose" (clicked)="onCliked($event)" ></app-res-detail>
 
   </div>
+
+
+
 </div>
