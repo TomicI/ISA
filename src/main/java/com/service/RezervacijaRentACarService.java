@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.model.RezervacijaRentACar;
+import com.model.Vozilo;
 import com.repository.RezervacijaRentACarRepository;
 
 @Service
@@ -29,6 +30,10 @@ public class RezervacijaRentACarService {
 	
 	public void remove (Long id) {
 		rezRepository.deleteById(id);
+	}
+	
+	public List<RezervacijaRentACar> findByVoz(Vozilo voz){
+		return rezRepository.findByVozilo(voz);
 	}
 
 }

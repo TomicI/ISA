@@ -21,14 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dto.CenovnikRentACarDTO;
 import com.dto.FilijalaDTO;
 import com.dto.RentACarDTO;
+import com.dto.RezervacijaRentACarDTO;
+import com.dto.VoziloDTO;
 import com.model.CenovnikRentACar;
 import com.model.Filijala;
 import com.model.RentACar;
+import com.model.RezervacijaRentACar;
 import com.model.Vozilo;
 import com.repository.RentACarRepository;
 import com.security.ResponseMessage;
 import com.service.CenovnikRentACarService;
 import com.service.RentACarService;
+import com.service.RezervacijaRentACarService;
+import com.service.RezervacijaService;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -40,6 +45,9 @@ public class RentACarController {
 	
 	@Autowired
 	private CenovnikRentACarService cenovnikService;
+	
+	@Autowired
+	private RezervacijaRentACarService rezService;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<RentACarDTO> getRentACar(@PathVariable Long id) {
@@ -97,7 +105,6 @@ public class RentACarController {
 		rentACar.setId(rentACarDTO.getId());
 		rentACar.setNaziv(rentACarDTO.getNaziv());
 		rentACar.setOpis(rentACarDTO.getOpis());
-		rentACar.setAdresa(rentACarDTO.getAdresa());
 
 		rentACar = rentACarService.save(rentACar);
 
@@ -151,10 +158,6 @@ public class RentACarController {
 			return new ResponseEntity<>(new ResponseMessage("Name is not available!"), HttpStatus.BAD_REQUEST);
 		}
 
-		if (rentACarDTO.getNaziv().length() < 3 || rentACarDTO.getAdresa().length() < 3 ) {
-			return new ResponseEntity<>(new ResponseMessage("Minimum 3 characters!"), HttpStatus.BAD_REQUEST);
-		}
-
 		if (rentACarDTO.getOpis().length() < 5) {
 			return new ResponseEntity<>(new ResponseMessage("Minimum 5 characters!"), HttpStatus.BAD_REQUEST);
 		}
@@ -169,7 +172,6 @@ public class RentACarController {
 		RentACar rentaACar = rentOptional.get();
 
 		rentaACar.setNaziv(rentACarDTO.getNaziv());
-		rentaACar.setAdresa(rentACarDTO.getAdresa());
 		rentaACar.setOpis(rentACarDTO.getOpis());
 
 		rentaACar = rentACarService.save(rentaACar);
@@ -177,9 +179,22 @@ public class RentACarController {
 		return new ResponseEntity<>(new RentACarDTO(rentaACar), HttpStatus.OK);
 
 	}
-
+	
+	@RequestMapping(value = "/searchFil", method = RequestMethod.GET)
+	public ResponseEntity<List<FilijalaDTO>> searchFilijala(@RequestParam(value = "name")String name){
+		
+		
+		
+		
+		
+		return null;
+		
+		
+	}
+	
+	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public ResponseEntity<?> search(@RequestParam(value = "search",required=false)String name,@RequestParam(value = "search") String search,@RequestParam(value = "pickup") Date pickUp , @RequestParam(value = "dropoff") Date dropOff) {
+	public ResponseEntity<List<RezervacijaRentACarDTO>> search(@RequestParam(value = "search",required=false)String name,@RequestParam(value = "search") String search,@RequestParam(value = "pickup") Date pickUp , @RequestParam(value = "dropoff") Date dropOff) {
 
 			
 		if (!rentACarService.exists(search)){
@@ -189,38 +204,97 @@ public class RentACarController {
 		RentACar r = rentACarService.findByNaziv(search);
 
 		
-		System.out.println(r.getAdresa());
+		List<CenovnikRentACar> cenovnikServisa = cenovnikService.findByServis(r);
+		
+		List<VoziloDTO> vozilaPretrage = new ArrayList<VoziloDTO>();
+		
+		List<FilijalaDTO> filijalaPretrage = new ArrayList<FilijalaDTO>();
+		
+		List<RezervacijaRentACarDTO> rezervacijePretrage = new ArrayList<RezervacijaRentACarDTO>();
 		
 		
-		Set<Filijala> f = r.getFilijale();
+		for (CenovnikRentACar c:cenovnikServisa) {
+			
+			 int odDatuma = c.getOdDatuma().compareTo(pickUp);
+			 int doDatuma = c.getDoDatuma().compareTo(dropOff);
+			 
+			 
+			 if ( odDatuma == -1 || odDatuma == 0 ) {
+				 if ( doDatuma == 1 || doDatuma == 0 ) {
+					 System.out.println("Postoji cenovnik za dati RANGE");
+					 
+					 Vozilo v = c.getVozilo();
+					 
+					 System.out.println("VOZILO "+ v.getNaziv() );
+					 
+					 List<RezervacijaRentACar> rezervacija= rezService.findByVoz(v);
 		
-		ArrayList<Vozilo>  vtemp = new ArrayList<Vozilo>();
-		
-		ArrayList<CenovnikRentACar>  ctemp = new ArrayList<CenovnikRentACar>();
-		
-		for (Filijala fl:f) {
-			for (Vozilo v:fl.getVozila()) {
-				
-				System.out.println(cenovnikService.findByVozilo(v));
-				
-			}
+					 int prolaz = 1 ;
+					 
+					 for(RezervacijaRentACar rez :rezervacija) {
+						 
+						 int pickUpBetween1  = rez.getDatumPreuz().compareTo(pickUp);
+						 int pickUpBetween2  = rez.getDatumVracanja().compareTo(pickUp);
+
+						 int dropOffBetween1 = rez.getDatumPreuz().compareTo(dropOff);
+						 int dropOffBetween2 = rez.getDatumVracanja().compareTo(dropOff);
+						 
+						 int pick = pickUpBetween1*pickUpBetween2;
+						 int drop = dropOffBetween1*dropOffBetween2;
+						 
+						 System.out.println("PICKUP "+ pick);
+						 
+						 System.out.println("DROPOFF "+ drop);
+						 
+						 int proizvod = 1;
+						 
+						 if (pick==-1 && drop==-1) {
+							 proizvod = -1;
+						 }else {
+							proizvod = pick*drop;
+						 }
+						 
+						 prolaz *=proizvod;
+						 
+						 if ( rez.getOtkazana() ) {
+							 prolaz*= -1;
+						 }
+						  
+					 }
+					 
+					 if (prolaz == 1) { 
+						
+						 System.out.println("Prolazi "+v.getNaziv());
+						 
+						 FilijalaDTO filVoz = new FilijalaDTO(v.getVozilo());
+						 filijalaPretrage.add(filVoz);
+						 
+						long brojDana = dropOff.getTime()-pickUp.getTime();
+						long diffDana = brojDana / (24 * 60 * 60 * 1000);
+						System.out.println(diffDana);
+						
+						double cena = diffDana*c.getCena();
+						
+						RezervacijaRentACarDTO rezTemp = new RezervacijaRentACarDTO(null,null, pickUp, dropOff, cena, false, new FilijalaDTO(v.getVozilo()), new VoziloDTO(v) , null);
+						
+						rezervacijePretrage.add(rezTemp);
+					 }
+					 
+					 
+				 }
+			 }
+			 
+			 
 		}
-
 		
 		
-
-
-		System.out.println(f);
-
-		List<RentACar> lista = rentACarService.findAll();
-
+			
 		
-		
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(rezervacijePretrage,HttpStatus.OK);
 
 	}
 
-
+	
 
 
 }

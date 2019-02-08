@@ -7,22 +7,20 @@ public class RentACarDTO {
 	private Long id;
 	private String naziv;
 	private String opis;
-	private String adresa;
 	
 	public RentACarDTO() {	
 		
 	}
 	
 	public RentACarDTO(RentACar r) {
-		this(r.getId(),r.getNaziv(),r.getOpis(),r.getAdresa());
+		this(r.getId(),r.getNaziv(),r.getOpis());
 	}
 
-	public RentACarDTO(Long id, String naziv,String opis,String adresa) {
+	public RentACarDTO(Long id, String naziv,String opis) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
 		this.opis=opis;
-		this.adresa=adresa;
 	}
 	
 
@@ -50,21 +48,6 @@ public class RentACarDTO {
 		this.naziv = naziv;
 	}
 
-	/**
-	 * @return the adresa
-	 */
-	public String getAdresa() {
-		return adresa;
-	}
-
-	/**
-	 * @param adresa the adresa to set
-	 */
-	public void setAdresa(String adresa) {
-		this.adresa = adresa;
-	}
-	
-	
 
 	
 }

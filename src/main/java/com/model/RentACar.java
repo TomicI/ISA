@@ -25,8 +25,6 @@ public class RentACar {
 	private String naziv;
 	@Column
 	private String opis;
-	@Column(nullable = false)
-	private String adresa;
 	
 	//cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
 
@@ -41,7 +39,7 @@ public class RentACar {
 		super();
 	}
 	
-	public RentACar(Long id, String naziv, String adresa, String opis, Double prosecnaOcena) {
+	public RentACar(Long id, String naziv, String opis, Double prosecnaOcena) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -104,19 +102,6 @@ public class RentACar {
 		this.filijale = filijale;
 	}
 
-	/**
-	 * @return the adresa
-	 */
-	public String getAdresa() {
-		return adresa;
-	}
-
-	/**
-	 * @param adresa the adresa to set
-	 */
-	public void setAdresa(String adresa) {
-		this.adresa = adresa;
-	}
 
 	/**
 	 * @return the cenovnici

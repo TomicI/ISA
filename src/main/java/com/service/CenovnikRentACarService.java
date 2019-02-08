@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.model.CenovnikRentACar;
+import com.model.RentACar;
 import com.model.Vozilo;
 import com.repository.CenovnikRentACarRepository;
 
@@ -34,6 +35,10 @@ public class CenovnikRentACarService {
 	
 	public List<CenovnikRentACar> findByVozilo(Vozilo v){
 		return cenovnikRentACarRepository.findByVozilo(v);
+	}
+	
+	public List<CenovnikRentACar> findByServis(RentACar r){
+		return cenovnikRentACarRepository.findByServis(r);
 	}
 	
 
