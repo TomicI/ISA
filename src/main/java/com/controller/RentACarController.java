@@ -265,7 +265,7 @@ public class RentACarController {
 						 if ( rez.getOtkazana() ) {
 							 prolaz*= -1;
 						 }
-						  
+
 					 }
 					 
 					 if (prolaz == 1) { 

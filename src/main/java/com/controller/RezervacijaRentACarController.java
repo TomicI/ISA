@@ -89,11 +89,11 @@ public class RezervacijaRentACarController {
 		rez.setDatumPreuz (rezDTO.getDatumPreuz());
 		rez.setDatumVracanja (rezDTO.getDatumVracanja());
 		rez.setCena (rezDTO.getCena());
-		rez.setOtkazana(false);
+	//	rez.setOtkazana(false);
 		rez.setRezervacija(filijalaOptional.get());
-		rez.setRezervacijaDrop(filijalaDropOptional.get());
-		rez.setUser(optionalUser.get());
-		rez.setStatus(StatusRes.Reserved);
+	//	rez.setRezervacijaDrop(filijalaDropOptional.get());
+	//	rez.setUser(optionalUser.get());
+	//	rez.setStatus(StatusRes.Reserved);
 		rez.setVozilo(voziloOptional.get());
 		
 		rez = rezService.save(rez);
@@ -193,7 +193,7 @@ public class RezervacijaRentACarController {
 
 		RezervacijaRentACar rez = rezOptional.get();
 
-		rez.setOtkazana(true);
+//		rez.setOtkazana(true);
 
 		rez = rezService.save(rez);
 
