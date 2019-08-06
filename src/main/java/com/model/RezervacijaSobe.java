@@ -1,19 +1,11 @@
 package com.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class RezervacijaSobe {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="rezervacija_id")
 	private Long id;
 	@Column
 	private String odDatuma;
@@ -21,6 +13,9 @@ public class RezervacijaSobe {
 	private String doDatuma;
 	@Column
 	private Boolean zauzeta;
+
+	@OneToOne
+	private Rezervacija rezervacija;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Soba sobaRez;

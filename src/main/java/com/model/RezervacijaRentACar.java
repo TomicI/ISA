@@ -34,14 +34,14 @@ public class RezervacijaRentACar {
 
 	@Column
 	private Boolean otkazana;
-	
+
 	@Column
 	private StatusRes status;
-	
+
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "filijala_id",nullable=false)
 	private Filijala rezervacija;
-	
+
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "filijala_drop_id",nullable=false)
 	private Filijala rezervacijaDrop;
@@ -157,7 +157,7 @@ public class RezervacijaRentACar {
 	public void setRezervacijaDrop(Filijala rezervacijaDrop) {
 		this.rezervacijaDrop = rezervacijaDrop;
 	}
-	
-	
+
+
 
 }

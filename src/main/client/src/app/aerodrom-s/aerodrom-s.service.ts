@@ -45,17 +45,7 @@ export class AerodromSService {
     return this.http.put(this.AVIO_API, aerodrom).toPromise();
   }
 
-  getAllDest(): Observable<any> {
-    return this.http.get(this.DEST_API + '/lista');
-  }
 
-  saveDestinacija(destinacija: Object): Promise<Object>{
-    console.log(destinacija);
-    return this.http.post(this.DEST_API, destinacija).toPromise();
-  }
 
-  getDestinacija(id: number): Observable<Object> {
-    console.log(this.DEST_API+ '/' + id);
-    return this.http.get(this.DEST_API +'/'+id);
-  }
+
 }

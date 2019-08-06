@@ -29,7 +29,7 @@ export class FormUpdateAerodromComponent implements OnInit {
 
   ngOnInit() {
     this.aerodrom=new Aerodrom();
-    this.destinacije=this.destinacija.getDestinacije();
+    //this.destinacije=this.destinacija.getDestinacije();
     this.regFormA=this.formBuilder.group({
       nazivAerodroma: ['']
     })

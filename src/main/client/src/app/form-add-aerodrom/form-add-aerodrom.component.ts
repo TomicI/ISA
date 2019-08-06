@@ -27,7 +27,7 @@ export class FormAddAerodromComponent implements OnInit {
 
   ngOnInit() {
     this.aerodrom=new Aerodrom();
-    this.destinacije=this.destinacija.getDestinacije();
+    //this.destinacije=this.destinacija.getDestinacije();
     console.log(this.destinacije);
     console.log('Uslo u save !');
     

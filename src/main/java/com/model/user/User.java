@@ -1,5 +1,10 @@
 package com.model.user;
 
+import com.model.RentACar;
+import com.model.aviokompanija.Ocena;
+import com.model.aviokompanija.Putnik;
+
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +22,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.model.Aviokompanija;
 import com.model.RentACar;
 import com.model.RezervacijaRentACar;
 
@@ -59,16 +63,25 @@ public class User {
 	@JoinColumn(name = "rent_id", unique = true)
 	private RentACar rentACar;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	/*@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "avio_id", unique = true)
-	private Aviokompanija aviokompanija;
+	private Aviokompanija aviokompanija;*/
 
 	@OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
 	private Set<RezervacijaRentACar> rezervacije = new HashSet<RezervacijaRentACar>();
 
+
+
+
+	@OneToMany(mappedBy = "user")
+	private Set<Ocena> ocene;
+
+	@OneToOne
+	private Putnik putnik;
+
 	public User() {
 		super();
-		// TODO Auto-generated constructor stub
+		ocene = new HashSet<>();
 	}
 
 	public User(String username, String password, String firstName, String lastName, String email) {
@@ -79,7 +92,6 @@ public class User {
 		this.lastName = lastName;
 		this.email = email;
 		this.enabled = false;
-		this.reset = false;
 	}
 
 	public Long getId() {
@@ -177,16 +189,16 @@ public class User {
 	/**
 	 * @return the aviokompanija
 	 */
-	public Aviokompanija getAviokompanija() {
+	/*public Aviokompanija getAviokompanija() {
 		return aviokompanija;
 	}
 
 	/**
 	 * @param aviokompanija the aviokompanija to set
 	 */
-	public void setAviokompanija(Aviokompanija aviokompanija) {
+/*	public void setAviokompanija(Aviokompanija aviokompanija) {
 		this.aviokompanija = aviokompanija;
-	}
+	}*/
 
 	/**
 	 * @return the rezervacije

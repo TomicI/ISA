@@ -12,7 +12,7 @@ public pom;
   constructor(private http: HttpClient) { }
   
   getAll(): Observable<any> {
-    return this.http.get(this.AVIO_API + '/lista');
+    return this.http.get(this.AVIO_API );
   }
   
   getAviokompanija(id: number): Observable<Object> {

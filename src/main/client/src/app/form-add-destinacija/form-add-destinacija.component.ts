@@ -27,7 +27,7 @@ export class FormAddDestinacijaComponent implements OnInit {
 
   onSubmit(){
     this.submitted=true;
-    this.aerodromService.saveDestinacija(this.regFormD.value);
+   // this.aerodromService.saveDestinacija(this.regFormD.value);
   }
 
 }

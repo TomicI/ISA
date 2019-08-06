@@ -31,14 +31,14 @@ export class AerodromComponent implements OnInit {
         if (aerodrom) {
           this.aerodrom = aerodrom;
           console.log(`Pronadjeno '${aerodrom.nazivAerodroma}' `);
-          this.aerodromService.getDestinacija(this.aerodrom.destinacijaID).subscribe((destinacija: any) => {
+       /*   this.aerodromService.getDestinacija(this.aerodrom.destinacijaID).subscribe((destinacija: any) => {
             if (destinacija) {
               this.destinacija = destinacija;
               console.log(`Pronadjeno '${destinacija.nazivDestinacije}' `);
             }else{
               console.log(`Destinacija with id '${destinacija.id}' not found `);
             }
-          })
+          })*/
         } else {
           console.log(`Aerodrom with id '${id}' not found `);
         }

@@ -1,8 +1,8 @@
 package com.dto;
 
-import java.sql.Date;
-
 import com.model.Rezervacija;
+
+import java.sql.Date;
 
 public class RezervacijaDTO {
 	private Long id;
@@ -13,7 +13,7 @@ public class RezervacijaDTO {
 	}
 	
 	public RezervacijaDTO(Rezervacija r) {
-		this(r.getId(), r.getDatumVremeP(), r.getDatumVremeS());
+		this();
 	}
 	
 	public RezervacijaDTO(Long id, Date datumVremeP, Date datumVremeS) {

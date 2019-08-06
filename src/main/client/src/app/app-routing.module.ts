@@ -1,4 +1,3 @@
-import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { RentacarComponent } from './rentacar/rentacar.component';
 import { RentacarListComponent } from './rentacar-list/rentacar-list.component';
@@ -31,6 +30,7 @@ import { SearchRentComponent } from './search-rent/search-rent.component';
 import { PanelAdminRentComponent } from './panel-admin-rent/panel-admin-rent.component';
 import { PanelReservationRentComponent } from './panel-reservation-rent/panel-reservation-rent.component';
 import { VehicleComponent } from './vehicle/vehicle.component';
+import {NgModule} from "@angular/core";
 
 
 

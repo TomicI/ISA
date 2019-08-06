@@ -24,7 +24,7 @@ export class DestinacijaComponent implements OnInit {
 
   getDestinacije(){
 
-    return this.destinacije=this.destinacijaService.getAllDest();
+    //return this.destinacije=this.destinacijaService.getAllDest();
   }
 }
 
