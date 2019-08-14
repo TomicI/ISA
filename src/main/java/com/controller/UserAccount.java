@@ -15,6 +15,8 @@ import com.model.SignUpForm;
 import com.model.user.User;
 import com.repository.UserRepository;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +73,6 @@ public class UserAccount {
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
     public ResponseEntity<SignUpForm> getUser(Principal user) {
 
-        System.out.println(user.getName());
 
         Optional<User> optionalUser = userRepository.findByUsername(user.getName());
 

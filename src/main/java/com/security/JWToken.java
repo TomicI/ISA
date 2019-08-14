@@ -4,23 +4,21 @@ import java.nio.file.attribute.UserPrincipal;
 import java.security.SignatureException;
 import java.util.Date;
 
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.service.UserDetails;
-
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
+import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class JWToken {
-	
+
+    @Value("isa-project")
+    private String appname;
 
 	@Value("secret")
 	private String secret;
@@ -39,9 +37,10 @@ public class JWToken {
         System.out.println(userDetails.getUsername());
  
         return Jwts.builder()
+                        .setIssuer(appname)
 		                .setSubject((userDetails.getUsername()))
 		                .setIssuedAt(new Date())
-		                .setExpiration(new Date((new Date()).getTime() + expires*1000))
+		                .setExpiration(genExpDate())
 		                .signWith(SignatureAlgorithm.HS512, secret)
 		                .compact();
     }
@@ -68,10 +67,57 @@ public class JWToken {
 			                .parseClaimsJws(token)
 			                .getBody().getSubject();
     }
-	
-	
-	
-	
-	
+
+    private Date genExpDate() {
+        return new Date((new Date()).getTime() + expires * 1000);
+    }
+
+
+    private Claims getAllClaimsFromToken(String token) {
+        Claims claims;
+        try {
+            claims = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            claims = null;
+        }
+        return claims;
+    }
+
+
+    public String refreshToken(String token) {
+        String refreshedToken;
+        try {
+            final Claims claims = this.getAllClaimsFromToken(token);
+            claims.setIssuedAt(new Date());
+            refreshedToken = Jwts.builder()
+                    .setClaims(claims)
+                    .setExpiration(genExpDate())
+                    .signWith(SignatureAlgorithm.HS512, secret)
+                    .compact();
+        } catch (Exception e) {
+            refreshedToken = null;
+        }
+        return refreshedToken;
+    }
+
+    public String getJwt(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.replace("Bearer ", "");
+        }
+
+        return null;
+    }
+
+
+
+
+
+
+
 
 }

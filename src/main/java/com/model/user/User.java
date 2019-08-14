@@ -5,6 +5,7 @@ import com.model.aviokompanija.Ocena;
 import com.model.aviokompanija.Putnik;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,10 +25,12 @@ import javax.persistence.Table;
 
 import com.model.RentACar;
 import com.model.RezervacijaRentACar;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
 	@Id
 	@Column(name = "id")
@@ -70,9 +73,6 @@ public class User {
 	@OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
 	private Set<RezervacijaRentACar> rezervacije = new HashSet<RezervacijaRentACar>();
 
-
-
-
 	@OneToMany(mappedBy = "user")
 	private Set<Ocena> ocene;
 
@@ -92,6 +92,7 @@ public class User {
 		this.lastName = lastName;
 		this.email = email;
 		this.enabled = false;
+		this.reset = false;
 	}
 
 	public Long getId() {
@@ -106,8 +107,28 @@ public class User {
 		return username;
 	}
 
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return roles;
 	}
 
 	public String getPassword() {

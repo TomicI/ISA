@@ -1,6 +1,6 @@
 <div class="container">
 
-  
+
 
   <div *ngIf="res" class="row">
 
@@ -24,16 +24,16 @@
         <div class="card-body">
           <p>Brand: {{res.voziloDTO.marka}} </p>
           <p>Model: {{res.voziloDTO.model}} </p>
-          <p> <i class="fas fa-user"></i>  {{res.voziloDTO.brojSedista}} 
+          <p> <i class="fas fa-user"></i>  {{res.voziloDTO.brojSedista}}
             <i class="fas fa-door-closed"></i> {{res.voziloDTO.brojVrata}}
               <i class="fas fa-suitcase"></i>  {{res.voziloDTO.brojTorbi}} </p>
           <div *ngIf="res.voziloDTO.klima"> AC : Yes </div>
           <div *ngIf="!res.voziloDTO.klima"> AC : No </div>
-          <p>Gear: {{res.voziloDTO.menjac}} </p>
-          <p>Gas: {{res.voziloDTO.gorivo}} </p>
-          <p>Tank: {{res.voziloDTO.rezervoar}} l</p>
-          <p>Consumption: {{res.voziloDTO.potrosnja}} l</p>
-          <p>Description: {{res.voziloDTO.dodatniOpis}} </p>
+          <div>Gear: {{res.voziloDTO.menjac}} </div>
+          <div>Gas: {{res.voziloDTO.gorivo}} </div>
+          <div *ngIf="res.voziloDTO.rezervoar">Tank: {{res.voziloDTO.rezervoar}} l</div>
+          <div *ngIf="res.voziloDTO.potrosnja">Consumption: {{res.voziloDTO.potrosnja}} l</div>
+          <div *ngIf="res.voziloDTO.dodatniopis">Description: {{res.voziloDTO.dodatniOpis}} </div>
         </div>
 
         <div class="card-footer">

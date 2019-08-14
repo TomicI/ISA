@@ -178,7 +178,7 @@ public class AuthRestAPIs {
 		Authentication current = SecurityContextHolder.getContext().getAuthentication();
 		String oldUsername = current.getName();
 
-		com.service.UserDetails userDet = (com.service.UserDetails) current.getPrincipal();
+		User userDet = (User) current.getPrincipal();
 		userDet.setUsername(signUpRequest.getUsername());
 
 		String jwt = jwtProvider.generateJWToken(current);

@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,7 +43,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		User user = userRepository.findByUsername(username).orElseThrow(
 				() -> new UsernameNotFoundException("User Not Found with -> username or email : " + username));
  
-		return com.service.UserDetails.build(user);
+		return user;
 		
 	}
 	
@@ -76,7 +77,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			return;
 		}
 
-		UserDetails ud = (UserDetails) loadUserByUsername(username);
+		User ud = (User) loadUserByUsername(username);
 		ud.setFirstName(first);
 		ud.setLastName(last);
 
@@ -96,7 +97,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			return;
 		}
 
-		UserDetails ud = (UserDetails) loadUserByUsername(username);
+		User ud = (User) loadUserByUsername(username);
 		ud.setEmail(email);
 
 		Optional<User> userOpt = userRepository.findByUsername(username);
@@ -107,6 +108,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	}
 
 	
-	
+
 
 }
