@@ -31,6 +31,10 @@ import { PanelAdminRentComponent } from './panel-admin-rent/panel-admin-rent.com
 import { PanelReservationRentComponent } from './panel-reservation-rent/panel-reservation-rent.component';
 import { VehicleComponent } from './vehicle/vehicle.component';
 import {NgModule} from "@angular/core";
+import {AdminResetComponent} from "./admin-reset/admin-reset.component";
+import {AuthGuard} from "./security/auth.guard";
+import {ReservationDetailsComponent} from "./reservation-details/reservation-details.component";
+import {ReservationOverviewComponent} from "./reservation-overview/reservation-overview.component";
 
 
 
@@ -52,15 +56,20 @@ const routes: Routes = [
     path: 'panel', component: PanelComponent,
     children: [
       { path: '', redirectTo: 'adminpanel', pathMatch: 'full'},
-      { path: 'adminpanel', component: PanelAdminRentComponent },
-      { path: 'adminres', component: PanelReservationRentComponent },
+      { path: 'adminpanel', component: PanelAdminRentComponent, canActivate:[AuthGuard],data: { roles: ['ROLE_ADMIN_RENT','ROLE_ADMIN_AVIO','ROLE_ADMIN_HOTEL'] } },
+      { path: 'adminres', component: PanelReservationRentComponent, canActivate:[AuthGuard],data: { roles: ['ROLE_ADMIN_RENT','ROLE_ADMIN_AVIO','ROLE_ADMIN_HOTEL'] } },
     ]
   },
-  { path: 'profile', component: PanelProfileComponent },
-  { path: 'settings', component: PanelSettingsComponent },
+  { path: 'profile', component: PanelProfileComponent , canActivate:[AuthGuard],data: { roles: ["ROLE_USER_REG"] } } ,
+  { path: 'settings', component: PanelSettingsComponent ,canActivate:[AuthGuard],data: { roles: ["ROLE_USER_REG"] } },
   { path: 'signup', component: SignUpModalComponent },
-  { path: 'reservations', component: UserReservationsComponent },
-  { path: 'friends', component: UserFriendsComponent },
+  { path: 'reservations', component: UserReservationsComponent ,canActivate:[AuthGuard],data: { roles: ["ROLE_USER_REG"] },
+    children: [
+      {path:'',component:ReservationOverviewComponent},
+      {path:'details',component:ReservationDetailsComponent}
+    ]
+  },
+  { path: 'friends', component: UserFriendsComponent,canActivate:[AuthGuard],data: { roles: ["ROLE_USER_REG"] }  },
   { path: 'aviokom-list', component: AviokomListComponent },
   { path: 'avio-edit/:id', component: AvioEditComponent },
   { path: 'form-akupdate/:id', component: FormAKUpdateComponent },
@@ -72,7 +81,8 @@ const routes: Routes = [
   { path: 'letUpdate/:id', component: FormUpdateLetComponent },
   { path: 'letAdd/:id', component: FormAddLetComponent },
   { path: 'letovi/:id', component: LetComponent },
-  { path: 'addAvioKom', component: FormDodajAviokomComponent }
+  { path: 'addAvioKom', component: FormDodajAviokomComponent },
+  { path: 'resetPassword',component: AdminResetComponent}
 ];
 
 @NgModule({

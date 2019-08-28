@@ -78,7 +78,6 @@ public class VoziloDTO {
 		this.gorivo = v.getGorivo();
 		this.menjac = v.getMenjac();
 		this.klima = v.getKlima();
-		this.prosecnaOcena = v.getProsecnaOcena();
 		this.rezervoar=v.getRezervoar();
 		this.potrosnja= v.getPotrosnja();
 		this.dodatniopis = v.getDodatniopis();

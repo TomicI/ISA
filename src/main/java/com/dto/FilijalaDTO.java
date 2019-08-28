@@ -22,7 +22,6 @@ public class FilijalaDTO {
 		
 		this.id=f.getId();
 		this.adresa = f.getAdresa();
-		this.prosecnaOcena = f.getProsecnaOcena();
 		this.rentACarDTO = new RentACarDTO(f.getFilijala());
 		
 	}

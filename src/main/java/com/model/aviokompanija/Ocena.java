@@ -1,8 +1,12 @@
 package com.model.aviokompanija;
 
+import com.model.Filijala;
+import com.model.Rezervacija;
+import com.model.Vozilo;
 import com.model.user.User;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Ocena {
@@ -13,6 +17,9 @@ public class Ocena {
 	
 	@Column
 	private int ocena;
+
+	@Column
+	private Date ocDate;
 	
 	@ManyToOne
 	private Aviokompanija aviokompanija;
@@ -21,7 +28,16 @@ public class Ocena {
 	private Let let;
 
 	@ManyToOne
+	private Vozilo vozilo;
+
+	@ManyToOne
 	private User user;
+
+	@ManyToOne
+	private Filijala filijala;
+
+	@ManyToOne
+	private Rezervacija rezervacija;
 
 	public Ocena() {
 		super();
@@ -66,6 +82,36 @@ public class Ocena {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
+
+	public Vozilo getVozilo() {
+		return vozilo;
+	}
+
+	public void setVozilo(Vozilo vozilo) {
+		this.vozilo = vozilo;
+	}
+
+	public Filijala getFilijala() {
+		return filijala;
+	}
+
+	public void setFilijala(Filijala filijala) {
+		this.filijala = filijala;
+	}
+
+	public Date getOcDate() {
+		return ocDate;
+	}
+
+	public void setOcDate(Date ocDate) {
+		this.ocDate = ocDate;
+	}
+
+	public Rezervacija getRezervacija() {
+		return rezervacija;
+	}
+
+	public void setRezervacija(Rezervacija rezervacija) {
+		this.rezervacija = rezervacija;
+	}
 }

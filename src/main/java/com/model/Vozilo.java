@@ -1,6 +1,9 @@
 package com.model;
 
+import com.model.aviokompanija.Ocena;
+
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -43,15 +46,16 @@ public class Vozilo {
 	private Double potrosnja;
 	@Column
 	private String dodatniopis;
-	@Column
-	private Double prosecnaOcena;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "filijala_id",nullable=false)
 	private Filijala vozilo;
 	
 	@OneToMany(mappedBy = "vozilo",fetch = FetchType.LAZY)
-	private Set<CenovnikRentACar> cenovnik = new HashSet<CenovnikRentACar>();
+	private List<CenovnikRentACar> cenovnik ;
+
+	@OneToMany(mappedBy = "vozilo",fetch = FetchType.LAZY)
+	private List<Ocena> ocene;
 	
 	
 	public Vozilo() {
@@ -131,28 +135,12 @@ public class Vozilo {
 		this.klima = klima;
 	}
 
-	public Double getProsecnaOcena() {
-		return prosecnaOcena;
-	}
-
-	public void setProsecnaOcena(Double prosecnaOcena) {
-		this.prosecnaOcena = prosecnaOcena;
-	}
-
 	public Filijala getVozilo() {
 		return vozilo;
 	}
 
 	public void setVozilo(Filijala vozilo) {
 		this.vozilo = vozilo;
-	}
-
-	public Set<CenovnikRentACar> getCenovnik() {
-		return cenovnik;
-	}
-
-	public void setCenovnik(Set<CenovnikRentACar> cenovnik) {
-		this.cenovnik = cenovnik;
 	}
 
 	public Gorivo getGorivo() {
@@ -186,10 +174,20 @@ public class Vozilo {
 	public void setDodatniopis(String dodatniopis) {
 		this.dodatniopis = dodatniopis;
 	}
-	
 
-	
-	
-	
-	
+	public List<CenovnikRentACar> getCenovnik() {
+		return cenovnik;
+	}
+
+	public void setCenovnik(List<CenovnikRentACar> cenovnik) {
+		this.cenovnik = cenovnik;
+	}
+
+	public List<Ocena> getOcene() {
+		return ocene;
+	}
+
+	public void setOcene(List<Ocena> ocene) {
+		this.ocene = ocene;
+	}
 }

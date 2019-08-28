@@ -64,6 +64,9 @@ import { SearchRentComponent } from './search-rent/search-rent.component';
 import { ResDetailComponent } from './res-detail/res-detail.component';
 import { MapComponent } from './map/map.component';
 import { VehicleComponent } from './vehicle/vehicle.component';
+import { AdminResetComponent } from './admin-reset/admin-reset.component';
+import { ReservationDetailsComponent } from './reservation-details/reservation-details.component';
+import { ReservationOverviewComponent } from './reservation-overview/reservation-overview.component';
 
 
 @NgModule({
@@ -112,7 +115,10 @@ import { VehicleComponent } from './vehicle/vehicle.component';
     SearchRentComponent,
     ResDetailComponent,
     MapComponent,
-    VehicleComponent
+    VehicleComponent,
+    AdminResetComponent,
+    ReservationDetailsComponent,
+    ReservationOverviewComponent
 
   ],
   imports: [

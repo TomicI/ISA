@@ -1,0 +1,19 @@
+<div class="container">
+
+  <div class="mt-2 "></div>
+
+
+  <div class="row" >
+
+
+    <div class="col-md-4">
+
+      <app-res-detail *ngIf="reservation" [(res)]="reservation.rezervacijaRentACarDTO" [(view)]="view" (clickedRate)="onClicked($event)" ></app-res-detail>
+
+    </div>
+
+
+
+  </div>
+
+</div>

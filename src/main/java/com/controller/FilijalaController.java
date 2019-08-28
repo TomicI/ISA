@@ -63,7 +63,6 @@ public class FilijalaController {
 		
 		Filijala filijala = new Filijala();
 		filijala.setAdresa(filijalaDTO.getAdresa());
-		filijala.setProsecnaOcena(filijalaDTO.getProsecnaOcena());
 		filijala.setFilijala(rentACar.get());
 		
 		filijala = filijalaService.save(filijala);
@@ -74,24 +73,7 @@ public class FilijalaController {
 	
 	@RequestMapping(value="/{id}/vozila",method=RequestMethod.GET)
 	public ResponseEntity<List<VoziloDTO>> getVozila(@PathVariable Long id){
-		
-		Optional<Filijala> filijalaOptional = filijalaService.findOne(id);
-		
-		if (!filijalaOptional.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		Set<Vozilo> vozila = filijalaOptional.get().getVozila();
-		
-		List<VoziloDTO> vozilaDTO = new ArrayList<VoziloDTO>();
-		
-		for (Vozilo v:vozila) {
-			VoziloDTO voziloDTO = new VoziloDTO(v);
-			vozilaDTO.add(voziloDTO);
-		}
-		
-		return new ResponseEntity<>(vozilaDTO,HttpStatus.OK);
-		
+		return new ResponseEntity<>(filijalaService.findOneVeh(id),HttpStatus.OK);
 	}
 	
 	

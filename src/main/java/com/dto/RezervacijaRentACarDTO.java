@@ -16,7 +16,6 @@ public class RezervacijaRentACarDTO {
 	private FilijalaDTO filijalaDTO;
 	private FilijalaDTO filijalaDropDTO;
 	private VoziloDTO voziloDTO;
-	private UserDTO userDTO;
 
 	public RezervacijaRentACarDTO(RezervacijaRentACar r) {
 		this.id = r.getId();
@@ -27,13 +26,12 @@ public class RezervacijaRentACarDTO {
 		this.filijalaDTO = new FilijalaDTO(r.getRezervacija());
 		this.filijalaDropDTO=new FilijalaDTO(r.getRezervacijaDrop());
 		this.voziloDTO = new VoziloDTO(r.getVozilo());
-		this.userDTO = new UserDTO(r.getUser());
 		this.otkazana = r.getOtkazana();
 		this.status = r.getStatus();
 	}
 
 	public RezervacijaRentACarDTO(Long id, Date datumRez, Date datumPreuz, Date datumVracanja, Double cena, Boolean otkazana ,
-			StatusRes status ,FilijalaDTO filijalaDTO,FilijalaDTO filijalaDropDTO,VoziloDTO voziloDTO, UserDTO userDTO) {
+			StatusRes status ,FilijalaDTO filijalaDTO,FilijalaDTO filijalaDropDTO,VoziloDTO voziloDTO) {
 		super();
 		this.id = id;
 		this.datumRez = datumRez;
@@ -44,7 +42,6 @@ public class RezervacijaRentACarDTO {
 		this.filijalaDTO = filijalaDTO;
 		this.filijalaDropDTO = filijalaDropDTO;
 		this.voziloDTO = voziloDTO;
-		this.userDTO = userDTO;
 		this.status = status;
 	}
 
@@ -104,19 +101,6 @@ public class RezervacijaRentACarDTO {
 		this.voziloDTO = voziloDTO;
 	}
 
-	/**
-	 * @return the userDTO
-	 */
-	public UserDTO getUserDTO() {
-		return userDTO;
-	}
-
-	/**
-	 * @param userDTO the userDTO to set
-	 */
-	public void setUserDTO(UserDTO userDTO) {
-		this.userDTO = userDTO;
-	}
 
 	/**
 	 * @return the otkazana

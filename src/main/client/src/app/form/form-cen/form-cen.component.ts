@@ -22,16 +22,28 @@ export class FormCenComponent implements OnInit {
 
   datenow = new Date();
 
-  minDatum = new Date();
+  minDatum : NgbDate;
+
+  odDate:Date;
+  doDate:Date;
 
   constructor(private formBuilder: FormBuilder, private cenService: CenovnikService,
-    private ngbDate: NgbDateParserFormatter) { }
+    private ngbDate: NgbDateParserFormatter,private calendar: NgbCalendar,) { }
 
 
   ngOnInit() {
+    this.minDatum = this.calendar.getToday();
   }
 
   async submit() {
+
+    this.odDate = this.cenovnikFormGroup.get('CenovnikRent').get('odDatuma').value;
+    this.odDate.setHours(0,0,0);
+
+    this.doDate = this.cenovnikFormGroup.get('CenovnikRent').get('doDatuma').value;
+    this.doDate.setHours(0,0,0);
+
+
     console.log(this.cenovnikFormGroup.get('CenovnikRent').value);
 
     if (this.edit === true) {

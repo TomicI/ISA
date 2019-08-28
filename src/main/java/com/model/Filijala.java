@@ -1,5 +1,7 @@
 package com.model;
 
+import com.model.aviokompanija.Ocena;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,9 +24,9 @@ public class Filijala {
 	
 	@Column(nullable = false,unique=true)
 	private String adresa;
-	
-	@Column
-	private Double prosecnaOcena;
+
+	@OneToMany(mappedBy = "filijala",fetch = FetchType.LAZY)
+	private Set<Ocena> ocene = new HashSet<>();
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "rentacar_id",nullable=false)
@@ -57,15 +59,6 @@ public class Filijala {
 		this.adresa = adresa;
 	}
 
-	public Double getProsecnaOcena() {
-		return prosecnaOcena;
-	}
-
-	public void setProsecnaOcena(Double prosecnaOcena) {
-		this.prosecnaOcena = prosecnaOcena;
-	}
-
-	
 
 	public RentACar getFilijala() {
 		return filijala;
@@ -97,7 +90,11 @@ public class Filijala {
 		this.rezervacije = rezervacije;
 	}
 
+	public Set<Ocena> getOcene() {
+		return ocene;
+	}
 
-	
-
+	public void setOcene(Set<Ocena> ocene) {
+		this.ocene = ocene;
+	}
 }

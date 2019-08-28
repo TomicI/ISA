@@ -1,11 +1,8 @@
 package com.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
+import com.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +28,6 @@ import com.model.StatusRes;
 import com.model.Vozilo;
 import com.repository.RentACarRepository;
 import com.security.ResponseMessage;
-import com.service.CenovnikRentACarService;
-import com.service.FilijalaService;
-import com.service.RentACarService;
-import com.service.RezervacijaRentACarService;
-import com.service.RezervacijaService;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -50,6 +42,9 @@ public class RentACarController {
 	
 	@Autowired
 	private FilijalaService filijalaService;
+
+	@Autowired
+	private VoziloService voziloService;
 	
 	@Autowired
 	private RezervacijaRentACarService rezService;
@@ -83,23 +78,7 @@ public class RentACarController {
 
 	@RequestMapping(value = "/{id}/filijale", method = RequestMethod.GET)
 	public ResponseEntity<List<FilijalaDTO>> getFilijale(@PathVariable Long id) {
-
-		Optional<RentACar> rentOptional = rentACarService.findOne(id);
-
-		if (!rentOptional.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		Set<Filijala> filijale = rentOptional.get().getFilijale();
-
-		List<FilijalaDTO> filijaleDTO = new ArrayList<>();
-
-		for (Filijala f : filijale) {
-			FilijalaDTO filijalaDTO = new FilijalaDTO(f);
-			filijaleDTO.add(filijalaDTO);
-		}
-
-		return new ResponseEntity<>(filijaleDTO, HttpStatus.OK);
+		return new ResponseEntity<>(rentACarService.findOneFilijala(id), HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
@@ -191,114 +170,8 @@ public class RentACarController {
 
 		System.out.println(pickUp);
 		System.out.println(bring);
-		
-		if (!filijalaService.existsByAdresa(locationp)) {
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-		
-		if (!filijalaService.existsByAdresa(bring)) {
-			
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-		
-		Filijala filSearch = filijalaService.find(locationp);
-		
-		Filijala filBring = filijalaService.find(bring);
-		
-		RentACar r = rentACarService.findByNaziv(filSearch.getFilijala().getNaziv());
-		
-		
-		List<CenovnikRentACar> cenovnikServisa = cenovnikService.findByServis(r);
-		
-		List<VoziloDTO> vozilaPretrage = new ArrayList<VoziloDTO>();
-		
-		List<FilijalaDTO> filijalaPretrage = new ArrayList<FilijalaDTO>();
-		
-		List<RezervacijaRentACarDTO> rezervacijePretrage = new ArrayList<RezervacijaRentACarDTO>();
-		
-		
-		for (CenovnikRentACar c:cenovnikServisa) {
-			
-			 int odDatuma = c.getOdDatuma().compareTo(pickUp);
-			 int doDatuma = c.getDoDatuma().compareTo(dropOff);
-			 
-			 
-			 if ( odDatuma == -1 || odDatuma == 0 ) {
-				 if ( doDatuma == 1 || doDatuma == 0 ) {
-					 System.out.println("Postoji cenovnik za dati RANGE");
-					 
-					 if (c.getVozilo().getVozilo().equals(filSearch)) {
-					 
-					 Vozilo v = c.getVozilo();
-					 
-					 System.out.println("VOZILO "+ v.getNaziv() );
-					 
-					 List<RezervacijaRentACar> rezervacija= rezService.findByVoz(v);
-		
-					 int prolaz = 1 ;
-					 
-					 for(RezervacijaRentACar rez :rezervacija) {
-						 
-						 int pickUpBetween1  = rez.getDatumPreuz().compareTo(pickUp);
-						 int pickUpBetween2  = rez.getDatumVracanja().compareTo(pickUp);
 
-						 int dropOffBetween1 = rez.getDatumPreuz().compareTo(dropOff);
-						 int dropOffBetween2 = rez.getDatumVracanja().compareTo(dropOff);
-						 
-						 int pick = pickUpBetween1*pickUpBetween2;
-						 int drop = dropOffBetween1*dropOffBetween2;
-						 
-						 System.out.println("PICKUP "+ pick);
-						 
-						 System.out.println("DROPOFF "+ drop);
-						 
-						 int proizvod = 1;
-						 
-						 if (pick==-1 && drop==-1) {
-							 proizvod = -1;
-						 }else {
-							proizvod = pick*drop;
-						 }
-						 
-						 prolaz *=proizvod;
-						 
-						 if ( rez.getOtkazana() ) {
-							 prolaz*= -1;
-						 }
-
-					 }
-					 
-					 if (prolaz == 1) { 
-						
-						 System.out.println("Prolazi "+v.getNaziv());
-						 
-						 FilijalaDTO filVoz = new FilijalaDTO(v.getVozilo());
-						 filijalaPretrage.add(filVoz);
-						 
-						long brojDana = dropOff.getTime()-pickUp.getTime();
-						long diffDana = brojDana / (24 * 60 * 60 * 1000);
-						System.out.println(diffDana);
-						
-						double cena = diffDana*c.getCena();
-						
-						RezervacijaRentACarDTO rezTemp = new RezervacijaRentACarDTO(null,null,pickUp,dropOff,cena,false,StatusRes.Reserved,new FilijalaDTO(filSearch),new FilijalaDTO(filBring),new VoziloDTO(v), null);
-														
-						
-						rezervacijePretrage.add(rezTemp);
-					 }
-					 
-					}
-					 
-				 }
-			 }
-			 
-			 
-		}
-		
-		
-			
-		
-		return new ResponseEntity<>(rezervacijePretrage,HttpStatus.OK);
+		return new ResponseEntity<>(filijalaService.search(locationp, bring, pickUp, dropOff),HttpStatus.OK);
 
 	}
 

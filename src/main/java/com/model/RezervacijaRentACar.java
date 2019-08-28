@@ -50,9 +50,9 @@ public class RezervacijaRentACar {
 	@JoinColumn(name = "vozilo_id",nullable=false)
 	private Vozilo vozilo;
 
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn(name = "user_id",nullable=false)
-	private User user;
+	private User user;*/
 
 	public RezervacijaRentACar(){
 		super();
@@ -115,20 +115,6 @@ public class RezervacijaRentACar {
 	}
 
 	/**
-	 * @return the user
-	 */
-	public User getUser() {
-		return user;
-	}
-
-	/**
-	 * @param user the user to set
-	 */
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	/**
 	 * @return the otkazana
 	 */
 	public Boolean getOtkazana() {
@@ -157,7 +143,5 @@ public class RezervacijaRentACar {
 	public void setRezervacijaDrop(Filijala rezervacijaDrop) {
 		this.rezervacijaDrop = rezervacijaDrop;
 	}
-
-
 
 }

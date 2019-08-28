@@ -20,6 +20,7 @@ export class AuthService {
   private signupUrl = 'http://localhost:8080/api/auth/signup';
 
   private passWordUrl = 'http://localhost:8080/api/auth/changePass';
+  private adminPassWordUrl = 'http://localhost:8080/api/auth/changeAdminPass';
   private nameUrl = 'http://localhost:8080/api/auth/changeName';
   private emailUrl = 'http://localhost:8080/api/auth/changeEmail';
   private usernameUrl = 'http://localhost:8080/api/auth/changeUsername';
@@ -41,6 +42,10 @@ export class AuthService {
 
   changePass(newPass: NewPass): Promise<JwtResponse> {
     return this.http.post<JwtResponse>(`${this.passWordUrl}`, newPass).toPromise();
+  }
+
+  changeAdminPass(newPass: NewPass): Promise<string> {
+    return this.http.post<string>(`${this.adminPassWordUrl}`, newPass).toPromise();
   }
 
   async changeName(user: User): Promise<JwtResponse> {

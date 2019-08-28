@@ -76,8 +76,8 @@ public class KartaService {
 		rezervacija.setKarta(karta);
 		karta.setRezervacija(rezervacija);
 		rezervacija.setCena(karta.getCena());
-		rezervacija.setDatumPocetka(new Date());
-		rezervacija.setDatumIsteka(let.getVremeDolaska());
+		rezervacija.setDatumVremeP(new Date());
+		rezervacija.setDatumVremeS(let.getVremeDolaska());
 		rezervacijaRepository.save(rezervacija);
 		kartaRepository.save(karta);
 

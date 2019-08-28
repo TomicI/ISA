@@ -27,6 +27,8 @@ export class SignUpModalComponent implements OnInit {
     this.signUpForm = this.formBuilder.group({
       firstName: [''],
       lastName: [''],
+      city:[''],
+      phone:[''],
       username: [''],
       email: [''],
       password: [''],

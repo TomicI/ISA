@@ -6,6 +6,8 @@ import { RentACar } from '../model';
 import { RentacarService } from '../services/rentacar.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { startWith, map } from 'rxjs/operators';
+import {Time} from "@angular/common";
+import {forEach} from "@angular/router/src/utils/collection";
 
 
 export interface SearchGroup {
@@ -42,7 +44,14 @@ export class SearchRentComponent implements OnInit {
 
   minDatum = this.calendar.getToday();
 
-  arrayOfHours: string[] = ['00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30',
+  arrayOfHours:any[] = ['00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30',
+    '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00'
+    , '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'
+    , '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'];
+
+  arrayOfHoursP: any[] = [];
+
+  arrayOfHoursD: string[] = ['00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30',
     '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00'
     , '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'
     , '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'];
@@ -52,6 +61,9 @@ export class SearchRentComponent implements OnInit {
 
   rentACars: RentACar[] = [];
   filijala: Observable<Object>;
+
+  date:Date;
+
 
   constructor(
     private rentACarService: RentacarService,
@@ -63,6 +75,21 @@ export class SearchRentComponent implements OnInit {
 
   ngOnInit() {
 
+    this.date = new Date();
+
+    for (var temp of this.arrayOfHours){
+      this.date = new Date();
+      const timeP = temp.split(':');
+      this.date.setHours(timeP[0]);
+      this.date.setMinutes(timeP[1]);
+
+
+      if (this.date > new Date()){
+        console.log(this.date);
+        this.arrayOfHoursP.push(temp);
+      }
+
+    }
 
     this.route.queryParams.subscribe(params => {
       console.log(params);
@@ -71,12 +98,14 @@ export class SearchRentComponent implements OnInit {
     this.fromDate = this.calendar.getToday();
     this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
 
+    console.log(this.calendar.getToday());
+
     this.searchFormGroup = this.formBuilder.group({
       locationp: ['', [Validators.required]],
       bring: [''],
       pickDate: this.fromDate,
       dropDate: this.toDate,
-      pickTime: '12:00',
+      pickTime: this.arrayOfHoursP[0],
       dropTime: '12:00'
 
     });

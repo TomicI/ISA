@@ -14,65 +14,15 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class UserReservationsComponent implements OnInit {
   @ViewChild('content') private content;
 
-  cancelStatus = false;
-
-  modalRef: any;
-
-  message = '';
-
-  tempRez;
-
-  rentACarRezOld;
-
-  rentACarRezNew;
-
   constructor(private modalService: NgbModal, private userService: UserService, private resService: ReservationService) { }
 
   ngOnInit() {
 
-    this.initRez();
 
   }
 
-  async initRez() {
-
-    await this.userService.getRes().then(data => {
-      this.rentACarRezNew = data;
-      this.cancelStatus = true;
-
-    });
-
-    await this.userService.getResHist().then(data => {
-      this.rentACarRezOld = data;
 
 
-    });
 
-  }
-
-  cancelRes(reservation) {
-    this.tempRez = reservation;
-
-    this.resService.getResCancel(reservation.id).then(data => {
-      this.message = data.message;
-      this.cancelStatus = true;
-    }).catch(error => {
-      this.message = error.error.message;
-      this.cancelStatus = false;
-    });
-
-    this.modalRef = this.modalService.open(this.content);
-  }
-
-
-  async confirmCancel() {
-    await this.resService.confirmCancel(this.tempRez).then(data => {
-      this.modalRef.close();
-      this.initRez();
-    }).catch(error => {
-      this.message = error.error.message;
-      this.cancelStatus = false;
-    });
-  }
 
 }

@@ -63,9 +63,7 @@ public class VoziloController {
 		vozilo.setBrojVrata(voziloDTO.getBrojVrata());
 		vozilo.setDodatniopis(voziloDTO.getDodatniopis());
 		vozilo.setKlima(voziloDTO.getKlima());
-		vozilo.setProsecnaOcena(0.00);
 		vozilo.setVozilo(filijalaOptional.get());
-		
 		
 		vozilo = voziloService.save(vozilo);
 		
@@ -110,7 +108,7 @@ public class VoziloController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Set<CenovnikRentACar> rentACars = voziloOptional.get().getCenovnik();
+		List<CenovnikRentACar> rentACars = voziloOptional.get().getCenovnik();
 		
 		List<CenovnikRentACarDTO> cenovnikRDTO = new ArrayList<>();
 		

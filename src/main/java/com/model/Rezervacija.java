@@ -1,9 +1,12 @@
 package com.model;
 
 import com.model.aviokompanija.Karta;
+import com.model.aviokompanija.Ocena;
+import com.model.user.User;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Rezervacija {
@@ -13,10 +16,10 @@ public class Rezervacija {
 	private Long id;
 	
 	@Column
-	private Date datumPocetka;
+	private Date datumVremeP;
 
 	@Column
-	private Date datumIsteka;
+	private Date datumVremeS;
 
 	@Column
 	private double cena;
@@ -29,6 +32,13 @@ public class Rezervacija {
 
 	@OneToOne
 	private RezervacijaRentACar rezervacijaRentACar;
+
+	@ManyToOne
+	@JoinColumn(name = "user_id",nullable=false)
+	private User user;
+
+	@OneToMany
+	private List<Invite> invites;
 
 	public Rezervacija(){
 
@@ -74,19 +84,35 @@ public class Rezervacija {
 		this.rezervacijaRentACar = rezervacijaRentACar;
 	}
 
-	public Date getDatumPocetka() {
-		return datumPocetka;
+	public Date getDatumVremeP() {
+		return datumVremeP;
 	}
 
-	public void setDatumPocetka(Date datumPocetka) {
-		this.datumPocetka = datumPocetka;
+	public void setDatumVremeP(Date datumVremeP) {
+		this.datumVremeP = datumVremeP;
 	}
 
-	public Date getDatumIsteka() {
-		return datumIsteka;
+	public Date getDatumVremeS() {
+		return datumVremeS;
 	}
 
-	public void setDatumIsteka(Date datumIsteka) {
-		this.datumIsteka = datumIsteka;
+	public void setDatumVremeS(Date datumVremeS) {
+		this.datumVremeS = datumVremeS;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public List<Invite> getInvites() {
+		return invites;
+	}
+
+	public void setInvites(List<Invite> invites) {
+		this.invites = invites;
 	}
 }

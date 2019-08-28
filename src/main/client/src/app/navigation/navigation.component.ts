@@ -17,13 +17,13 @@ export class NavigationComponent implements OnInit {
 
   loginDiv = true;
   signupDiv = false;
+  isAdmin = false;
 
-
- 
 
   isLoggedIn = false;
 
   roles: string[] = [];
+  adminRoles: string[] = ['ROLE_ADMIN_RENT','ROLE_ADMIN_AVIO','ROLE_ADMIN_HOTEL'];
 
   name = 'Log in';
 
@@ -41,18 +41,16 @@ export class NavigationComponent implements OnInit {
       this.roles = this.tokenStorage.getAuthorities();
       this.username = this.tokenStorage.getUsername();
 
-      this.roles.forEach(function(x){
-        console.log(x);
-        if(x === 'ROLE_ADMIN_RENT' || 'ROLE_ADMIN_AVIO' || 'ROLE_ADMIN_HOTEL'){
-        
-        } 
-      });
+      for (let role of this.adminRoles){
+        if (this.roles.includes(role)){
+          console.log(role);
+          this.isAdmin = true;
+        }
+      };
 
 
   
     }
-
-
 
   }
 
@@ -82,7 +80,7 @@ export class NavigationComponent implements OnInit {
   }
 
   reloadPage() {
-    window.location.reload();
+    window.location.href = "home";
   }
 
 }

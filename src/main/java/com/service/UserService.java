@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.model.RentACar;
 import com.model.SignUpForm;
 import com.model.user.User;
 import com.model.user.VerificationToken;
@@ -61,7 +62,7 @@ public class UserService {
     public Optional<User> findByUsername(String username){
     	return userRepository.findByUsername(username);
     }
-     
+   
     
 	
 }

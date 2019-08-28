@@ -25,6 +25,7 @@ public class RentACar {
 	private String naziv;
 	@Column
 	private String opis;
+
 	
 	//cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
 

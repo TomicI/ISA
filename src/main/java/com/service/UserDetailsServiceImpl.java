@@ -1,5 +1,6 @@
 package com.service;
 
+import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -61,10 +62,28 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		Optional<User> userOpt = userRepository.findByUsername(username);
 		
 		userOpt.get().setPassword(passwordEncoder.encode(newPass));
-		
+		userOpt.get().setLastPasswordResetDate(new Date());
 		userRepository.save(userOpt.get());
-		
-		
+
+	}
+
+	public boolean changeAdminPass(String newPass){
+
+		Authentication current = SecurityContextHolder.getContext().getAuthentication();
+		String username = current.getName();
+
+		Optional<User> userOpt = userRepository.findByUsername(username);
+
+		if (!userOpt.get().isReset()){
+			userOpt.get().setPassword(passwordEncoder.encode(newPass));
+			userOpt.get().setLastPasswordResetDate(new Date());
+			userOpt.get().setReset(true);
+			userRepository.save(userOpt.get());
+			return true;
+		}
+
+		return false;
+
 	}
 
 

@@ -88,6 +88,10 @@ public class UserAccount {
         temp.setFirstName(tempu.getFirstName());
         temp.setLastName(tempu.getLastName());
         temp.setEmail(tempu.getEmail());
+        temp.setReset(tempu.isReset());
+        temp.setCity(tempu.getCity());
+        temp.setPhone(tempu.getPhone());
+        temp.setLastPasswordResetDate(tempu.getLastPasswordResetDate());
 
         return new ResponseEntity<>(temp, HttpStatus.OK);
 
@@ -100,15 +104,15 @@ public class UserAccount {
 
         Optional<User> optionalUser = userRepository.findByUsername(user.getName());
 
-        if (!optionalUser.isPresent()) {
+        /*if (!optionalUser.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        Set<RezervacijaRentACar> rez = optionalUser.get().getRezervacije();
+        Set<RezervacijaRentACar> rez = optionalUser.get().getRezervacije();*/
 
         List<RezervacijaRentACarDTO> rezDTO = new ArrayList<RezervacijaRentACarDTO>();
 
-        for (RezervacijaRentACar r : rez) {
+        /*for (RezervacijaRentACar r : rez) {
 
             Date dropOff=r.getDatumVracanja();
 
@@ -120,7 +124,7 @@ public class UserAccount {
                 
             }
             
-        }
+        }*/
 
         return new ResponseEntity<>(rezDTO, HttpStatus.OK);
     }
@@ -130,7 +134,7 @@ public class UserAccount {
     public ResponseEntity<?> getResVehHist(Principal user) {
         System.out.println("Preuzima REZ");
 
-        int broj = 0;
+        /*int broj = 0;
         int drugi = 0;
 
         for (int i =0;i<24;i++){
@@ -138,7 +142,7 @@ public class UserAccount {
             drugi+=30;
             System.out.println(i+":"+drugi);
             drugi-=30;
-        }
+        }*/
 
         Optional<User> optionalUser = userRepository.findByUsername(user.getName());
 
@@ -146,11 +150,11 @@ public class UserAccount {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        Set<RezervacijaRentACar> rez = optionalUser.get().getRezervacije();
+        //Set<RezervacijaRentACar> rez = optionalUser.get().getRezervacije();
 
         List<RezervacijaRentACarDTO> rezDTO = new ArrayList<RezervacijaRentACarDTO>();
 
-        for (RezervacijaRentACar r : rez) {
+        /*for (RezervacijaRentACar r : rez) {
 
             Date dropOff=r.getDatumVracanja();
 
@@ -165,7 +169,7 @@ public class UserAccount {
                 rezDTO.add(rtemp);
             }
             
-        }
+        }*/
 
         return new ResponseEntity<>(rezDTO, HttpStatus.OK);
     }

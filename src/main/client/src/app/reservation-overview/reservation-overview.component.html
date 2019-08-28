@@ -1,0 +1,115 @@
+<div class="container">
+  <div class="mt-2 "></div>
+  <div class="row">
+
+    <div class="col-md-4">
+
+      <div class="card">
+
+        <div class="card-header">
+          <h5>Flights</h5>
+        </div>
+
+        <div class="card-body">
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+      <div class="card">
+
+        <div class="card-header">
+          <h5>Hotels</h5>
+        </div>
+
+        <div class="card-body">
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+      <div class="card">
+
+        <div class="card-header">
+          <h5>Cars</h5>
+        </div>
+        <div class="list-group list-group-flush">
+
+          <li class="list-group-item">Old</li>
+
+          <li *ngFor="let rez of reservationsOld " class="list-group-item flex-column ">
+            <div class="d-flex justify-content-between">
+              <h6 class="mb-1">{{rez.rezervacijaRentACarDTO.voziloDTO.naziv}}</h6>
+              <p class="mb-0">
+                <button class="btn btn-sm " type="button " (click)="resInfo(rez)"><i class="fas fa-ellipsis-v"></i>
+                </button>
+              </p>
+            </div>
+            <div *ngIf="!rez.rezervacijaRentACarDTO.otkazana">
+              <p class="mb-1">{{rez.rezervacijaRentACarDTO.filijalaDTO.adresa}}</p>
+              <p class="mb-1">Pick-up : {{rez.rezervacijaRentACarDTO.datumPreuz | date: 'dd/MM/yyyy HH:mm'}} </p>
+              <p class="mb-1">Drop-off : {{rez.rezervacijaRentACarDTO.datumVracanja | date: 'dd/MM/yyyy HH:mm'}} </p>
+            </div>
+            <p class="mb-1 text-danger" *ngIf="rez.rezervacijaRentACarDTO.otkazana"> CANCELED </p>
+          </li>
+
+
+          <li class="list-group-item ">New</li>
+
+          <li *ngFor="let rez of reservationsNew" class="list-group-item flex-column ">
+            <div class="d-flex justify-content-between">
+              <h6 class="mb-1">{{rez.rezervacijaRentACarDTO.voziloDTO.naziv}}</h6>
+              <p *ngIf="!rez.rezervacijaRentACarDTO.otkazana" class="mb-0">
+                <button class="btn btn-sm " type="button" (click)="cancelVehRes(rez.rezervacijaRentACarDTO)"><i
+                  class="fas fa-ban"></i></button>
+              </p>
+              <p class="mb-0">
+                <button class="btn btn-sm " type="button " (click)="resInfo(rez)"><i class="fas fa-ellipsis-v"></i>
+                </button>
+              </p>
+            </div>
+            <div *ngIf="!rez.rezervacijaRentACarDTO.otkazana">
+              <p class="mb-1">{{rez.rezervacijaRentACarDTO.filijalaDTO.adresa}}</p>
+              <p class="mb-1">Pick-up : {{rez.rezervacijaRentACarDTO.datumPreuz | date: 'dd/MM/yyyy HH:mm'}} </p>
+              <p class="mb-1">Drop-off : {{rez.rezervacijaRentACarDTO.datumVracanja | date: 'dd/MM/yyyy HH:mm'}} </p>
+            </div>
+            <p class="mb-1 text-danger" *ngIf="rez.rezervacijaRentACarDTO.otkazana"> CANCELED </p>
+          </li>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <ng-template #content let-c="close" let-d="dismiss">
+
+    <div class="modal-body ">
+      <div class="justify-content-center text-center">
+        <h5>{{message}}</h5>
+
+      </div>
+
+      <div class="row">
+        <div class="col text-center">
+          <div *ngIf="cancelStatus" class="justify-content-center">
+            <button type="button" class="btn btn-danger btn-sm" (click)="confirmCancel()">Confirm</button>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  </ng-template>
+
+
+</div>

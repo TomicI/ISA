@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -107,7 +108,7 @@ public class AuthRestAPIs {
 
 		// Creating user's account
 		User user = new User(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()),
-				signUpRequest.getFirstName(), signUpRequest.getLastName(), signUpRequest.getEmail());
+				signUpRequest.getFirstName(), signUpRequest.getLastName(), signUpRequest.getEmail(),signUpRequest.getCity(),signUpRequest.getPhone());
 
 		Set<Role> tempRoles = new HashSet<>();
 
@@ -163,6 +164,19 @@ public class AuthRestAPIs {
 		return new ResponseEntity<>(new ResponseMessage("Password changed!"), HttpStatus.OK);
 
 	}
+
+	@RequestMapping(value = "/changeAdminPass", method = RequestMethod.POST)
+	@PreAuthorize("hasRole('ADMIN_RENT') or hasRole('ADMIN_HOTEL') or hasRole('ADMIN_AVIO')")
+	public ResponseEntity<?> changeAdminPass(@RequestBody PasswordChange passwordChange) {
+
+		boolean status = userDetails.changeAdminPass(passwordChange.getNewPass());
+
+		if(!status){
+			return new ResponseEntity<>(new ResponseMessage("Password already reset!"), HttpStatus.BAD_REQUEST);
+		}else
+			return new ResponseEntity<>(new ResponseMessage("Password changed!"), HttpStatus.OK);
+	}
+
 
 	@RequestMapping(value = "/changeUsername", method = RequestMethod.POST)
 	public ResponseEntity<?> changeUsername(@RequestBody SignUpForm signUpRequest) {
