@@ -115,6 +115,7 @@ public class User implements UserDetails {
         this.phone = phone;
         this.enabled = false;
         this.reset = false;
+        this.points = 0;
     }
 
     public Long getId() {
