@@ -15,11 +15,13 @@ import com.model.Invite;
 import com.model.RentACar;
 import com.model.RezervacijaRentACar;
 import com.model.SignUpForm;
+import com.model.user.Friend;
 import com.model.user.User;
 import com.repository.InviteRepository;
 import com.repository.UserRepository;
 
 
+import com.service.FriendService;
 import com.service.InviteService;
 import io.swagger.annotations.ApiOperation;
 import com.service.UserService;
@@ -51,6 +53,9 @@ public class UserAccount {
 
     @Autowired
     InviteService inviteService;
+
+    @Autowired
+    FriendService friendService;
 
     @RequestMapping(value = "/getRent/{id}", method = RequestMethod.GET)
     public ResponseEntity<RentACarDTO> getUserRentACar(@PathVariable Long id) {
@@ -175,29 +180,32 @@ public class UserAccount {
         List <UserDTO> pom=new ArrayList<>();
         Optional<List<User>> FN=Optional.of(new ArrayList<>());
         Optional<List<User>> LN=Optional.of(new ArrayList<>());
-
-        if(s.split(" ").length==1){
-            FN=userRepository.findByFirstName(s);
-            LN=userRepository.findByLastName(s);
-        } else if(s.split(" ").length>1){
-            FN=userRepository.findByFirstNameAndLastName(s.split(" ")[0], s.split(" ")[1]);
-            LN=userRepository.findByFirstNameAndLastName(s.split(" ")[1], s.split(" ")[0]);
-        }
-
-        if(FN.isPresent() && u.isPresent()) {
-            for (int i = 0; i < FN.get().size(); i++) {
-               if(!this.inviteRepository.findByUserSentAndUserReceiveAndReservation(u.get(), FN.get().get(i), null).isPresent() && !this.inviteRepository.findByUserSentAndUserReceiveAndReservation( FN.get().get(i), u.get(), null).isPresent() )
-                    pom.add(new UserDTO(FN.get().get(i)));
+        if(u.isPresent()) {
+            Optional<Friend> f = this.friendService.findById(u.get().getId());
+            if (s.split(" ").length == 1) {
+                FN = userRepository.findByFirstName(s);
+                LN = userRepository.findByLastName(s);
+            } else if (s.split(" ").length > 1) {
+                FN = userRepository.findByFirstNameAndLastName(s.split(" ")[0], s.split(" ")[1]);
+                LN = userRepository.findByFirstNameAndLastName(s.split(" ")[1], s.split(" ")[0]);
             }
-        }
-        if(LN.isPresent() && u.isPresent()) {
-            for (int i = 0; i < LN.get().size(); i++) {
-                if (!pom.contains(new UserDTO(LN.get().get(i))))
-                    if(!this.inviteRepository.findByUserSentAndUserReceiveAndReservation(u.get(), LN.get().get(i), null).isPresent() && !this.inviteRepository.findByUserSentAndUserReceiveAndReservation( LN.get().get(i), u.get(), null).isPresent() )
-                        pom.add(new UserDTO(LN.get().get(i)));
+
+            if (FN.isPresent() && f.isPresent()) {
+                for (int i = 0; i < FN.get().size(); i++) {
+                    if (!this.inviteRepository.findByUserSentAndUserReceiveAndReservation(u.get(), FN.get().get(i), null).isPresent() && !this.inviteRepository.findByUserSentAndUserReceiveAndReservation(FN.get().get(i), u.get(), null).isPresent() && !(u.get().getUsername().equals(FN.get().get(i).getUsername())) && !(f.get().getFriends().contains(FN.get().get(i))))
+                        pom.add(new UserDTO(FN.get().get(i)));
+                }
             }
+            if (LN.isPresent() && f.isPresent()) {
+                for (int i = 0; i < LN.get().size(); i++) {
+                    if (!pom.contains(new UserDTO(LN.get().get(i))))
+                        if (!this.inviteRepository.findByUserSentAndUserReceiveAndReservation(u.get(), LN.get().get(i), null).isPresent() && !this.inviteRepository.findByUserSentAndUserReceiveAndReservation(LN.get().get(i), u.get(), null).isPresent() && !(u.get().getUsername().equals(LN.get().get(i).getUsername()))&& !(f.get().getFriends().contains(LN.get().get(i))))
+                            pom.add(new UserDTO(LN.get().get(i)));
+                }
+            }
+            return new ResponseEntity<>(pom, HttpStatus.OK);
         }
-        return new ResponseEntity<>(pom, HttpStatus.OK);
+        return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/friendRequests",method = RequestMethod.GET)
@@ -230,5 +238,82 @@ public class UserAccount {
 
 
             return new ResponseEntity<>(new InviteDTO(invite), HttpStatus.CREATED);
+    }
+    @RequestMapping(value = "/friends",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('USER_REG')")
+    public ResponseEntity<List<UserDTO>> search( Principal user) {
+        Optional<User> us=this.userRepository.findByUsername(user.getName());
+
+        List<UserDTO> friendsDTO=new ArrayList<>();
+        if(us.isPresent()){
+            Optional<Friend> f= this.friendService.findById(us.get().getId());
+            if(f.isPresent()) {
+                for (User u : f.get().getFriends()){
+                    friendsDTO.add(new UserDTO(u));
+                }
+                return new ResponseEntity<>(friendsDTO, HttpStatus.OK);
+            }
+
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+
+    @RequestMapping(value = "/aRequest", method=RequestMethod.PUT,consumes = "application/json" )
+    @PreAuthorize("hasRole('USER_REG')")
+    public ResponseEntity<UserDTO> aRequest(@RequestBody InviteDTO inviteDTO, Principal user){
+        Optional<User> us=this.userRepository.findByUsername(user.getName());
+        if(us.isPresent()) {
+            Optional<User> u=this.userRepository.findByUsername(inviteDTO.userSent.getUsername());
+            Optional<Friend> f = this.friendService.findById(us.get().getId());
+            Optional<Friend> f1 = this.friendService.findById(u.get().getId());
+
+            if(f.isPresent() && u.isPresent() && f1.isPresent()){
+                f.get().getFriends().add(u.get());
+                f1.get().getFriends().add(us.get());
+                Optional<Invite> in=this.inviteRepository.findById(inviteDTO.getId());
+                if(in.isPresent()){
+                    this.inviteRepository.delete(in.get());
+                }
+                return new ResponseEntity<>(new UserDTO(us.get()),HttpStatus.OK);
+            }
+
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value = "/eRequest", method=RequestMethod.PUT,consumes = "application/json" )
+    @PreAuthorize("hasRole('USER_REG')")
+    public ResponseEntity<UserDTO> eRequest(@RequestBody InviteDTO inviteDTO, Principal user){
+        Optional<User> us=this.userRepository.findByUsername(user.getName());
+        if(us.isPresent()) {
+            Optional<Invite> in = this.inviteRepository.findById(inviteDTO.getId());
+            if (in.isPresent()) {
+                this.inviteRepository.delete(in.get());
+                return new ResponseEntity<>(new UserDTO(us.get()), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value = "/deleteFriend", method=RequestMethod.PUT,consumes = "application/json" )
+    @PreAuthorize("hasRole('USER_REG')")
+    public ResponseEntity<UserDTO> deleteFriend(@RequestBody UserDTO userDTO, Principal user){
+        Optional<User> us=this.userRepository.findByUsername(user.getName());
+        if(us.isPresent()) {
+            Optional<Friend> f = this.friendService.findById(us.get().getId());
+            Optional<User> u=this.userRepository.findByUsername(userDTO.getUsername());
+            Optional<Friend> f1 = this.friendService.findById(u.get().getId());
+            if(f.isPresent() && u.isPresent()){
+                f.get().getFriends().remove(u.get());
+                f1.get().getFriends().remove(us.get());
+                this.friendService.save(f.get());
+                this.friendService.save(f1.get());
+                return new ResponseEntity<>(new UserDTO(us.get()),HttpStatus.OK);
+            }
+
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

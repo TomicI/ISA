@@ -41,6 +41,7 @@ export class AddFriendsComponent implements OnInit {
     this.userService.sendFriendrequest(this.invite).then(pom=>{
         console.log("send fr ");
         console.log(pom);
+        location.reload();
       }
     )
 

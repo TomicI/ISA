@@ -9,3 +9,7 @@
   </div>
 </div>
 
+<div *ngFor="let u of listaF; let i = index" align="left" class="container"  style=" width: auto;  padding: 20px; margin-top: 50px; margin-left: 30px;" class="border border-light">
+  <div><span>{{u.username}}</span><span style="margin-left: 10px"><button (click)="ukloni(i)"><i class="fa fa-user-minus"></i></button></span></div>
+    <div>{{u.firstName}}  {{u.lastName}}</div>
+</div>

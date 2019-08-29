@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import com.model.user.Friend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,9 @@ public class UserService {
 	
 	@Autowired
 	private VerificationTokenRepository tokenRepository;
-	
+
+	@Autowired
+    private FriendService friendService;
 	
 	public boolean checkIfEmailExists(String email) {
         User user = userRepository.findByEmail(email);
@@ -49,7 +52,10 @@ public class UserService {
      
 
     public void saveUser(User user) {
+
     	userRepository.save(user);
+
+    	this.friendService.save(new Friend());
     }
     
     public void createVerificationToken(User user, String token) {
