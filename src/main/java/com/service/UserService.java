@@ -1,10 +1,13 @@
 package com.service;
 
+import java.security.Principal;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.model.RentACar;
@@ -13,6 +16,7 @@ import com.model.user.User;
 import com.model.user.VerificationToken;
 import com.repository.UserRepository;
 import com.repository.VerificationTokenRepository;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -58,11 +62,49 @@ public class UserService {
        return userRepository.findById(id);
         
     }
+
+    public User getOne(Long id){
+	    Optional<User> optionalUser = findOne(id);
+        if (!optionalUser.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User doesn't exist!");
+        }
+        return optionalUser.get();
+    }
     
     public Optional<User> findByUsername(String username){
-    	return userRepository.findByUsername(username);
+
+	    return userRepository.findByUsername(username);
     }
-   
+
+
+    public User getByUsername(String username){
+
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+
+        if (!optionalUser.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User doesn't exist!");
+        }
+
+        return optionalUser.get();
+    }
+
+
+    public SignUpForm getUserP(Principal user){
+        SignUpForm temp = new SignUpForm();
+
+        User tempu = getByUsername(user.getName());
+
+        temp.setUsername(tempu.getUsername());
+        temp.setFirstName(tempu.getFirstName());
+        temp.setLastName(tempu.getLastName());
+        temp.setEmail(tempu.getEmail());
+        temp.setReset(tempu.isReset());
+        temp.setCity(tempu.getCity());
+        temp.setPhone(tempu.getPhone());
+        temp.setLastPasswordResetDate(tempu.getLastPasswordResetDate());
+
+        return temp;
+    }
     
 	
 }

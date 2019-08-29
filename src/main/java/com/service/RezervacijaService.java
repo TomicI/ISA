@@ -30,6 +30,17 @@ public class RezervacijaService {
 	public Optional<Rezervacija> findById(Long id) {
 		return rezervacijaRepository.findById(id);
 	}
+
+	public Rezervacija getOne(Long id){
+
+		Optional<Rezervacija> optionalRezervacija = findById(id);
+
+		if (!optionalRezervacija.isPresent()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation doesn't exist!");
+		}
+
+		return  optionalRezervacija.get();
+	}
 	
 	public List<Rezervacija> findAll(){
 		return rezervacijaRepository.findAll();

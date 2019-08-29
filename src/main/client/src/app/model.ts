@@ -51,17 +51,6 @@ export class Karta {
 
 }
 
-export class Ocena {
-  id: number;
-  let: Let;
-  user: User;
-  ocena: number;
-  aviokompanija: Aviokompanija;
-
-  constructor() { }
-
-}
-
 export class Prtljag {
   id: number;
   duzina: number;
@@ -270,12 +259,12 @@ export class RezervacijaRent {
   datumPreuz: Date;
   datumVracanja: Date;
   cena: number;
-  FilijalaDTO: Filijala;
-  FilijalaDropDTO: Filijala;
+  filijalaDTO: Filijala;
+  filijalaDropDTO: Filijala;
   status: StatusRes;
   otkazana: boolean;
-  VoziloDTO: Vozilo;
-  UserDTO: User;
+  voziloDTO: Vozilo;
+  userDTO: User;
 
   constructor(
     id: number,
@@ -283,24 +272,24 @@ export class RezervacijaRent {
     datumPreuz: Date,
     datumVracanja: Date,
     cena: number,
-    FilijalaDTO: Filijala,
-    FilijalaDropDTO: Filijala,
+    filijalaDTO: Filijala,
+    filijalaDropDTO: Filijala,
     status: StatusRes,
     otkazana: boolean,
-    VoziloDTO: Vozilo,
-    UserDTO: User,
+    voziloDTO: Vozilo,
+    userDTO: User,
   ) {
     this.id = id;
     this.datumRez = datumRez;
     this.datumPreuz = datumPreuz;
     this.datumVracanja = datumVracanja;
     this.cena = cena;
-    this.FilijalaDTO = FilijalaDTO;
-    this.FilijalaDropDTO = FilijalaDTO;
+    this.filijalaDTO = filijalaDTO;
+    this.filijalaDropDTO = filijalaDTO;
     this.status = status;
     this.otkazana = otkazana;
-    this.VoziloDTO = VoziloDTO;
-    this.UserDTO = UserDTO;
+    this.voziloDTO = voziloDTO;
+    this.userDTO = userDTO;
 
 
   }
@@ -312,23 +301,23 @@ export class Rezervacija {
   datumVremeP: Date;
   datumVremeS: Date;
   cena: number;
-  RezervacijaRentACarDTO: RezervacijaRent;
-  UserDTO: User;
+  rezervacijaRentACarDTO: RezervacijaRent;
+  userDTO: User;
 
   constructor(
     id: number,
     datumVremeP: Date,
     datumVremeS: Date,
     cena: number,
-    RezervacijaRentACarDTO: RezervacijaRent,
+    rezervacijaRentACarDTO: RezervacijaRent,
     UserDTO: User
   ){
     this.id = id;
     this.datumVremeP = datumVremeP;
     this.datumVremeS = datumVremeS;
     this.cena = cena;
-    this.RezervacijaRentACarDTO = RezervacijaRentACarDTO;
-    this.UserDTO = UserDTO;
+    this.rezervacijaRentACarDTO = rezervacijaRentACarDTO;
+    this.userDTO = UserDTO;
   }
 
 }
@@ -370,6 +359,32 @@ export class User {
     this.lastPasswordResetDate = lastPasswordResetDate;
   }
 
+}
+
+export class Ocena{
+
+  id:number;
+  ocena:number;
+  ocDate:Date;
+  aviokompanijaDTO:Aviokompanija;
+  letDTO:Let;
+  voziloDTO:Vozilo;
+  userDTO:User;
+  filijalaDTO:Filijala;
+  rezervacijaDTO:Rezervacija;
+
+
+  constructor(id: number, ocena: number, ocDate: Date, aviokompanijaDTO: Aviokompanija, letDTO: Let, voziloDTO: Vozilo, userDTO: User, filijalaDTO: Filijala, rezervacijaDTO: Rezervacija) {
+    this.id = id;
+    this.ocena = ocena;
+    this.ocDate = ocDate;
+    this.aviokompanijaDTO = aviokompanijaDTO;
+    this.letDTO = letDTO;
+    this.voziloDTO = voziloDTO;
+    this.userDTO = userDTO;
+    this.filijalaDTO = filijalaDTO;
+    this.rezervacijaDTO = rezervacijaDTO;
+  }
 }
 
 export class NewPass {

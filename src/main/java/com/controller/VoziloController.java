@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.dto.RezervacijaDTO;
+import com.dto.aviokompanija.OcenaDTO;
+import com.model.Rezervacija;
+import com.model.aviokompanija.Ocena;
+import com.security.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -157,6 +162,13 @@ public class VoziloController {
 		
 		return new ResponseEntity<>(new VoziloDTO(vozilo),HttpStatus.OK);
 		
+	}
+
+	@RequestMapping(value="/rate",method=RequestMethod.POST,consumes="application/json")
+	public ResponseEntity<ResponseMessage> rateVehicle(@RequestBody OcenaDTO ocenaDTO){
+
+		return new ResponseEntity<>(voziloService.rateVehicle(ocenaDTO),HttpStatus.OK);
+
 	}
 
 	

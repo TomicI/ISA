@@ -13,13 +13,13 @@ public class Invite {
     private Long id;
 
     @ManyToOne
-    public User userSent;
+    private User userSent;
     @ManyToOne
-    public User userReceive;
+    private User userReceive;
     @Column
-    public Date dateSent;
+    private Date dateSent;
     @ManyToOne
-    public Rezervacija reservation;
+    private Rezervacija reservation;
 
     public Invite() {
     }

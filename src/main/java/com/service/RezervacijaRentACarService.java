@@ -57,6 +57,18 @@ public class RezervacijaRentACarService {
 		return rezRepository.findByVozilo(voz);
 	}
 
+	public RezervacijaRentACar getOneRes(Long id){
+
+		Optional<RezervacijaRentACar> rezOptional  = findOne(id);
+
+		if (!rezOptional .isPresent()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation doesn't exist!");
+		}
+
+		return rezOptional.get();
+
+	}
+
 	public RezervacijaRentACarDTO getOne(Long id){
 
 		Optional<RezervacijaRentACar> rezOptional  = findOne(id);

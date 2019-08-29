@@ -11,8 +11,8 @@
             </div>
           </div>
           <h5>RentACar Name : {{res.filijalaDTO.rentACarDTO.naziv}} </h5>
-          <p class="h6">PickUp adress : <button type="button" class="btn btn-link" (click)="mapOpen(res.filijalaDTO.adresa)"> {{res.filijalaDTO.adresa}} </button>  </p>
-          <p class="h6">DropOff adress :  <button type="button" class="btn btn-link" (click)="mapOpen(res.filijalaDropDTO.adresa)"> {{res.filijalaDropDTO.adresa}}  </button> </p>
+          <p class="h6">PickUp adress : {{res.filijalaDTO.adresa}} </p>
+          <p class="h6">DropOff adress :  {{res.filijalaDropDTO.adresa}}  </p>
           <h6>Pick-up: {{res.datumPreuz | date: 'dd/MM/yyyy HH:mm' }} </h6>
           <h6>Drop-off: {{res.datumVracanja | date: 'dd/MM/yyyy HH:mm'}} </h6>
 
@@ -34,16 +34,10 @@
         </div>
 
         <div class="card-footer">
-          <div *ngIf="!view" class="d-flex">
+          <div class="d-flex">
             <div> <i class="fas fa-star"></i>{{res.voziloDTO.prosecnaOcena}}</div>
             <div class="ml-auto">
               <button type="button" class="btn btn-outline-secondary btn-sm" (click)="rent()">Rent</button>
-            </div>
-          </div>
-          <div *ngIf="view" class="d-flex">
-            <div class="ml-auto">
-              <p class="mb-1 text-danger" *ngIf="res.otkazana"> CANCELED </p>
-              <button *ngIf="!res.otkazana" type="button" class="btn btn-outline-secondary btn-sm" (click)="rate(res)">Rate</button>
             </div>
           </div>
         </div>
@@ -61,50 +55,7 @@
 
   </div>
 
-  <ng-template #content let-c="close" let-d="dismiss">
 
-    <div class="modal-body ">
-      <div class="justify-content-center text-center">
-        <h5>Rating</h5>
-      </div>
-
-      <div class="row">
-        <div class="col text-center">
-
-          <form class="form-group" [formGroup]="rateGroup" >
-
-            <div class="form-group">
-              <label for="branchRateSelect">Branch rate</label>
-              <select class="form-control form-control-sm" id="branchRateSelect" [formControlName]="'branchRate'" [disabled]="test">
-                <option selected>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="vehicleRateSelect">Vehicle rate</label>
-              <select class="form-control form-control-sm" id="vehicleRateSelect" [formControlName]="'vehicleRate'">
-                <option selected>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-            </div>
-
-            <button type="button"  class="btn btn-primary btn-sm" (click)="rateSubmit()">Submit</button>
-
-          </form>
-
-        </div>
-      </div>
-
-    </div>
-
-  </ng-template>
 
 
 

@@ -22,6 +22,7 @@ import com.repository.UserRepository;
 
 import com.service.InviteService;
 import io.swagger.annotations.ApiOperation;
+import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,6 +42,9 @@ public class UserAccount {
 
     @Autowired
     RentACarController rentACarController;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     InviteRepository inviteRepository;
@@ -83,27 +87,7 @@ public class UserAccount {
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
     public ResponseEntity<SignUpForm> getUser(Principal user) {
 
-
-        Optional<User> optionalUser = userRepository.findByUsername(user.getName());
-
-        if (!optionalUser.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        SignUpForm temp = new SignUpForm();
-
-        User tempu = optionalUser.get();
-
-        temp.setUsername(tempu.getUsername());
-        temp.setFirstName(tempu.getFirstName());
-        temp.setLastName(tempu.getLastName());
-        temp.setEmail(tempu.getEmail());
-        temp.setReset(tempu.isReset());
-        temp.setCity(tempu.getCity());
-        temp.setPhone(tempu.getPhone());
-        temp.setLastPasswordResetDate(tempu.getLastPasswordResetDate());
-
-        return new ResponseEntity<>(temp, HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUserP(user), HttpStatus.OK);
 
     }
 

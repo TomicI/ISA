@@ -23,6 +23,10 @@ export class VehicleService {
     return await this.http.delete(`${this.VehicleURL}/${id}`).toPromise();
   }
 
+  rateVehicle(ocena):Observable<any>{
+    return this.http.post(`${this.VehicleURL}/rate`,ocena)
+  }
+
 
 
 }

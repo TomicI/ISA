@@ -5,9 +5,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.dto.CenovnikRentACarDTO;
 import com.dto.FilijalaDTO;
+import com.dto.RentACarDTO;
+import com.model.CenovnikRentACar;
 import com.model.Filijala;
 import com.model.aviokompanija.Ocena;
+import com.security.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.model.RentACar;
 import com.repository.RentACarRepository;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class RentACarService {
@@ -29,16 +34,21 @@ public class RentACarService {
 	public Optional<RentACar> findOne(Long id){
 		return rentACarRepository.findById(id);
 	}
-	
-	public List<FilijalaDTO> findOneFilijala(Long id) {
 
+	public RentACar getOne(Long id){
 		Optional<RentACar> rentOptional =findOne(id);
 
 		if (!rentOptional.isPresent()) {
-
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "RentACar doesn't exist!");
 		}
 
-		Set<Filijala> filijale = rentOptional.get().getFilijale();
+		return rentOptional.get();
+	}
+
+	public List<FilijalaDTO> findOneFilijala(Long id) {
+
+
+		Set<Filijala> filijale = getOne(id).getFilijale();
 
 		List<FilijalaDTO> filijaleDTO = new ArrayList<>();
 
@@ -65,18 +75,78 @@ public class RentACarService {
 	public List<RentACar> findAll(){
 		return rentACarRepository.findAll();
 	}
+
+	public List<RentACarDTO> getAll() {
+
+		List<RentACar> rentACar = findAll();
+
+		List<RentACarDTO> rentACarDTO = new ArrayList<>();
+
+		for (RentACar r : rentACar) {
+			rentACarDTO.add(new RentACarDTO(r));
+		}
+
+		return rentACarDTO;
+	}
 	
 	public RentACar save(RentACar rentACar) {
 		return rentACarRepository.save(rentACar);
 	}
+
+	public RentACar saveRentACar(RentACarDTO rentACarDTO){
+		RentACar rentACar = new RentACar();
+		rentACar.setId(rentACarDTO.getId());
+		rentACar.setNaziv(rentACarDTO.getNaziv());
+		rentACar.setOpis(rentACarDTO.getOpis());
+
+		return save(rentACar);
+
+	}
 	
 	public void remove(Long id) {
+
 		rentACarRepository.deleteById(id);
 	}
+
+	public List<CenovnikRentACarDTO> getCenovnici(Long id){
+		Set<CenovnikRentACar> cenovnik = getOne(id).getCenovnici();
+
+		List<CenovnikRentACarDTO> cenovnikDTO = new ArrayList<CenovnikRentACarDTO>();
+
+		for (CenovnikRentACar c : cenovnik) {
+			System.out.println(c.getOdDatuma());
+			CenovnikRentACarDTO tempCDTO = new CenovnikRentACarDTO(c);
+			cenovnikDTO.add(tempCDTO);
+		}
+
+		return cenovnikDTO;
+	}
+
+	public RentACar edit(RentACarDTO rentACarDTO){
+
+		if (exists(rentACarDTO.getNaziv())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Name is not available!");
+		}
+
+		if (rentACarDTO.getOpis().length() < 5) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Minimum 5 characters!");
+		}
+
+
+		RentACar rentaACar = getOne(rentACarDTO.getId());
+
+		rentaACar.setNaziv(rentACarDTO.getNaziv());
+		rentaACar.setOpis(rentACarDTO.getOpis());
+
+		return save(rentaACar);
+	}
+
 
 	public boolean exists(String name){
 		return rentACarRepository.existsByNaziv(name);
 	}
+
+
 
 	
 	

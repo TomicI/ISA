@@ -23,19 +23,32 @@ public class OcenaDTO {
     private FilijalaDTO filijalaDTO;
     private VoziloDTO voziloDTO;
 
-    public OcenaDTO(Ocena ocena){
-        this(ocena.getId(),ocena.getOcena(),ocena.getAviokompanija(),ocena.getLet(),ocena.getUser(),ocena.getRezervacija(),ocena.getFilijala(),ocena.getVozilo());
+    public OcenaDTO(){
+
     }
 
-    public OcenaDTO(Long id, int ocena, Aviokompanija aviokompanija, Let let, User user, Rezervacija rezervacija, Filijala filijala, Vozilo vozilo) {
+    public OcenaDTO(Long id, int ocena, AviokompanijaDTO aviokompanijaDTO, LetDTO letDTO, UserDTO userDTO, RezervacijaDTO rezervacijaDTO, FilijalaDTO filijalaDTO, VoziloDTO voziloDTO) {
         this.id = id;
         this.ocena = ocena;
-        this.aviokompanijaDTO = new AviokompanijaDTO(aviokompanija);
-        this.letDTO =new LetDTO(let);
-        this.userDTO = new UserDTO(user);
-        this.rezervacijaDTO = new RezervacijaDTO(rezervacija);
-        this.filijalaDTO = new FilijalaDTO(filijala);
-        this.voziloDTO = new VoziloDTO(vozilo);
+        this.aviokompanijaDTO = aviokompanijaDTO;
+        this.letDTO = letDTO;
+        this.userDTO = userDTO;
+        this.rezervacijaDTO = rezervacijaDTO;
+        this.filijalaDTO = filijalaDTO;
+        this.voziloDTO = voziloDTO;
+    }
+
+    public OcenaDTO(Ocena ocena){
+        this.id = ocena.getId();
+        this.ocena = ocena.getOcena();
+        this.aviokompanijaDTO = new AviokompanijaDTO(ocena.getAviokompanija());
+        this.letDTO = new LetDTO(ocena.getLet());
+        this.userDTO = new UserDTO(ocena.getUser());
+        this.rezervacijaDTO = new RezervacijaDTO(ocena.getRezervacija());
+        this.filijalaDTO = new FilijalaDTO(ocena.getFilijala());
+        this.voziloDTO = new VoziloDTO(ocena.getVozilo());
+
+
     }
 
     public Long getId() {

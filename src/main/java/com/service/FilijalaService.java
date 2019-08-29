@@ -5,15 +5,23 @@ import java.util.*;
 import com.dto.FilijalaDTO;
 import com.dto.RezervacijaRentACarDTO;
 import com.dto.VoziloDTO;
+import com.dto.aviokompanija.OcenaDTO;
 import com.model.*;
 import com.model.aviokompanija.Ocena;
+import com.model.user.User;
+import com.security.ResponseMessage;
+import com.service.aviokompanija.OcenaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.repository.FilijalaRepository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
 
 @Service
 public class FilijalaService {
@@ -33,35 +41,42 @@ public class FilijalaService {
     @Autowired
     private RezervacijaRentACarService rezervacijaRentACarService;
 
+    @Autowired
+    private RezervacijaService rezervacijaService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private OcenaService ocenaService;
+
     public Optional<Filijala> findOne(Long id) {
         return filijalaRepository.findById(id);
     }
 
-    public List<VoziloDTO> findOneVeh(Long id) {
-
+    public Filijala getOne(Long id){
         Optional<Filijala> filijalaOptional = findOne(id);
 
         if (!filijalaOptional.isPresent()) {
-
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Filijala doesn't exist!");
         }
 
-        Set<Vozilo> vozila = filijalaOptional.get().getVozila();
+        return filijalaOptional.get();
+    }
+
+    public List<VoziloDTO> findOneVeh(Long id) {
+
+        Set<Vozilo> vozila = getOne(id).getVozila();
 
         List<VoziloDTO> vozilaDTO = new ArrayList<VoziloDTO>();
 
-        Double sumOcena;
-        int broj;
+
 
         for (Vozilo v : vozila) {
-            List<Ocena> ocene = v.getOcene();
-            sumOcena = 0.0;
-            broj = ocene.size();
-            for (Ocena o : ocene) {
-                sumOcena += o.getOcena();
-            }
             VoziloDTO voziloDTO = new VoziloDTO(v);
-            if (sumOcena > 0)
-                voziloDTO.setProsecnaOcena(sumOcena / broj);
+
+            voziloDTO.setProsecnaOcena(average(v));
+
             vozilaDTO.add(voziloDTO);
         }
 
@@ -164,7 +179,11 @@ public class FilijalaService {
 
                             if (temp.compareTo(dropOff) == 0 || temp.compareTo(dropOff) == 1) {
                                 System.out.println("CENA " + cen);
-                                RezervacijaRentACarDTO rezTemp = new RezervacijaRentACarDTO(null, null, pickUp, dropOff, cen, false, StatusRes.Reserved, new FilijalaDTO(filSearch), new FilijalaDTO(filBring), new VoziloDTO(v));
+
+                                VoziloDTO voziloDTO = new VoziloDTO(v);
+                                voziloDTO.setProsecnaOcena(average(v));
+
+                                RezervacijaRentACarDTO rezTemp = new RezervacijaRentACarDTO(null, null, pickUp, dropOff, cen, false, StatusRes.Reserved, new FilijalaDTO(filSearch), new FilijalaDTO(filBring), voziloDTO);
                                 rezervacijePretrage.add(rezTemp);
                                 break;
                             }
@@ -260,6 +279,76 @@ public class FilijalaService {
 
     }
 
+    public double average(Vozilo v){
+
+        Double sumOcena;
+        int broj;
+
+        List<Ocena> ocene = v.getOcene();
+        sumOcena = 0.0;
+        broj = ocene.size();
+        for (Ocena o : ocene) {
+            sumOcena += o.getOcena();
+        }
+
+        if (sumOcena > 0)
+            return (sumOcena / broj);
+
+        return 0;
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
+    public ResponseMessage rateFilijala(OcenaDTO ocenaDTO){
+
+        Rezervacija rezervacija = rezervacijaService.getOne(ocenaDTO.getRezervacijaDTO().getId());
+        Filijala filijala = getOne(ocenaDTO.getFilijalaDTO().getId());
+
+        if (rezervacija.getDatumVremeS().after(new Date())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation didn't end!");
+        }
+
+        if (ocenaService.findByRezervacijaAndFilijala(rezervacija.getId(),filijala.getId()).isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch already rated!");
+        }
+
+        User user = userService.getOne(ocenaDTO.getUserDTO().getId());
+
+        Ocena ocena = new Ocena();
+
+        ocena.setOcena(ocenaDTO.getOcena());
+        ocena.setUser(user);
+        ocena.setOcDate(new Date());
+        ocena.setRezervacija(rezervacija);
+        ocena.setFilijala(filijala);
+
+        ocenaService.saveOcena(ocena);
+
+        return new ResponseMessage("Branch rate saved!");
+
+    }
+
+    public Filijala insert(FilijalaDTO filijalaDTO){
+
+        if (filijalaDTO.getRentACarDTO()==null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch can't be null!");
+        }
+
+        RentACar rentACar = rentACarService.getOne(filijalaDTO.getRentACarDTO().getId());
+
+        Filijala filijala = new Filijala();
+        filijala.setAdresa(filijalaDTO.getAdresa());
+        filijala.setFilijala(rentACar);
+
+        return save(filijala);
+    }
+
+    public Filijala edit(FilijalaDTO filijalaDTO){
+        Filijala filijala = getOne(filijalaDTO.getId());
+
+        filijala.setAdresa(filijalaDTO.getAdresa());
+
+        return save(filijala);
+    }
 
     public List<Filijala> findAll() {
         return filijalaRepository.findAll();

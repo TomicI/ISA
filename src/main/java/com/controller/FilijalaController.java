@@ -44,30 +44,12 @@ public class FilijalaController {
 	@Autowired
 	private UserService userService;
 	
-	
 
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<FilijalaDTO> insertFilijala(@RequestBody FilijalaDTO filijalaDTO){
-		System.out.println(filijalaDTO);
-		
-		if (filijalaDTO.getRentACarDTO()==null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		Optional<RentACar> rentACar = rentACarService.findOne(filijalaDTO.getRentACarDTO().getId());
-		
-		if (!rentACar.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		Filijala filijala = new Filijala();
-		filijala.setAdresa(filijalaDTO.getAdresa());
-		filijala.setFilijala(rentACar.get());
-		
-		filijala = filijalaService.save(filijala);
-		
-		return new ResponseEntity<>(new FilijalaDTO(filijala),HttpStatus.CREATED);
+
+		return new ResponseEntity<>(new FilijalaDTO(filijalaService.insert(filijalaDTO)),HttpStatus.CREATED);
 		
 	}
 	
@@ -80,9 +62,7 @@ public class FilijalaController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<Void> deleteFilijala(@PathVariable Long id) {
-		
-		System.out.println("Brisnjae");
-		
+
 		Optional<Filijala> filijalaOptional = filijalaService.findOne(id);
 		
 		if (filijalaOptional.isPresent()) {
@@ -96,22 +76,8 @@ public class FilijalaController {
 	@RequestMapping(method=RequestMethod.PUT,consumes = "application/json" )
 	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<FilijalaDTO> updateFilijala(@RequestBody FilijalaDTO filijalaDTO){
-		
-		Optional<Filijala> optFilijala = filijalaService.findOne(filijalaDTO.getId());
-		
-		if (!optFilijala.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		Filijala filijala = optFilijala.get();
-		
-		filijala.setAdresa(filijalaDTO.getAdresa());
-		
-		filijala = filijalaService.save(filijala);
-		
-		return new ResponseEntity<>(new FilijalaDTO(filijala),HttpStatus.OK);
-		
-		
+
+		return new ResponseEntity<>(new FilijalaDTO(filijalaService.edit(filijalaDTO)),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/rezadmin", method = RequestMethod.GET)
@@ -125,9 +91,7 @@ public class FilijalaController {
 		Set<Filijala> filLista = rtemp.getFilijale();
 		
 		List<RezervacijaRentACarDTO> rezList = new ArrayList<RezervacijaRentACarDTO>();
-		
-		
-		
+
 		for (Filijala f : filLista) {
 			for(RezervacijaRentACar r : f.getRezervacije()) {
 				RezervacijaRentACarDTO reztemp = new RezervacijaRentACarDTO(r);

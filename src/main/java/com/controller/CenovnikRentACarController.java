@@ -31,66 +31,12 @@ public class CenovnikRentACarController {
 	@Autowired
 	private CenovnikRentACarService cenovnikService;
 
-	@Autowired
-	private VoziloService voziloService;
-
-	@Autowired
-	private RentACarService rentService;
 
 	@RequestMapping(method=RequestMethod.POST,consumes="application/json")
 	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<CenovnikRentACarDTO> saveCenovnik(@RequestBody CenovnikRentACarDTO cenovnikDTO){
-
 		
-		
-		if (cenovnikDTO.getVoziloDTO()==null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-
-		if (cenovnikDTO.getRentACarDTO()==null){
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		Optional<Vozilo> voziloOptional = voziloService.findOne(cenovnikDTO.getVoziloDTO().getId());
-
-		System.out.println(voziloOptional.get().getNaziv());
-		
-		if (!voziloOptional.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-
-		Optional<RentACar> rentACarOptional = rentService.findOne(cenovnikDTO.getRentACarDTO().getId());
-
-		if (!rentACarOptional.isPresent()){
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-
-		Vozilo voz = voziloOptional.get();
-
-		Filijala f = voz.getVozilo();
-
-		RentACar r = f.getFilijala();
-
-		RentACar rentACar = rentACarOptional.get();
-
-		if (rentACar.getId()!=r.getId()){
-			System.out.println("Vozilo ne pripada filijali trenutnog RentACar-a");
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-
-		CenovnikRentACar rent = new CenovnikRentACar();
-
-		System.out.println(cenovnikDTO.getOdDatuma());
-		
-		rent.setOdDatuma(cenovnikDTO.getOdDatuma());
-		rent.setDoDatuma(cenovnikDTO.getDoDatuma());
-		rent.setCena(cenovnikDTO.getCena());
-		rent.setVozilo(voz);
-		rent.setServis(rentACar);
-		
-		rent = cenovnikService.save(rent);
-		
-		return new ResponseEntity<>(new CenovnikRentACarDTO(rent),HttpStatus.CREATED);
+		return new ResponseEntity<>(new CenovnikRentACarDTO(cenovnikService.insertCenovnik(cenovnikDTO)),HttpStatus.CREATED);
 		
 	}
 
@@ -124,14 +70,7 @@ public class CenovnikRentACarController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<CenovnikRentACarDTO> getCenovnik(@PathVariable Long id) {
 
-		Optional<CenovnikRentACar> optionalCenovnik = cenovnikService.findOne(id);
-
-		if (!optionalCenovnik.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		return new ResponseEntity<>(new CenovnikRentACarDTO(optionalCenovnik.get()), HttpStatus.OK);
-
+		return new ResponseEntity<>(new CenovnikRentACarDTO(cenovnikService.getOne(id)), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

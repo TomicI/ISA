@@ -16,17 +16,22 @@ public class AviokompanijaDTO {
 	
 	public AviokompanijaDTO(Aviokompanija a) {
 
-			this(a.getId(), a.getNaziv(), a.getAdresa(), a.getOpis(), a.getProsecnaOcena(), a.getLokacija());
-
+		this.id=a.getId();
+		this.naziv = a.getNaziv();
+		this.adresa = a.getAdresa();
+		this.opis = a.getOpis();
+		this.prosecnaOcena = a.getProsecnaOcena() ;
+		this.lokacijaDTO  = new LokacijaDTO(a.getLokacija());
 	}
-	
-	public AviokompanijaDTO(Long id, String naziv, String adresa, String opis, Double prosecnaOcena, Lokacija lokacija) {
-		this.setId(id);
-		this.setNaziv(naziv);
-		this.setAdresa(adresa);
-		this.setOpis(opis);
-		this.setProsecnaOcena(prosecnaOcena);
-		this.setLokacijaDTO(new LokacijaDTO(lokacija));
+
+
+	public AviokompanijaDTO(Long id, String naziv, String adresa, String opis, Double prosecnaOcena, LokacijaDTO lokacijaDTO) {
+		this.id = id;
+		this.naziv = naziv;
+		this.adresa = adresa;
+		this.opis = opis;
+		this.prosecnaOcena = prosecnaOcena;
+		this.lokacijaDTO = lokacijaDTO;
 	}
 
 	public Long getId() {

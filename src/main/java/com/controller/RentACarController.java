@@ -2,6 +2,7 @@ package com.controller;
 
 import java.util.*;
 
+import com.dto.aviokompanija.OcenaDTO;
 import com.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,42 +39,19 @@ public class RentACarController {
 	private RentACarService rentACarService;
 	
 	@Autowired
-	private CenovnikRentACarService cenovnikService;
-	
-	@Autowired
 	private FilijalaService filijalaService;
 
-	@Autowired
-	private VoziloService voziloService;
-	
-	@Autowired
-	private RezervacijaRentACarService rezService;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<RentACarDTO> getRentACar(@PathVariable Long id) {
 
-		Optional<RentACar> rentOptional = rentACarService.findOne(id);
-
-		if (rentOptional.isPresent()) {
-			return new ResponseEntity<>(new RentACarDTO(rentOptional.get()), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
+		return new ResponseEntity<>(new RentACarDTO(rentACarService.getOne(id)), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	public ResponseEntity<List<RentACarDTO>> getAll() {
 
-		List<RentACar> rentACar = rentACarService.findAll();
-
-		List<RentACarDTO> rentACarDTO = new ArrayList<>();
-
-		for (RentACar r : rentACar) {
-			rentACarDTO.add(new RentACarDTO(r));
-		}
-
-		return new ResponseEntity<>(rentACarDTO, HttpStatus.OK);
+		return new ResponseEntity<>(rentACarService.getAll(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}/filijale", method = RequestMethod.GET)
@@ -85,20 +63,14 @@ public class RentACarController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<RentACarDTO> saveRentACar(@RequestBody RentACarDTO rentACarDTO) {
 
-		RentACar rentACar = new RentACar();
-		rentACar.setId(rentACarDTO.getId());
-		rentACar.setNaziv(rentACarDTO.getNaziv());
-		rentACar.setOpis(rentACarDTO.getOpis());
 
-		rentACar = rentACarService.save(rentACar);
-
-		return new ResponseEntity<>(new RentACarDTO(rentACar), HttpStatus.CREATED);
+		return new ResponseEntity<>(new RentACarDTO(rentACarService.saveRentACar(rentACarDTO)), HttpStatus.CREATED);
 
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@PreAuthorize("hasRole('ADMIN_RENT')")
-	public ResponseEntity<Void> deleteRentACar(@PathVariable Long id) {
+	public ResponseEntity<?> deleteRentACar(@PathVariable Long id) {
 
 		Optional<RentACar> rentOptional = rentACarService.findOne(id);
 
@@ -114,23 +86,8 @@ public class RentACarController {
 	@RequestMapping(value = "/{id}/cenovnik", method = RequestMethod.GET)
 	public ResponseEntity<List<CenovnikRentACarDTO>> getCenovnik(@PathVariable Long id) {
 
-		Optional<RentACar> rentOptional = rentACarService.findOne(id);
 
-		if (!rentOptional.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		Set<CenovnikRentACar> cenovnik = rentOptional.get().getCenovnici();
-
-		List<CenovnikRentACarDTO> cenovnikDTO = new ArrayList<CenovnikRentACarDTO>();
-
-		for (CenovnikRentACar c : cenovnik) {
-			System.out.println(c.getOdDatuma());
-			CenovnikRentACarDTO tempCDTO = new CenovnikRentACarDTO(c);
-			cenovnikDTO.add(tempCDTO);
-		}
-
-		return new ResponseEntity<>(cenovnikDTO, HttpStatus.OK);
+		return new ResponseEntity<>(rentACarService.getCenovnici(id), HttpStatus.OK);
 
 	}
 
@@ -138,30 +95,7 @@ public class RentACarController {
 	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<?> edit(@RequestBody RentACarDTO rentACarDTO) {
 
-		if (rentACarService.exists(rentACarDTO.getNaziv())) {
-			return new ResponseEntity<>(new ResponseMessage("Name is not available!"), HttpStatus.BAD_REQUEST);
-		}
-
-		if (rentACarDTO.getOpis().length() < 5) {
-			return new ResponseEntity<>(new ResponseMessage("Minimum 5 characters!"), HttpStatus.BAD_REQUEST);
-		}
-
-
-		Optional<RentACar> rentOptional = rentACarService.findOne(rentACarDTO.getId());
-
-		if (!rentOptional.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-
-		RentACar rentaACar = rentOptional.get();
-
-		rentaACar.setNaziv(rentACarDTO.getNaziv());
-		rentaACar.setOpis(rentACarDTO.getOpis());
-
-		rentaACar = rentACarService.save(rentaACar);
-
-		return new ResponseEntity<>(new RentACarDTO(rentaACar), HttpStatus.OK);
-
+		return new ResponseEntity<>(new RentACarDTO(rentACarService.edit(rentACarDTO)), HttpStatus.OK);
 	}
 	
 
@@ -172,6 +106,13 @@ public class RentACarController {
 		System.out.println(bring);
 
 		return new ResponseEntity<>(filijalaService.search(locationp, bring, pickUp, dropOff),HttpStatus.OK);
+
+	}
+
+	@RequestMapping(value="/rate",method=RequestMethod.POST,consumes="application/json")
+	public ResponseEntity<ResponseMessage> rateFilijala(@RequestBody OcenaDTO ocenaDTO){
+
+		return new ResponseEntity<>(filijalaService.rateFilijala(ocenaDTO),HttpStatus.OK);
 
 	}
 

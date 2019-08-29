@@ -12,20 +12,15 @@ import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 })
 export class ResDetailComponent implements OnInit {
 
-  @ViewChild('content') private content;
 
   @Input() res: any;
   @Input() view:boolean;
   @Output() clickedCen = new EventEmitter<boolean>();
   @Output() clickedRate = new EventEmitter<any>();
 
-  rateGroup: FormGroup;
-  clickedMap;
 
   test;
 
-  modalRef: any;
-  
 
   message = '';
 
@@ -33,11 +28,6 @@ export class ResDetailComponent implements OnInit {
 
   ngOnInit() {
 
-
-    this.rateGroup = this.formBuilder.group({
-      branchRate:new FormControl({value:"1",disabled:false}),
-      vehicleRate: "1"
-    });
 
   }
 
@@ -69,23 +59,6 @@ export class ResDetailComponent implements OnInit {
     }
   }
 
-  rate(res){
 
-    this.modalRef = this.modalService.open(this.content);
-
-  }
-
-  rateSubmit(){
-
-    console.log(this.rateGroup.value);
-
-    this.clickedRate.emit(this.rateGroup.value);
-
-  }
-
-  mapOpen(address){
-
-    this.clickedMap = address;
-  }
 
 }

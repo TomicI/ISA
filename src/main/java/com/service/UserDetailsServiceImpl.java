@@ -126,7 +126,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		userRepository.save(userOpt.get());
 	}
 
-	
 
 
 }

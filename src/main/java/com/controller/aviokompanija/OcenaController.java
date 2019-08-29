@@ -1,6 +1,7 @@
 package com.controller.aviokompanija;
 
 import com.dto.aviokompanija.OcenaDTO;
+import com.security.ResponseMessage;
 import com.service.aviokompanija.OcenaService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -76,5 +77,30 @@ public class OcenaController {
         ocenaService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @RequestMapping(value="/rentACar", method=RequestMethod.POST)
+    @ApiOperation(value = "Dodaje ocenu RentACar", httpMethod = "POST", produces = "application/json", consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 204, message = "No Content"),
+            @ApiResponse(code = 400, message = "Bad Request")
+    })
+    public ResponseEntity<?> saveRentACarRating(@RequestBody List<OcenaDTO> ocene ){
+        ocenaService.saveOcenaRentACar(ocene);
+        return new ResponseEntity<>(new ResponseMessage("Rating saved!"),HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/rentACar", method=RequestMethod.GET)
+    @ApiOperation(value = "Vraca ocenu RentACar", httpMethod = "GET", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 204, message = "No Content"),
+            @ApiResponse(code = 400, message = "Bad Request")
+    })
+    public ResponseEntity<List<OcenaDTO>> getRentACarRating(@RequestBody OcenaDTO ocena ){
+        return new ResponseEntity<>(ocenaService.getOcenaRentACar(ocena),HttpStatus.OK);
+    }
+
+
 
 }
