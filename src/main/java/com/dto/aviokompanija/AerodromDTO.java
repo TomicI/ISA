@@ -4,6 +4,11 @@ import com.model.aviokompanija.Aerodrom;
 import com.model.aviokompanija.Aviokompanija;
 import com.model.aviokompanija.Lokacija;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class AerodromDTO {
 
 	private Long id;

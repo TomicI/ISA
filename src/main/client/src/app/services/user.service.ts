@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RentACar, User, NewPass, RezervacijaRent } from '../model';
+import {RentACar, User, NewPass, RezervacijaRent, Invite} from '../model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,4 +28,18 @@ export class UserService {
     return await this.http.get<RezervacijaRent[]>(`${this.userAccount}/getResVehHist`).toPromise();
   }
 
+  searchFriends(s: Object):Promise<User[]>{
+    console.log("s " + s);
+    return this.http.get<User[]>(`${this.userAccount}/search/`+ s).toPromise();
+  }
+
+  friendRequests(): Promise<Invite[]>{
+    return this.http.get<Invite[]>(`${this.userAccount}/friendRequests`).toPromise();
+  }
+
+  async sendFriendrequest(invite: Object): Promise<Object> {
+    console.log(invite);
+    console.log('POST');
+    return this.http.post(`${this.userAccount}/sendRequest`, invite).toPromise();
+  }
 }

@@ -3,19 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import {Aerodrom} from '../model';
-import {Destinacija} from '../model';
 
 @Injectable()
 export class AerodromSService {
   aerodrom: Aerodrom;
   public AVIO_API='//localhost:8080/api/aerodrom';
-  public DEST_API='//localhost:8080/api/destinacija';
+
   constructor(private http: HttpClient) { }
 
   getAllAerodromi(): Observable<any> {
     return this.http.get(this.AVIO_API + '/lista');
   }
-  getAerodrom(id: number): Observable<Aerodrom> {
+  getAerodrom(id: number): Observable<Object> {
     console.log(this.AVIO_API+ '/' + id);
     return this.http.get(this.AVIO_API +'/'+id);
   }

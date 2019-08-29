@@ -15,7 +15,8 @@ public class Aerodrom {
 	
 	@Column
 	private String naziv;
-	
+
+
 	@ManyToOne
 	private Aviokompanija aviokompanija;
 	

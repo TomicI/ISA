@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { AerodromSService } from '../aerodrom-s/aerodrom-s.service';
 import { DestinacijaComponent} from '../destinacija/destinacija.component';
-import { Destinacija } from '../model';
+import { Lokacija } from '../model';
 import { Aerodrom } from '../model';
 @Component({
   selector: 'app-form-add-aerodrom',
@@ -16,13 +16,13 @@ export class FormAddAerodromComponent implements OnInit {
 
   regFormA: FormGroup;
   submitted = false;
-  destinacije: Observable<Destinacija[]>;
+  destinacije: Observable<Lokacija[]>;
   aerodrom: Aerodrom;
   constructor(
     private router: Router,
     private formBuilder: FormBuilder ,
     private aerodromService: AerodromSService,
-    private destinacija : DestinacijaComponent,
+    private destinacija : Lokacija,
     ) { }
 
   ngOnInit() {
@@ -44,6 +44,6 @@ export class FormAddAerodromComponent implements OnInit {
 
   onChange(value: any){
     console.log(value);
-    this.aerodrom.destinacijaID=value;
+    this.aerodrom.lokacija=value;
   }
 }

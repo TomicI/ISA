@@ -28,6 +28,9 @@ public class Karta {
 
 	@OneToOne
 	private Rezervacija rezervacija;
+
+	@ManyToOne
+	private Let let;
 	
 	public Karta() {
 		super();
@@ -74,5 +77,13 @@ public class Karta {
 
 	public void setRezervacija(Rezervacija rezervacija) {
 		this.rezervacija = rezervacija;
+	}
+
+	public Let getLet() {
+		return let;
+	}
+
+	public void setLet(Let let) {
+		this.let = let;
 	}
 }

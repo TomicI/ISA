@@ -1,48 +1,151 @@
+import * as moment from "moment";
+import _date = moment.unitOfTime._date;
+
 export class Aviokompanija {
-  constructor(
-    public id?: number,
-    public naziv?: string,
-    public adresa?: string,
-    public opis?: string,
-    public prosecnaOcena?: number) {
-  }
+  id: number;
+  naziv: string;
+  adresa: string;
+  opis: string;
+  prosecnaOcena: number;
+  lokacija: Lokacija;
+  constructor() { }
 
 }
 
 export class Aerodrom {
-  constructor(
-    public id?: number,
-    public nazivAerodroma?: string,
-    public destinacijaID?: number) {
-  }
+  id: number;
+  nazivAerodroma: string;
+  lokacija: Lokacija;
+  constructor() { }
 
 }
 
-export class Destinacija {
-  constructor(
-    public id?: number,
-    public nazivDestinacije?: string) {
-  }
+export class Lokacija {
+  id: number;
+  naziv: string;
+  geoSirina: number;
+  geoVisina: number;
+
+  constructor() { }
+
+}
+
+export class DodatnaUslugaAviokompanija {
+  id: number;
+  naziv: string;
+  opis: string;
+  cena: number;
+  aviokompanija: Aviokompanija;
+  karta: Karta;
+  constructor() { }
+
+}
+
+export class Karta {
+  id: number;
+  let: Let;
+  user: User;
+  prosecnaOcena: number;
+
+  constructor() { }
+
+}
+
+export class Ocena {
+  id: number;
+  let: Let;
+  user: User;
+  ocena: number;
+  aviokompanija: Aviokompanija;
+
+  constructor() { }
+
+}
+
+export class Prtljag {
+  id: number;
+  duzina: number;
+  sirina: number;
+  tezina: number;
+  cena: number;
+  aviokompanija: Aviokompanija;
+
+  constructor() { }
+
+}
+
+export class Putnik {
+  id: number;
+  let: Let;
+  user: User;
+  ocena: number;
+  aviokompanija: Aviokompanija;
+
+  constructor() { }
+
+}
+
+
+export class Sediste {
+  id: number;
+  kolona: number;
+  red: number;
+  zauzeto: boolean;
+  karta: Karta;
+  putnik: Putnik;
+  prtljag: Prtljag;
+  segment: Segment;
+  constructor() { }
+
+}
+
+
+export class Segment {
+  id: number;
+  duzina: number;
+  sirina: number;
+  redniBroj: number;
+  kofiguracija: KonfiguracijaLeta;
+  kategorija: KategorijaSedista;
+  constructor() { }
+
+}
+
+export class KategorijaSedista {
+  id: number;
+  naziv: string;
+  cena: number;
+  aviokompanija: Aviokompanija;
+
+  constructor() { }
+
+}
+
+export class KonfiguracijaLeta {
+  id: number;
+  naziv: string;
+  aviokompanija: Aviokompanija;
+
+  constructor() { }
 
 }
 
 export class Let {
-  constructor(
-    public id?: number,
-    public aerodromP?: Aerodrom,
-    public aerodromS?: Aerodrom,
-    public brojSedista?: number,
-    public datumP?: Date,
-    public datumS?: Date,
-    public vremeP?: String,
-    public vremeS?: String,
-    public aviokompanijaID?: number,
-    public presedanje?: Let,
-    public imaPresedanje?: Boolean,
-    public vremePutovanja?: String,
-    public duzinaPutovanja?: Number
-  ) {
-  }
+   id: number;
+   aerodrom: Aerodrom;
+   destinacija: Lokacija;
+   brojSedista: number;
+   vremePolaska: Date;
+   vremeDolaska: Date;
+   aviokompanijaID: number;
+   presedanja: string;
+   brojPresedanja: number;
+   vremePutovanja: string;
+   duzinaPutovanja: number
+   prosecnaOcena : number;
+   konfiguracijaLeta: KonfiguracijaLeta;
+    constructor()
+     { }
 }
 
 export class RentACar {
@@ -280,6 +383,15 @@ export class NewPass {
 
 }
 
+export class Invite{
+  id: number;
+  userSent: User;
+  userReceive: User;
+  dateSent: Date;
+  reservation: Rezervacija;
+
+  Inivte(){}
+}
 
 export enum Menjac {
   AUTO,

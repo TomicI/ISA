@@ -1,0 +1,16 @@
+<div align="center" class="container"  style=" width: 50%;  padding: 20px; margin-top: 50px" ><h2>Write first name or/and last name</h2></div>
+<div align="center" class="container"  style=" width: 50%;  padding: 20px; margin-top: 50px" ><input type="text" [(ngModel)]="pretraga"/><button (click)="pretrazi()"><i class="fa fa-search"></i></button> </div>
+
+<div  align="left" class="container"  style=" width: 50%;  padding: 20px; margin-top: 50px"  *ngIf="lista.length>0">
+<div *ngFor="let u of lista; let i = index" style=" width: 50%;  padding: 20px; margin-top: 30px">
+  <div><span>{{u.username}}</span><span style="  margin-left: 10px"><button (click)="dodaj(i)"><i class="fa fa-user-plus"></i></button></span></div>
+  <div>{{u.firstName}}</div>
+  <div>{{u.lastName}}</div>
+  <div>{{u.email}}</div>
+
+</div>
+</div>
+
+<div  align="center" class="container"  style=" width: 50%;  padding: 20px; margin-top: 50px"  *ngIf="lista.length==0 && p!=0">
+  <h2>User {{p2}} not found. Please try again. </h2> <i class="fa fa-sad-tear"></i>
+</div>

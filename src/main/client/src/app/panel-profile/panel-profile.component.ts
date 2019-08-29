@@ -1,4 +1,6 @@
-import { Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import { User} from "../model";
+import {UserService} from "../services/user.service";
 
 @Component({
   selector: 'app-panel-profile',
@@ -6,13 +8,19 @@ import { Component, OnInit} from '@angular/core';
   styleUrls: ['./panel-profile.component.css']
 })
 export class PanelProfileComponent implements OnInit {
-
-  constructor(
-  ) { }
+  user:User;
+  pom: any;
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
+    this.user=new User("", "", "", "", "", "", "", false, new Date());
+    this.userService.getUser().then((response: any) => {
+      this.user = response;
+      console.log(this.user); // Log here instead of outside the promise
+    })
 
   }
+
 
 
 }

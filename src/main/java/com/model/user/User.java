@@ -1,5 +1,6 @@
 package com.model.user;
 
+import com.dto.UserDTO;
 import com.model.*;
 import com.model.aviokompanija.Ocena;
 import com.model.aviokompanija.Putnik;

@@ -57,6 +57,7 @@ public class Let {
 	@JsonIgnore
 	@OneToMany(mappedBy = "let")
 	private Set<Ocena> ocene;
+
 	
 	public Let() {
 		super();

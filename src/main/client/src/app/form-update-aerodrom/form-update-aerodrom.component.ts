@@ -4,7 +4,7 @@ import { AerodromSService } from '../aerodrom-s/aerodrom-s.service';
 import {Aerodrom} from '../model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DestinacijaComponent} from '../destinacija/destinacija.component';
-import { Destinacija } from '../model';
+import { Lokacija } from '../model';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 export class FormUpdateAerodromComponent implements OnInit {
   @Input() aerodrom:Aerodrom;
   regFormA: FormGroup;
-  destinacije: Observable<Destinacija[]>;
+  destinacije: Observable<Lokacija[]>;
   submitted = false;
 
   constructor(
@@ -24,7 +24,7 @@ export class FormUpdateAerodromComponent implements OnInit {
     private formBuilder: FormBuilder ,
     private route: ActivatedRoute,
     private aerodromService: AerodromSService,
-    private destinacija : DestinacijaComponent) { }
+    private destinacija : Lokacija) { }
 
 
   ngOnInit() {
@@ -65,6 +65,6 @@ export class FormUpdateAerodromComponent implements OnInit {
 
   onChange(value: any){
     console.log(value);
-    this.aerodrom.destinacijaID=value;
+    this.aerodrom.lokacija.id=value;
   }
 }

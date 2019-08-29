@@ -67,6 +67,8 @@ import { VehicleComponent } from './vehicle/vehicle.component';
 import { AdminResetComponent } from './admin-reset/admin-reset.component';
 import { ReservationDetailsComponent } from './reservation-details/reservation-details.component';
 import { ReservationOverviewComponent } from './reservation-overview/reservation-overview.component';
+import { AviokomProfilComponent } from './aviokom-profil/aviokom-profil.component';
+import { AddFriendsComponent } from './add-friends/add-friends.component';
 
 
 @NgModule({
@@ -116,9 +118,12 @@ import { ReservationOverviewComponent } from './reservation-overview/reservation
     ResDetailComponent,
     MapComponent,
     VehicleComponent,
+    AviokomProfilComponent,
+    VehicleComponent,
     AdminResetComponent,
     ReservationDetailsComponent,
-    ReservationOverviewComponent
+    ReservationOverviewComponent,
+    AddFriendsComponent
 
   ],
   imports: [

@@ -4,8 +4,7 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 
 import { AerodromSService } from '../aerodrom-s/aerodrom-s.service';
-import { Aerodrom } from '../model';
-import { Destinacija } from '../model';
+import { Aerodrom, Lokacija } from '../model';
 @Component({
   selector: 'app-aerodrom',
   templateUrl: './aerodrom.component.html',
@@ -15,13 +14,13 @@ import { Destinacija } from '../model';
 export class AerodromComponent implements OnInit {
   @Input() aerodrom: Aerodrom;
 
-  destinacija: Destinacija;
+  destinacija: Lokacija;
   constructor(private route: ActivatedRoute,
     private router: Router,
     private aerodromService: AerodromSService) { }
 
   ngOnInit() {
-    this.destinacija=new Destinacija();
+    this.destinacija=new Lokacija();
     this.aerodrom=new Aerodrom();
     this.route.params.subscribe
     ( params =>  { const id = params['id'];

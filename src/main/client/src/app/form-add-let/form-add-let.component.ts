@@ -33,10 +33,8 @@
     ngOnInit() {
       this.pom1=new Let();
       this.let=new Let();
-      this.let.aerodromP=new Aerodrom();
-      this.let.aerodromS=new Aerodrom();
-      this.let.aerodromP.id=-1;
-      this.let.aerodromS.id=-1;
+      this.let.aerodrom=new Aerodrom();
+      this.let.aerodrom.id=-1;
       this.aerodromi=this.aerodromService.getAllAerodromi();
 
       this.route.params.subscribe
@@ -45,18 +43,16 @@
           this.let.aviokompanijaID=id;
         }});
       this.regFormA=this.formBuilder.group({
-        datumP: [''],
-        datumS: [''],
-        vremeP: [''],
-        vremeS: [''],
-        brojSedista: [''],
+        vremePolaska: [''],
+        vremeDolaska: [''],
+        konfiguracijaLeta: [''],
         vremePutovanja: [''],
         duzinaPutovanja: [''],
-        aerodromP:[''],
-        aerodromS:[''],
+        aerodrom:[''],
+        destinacija: [''],
         aviokompanijaID: [''],
         presedanje:[''],
-        imaPresedanje:['false']
+        brojPresedanja:['']
       })
     }
 
@@ -64,8 +60,7 @@
       this.submitted=true;
       //this.aerodrom.nazivAerodroma=this.regFormA.value.nazivAerodroma;
       
-      this.regFormA.value.aerodromP=this.let.aerodromP;
-      this.regFormA.value.aerodromS=this.let.aerodromS;
+      this.regFormA.value.aerodrom=this.let.aerodrom;
       console.log("presedanje " + this.pom1.id);
       console.log(this.pom1);
       this.regFormA.value.presedanje=this.pom1.id;
@@ -78,21 +73,21 @@
 
     onChange(value: any){
       console.log(value);
-      this.let.aerodromP.id=value;
+      this.let.aerodrom.id=value;
     }
 
-    onChange1(value: any){
+  /*  onChange1(value: any){
       console.log(value);
-      this.let.aerodromS.id=value;
-    }
+      this.let.aerodrom.id=value;
+    }*/
 
     dodajP(){
-      console.log("ima presedanje ");
+    /*  console.log("ima presedanje ");
       this.let.imaPresedanje=true;
       this.regFormA.value.imaPresedanje="true";
       this.onSubmit();
       
       this.router.navigateByUrl('letUpdate/'+(this.pom1.__zone_symbol__value.id-1));
-      
+     */
     }
   }

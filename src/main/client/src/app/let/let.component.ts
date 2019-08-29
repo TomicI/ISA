@@ -51,23 +51,24 @@ export class LetComponent implements OnInit {
     
     if(type=="undefined"){
       this.aerodromService.getAerodrom(aero).subscribe(aerodrom=>
-        this.aerodromP=aerodrom.nazivAerodroma
+        this.aerodromP=aerodrom
       )
       console.log(this.aerodromP)
       if(this.aerodromP=="undefined"){
         this.findAodromP(aero, "undefined");
       }
-      return this.aerodromP.nazivAerodroma;
+      return this.aerodromP.naziv;
     }else{
       console.log("ELSE ")
       this.aerodromService.getAerodrom(aero).subscribe(aerodrom=>
-        this.aerodromP=aerodrom.nazivAerodroma
+        this.aerodromP=aerodrom
+
       )
       if(this.aerodromP=="undefined"){
         this.findAodromP(aero, "undefined");
       }
       console.log(this.aerodromP)
-      return this.aerodromP.nazivAerodroma;
+      return this.aerodromP.naziv;
     }
     
     
@@ -97,23 +98,23 @@ export class LetComponent implements OnInit {
   findAerodromS(aero: number, type){
     if(type=="undefined"){
       this.aerodromService.getAerodrom(aero).subscribe(aerodrom=>
-        this.aerodromS=aerodrom.nazivAerodroma
+        this.aerodromS=aerodrom
       )
       console.log(this.aerodromS)
       if(this.aerodromS=="undefined"){
         this.findAerodromS(aero, "undefined");
       }
-      return this.aerodromS.nazivAerodroma;
+      return this.aerodromS.naziv;
     }else{
       console.log("ELSE ")
       this.aerodromService.getAerodrom(aero).subscribe(aerodrom=>
-        this.aerodromS=aerodrom.nazivAerodroma
+        this.aerodromS=aerodrom
       )
       if(this.aerodromS=="undefined"){
         this.findAerodromS(aero, "undefined");
       }
       console.log(this.aerodromS)
-      return this.aerodromS.nazivAerodroma;
+      return this.aerodromS.naziv;
     }
     
     /*this.aerodromService.getAerodrom(aero).subscribe((aerodrom:any) => {console.log(aerodrom)

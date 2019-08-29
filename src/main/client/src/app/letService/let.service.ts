@@ -15,7 +15,7 @@ export class LetService {
     return this.http.get(this.LET_API + '/lista');
   }
   
-  getLet(id: number): Observable<Object> {
+  getLet(id: number): Observable<any> {
     console.log(this.LET_API+ '/' + id);
     return this.http.get(this.LET_API +'/'+id);
   }

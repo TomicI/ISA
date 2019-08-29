@@ -33,16 +33,16 @@ export class FormUpdateLetComponent implements OnInit {
     
     this.regFormA=this.formBuilder.group({
       id:[''],
-      datumP: [''],
-      datumS: [''],
-      vremeP: [''],
-      vremeS: [''],
-      brojSedista: [''],
-      vremePutovanja:[''],
-      duzinaPutovanja:[''],
-      aerodromP:[''],
-      aerodromS:[''],
-      aviokompanijaID: ['']
+      vremePolaska: [''],
+      vremeDolaska: [''],
+      konfiguracijaLeta: [''],
+      vremePutovanja: [''],
+      duzinaPutovanja: [''],
+      aerodrom:[''],
+      destinacija: [''],
+      aviokompanijaID: [''],
+      presedanje:[''],
+      brojPresedanja:['']
     })
     this.route.params.subscribe
       ( params =>  { const id = params['id'];
@@ -51,16 +51,16 @@ export class FormUpdateLetComponent implements OnInit {
           letN=> {this.letP=letN
           this.regFormA=this.formBuilder.group({
             id:[this.letP.id],
-            datumP: [this.letP.datumP],
-            datumS: [this.letP.datumS],
-            vremeP: [this.letP.vremeP],
-            vremeS: [this.letP.vremeS],
-            brojSedista: [this.letP.brojSedista],
+            vremePolaska: [this.letP.vremePolaska],
+            vremeDolaska: [this.letP.vremeDolaska],
+            konfiguracijaLeta: [this.letP.konfiguracijaLeta],
             vremePutovanja: [this.letP.vremePutovanja],
             duzinaPutovanja: [this.letP.duzinaPutovanja],
-            aerodromP:[this.letP.aerodromP],
-            aerodromS:[this.letP.aerodromS],
-            aviokompanijaID: [this.letP.aviokompanijaID]
+            aerodrom:[this.letP.aerodrom],
+            destinacija: [this.letP.destinacija],
+            aviokompanijaID: [this.letP.aviokompanijaID],
+            presedanje:[this.letP.presedanja],
+            brojPresedanja:[this.letP.brojPresedanja]
           })
 
         })
@@ -73,18 +73,18 @@ export class FormUpdateLetComponent implements OnInit {
   onSubmit(){
     this.submitted=true;
     //this.aerodrom.nazivAerodroma=this.regFormA.value.nazivAerodroma;
-    this.regFormA.value.aerodromP=this.letP.aerodromP;
-    this.regFormA.value.aerodromS=this.letP.aerodromS;
+    this.regFormA.value.aerodrom=this.letP.aerodrom;
+    this.regFormA.value.destinacija=this.letP.destinacija;
     this.letService.updateLet(this.regFormA.value);
   }
 
   onChange(value: any){
     console.log(value);
-    this.letP.aerodromP.id=value;
+    this.letP.aerodrom.id=value;
   }
 
   onChange1(value: any){
     console.log(value);
-    this.letP.aerodromS.id=value;
+    this.letP.destinacija.id=value;
   }
 }

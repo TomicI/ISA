@@ -31,10 +31,12 @@ import { PanelAdminRentComponent } from './panel-admin-rent/panel-admin-rent.com
 import { PanelReservationRentComponent } from './panel-reservation-rent/panel-reservation-rent.component';
 import { VehicleComponent } from './vehicle/vehicle.component';
 import {NgModule} from "@angular/core";
+import {AviokomProfilComponent} from "./aviokom-profil/aviokom-profil.component";
 import {AdminResetComponent} from "./admin-reset/admin-reset.component";
 import {AuthGuard} from "./security/auth.guard";
 import {ReservationDetailsComponent} from "./reservation-details/reservation-details.component";
 import {ReservationOverviewComponent} from "./reservation-overview/reservation-overview.component";
+import {AddFriendsComponent} from "./add-friends/add-friends.component";
 
 
 
@@ -81,8 +83,10 @@ const routes: Routes = [
   { path: 'letUpdate/:id', component: FormUpdateLetComponent },
   { path: 'letAdd/:id', component: FormAddLetComponent },
   { path: 'letovi/:id', component: LetComponent },
+  { path: 'aviokompanijaProfil/:id', component: AviokomProfilComponent },
   { path: 'addAvioKom', component: FormDodajAviokomComponent },
-  { path: 'resetPassword',component: AdminResetComponent}
+  { path: 'resetPassword',component: AdminResetComponent},
+  { path: 'addFriends', component: AddFriendsComponent}
 ];
 
 @NgModule({

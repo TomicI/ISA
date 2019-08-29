@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { AerodromSService } from '../aerodrom-s/aerodrom-s.service';
-import { Destinacija } from '../model';
+import { Lokacija } from '../model';
 
 @Component({
   selector: 'app-destinacija',
@@ -13,7 +13,7 @@ import { Destinacija } from '../model';
 })
 export class DestinacijaComponent implements OnInit {
 
-  destinacije: Observable<Destinacija[]>;
+  destinacije: Observable<Lokacija[]>;
   constructor(private route: ActivatedRoute,
     private router: Router,
     private destinacijaService: AerodromSService ) { }

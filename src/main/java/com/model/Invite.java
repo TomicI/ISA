@@ -24,6 +24,14 @@ public class Invite {
     public Invite() {
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public User getUserSent() {
         return userSent;
     }
