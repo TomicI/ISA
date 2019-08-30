@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -11,10 +11,22 @@ export class RatingService {
 
   constructor(private http: HttpClient) { }
 
+  getPermission(params): Observable<any> {
+
+    return this.http.get(`${this.RatingURL}/permissionRent`,{ params: params } );
+  }
+
   saveRentACarRating(ratings: Object): Observable<any> {
     return this.http.post(`${this.RatingURL}/rentACar`,ratings );
   }
-  getRentACarRating(ratings: Object): Observable<any> {
-    return this.http.get(`${this.RatingURL}/rentACar`,ratings );
+  getRating(params): Observable<any> {
+
+    return this.http.get(`${this.RatingURL}/ratings`,{ params: params } );
   }
+
+  getAllRating(params):Observable<any> {
+
+    return this.http.get(`${this.RatingURL}/allRating`,{ params: params } );
+  }
+
 }

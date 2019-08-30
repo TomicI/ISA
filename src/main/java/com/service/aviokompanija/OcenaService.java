@@ -1,8 +1,10 @@
 package com.service.aviokompanija;
 
+import com.dto.RateDTO;
 import com.dto.aviokompanija.OcenaDTO;
 import com.model.Rezervacija;
 import com.model.aviokompanija.Ocena;
+import com.model.user.User;
 import com.repository.aviokompanija.OcenaRepository;
 import com.service.FilijalaService;
 import com.service.RezervacijaService;
@@ -10,6 +12,8 @@ import com.service.UserService;
 import com.service.VoziloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,6 +33,9 @@ public class OcenaService {
 
     @Autowired
     private FilijalaService filijalaService;
+
+    @Autowired
+    private UserService userService;
 
     private ListeDTO liste = new ListeDTO();
 
@@ -50,12 +57,16 @@ public class OcenaService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ocena ne postoji");
     }
 
-    public Optional<Ocena> findByRezervacijaAndVozilo(Long rezervacija_id,Long vozilo_id){
-        return ocenaRepository.findByRezervacijaIdAndVoziloId(rezervacija_id,vozilo_id);
+    public Optional<Ocena> findByRezervacijaAndVozilo(Long rezervacija_id,Long vozilo_id,Long user_id){
+        return ocenaRepository.findByRezervacijaIdAndVoziloIdAndUserId(rezervacija_id,vozilo_id,user_id);
     }
 
-    public Optional<Ocena> findByRezervacijaAndFilijala(Long rezervacija_id,Long filijala_id){
-        return ocenaRepository.findByRezervacijaIdAndFilijalaId(rezervacija_id,filijala_id);
+    public Optional<Ocena> findByRezervacijaAndFilijala(Long rezervacija_id,Long filijala_id,Long user_id){
+        return ocenaRepository.findByRezervacijaIdAndFilijalaIdAndUserId(rezervacija_id,filijala_id,user_id);
+    }
+
+    public List<Ocena> findByRezervavijaAndUser(Long rezervacija_id,Long user_id){
+        return ocenaRepository.findByRezervacijaIdAndUserId(rezervacija_id,user_id);
     }
 
     public Ocena saveOcena(Ocena ocena){
@@ -90,6 +101,37 @@ public class OcenaService {
         ocenaRepository.deleteById(id);
     }
 
+    public RateDTO getRates(Long rezervacija_id){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        List<Ocena> ocene = findByRezervavijaAndUser(rezervacija_id,user.getId());
+
+        RateDTO rateDTO = new RateDTO();
+
+        for (Ocena o:ocene){
+            if (o.getAviokompanija()!=null){
+                rateDTO.setAvio(o.getOcena());
+            }else if (o.getLet()!=null){
+                rateDTO.setLet(o.getOcena());
+            }else if (o.getVozilo()!=null){
+                rateDTO.setVoz(o.getOcena());
+            }else if (o.getFilijala()!=null){
+                rateDTO.setFil(o.getOcena());
+            }
+        }
+
+        return rateDTO;
+    }
+
+    public void getPermissionRent(Long res_id,Long veh_id,Long fil_id){
+
+        voziloService.ratePermission(res_id,veh_id);
+        filijalaService.ratePermission(res_id,fil_id);
+
+    }
+
     public void saveOcenaRentACar(List<OcenaDTO> ocenaDTOS){
 
         if (ocenaDTOS.isEmpty()){
@@ -101,39 +143,28 @@ public class OcenaService {
         filijalaService.rateFilijala(ocenaDTOS.get(1));
     }
 
-    public List<OcenaDTO> getOcenaRentACar(OcenaDTO ocenaDTO){
-
-        if (ocenaDTO==null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-
-        Optional<Ocena> ocena = findByRezervacijaAndFilijala(ocenaDTO.getRezervacijaDTO().getId(),ocenaDTO.getFilijalaDTO().getId());
-
-        if (!ocena.isPresent()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ocena not found!");
-        }
+    public List<OcenaDTO> getOcenaRentACar(Long res_id,Long veh_id,Long fil_id){
 
         List<OcenaDTO> ocenaDTOS = new ArrayList<>();
 
-        OcenaDTO ocenaTemp = new OcenaDTO();
+        if (veh_id!=null){
+            OcenaDTO ocenaDTOVozilo = voziloService.getRate(res_id,veh_id);
 
-        ocenaTemp.setOcena(ocena.get().getOcena());
-        ocenaTemp.setFilijalaDTO(ocenaDTO.getFilijalaDTO());
-
-
-        ocenaDTOS.add(ocenaDTO);
-
-        ocena = findByRezervacijaAndVozilo(ocenaDTO.getRezervacijaDTO().getId(),ocenaDTO.getVoziloDTO().getId());
-
-        if (!ocena.isPresent()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ocena not found!");
+            if (ocenaDTOVozilo!=null){
+                ocenaDTOS.add(ocenaDTOVozilo);
+            }
         }
 
-        ocenaTemp.setOcena(ocena.get().getOcena());
-        ocenaTemp.setVoziloDTO(ocenaDTO.getVoziloDTO());
-        ocenaTemp.setFilijalaDTO(null);
+        if (fil_id!=null){
 
-        ocenaDTOS.add(ocenaDTO);
+            OcenaDTO ocenaDTOFil = filijalaService.getRate(res_id,fil_id);
+
+            if (ocenaDTOFil!=null){
+                ocenaDTOS.add(ocenaDTOFil);
+            }
+
+        }
+
 
         return ocenaDTOS;
 

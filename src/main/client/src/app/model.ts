@@ -398,6 +398,26 @@ export class NewPass {
 
 }
 
+export class Rate{
+
+  avio:number;
+  letoc:number;
+  fil:number;
+  voz:number;
+  hot:number;
+  sob:number;
+
+
+  constructor(avio: number, letoc: number, fil: number, voz: number, hot: number, sob: number) {
+    this.avio = avio;
+    this.letoc = letoc;
+    this.fil = fil;
+    this.voz = voz;
+    this.hot = hot;
+    this.sob = sob;
+  }
+}
+
 export class Invite{
   id: number;
   userSent: User;

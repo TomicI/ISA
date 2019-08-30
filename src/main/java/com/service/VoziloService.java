@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.dto.VoziloDTO;
 import com.dto.aviokompanija.OcenaDTO;
 import com.model.Rezervacija;
 import com.model.RezervacijaRentACar;
@@ -13,6 +14,8 @@ import com.security.ResponseMessage;
 import com.service.aviokompanija.OcenaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.model.Vozilo;
@@ -63,6 +66,25 @@ public class VoziloService {
 		voziloRepository.deleteById(id);
 	}
 
+	public boolean ratePermission(Long resid,Long vehid){
+
+        Rezervacija rezervacija = rezervacijaService.getOne(resid);
+        Vozilo vozilo = getOne(vehid);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        if (rezervacija.getDatumVremeS().after(new Date())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation didn't end!");
+        }
+
+        if (ocenaService.findByRezervacijaAndVozilo(rezervacija.getId(),vozilo.getId(),user.getId()).isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vehicle already rated!");
+        }
+
+        return true;
+
+    }
+
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
 	public ResponseMessage rateVehicle(OcenaDTO ocenaDTO){
 
@@ -73,11 +95,13 @@ public class VoziloService {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation didn't end!");
 		}
 
-		if (ocenaService.findByRezervacijaAndVozilo(rezervacija.getId(),vozilo.getId()).isPresent()){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+		if (ocenaService.findByRezervacijaAndVozilo(rezervacija.getId(),vozilo.getId(),user.getId()).isPresent()){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vehicle already rated!");
 		}
 
-		User user = userService.getOne(ocenaDTO.getUserDTO().getId());
 
 		Ocena ocena = new Ocena();
 
@@ -90,6 +114,28 @@ public class VoziloService {
 		ocenaService.saveOcena(ocena);
 		return new ResponseMessage("Vehicle rate saved!");
 	}
+
+	public OcenaDTO getRate(Long resid,Long vehid){
+
+        Rezervacija rezervacija = rezervacijaService.getOne(resid);
+        Vozilo vozilo = getOne(vehid);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        Optional<Ocena> optionalOcena = ocenaService.findByRezervacijaAndVozilo(rezervacija.getId(),vozilo.getId(),user.getId());
+
+        if (optionalOcena.isPresent()){
+
+            OcenaDTO ocenaDTO = new OcenaDTO();
+            ocenaDTO.setOcena(optionalOcena.get().getOcena());
+            ocenaDTO.setVoziloDTO(new VoziloDTO(vozilo));
+
+            return ocenaDTO;
+        }
+
+        return null;
+
+    }
 
 
 

@@ -24,6 +24,8 @@ export class ResDetailComponent implements OnInit {
 
   message = '';
 
+
+
   constructor(private tokenStorage: TokenService, private reservationService: ReservationService , private router: Router,private modalService: NgbModal,private formBuilder: FormBuilder) { }
 
   ngOnInit() {

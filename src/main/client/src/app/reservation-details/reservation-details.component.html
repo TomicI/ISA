@@ -44,9 +44,10 @@
 
             <div class="card-footer">
               <div class="d-flex">
+                <div *ngIf="rates"> Branch : {{rates.fil}} Vehicle : {{rates.voz}}</div>
                 <div class="ml-auto">
                   <p class="mb-1 text-danger" *ngIf="rentACarRes.otkazana"> CANCELED </p>
-                  <button *ngIf="!rentACarRes.otkazana" type="button" class="btn btn-outline-secondary btn-sm" (click)="rate(rentACarRes)">Rate</button>
+                  <button *ngIf="!rentACarRes.otkazana && rateRent " type="button" class="btn btn-outline-secondary btn-sm" (click)="rate(rentACarRes)">Rate</button>
                 </div>
               </div>
             </div>

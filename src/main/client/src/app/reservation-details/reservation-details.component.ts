@@ -1,11 +1,12 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {Ocena, Rezervacija, RezervacijaRent, Vozilo} from "../model";
+import {Ocena, Rate, Rezervacija, RezervacijaRent, Vozilo} from "../model";
 import {ReservationService} from "../services/reservation.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {VehicleService} from "../services/vehicle.service";
 import {RatingService} from "../services/rating.service";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-reservation-details',
@@ -19,7 +20,11 @@ export class ReservationDetailsComponent implements OnInit {
   rateGroup: FormGroup;
   clickedMap;
 
+  rateRent:boolean;
+
   modalRef: any;
+
+  rates:Rate;
 
   params: any = {};
 
@@ -36,8 +41,6 @@ export class ReservationDetailsComponent implements OnInit {
 
   ngOnInit() {
 
-
-
     this.rateGroup = this.formBuilder.group({
       branchRate:new FormControl({value:"1",disabled:false}),
       vehicleRate: "1"
@@ -50,22 +53,30 @@ export class ReservationDetailsComponent implements OnInit {
         this.reservation = data;
         this.rentACarRes=data.rezervacijaRentACarDTO;
 
+        let params = new HttpParams();
+        params = params.append('resid',this.reservation.id.toString());
+
+        this.ratingService.getAllRating(params).subscribe(data=>{
+          this.rates=data;
+        });
+
+        params = params.append('vehid',this.rentACarRes.voziloDTO.id.toString());
+        params = params.append('filid',this.rentACarRes.filijalaDTO.id.toString());
+
+
+        this.ratingService.getPermission(params).subscribe(data=>{
+          this.rateRent = true;
+        },error=>{
+          this.rateRent = false;
+        });
+
         let ocenaTemp:Ocena;
 
-        ocenaTemp = new Ocena(
-          null,
-          null,
-          null,
-          null,
-          null,
-          this.rentACarRes.voziloDTO,
-          this.reservation.userDTO,
-          this.rentACarRes.filijalaDTO,
-          this.reservation);
-
-        this.ratingService.getRentACarRating(ocenaTemp).subscribe(data=>{
+       /* this.ratingService.getRating(params).subscribe(data=>{
           console.log(data);
-        });
+        });*/
+
+
 
         console.log(data);
       },error1 => {
@@ -117,10 +128,13 @@ export class ReservationDetailsComponent implements OnInit {
 
     this.ratingService.saveRentACarRating(ocene).subscribe(data=>{
       console.log(data);
+      this.ngOnInit();
     },error1 => {
       alert(error1.error.message);
     } ) ;
 
+
+    this.modalRef.close();
 
    /* this.vehicleService.rateVehicle(ocena).subscribe(data=>{
       console.log(data);

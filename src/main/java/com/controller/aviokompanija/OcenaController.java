@@ -1,5 +1,6 @@
 package com.controller.aviokompanija;
 
+import com.dto.RateDTO;
 import com.dto.aviokompanija.OcenaDTO;
 import com.security.ResponseMessage;
 import com.service.aviokompanija.OcenaService;
@@ -78,6 +79,18 @@ public class OcenaController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value="/permissionRent", method=RequestMethod.GET)
+    @ApiOperation(value = "Vraca ocenu RentACar", httpMethod = "GET", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 204, message = "No Content"),
+            @ApiResponse(code = 400, message = "Bad Request")
+    })
+    public ResponseEntity<?> getPermission(@RequestParam(value="resid") Long resid,@RequestParam(value="vehid") Long vehid,@RequestParam(value="filid")Long filid){
+        ocenaService.getPermissionRent(resid,vehid,filid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @RequestMapping(value="/rentACar", method=RequestMethod.POST)
     @ApiOperation(value = "Dodaje ocenu RentACar", httpMethod = "POST", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
@@ -90,16 +103,29 @@ public class OcenaController {
         return new ResponseEntity<>(new ResponseMessage("Rating saved!"),HttpStatus.OK);
     }
 
-    @RequestMapping(value="/rentACar", method=RequestMethod.GET)
+    @RequestMapping(value="/ratings", method=RequestMethod.GET)
     @ApiOperation(value = "Vraca ocenu RentACar", httpMethod = "GET", produces = "application/json",consumes = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 204, message = "No Content"),
             @ApiResponse(code = 400, message = "Bad Request")
     })
-    public ResponseEntity<List<OcenaDTO>> getRentACarRating(@RequestBody OcenaDTO ocena ){
-        return new ResponseEntity<>(ocenaService.getOcenaRentACar(ocena),HttpStatus.OK);
+    public ResponseEntity<List<OcenaDTO>> getRentACarRating(@RequestParam(value="resid") Long resid,@RequestParam(value="vehid") Long vehid,@RequestParam(value="filid")Long filid){
+        return new ResponseEntity<>(ocenaService.getOcenaRentACar(resid,vehid,filid),HttpStatus.OK);
     }
+
+    @RequestMapping(value="/allRating", method=RequestMethod.GET)
+    @ApiOperation(value = "Vraca ocene", httpMethod = "GET", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 204, message = "No Content"),
+            @ApiResponse(code = 400, message = "Bad Request")
+    })
+    public ResponseEntity<RateDTO> getRentACarRating(@RequestParam(value="resid") Long resid){
+        return new ResponseEntity<>(ocenaService.getRates(resid),HttpStatus.OK);
+    }
+
+
 
 
 

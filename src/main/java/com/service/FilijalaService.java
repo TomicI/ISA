@@ -14,6 +14,8 @@ import com.service.aviokompanija.OcenaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.repository.FilijalaRepository;
@@ -297,6 +299,25 @@ public class FilijalaService {
         return 0;
     }
 
+    public boolean ratePermission(Long resid,Long filid){
+
+        Rezervacija rezervacija = rezervacijaService.getOne(resid);
+        Filijala filijala = getOne(filid);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        if (rezervacija.getDatumVremeS().after(new Date())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation didn't end!");
+        }
+
+        if (ocenaService.findByRezervacijaAndFilijala(rezervacija.getId(),filijala.getId(),user.getId()).isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch already rated!");
+        }
+
+        return true;
+
+    }
+
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
     public ResponseMessage rateFilijala(OcenaDTO ocenaDTO){
 
@@ -307,11 +328,12 @@ public class FilijalaService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation didn't end!");
         }
 
-        if (ocenaService.findByRezervacijaAndFilijala(rezervacija.getId(),filijala.getId()).isPresent()){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        if (ocenaService.findByRezervacijaAndFilijala(rezervacija.getId(),filijala.getId(),user.getId()).isPresent()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch already rated!");
         }
-
-        User user = userService.getOne(ocenaDTO.getUserDTO().getId());
 
         Ocena ocena = new Ocena();
 
@@ -327,6 +349,31 @@ public class FilijalaService {
 
     }
 
+    public OcenaDTO getRate(Long resid,Long filid){
+
+        Rezervacija rezervacija = rezervacijaService.getOne(resid);
+        Filijala filijala = getOne(filid);
+
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        Optional<Ocena> optionalOcena = ocenaService.findByRezervacijaAndFilijala(rezervacija.getId(),filijala.getId(),user.getId());
+
+        if (optionalOcena.isPresent()){
+
+            OcenaDTO ocenaDTO = new OcenaDTO();
+            ocenaDTO.setOcena(optionalOcena.get().getOcena());
+            ocenaDTO.setFilijalaDTO(new FilijalaDTO(filijala));
+
+            return ocenaDTO;
+        }
+
+        return null;
+
+    }
+
+
     public Filijala insert(FilijalaDTO filijalaDTO){
 
         if (filijalaDTO.getRentACarDTO()==null) {
@@ -341,6 +388,8 @@ public class FilijalaService {
 
         return save(filijala);
     }
+
+
 
     public Filijala edit(FilijalaDTO filijalaDTO){
         Filijala filijala = getOne(filijalaDTO.getId());

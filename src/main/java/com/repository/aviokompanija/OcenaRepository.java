@@ -8,8 +8,11 @@ import java.util.Optional;
 
 public interface OcenaRepository extends JpaRepository<Ocena, Long> {
 
-    Optional<Ocena> findByRezervacijaIdAndVoziloId(Long rezervacija_id, Long vozilo_id);
+    Optional<Ocena> findByRezervacijaIdAndVoziloIdAndUserId(Long rezervacija_id, Long vozilo_id,Long user_id);
 
-    Optional<Ocena> findByRezervacijaIdAndFilijalaId(Long rezervacija_id, Long filijala_id);
+    Optional<Ocena> findByRezervacijaIdAndFilijalaIdAndUserId(Long rezervacija_id, Long filijala_id,Long user_id);
+
+    List<Ocena> findByRezervacijaIdAndUserId(Long rezervacija_id,Long user_id);
+
 
 }
