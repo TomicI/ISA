@@ -69,6 +69,7 @@ import { ReservationDetailsComponent } from './reservation-details/reservation-d
 import { ReservationOverviewComponent } from './reservation-overview/reservation-overview.component';
 import { AviokomProfilComponent } from './aviokom-profil/aviokom-profil.component';
 import { AddFriendsComponent } from './add-friends/add-friends.component';
+import { RouteCheckComponent } from './route-check/route-check.component';
 
 
 @NgModule({
@@ -123,7 +124,8 @@ import { AddFriendsComponent } from './add-friends/add-friends.component';
     AdminResetComponent,
     ReservationDetailsComponent,
     ReservationOverviewComponent,
-    AddFriendsComponent
+    AddFriendsComponent,
+    RouteCheckComponent
 
   ],
   imports: [

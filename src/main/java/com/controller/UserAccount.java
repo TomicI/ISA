@@ -96,6 +96,15 @@ public class UserAccount {
 
     }
 
+
+    @RequestMapping(value = "/checkReset",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ADMIN_RENT') or hasRole('ADMIN_HOTEL') or hasRole('ADMIN_AVIO')")
+    public ResponseEntity<?> checkReset(){
+        userService.checkReset();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
     @RequestMapping(value = "/getResVeh",method = RequestMethod.GET)
     @PreAuthorize("hasRole('USER_REG')")
     public ResponseEntity<?> getResVeh(Principal user) {

@@ -47,6 +47,8 @@ export class AuthService {
   changeAdminPass(newPass: NewPass): Promise<string> {
     return this.http.post<string>(`${this.adminPassWordUrl}`, newPass).toPromise();
   }
+  
+  
 
   async changeName(user: User): Promise<JwtResponse> {
     return await  this.http.post<JwtResponse>(`${this.nameUrl}`, user).toPromise();

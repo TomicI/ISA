@@ -20,6 +20,8 @@ export class AdminResetComponent implements OnInit {
 
   submitError = false;
 
+  message;
+
   constructor(private userService: UserService,
               private fb: FormBuilder,
               private modalService: NgbModal,
@@ -46,7 +48,18 @@ export class AdminResetComponent implements OnInit {
       this.passFormGroup.get('password').value
     );
 
-    this.authService.changeAdminPass(newPass).catch(error => {
+    this.authService.changeAdminPass(newPass).then(data=>{
+
+      this.message = data.message;
+
+      setTimeout(() => {
+        this.message = '';
+        window.location.href = "home";
+      }, 4000);
+
+
+      
+    }).catch(error => {
       this.errorSub = error.error.error;
 
       this.submitError = true;

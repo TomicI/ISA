@@ -24,6 +24,9 @@ export class AuthGuard implements CanActivate {
         }
       }
 
+      window.location.href='/home';
+      return false;
+
     }
 
     // if (this.authService.){

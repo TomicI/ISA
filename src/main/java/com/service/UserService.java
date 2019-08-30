@@ -9,6 +9,8 @@ import com.model.user.Friend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.model.RentACar;
@@ -110,6 +112,17 @@ public class UserService {
         temp.setLastPasswordResetDate(tempu.getLastPasswordResetDate());
 
         return temp;
+    }
+
+    public void checkReset(){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = getByUsername(auth.getName());
+
+        if (!user.isReset()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
     }
     
 	

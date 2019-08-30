@@ -64,4 +64,8 @@ export class UserService {
     console.log('PUT');
     return this.http.put<User>(`${this.userAccount}/deleteFriend`, user).toPromise();
   }
+
+  checkReset():Observable<any>{
+    return this.http.get<any>(`${this.userAccount}/checkReset`);
+  }
 }
