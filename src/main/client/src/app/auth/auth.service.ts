@@ -44,8 +44,8 @@ export class AuthService {
     return this.http.post<JwtResponse>(`${this.passWordUrl}`, newPass).toPromise();
   }
 
-  changeAdminPass(newPass: NewPass): Promise<string> {
-    return this.http.post<string>(`${this.adminPassWordUrl}`, newPass).toPromise();
+  changeAdminPass(newPass: NewPass): Promise<any> {
+    return this.http.post<any>(`${this.adminPassWordUrl}`, newPass).toPromise();
   }
   
   

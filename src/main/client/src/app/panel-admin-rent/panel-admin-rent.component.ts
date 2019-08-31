@@ -323,7 +323,8 @@ export class PanelAdminRentComponent implements OnInit {
   onClickedVozilo() {
     console.log('Submit kliknut vozilo!');
     this.modalRef.close();
-    this.showVehicles(this.filijala);
+    //this.showVehicles(this.filijala);
+    this.getAllVozila();
 
   }
 
