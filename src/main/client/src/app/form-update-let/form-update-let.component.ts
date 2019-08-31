@@ -18,7 +18,7 @@ export class FormUpdateLetComponent implements OnInit {
   @Input() letP:Let
   regFormA: FormGroup;
   submitted = false;
-  aerodromi: Observable<Aerodrom[]>
+  aerodromi: Aerodrom[]=[];
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -29,7 +29,7 @@ export class FormUpdateLetComponent implements OnInit {
 
   ngOnInit() {
     this.letP=new Let();
-    this.aerodromi=this.aerodromService.getAllAerodromi();
+    this.aerodromService.getAllAerodromi().then(pom=>{this.aerodromi=pom;})
     
     this.regFormA=this.formBuilder.group({
       id:[''],
@@ -47,8 +47,8 @@ export class FormUpdateLetComponent implements OnInit {
     this.route.params.subscribe
       ( params =>  { const id = params['id'];
       if (id) {
-        this.letService.getLet(id).subscribe(
-          letN=> {this.letP=letN
+        this.letService.getLet(id).then(letN=>{
+          this.letP=letN
           this.regFormA=this.formBuilder.group({
             id:[this.letP.id],
             vremePolaska: [this.letP.vremePolaska],
@@ -58,11 +58,9 @@ export class FormUpdateLetComponent implements OnInit {
             duzinaPutovanja: [this.letP.duzinaPutovanja],
             aerodrom:[this.letP.aerodrom],
             destinacija: [this.letP.destinacija],
-            aviokompanijaID: [this.letP.aviokompanijaID],
             presedanje:[this.letP.presedanja],
             brojPresedanja:[this.letP.brojPresedanja]
           })
-
         })
       }
      

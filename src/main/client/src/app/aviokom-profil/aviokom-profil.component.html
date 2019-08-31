@@ -1,3 +1,14 @@
-<p>
-  aviokom-profil works!
-</p>
+<div  align="center" class="jumbotron container col-sm-6"  style=" width: auto;  padding: 20px; margin-top: 50px; ">
+  <div align="left" style="width: 70%">
+  <div align="left"><span><h2>Profil aviokompanije: </h2></span> <span style="margin-left: 10px"><a href="http://localhost:4200/avio-edit/{{aviokomapnija.id}}"><i class="fa fa-edit"></i></a></span></div>
+
+  <div align="left"><span>Naizv: </span><span >  {{aviokomapnija.naziv}}</span>  </div>
+
+  <div align="left"><span>Adresa: </span> <span >  {{aviokomapnija.adresa}}</span></div>
+
+  <div align="left"> <span>Opis: </span> <span >  {{aviokomapnija.opis}}</span></div>
+  </div>
+  <div><a href="http://localhost:4200/konfig-list/{{aviokomapnija.id}}">Konfiguracije leta</a></div>
+  <div><a href="http://localhost:4200/addKonf/{{aviokomapnija.id}}">Dodaj konfiguraciju leta</a></div>
+  <div><a href="http://localhost:4200/addKatSed/{{aviokomapnija.id}}">Dodaj kategoriju sedista</a></div>
+</div>

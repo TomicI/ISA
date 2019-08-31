@@ -2,8 +2,10 @@ package com.service.aviokompanija;
 
 import com.dto.aviokompanija.SegmentDTO;
 import com.model.aviokompanija.KategorijaSedista;
+import com.model.aviokompanija.KonfiguracijaLeta;
 import com.model.aviokompanija.Segment;
 import com.repository.aviokompanija.KategorijaSedistaRepository;
+import com.repository.aviokompanija.KonfiguracijaLetaRepository;
 import com.repository.aviokompanija.SegmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,9 @@ public class SegmentService {
 
     @Autowired
     private KategorijaSedistaRepository kategorijaSedistaRepository;
+
+    @Autowired
+    private KonfiguracijaLetaRepository konfiguracijaLetaRepository;
 
     private ListeDTO liste = new ListeDTO();
 
@@ -42,14 +47,15 @@ public class SegmentService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Segment ne postoji");
     }
 
-    public SegmentDTO create(SegmentDTO segmentDTO){
+    public SegmentDTO create(Long id, SegmentDTO segmentDTO){
         List<Segment> segmenti = segmentRepository.findAll();
 
         Segment segment = new Segment();
         segment.setDuzina(segmentDTO.getDuzina());
         segment.setSirina(segmentDTO.getSirina());
-        segment.setRedniBroj(segmenti.size() + 1);
-        if(segmentDTO.getKategorija().getId() != null){
+
+
+        if(segmentDTO.getKategorija() != null){
             Optional<KategorijaSedista> kategorijaSedista = kategorijaSedistaRepository.findById(segmentDTO.getKategorija().getId());
             if(!kategorijaSedista.isPresent())
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Kategorija sedista ne postoji");
@@ -58,6 +64,14 @@ public class SegmentService {
             kategorijaSedistaRepository.save(kategorijaSedista.get());
         }
 
+        if(id != null) {
+            Optional<KonfiguracijaLeta> konfiguracijaLeta = konfiguracijaLetaRepository.findById(id);
+            if (!konfiguracijaLeta.isPresent())
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Konfiguracija leta ne postoji");
+
+            segment.setRedniBroj(konfiguracijaLeta.get().getSegmenti().size() + 1);
+            segment.setKonfiguracija(konfiguracijaLeta.get());
+        }
         segmentRepository.save(segment);
         return segmentDTO;
     }

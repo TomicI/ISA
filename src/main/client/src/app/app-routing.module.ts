@@ -37,6 +37,10 @@ import {AuthGuard} from "./security/auth.guard";
 import {ReservationDetailsComponent} from "./reservation-details/reservation-details.component";
 import {ReservationOverviewComponent} from "./reservation-overview/reservation-overview.component";
 import {AddFriendsComponent} from "./add-friends/add-friends.component";
+import {FormKonfLetaComponent} from "./form-konf-leta/form-konf-leta.component";
+import {KonfigListComponent} from "./konfig-list/konfig-list.component";
+import {AddKatSedistaComponent} from "./add-kat-sedista/add-kat-sedista.component";
+import {AddSegmentComponent} from "./add-segment/add-segment.component";
 
 
 const routes: Routes = [
@@ -104,8 +108,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: {roles: ['ROLE_ADMIN_RENT', 'ROLE_ADMIN_AVIO', 'ROLE_ADMIN_HOTEL']}
   },
-  {path: 'addFriends', component: AddFriendsComponent}
-];
+  {path: 'addFriends', component: AddFriendsComponent},
+  { path: 'addKonf/:id', component: FormKonfLetaComponent},
+  { path: 'konfig-list/:id', component: KonfigListComponent},
+  { path: 'addKatSed/:id', component: AddKatSedistaComponent},
+  { path: 'addSegment/:id', component: AddSegmentComponent}
+  ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

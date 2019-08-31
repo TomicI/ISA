@@ -43,15 +43,15 @@ public class SegmentController {
         return new ResponseEntity<>(segmentService.findById(id),HttpStatus.OK);
     }
 
-    @RequestMapping(method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/{id}", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Kreira segment", httpMethod = "POST", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = SegmentDTO.class),
             @ApiResponse(code = 204, message = "No Content"),
             @ApiResponse(code = 400, message = "Bad Request")
     })
-    public ResponseEntity<SegmentDTO> create(@RequestBody SegmentDTO segmentDTO){
-        return new ResponseEntity<>(segmentService.create(segmentDTO), HttpStatus.CREATED);
+    public ResponseEntity<SegmentDTO> create(@PathVariable(value="id") Long id, @RequestBody SegmentDTO segmentDTO){
+        return new ResponseEntity<>(segmentService.create(id, segmentDTO), HttpStatus.CREATED);
     }
 
     @RequestMapping(method=RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)

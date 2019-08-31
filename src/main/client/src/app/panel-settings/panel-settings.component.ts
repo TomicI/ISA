@@ -216,6 +216,7 @@ export class PanelSettingsComponent implements OnInit {
         null,
         null,
         null,
+        null,
         null
       );
 
@@ -231,6 +232,7 @@ export class PanelSettingsComponent implements OnInit {
         null,
         null,
         this.profileFormGroup.get('input1').value,
+        null,
         null,
         null,
         null,
@@ -260,6 +262,7 @@ export class PanelSettingsComponent implements OnInit {
         null,
         null,
         this.profileFormGroup.get('input1').value,
+        null,
         null,
         null,
         null,

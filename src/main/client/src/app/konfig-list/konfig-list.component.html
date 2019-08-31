@@ -1,0 +1,8 @@
+<div class="container">
+  <h1>Lista konfiguracija leta</h1>
+  <div  align="left" class="container"  style=" width: 50%;  padding: 20px; margin-top: 50px"  >
+    <div *ngFor="let konf of konfig" style=" width: 50%;  padding: 20px; margin-top: 30px">
+      <div align="left"><span><h3>{{konf.naziv}} </h3></span> <span style="margin-left: 10px"><a href="http://localhost:4200/addSegment/{{konf.id}}">Dodaj segment</a></span></div>
+    </div>
+  </div>
+</div>

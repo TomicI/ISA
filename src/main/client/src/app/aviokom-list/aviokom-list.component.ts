@@ -13,17 +13,18 @@ import { Aviokompanija } from '../model';
 })
 export class AviokomListComponent implements OnInit {
 	
-	aviokompanije: Observable<Aviokompanija[]>;
+	aviokompanije: Aviokompanija[]=[];
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private aviokompanijaSercive: AviokompanijaService) { }
+              private aviokompanijaService: AviokompanijaService) { }
+
 
   ngOnInit() {
- 	this.getAviokomapnije();
+    this.aviokompanijaService.getAll().then(pom=>{
+      console.log(pom);
+      this.aviokompanije=pom;
+    });
   }
-	
-	getAviokomapnije(){
-		this.aviokompanije=this.aviokompanijaSercive.getAll();
-	}
+
 
 }

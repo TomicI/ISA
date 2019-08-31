@@ -1,0 +1,11 @@
+<form [formGroup]="formKonf" (ngSubmit)="onSubmit()" >
+  <div class="form-group form-inline">
+    <label for="naziv" class="control-label col-sm-4">Naziv </label>
+    <div class="col-sm-8 text-left">
+      <input class="form-control shadow" name="naziv" id="naziv" type="text" formControlName="naziv">
+    </div>
+  </div>
+  <div class="col-sm-offset-2">
+    <button type="submit" class="btn btn-primary">Sacuvaj</button>
+  </div>
+</form>

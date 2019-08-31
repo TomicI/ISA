@@ -15,13 +15,14 @@ public class UserDTO {
     private String lastName;
     private String email;
     private boolean enabled;
+    private Long avioID;
 
     public UserDTO(User user){
-        this(user.getId(),user.getPoints(),user.getBrojPasosa(),user.getCity(),user.getPhone(),user.getUsername(),user.getFirstName(),user.getLastName(),user.getEmail(),user.isEnabled());
+        this(user.getId(),user.getPoints(),user.getBrojPasosa(),user.getCity(),user.getPhone(),user.getUsername(),user.getFirstName(),user.getLastName(),user.getEmail(),user.isEnabled(), user.getAviokompanija().getId());
     }
 
 
-    public UserDTO(Long id, int points, String brojPasosa, String city, String phone, String username,String firstName, String lastName, String email, boolean enabled) {
+    public UserDTO(Long id, int points, String brojPasosa, String city, String phone, String username,String firstName, String lastName, String email, boolean enabled, Long avioID) {
         this.id = id;
         this.points = points;
         this.brojPasosa = brojPasosa;
@@ -32,6 +33,7 @@ public class UserDTO {
         this.lastName = lastName;
         this.email = email;
         this.enabled = enabled;
+        this.avioID=avioID;
     }
 
     public Long getId() {
@@ -120,5 +122,13 @@ public class UserDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Long getAvioID() {
+        return avioID;
+    }
+
+    public void setAvioID(Long avioID) {
+        this.avioID = avioID;
     }
 }

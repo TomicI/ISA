@@ -22,8 +22,20 @@ public class SegmentDTO {
         this.setDuzina(duzina);
         this.setSirina(sirina);
         this.setRedniBroj(redniBroj);
-        this.setKonfiguracija(new KonfiguracijaLetaDTO(konfiguracijaLeta));
-        this.setKategorija(new KategorijaSedistaDTO(kategorijaSedista));
+        if(konfiguracijaLeta!=null) {
+            System.out.println("Konf je null :O");
+            this.setKonfiguracija(new KonfiguracijaLetaDTO(konfiguracijaLeta));
+        }
+        else
+            this.setKonfiguracija(null);
+
+        if(kategorija!=null) {
+            System.out.println("Kat je null :O");
+            this.setKategorija(new KategorijaSedistaDTO(kategorijaSedista));
+
+        }
+        else
+            this.setKonfiguracija(null);
     }
 
     public Long getId() {

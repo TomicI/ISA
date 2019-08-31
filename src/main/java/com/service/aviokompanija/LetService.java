@@ -38,6 +38,9 @@ public class LetService {
 	@Autowired
 	private OcenaRepository ocenaRepository;
 
+	@Autowired
+	private AerodromRepository aerodromRepository;
+
 	private ListeDTO liste = new ListeDTO();
 
 	public List<LetDTO> getAll(){
@@ -70,6 +73,18 @@ public class LetService {
 		let.setVremeDolaska(letDTO.getVremeDolaska());
 		let.setProsecnaOcena(2.5);
 		let.setVrstaLeta(letDTO.getVrstaLeta());
+
+
+		if(letDTO.getAerodrom() != null){
+			Optional<Aerodrom> aerodrom = aerodromRepository.findById(letDTO.getAerodrom().getId());
+
+			if(!aerodrom.isPresent())
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aerodrom ne postoji");
+
+			aerodrom.get().getLetovi().add(let);
+			let.setAerodrom(aerodrom.get());
+			aerodromRepository.save(aerodrom.get());
+		}
 
 		if(letDTO.getDestinacija() != null){
 			Optional<Lokacija> lokacija = lokacijaRepository.findById(letDTO.getDestinacija().getId());

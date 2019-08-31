@@ -69,7 +69,11 @@ import { ReservationDetailsComponent } from './reservation-details/reservation-d
 import { ReservationOverviewComponent } from './reservation-overview/reservation-overview.component';
 import { AviokomProfilComponent } from './aviokom-profil/aviokom-profil.component';
 import { AddFriendsComponent } from './add-friends/add-friends.component';
-import { RouteCheckComponent } from './route-check/route-check.component';
+import { FormKonfLetaComponent } from './form-konf-leta/form-konf-leta.component';
+import { KonfigListComponent } from './konfig-list/konfig-list.component';
+import { AddSegmentComponent } from './add-segment/add-segment.component';
+import { AddKatSedistaComponent } from './add-kat-sedista/add-kat-sedista.component';
+import {RouteCheckComponent} from "./route-check/route-check.component";
 
 
 @NgModule({
@@ -125,7 +129,12 @@ import { RouteCheckComponent } from './route-check/route-check.component';
     ReservationDetailsComponent,
     ReservationOverviewComponent,
     AddFriendsComponent,
-    RouteCheckComponent
+    RouteCheckComponent,
+    AddFriendsComponent,
+    FormKonfLetaComponent,
+    KonfigListComponent,
+    AddSegmentComponent,
+    AddKatSedistaComponent
 
   ],
   imports: [

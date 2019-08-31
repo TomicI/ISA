@@ -13,7 +13,7 @@ export class PanelProfileComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   ngOnInit() {
-    this.user=new User("", "", "", "", "", "", "", false, new Date());
+    this.user=new User("", "", "", "", "", "", "", false, new Date(), null);
     this.userService.getUser().then((response: any) => {
       this.user = response;
       console.log(this.user); // Log here instead of outside the promise

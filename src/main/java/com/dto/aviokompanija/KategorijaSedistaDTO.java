@@ -18,7 +18,10 @@ public class KategorijaSedistaDTO {
         this.setId(id);
         this.setNaziv(naziv);
         this.setCena(cena);
-        this.setAviokompanija(new AviokompanijaDTO(aviokompanija));
+        if(aviokompanija!=null)
+            this.setAviokompanija(new AviokompanijaDTO(aviokompanija));
+        else
+            this.setAviokompanija(null);
     }
 
     public Long getId() {

@@ -21,8 +21,8 @@ export class LetComponent implements OnInit {
     onChange : EventEmitter<void>= new EventEmitter<void>(); 
 
 
-  letovi: Observable<Let[]>;
-  aerodromi: Observable<Aerodrom[]>
+  letovi: Let[]=[];
+  aerodromi: Aerodrom[]=[];
   aerodromP:any;
   aerodromS: any;
   constructor(
@@ -34,25 +34,27 @@ export class LetComponent implements OnInit {
 
   ngOnInit() {
     console.log("ng sad ");
-    this.aerodromi=this.aerodromService.getAllAerodromi();
+    this.aerodromService.getAllAerodromi().then(pom=>{this.aerodromi=pom});
     this.route.params.subscribe
       ( params =>  { const id = params['id'];
       if (id) {
-        this.letovi=this.letService.getLetove(id);
+        this.letService.getLetove(id).then(pom=>{
+          this.letovi=pom;
+          console.log(this.letovi);
+
+        })
         
-        console.log(this.letovi);
+
       }});
 
     
   }
-  
+  /*
   
   findAodromP(aero: number, type){
     
     if(type=="undefined"){
-      this.aerodromService.getAerodrom(aero).subscribe(aerodrom=>
-        this.aerodromP=aerodrom
-      )
+      this.aerodromService.getAerodrom(aero).then(pom=>this.aerodromP=pom;)
       console.log(this.aerodromP)
       if(this.aerodromP=="undefined"){
         this.findAodromP(aero, "undefined");
@@ -93,8 +95,8 @@ export class LetComponent implements OnInit {
        console.log(`Pronadjeno aerodrom kraj P'${this.aerodromP$}' `);
        return  this.aerodromP$.nazivAerodroma;*/
     //   return this.aerodromService.getAerodromIme(aero);
-  }
-  
+ // }
+ /*
   findAerodromS(aero: number, type){
     if(type=="undefined"){
       this.aerodromService.getAerodrom(aero).subscribe(aerodrom=>
@@ -120,7 +122,7 @@ export class LetComponent implements OnInit {
     /*this.aerodromService.getAerodrom(aero).subscribe((aerodrom:any) => {console.log(aerodrom)
       this.aerodromS$=aerodrom;
     });*/
-   }
+ //  }
 
    
   

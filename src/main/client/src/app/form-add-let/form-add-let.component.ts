@@ -1,58 +1,118 @@
-  import { Component, OnInit, Input } from '@angular/core';
-  import { FormGroup, FormBuilder } from '@angular/forms';
-  import { Observable } from 'rxjs';
-  import { Router, ActivatedRoute } from '@angular/router';
-  import { AerodromSService } from '../aerodrom-s/aerodrom-s.service';
-  import { Aerodrom } from '../model';
-  import { Aviokompanija } from '../model';
-  import { Let } from '../model';
-  import { LetService } from '../letService/let.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AerodromSService} from '../aerodrom-s/aerodrom-s.service';
+import {Aerodrom, KonfiguracijaLeta, Let, Lokacija, VrstaLeta} from '../model';
+import {LetService} from '../letService/let.service';
+import {AviokompanijaService} from "../aviokompanija/aviokompanija.service";
+import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
 
-  @Component({
+@Component({
     selector: 'app-form-add-let',
     templateUrl: './form-add-let.component.html',
     styleUrls: ['./form-add-let.component.css'],
-    providers: [AerodromSService, LetService]
+    providers: [AerodromSService, LetService, AviokompanijaService]
   })
   export class FormAddLetComponent implements OnInit {
     @Input() avikompanija:number
     regFormA: FormGroup;
     submitted = false;
-    aerodromi: Observable<Aerodrom[]>;
+    aerodromi: Aerodrom[]=[];
+    destinacije: Lokacija[]=[];
+    vrstaLeta: VrstaLeta;
+
+
+    konfig: KonfiguracijaLeta[]=[];
+
     let: Let;
     pom: Let;
     pom1: any;
+    date:Date;
+
+    arrayOfHours:any[] = ['00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30',
+      '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00'
+      , '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'
+      , '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'];
+
+    arrayOfHoursP: any[] = [];
+
+    arrayOfHoursD: string[] = ['00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30',
+      '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00'
+      , '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30'
+      , '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'];
+
+    fromDate: NgbDate;
+    toDate: NgbDate;
+
+
+
+
     constructor(
       private router: Router,
       private route: ActivatedRoute,
       private formBuilder: FormBuilder ,
       private aerodromService: AerodromSService,
-      private letService:LetService
+      private letService:LetService,
+      private calendar: NgbCalendar,
+      private aviokompanijaService: AviokompanijaService
     ) { }
 
     ngOnInit() {
+      this.date = new Date();
+      this.let=new Let();
+      this.let.aerodrom=new Aerodrom();
+      this.let.konfiguracijaLeta=new KonfiguracijaLeta();
+      this.let.destinacija=new Lokacija();
+      for (var temp of this.arrayOfHours){
+        this.date = new Date();
+        const timeP = temp.split(':');
+        this.date.setHours(timeP[0]);
+        this.date.setMinutes(timeP[1]);
+
+
+        if (this.date > new Date()){
+          console.log(this.date);
+          this.arrayOfHoursP.push(temp);
+        }
+
+      }
+
+      this.fromDate = this.calendar.getToday();
+      this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
+
+
       this.pom1=new Let();
       this.let=new Let();
       this.let.aerodrom=new Aerodrom();
       this.let.aerodrom.id=-1;
-      this.aerodromi=this.aerodromService.getAllAerodromi();
+      this.aerodromService.getAllAerodromi().then(pom=>{
+        this.aerodromi=pom;
+      })
+
+      this.letService.getAllLokacije().then(pom=>{this.destinacije=pom})
 
       this.route.params.subscribe
         ( params =>  { const id = params['id'];
         if (id) {
-          this.let.aviokompanijaID=id;
+          this.aviokompanijaService.getKonfiguracije(id).then(pom=>
+          {
+            this.konfig=pom;
+          })
         }});
       this.regFormA=this.formBuilder.group({
         vremePolaska: [''],
         vremeDolaska: [''],
-        konfiguracijaLeta: [''],
         vremePutovanja: [''],
         duzinaPutovanja: [''],
         aerodrom:[''],
         destinacija: [''],
-        aviokompanijaID: [''],
-        presedanje:[''],
-        brojPresedanja:['']
+        presedanja:[''],
+        brojPresedanja:[''],
+        konfiguracijaLeta: [''],
+        opis:[''],
+        vrstaLeta:[''],
+        timePolaska: [''],
+        timeDolaska: ['']
       })
     }
 
@@ -61,20 +121,60 @@
       //this.aerodrom.nazivAerodroma=this.regFormA.value.nazivAerodroma;
       
       this.regFormA.value.aerodrom=this.let.aerodrom;
-      console.log("presedanje " + this.pom1.id);
+     /* console.log("presedanje " + this.pom1.id);
       console.log(this.pom1);
-      this.regFormA.value.presedanje=this.pom1.id;
-      this.regFormA.value.aviokompanijaID=this.let.aviokompanijaID;
-      
-      this.pom1=this.letService.saveLet(this.regFormA.value);
-      console.log(this.pom1);
-      console.log("ovoooo " + this.pom1.__zone_symbol__value.presedanje);
+      this.regFormA.value.presedanje=this.pom1.id;*/
+
+     this.let=this.regFormA.value;
+
+     this.let.vremePolaska.setDate(this.regFormA.value.vremePolaska);
+     this.let.vremePolaska.setHours(this.regFormA.value.timePolaska.split(":")[0]);
+     this.let.vremePolaska.setMinutes(this.regFormA.value.timePolaska.split(":")[1]);
+     this.let.vremeDolaska.setDate(this.regFormA.value.vremeDolaska);
+     this.let.vremeDolaska.setHours(this.regFormA.value.timeDolaska.split(":")[0]);
+     this.let.vremeDolaska.setMinutes(this.regFormA.value.timeDolaska.split(":")[1]);
+
+     console.log("Vrednsoti let ");
+     console.log(this.let);
+
+      this.letService.saveLet(this.regFormA.value).then(pom=>
+      {
+        console.log(pom);
+      })
+
+     // console.log("ovoooo " + this.pom1.__zone_symbol__value.presedanje);
     }
 
-    onChange(value: any){
+    onChangeA(value: any){
       console.log(value);
       this.let.aerodrom.id=value;
     }
+
+    onChangeL(value: any){
+      console.log(value);
+      this.let.destinacija.id=value;
+    }
+
+    onChangeVL(value: any){
+      console.log(value);
+      if(value==1)
+        this.let.vrstaLeta=VrstaLeta.JEDAN_PRAVAC;
+      if(value==2)
+        this.let.vrstaLeta=VrstaLeta.POVRATNI;
+      if(value==3)
+        this.let.vrstaLeta=VrstaLeta.VISE_DESTINACIJA;
+    }
+
+    onChangeK(value: any){
+      console.log(value);
+
+      this.aviokompanijaService.getKonfiguracija(value).then(pom=>{
+        console.log(pom);
+        this.let.konfiguracijaLeta=pom;
+      })
+    }
+
+
 
   /*  onChange1(value: any){
       console.log(value);
@@ -89,5 +189,19 @@
       
       this.router.navigateByUrl('letUpdate/'+(this.pom1.__zone_symbol__value.id-1));
      */
+    }
+
+    onDateSelected() {
+
+      console.log('Promena');
+
+      this.toDate = this.calendar.getNext(this.regFormA.get('vremePolaska').value, 'd', 1);
+      this.regFormA.setValue({
+        vremePolaska: this.regFormA.get('vremePolaska').value,
+        vremeDolaska: this.calendar.getNext(this.regFormA.get('vremeDolaska').value, 'd', 1),
+        timePolaska: this.regFormA.get('timePolaska').value,
+        timeDolaska: this.regFormA.get('timeDolaska').value
+      });
+
     }
   }

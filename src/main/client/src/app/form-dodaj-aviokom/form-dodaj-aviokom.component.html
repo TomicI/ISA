@@ -9,39 +9,40 @@
 </head>
 <body>
   <br/>
-<div class="jumbotron container text-center col-sm-6">
-    <h2 class="text-center" >Unos nove aviokompanije</h2>
-  <form [formGroup]="regForm" (ngSubmit)="onSubmit()" >
+  <div *ngIf="user.avioID==null">
+    <div class="jumbotron container text-center col-sm-6">
+        <h2 class="text-center" >Unos nove aviokompanije</h2>
+      <form [formGroup]="regForm" (ngSubmit)="onSubmit()" >
 
-    <div class="form-group form-inline">
-      <label for="naziv" class="control-label col-sm-4">Naziv </label>
-      <div class="col-sm-8 text-left">
-      <input class="form-control shadow" name="naziv" id="naziv" type="text" formControlName="naziv">
+        <div class="form-group form-inline">
+          <label for="naziv" class="control-label col-sm-4">Naziv </label>
+          <div class="col-sm-8 text-left">
+            <input class="form-control shadow" name="naziv" id="naziv" type="text" formControlName="naziv">
+          </div>
+        </div>
+        <div class="form-group form-inline">
+          <label for="adresa" class="control-label col-sm-4">Adresa</label>
+          <div class="col-sm-8 text-left">
+            <input class="form-control shadow" name="adresa" id="adresa" type="text" formControlName="adresa">
+          </div>
+        </div>
+        <div class="form-group form-inline">
+          <label for="opis" class="control-label col-sm-4">Opis</label>
+          <div class="col-sm-8 text-left">
+            <input class="form-control shadow" name="opis" id="opis" type="text" formControlName="opis">
+          </div>
+        </div>
+
+        <div class="col-sm-offset-2">
+          <button type="submit" class="btn btn-primary">Sacuvaj</button>
+        </div>
+      </form>
     </div>
-    </div>
-    <div class="form-group form-inline">
-      <label for="adresa" class="control-label col-sm-4">Adresa</label>
-      <div class="col-sm-8 text-left">
-      <input class="form-control shadow" name="adresa" id="adresa" type="text" formControlName="adresa">
-    </div>
-    </div>
-    <div class="form-group form-inline">
-      <label for="opis" class="control-label col-sm-4">Opis</label>
-      <div class="col-sm-8 text-left">
-      <input class="form-control shadow" name="opis" id="opis" type="text" formControlName="opis">
-    </div>
-    </div>
-    <div class="form-group form-inline">
-      <label for="prosecnaOcena" class="control-label col-sm-4">Prosecna ocena</label>
-      <div class="col-sm-8 text-left">
-      <input class="form-control shadow" name="prosecnaOcena" id="prosecnaOcena" type="number" formControlName="prosecnaOcena">
-    </div>
-    </div>
-    
-    <div class="col-sm-offset-2"> 
-    <button type="submit" class="btn btn-primary">Sacuvaj</button>
   </div>
-  </form>
-</div>
+
+  <div  align="center" class="container"  style=" width: 50%;  padding: 20px; margin-top: 50px"  *ngIf="user.avioID!=null">
+   <div><span><h2>You already have aircompany! Update info </h2> </span><span style="  margin-left: 10px"><a href="localhost:4200/avio-edit/{{user.avioID}}"><i class="fa fa-edit"></i></a></span></div>
+
+  </div>
 </body>
 </html>

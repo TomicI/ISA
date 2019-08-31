@@ -19,6 +19,8 @@ public class LetDTO {
 	private AerodromDTO aerodrom;
 	private LokacijaDTO destinacija;
 	private KonfiguracijaLetaDTO konfiguracijaLeta;
+	private String timePolaska;
+	private String timeDolaska;
 
 	
 	public LetDTO(Let let) {
@@ -148,5 +150,21 @@ public class LetDTO {
 
 	public void setKonfiguracijaLeta(KonfiguracijaLetaDTO konfiguracijaLeta) {
 		this.konfiguracijaLeta = konfiguracijaLeta;
+	}
+
+	public String getTimePolaska() {
+		return timePolaska;
+	}
+
+	public void setTimePolaska(String timePolaska) {
+		this.timePolaska = timePolaska;
+	}
+
+	public String getTimeDolaska() {
+		return timeDolaska;
+	}
+
+	public void setTimeDolaska(String timeDolaska) {
+		this.timeDolaska = timeDolaska;
 	}
 }

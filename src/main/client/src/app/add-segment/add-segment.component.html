@@ -1,0 +1,26 @@
+<form [formGroup]="formSeg" (ngSubmit)="onSubmit()" >
+  <div class="form-group form-inline">
+    <label for="duzina" class="control-label col-sm-4">Duzina: </label>
+    <div class="col-sm-8 text-left">
+      <input class="form-control shadow" name="duzina" id="duzina" type="number" formControlName="duzina">
+    </div>
+  </div>
+  <div class="form-group form-inline">
+    <label for="sirina" class="control-label col-sm-4">Sirina: </label>
+    <div class="col-sm-8 text-left">
+      <input class="form-control shadow" name="sirina" id="sirina" type="number" formControlName="sirina">
+    </div>
+  </div>
+
+  <div class="form-group form-inline">
+    <label for="kategorija" class="control-label col-sm-4">Kategorija: </label>
+    <div class="col-sm-8 text-left">
+      <select  class="form-control" name="kategorija" (change)="onChange($event.target.value)">
+
+        <option *ngFor="let k of kateg" [value]="k.id">{{k.naziv}}</option>
+      </select></div>
+  </div>
+  <div class="col-sm-offset-2">
+    <button type="submit" class="btn btn-primary">Sacuvaj</button>
+  </div>
+</form>

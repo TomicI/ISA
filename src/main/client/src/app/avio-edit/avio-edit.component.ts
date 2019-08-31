@@ -177,11 +177,11 @@ export class AvioEditComponent implements OnInit {
 
 
   deleteAk(id){
-    this.aviokompanijaService.deleteAviokompanija(id).subscribe((aviokompanija: any) =>{
+    this.aviokompanijaService.deleteAviokompanija(id).then(pom=>{
       console.log('Uspesno obrisano! ');
       this.router.navigateByUrl('aviokom-list');
-      this.aviokompanije.getAviokomapnije();
-    });
+
+    })
 
   }
   updateAk(id){

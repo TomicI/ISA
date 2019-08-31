@@ -1,6 +1,8 @@
 package com.controller.aviokompanija;
 
 import com.dto.aviokompanija.*;
+import com.model.user.User;
+import com.service.UserService;
 import com.service.aviokompanija.AviokompanijaService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -9,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -20,6 +25,7 @@ public class AviokompanijaController {
 
 	@Autowired
 	private AviokompanijaService aviokompanijaService;
+
 
 	@RequestMapping(method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "Vraca sve aviokompanije", httpMethod = "GET", produces = "application/json")
@@ -50,6 +56,7 @@ public class AviokompanijaController {
 			@ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<AviokompanijaDTO> create(@RequestBody AviokompanijaDTO aviokompanijaDTO){
 		return new ResponseEntity<>(aviokompanijaService.create(aviokompanijaDTO), HttpStatus.CREATED);
 	}
@@ -204,15 +211,15 @@ public class AviokompanijaController {
 		return new ResponseEntity<>(aviokompanijaService.oceni(id,userId,ocena),HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "{id}/postavi_lokaciju/{location_id}", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiOperation(value = "Kreira let za prosledjeni aerodrom", httpMethod = "POST", produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "{id}/postavi_lokaciju", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Kreira let za prosledjeni aerodrom", httpMethod = "PUT", produces = "application/json", consumes = "application/json")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "OK", response = LokacijaDTO.class),
 			@ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
-	public ResponseEntity<LokacijaDTO> postaviLokaciju(@PathVariable(value = "id") Long id, @PathVariable(value = "location_id") Long lokacija ){
-		return new ResponseEntity<>(aviokompanijaService.postaviLokaciju(id, lokacija), HttpStatus.OK);
+	public ResponseEntity<LokacijaDTO> postaviLokaciju(@PathVariable(value = "id") Long id, @RequestBody LokacijaDTO lokacija ){
+		return new ResponseEntity<>(aviokompanijaService.postaviLokaciju(id, lokacija.getId()), HttpStatus.OK);
 	}
 
 

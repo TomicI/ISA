@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { AviokompanijaService } from '../aviokompanija/aviokompanija.service';
 
 import { Router } from '@angular/router';
+import {Aviokompanija, User} from "../model";
+import {UserService} from "../services/user.service";
 
 @Component({
   selector: 'app-form-dodaj-aviokom',
@@ -15,15 +17,20 @@ export class FormDodajAviokomComponent implements OnInit {
 
   regForm: FormGroup;
   submitted = false;
+  aviokompanija: Aviokompanija;
+
 
   constructor(
     private router: Router,
     private formBuilder: FormBuilder ,
-    private aviokompanijaService: AviokompanijaService
+    private aviokompanijaService: AviokompanijaService,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
-    console.log('Uslo u save !')
+    console.log('Uslo u save !');
+
+
     this.regForm=this.formBuilder.group({
       naziv: [''],
       adresa: [''],
@@ -36,7 +43,10 @@ export class FormDodajAviokomComponent implements OnInit {
 
   onSubmit(){
     this.submitted=true;
-    this.aviokompanijaService.saveAviokompanija(this.regForm.value);
-    this.router.navigateByUrl('aviokom-list');
+    this.aviokompanijaService.saveAviokompanija(this.regForm.value).then(pom=>
+      {
+        this.router.navigateByUrl('aviokom-list/');
+      }
+    )
   }
 }

@@ -38,21 +38,21 @@ export class FormUpdateAerodromComponent implements OnInit {
       ( params =>  { const id = params['id'];
       if (id) {
         console.log(`aerodrom with id '${id}' `);
-        this.aerodromService.getAerodrom(id).subscribe((aerodrom: any) => {
-          
-        console.log(`aerodrom with name `+ aerodrom.destinacijaID);
+        this.aerodromService.getAerodrom(id).then(aerodrom=>{
+          console.log(`aerodrom with name `+ aerodrom.nazivAerodroma);
           if (aerodrom) {
             this.aerodrom=aerodrom;
             this.regFormA=this.formBuilder.group({
               nazivAerodroma: aerodrom.nazivAerodroma,
-              
+
             })
-            
+
           } else {
             console.log(`aerodrom with id '${id}' not found `);
-          }
+          }})
 
-        });
+
+
       }
     });
   }

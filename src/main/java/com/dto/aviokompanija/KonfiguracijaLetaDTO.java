@@ -12,7 +12,10 @@ public class KonfiguracijaLetaDTO {
     public KonfiguracijaLetaDTO(Long id, String naziv, Aviokompanija aviokompanija){
         this.setId(id);
         this.setNaziv(naziv);
-        this.setAviokompanija(new AviokompanijaDTO(aviokompanija));
+        if(aviokompanija!=null)
+            this.setAviokompanija(new AviokompanijaDTO(aviokompanija));
+        else
+            this.setAviokompanija(null);
 
     }
 

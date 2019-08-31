@@ -2,6 +2,7 @@ package com.model.user;
 
 import com.dto.UserDTO;
 import com.model.*;
+import com.model.aviokompanija.Aviokompanija;
 import com.model.aviokompanija.Ocena;
 import com.model.aviokompanija.Putnik;
 
@@ -73,9 +74,10 @@ public class User implements UserDetails {
     @JoinColumn(name = "rent_id", unique = true)
     private RentACar rentACar;
 
-	/*@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "avio_id", unique = true)
-	private Aviokompanija aviokompanija;*/
+	private Aviokompanija aviokompanija;
 
     /*@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<RezervacijaRentACar> rezervacije = new HashSet<RezervacijaRentACar>();*/
@@ -258,16 +260,16 @@ public class User implements UserDetails {
     /**
      * @return the aviokompanija
      */
-	/*public Aviokompanija getAviokompanija() {
+    public Aviokompanija getAviokompanija() {
 		return aviokompanija;
 	}
 
 	/**
 	 * @param aviokompanija the aviokompanija to set
 	 */
-/*	public void setAviokompanija(Aviokompanija aviokompanija) {
+	public void setAviokompanija(Aviokompanija aviokompanija) {
 		this.aviokompanija = aviokompanija;
-	}*/
+	}
 
     public List<Rezervacija> getRezervacija() {
         return rezervacija;

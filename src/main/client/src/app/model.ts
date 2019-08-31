@@ -126,13 +126,16 @@ export class Let {
    brojSedista: number;
    vremePolaska: Date;
    vremeDolaska: Date;
-   aviokompanijaID: number;
    presedanja: string;
    brojPresedanja: number;
    vremePutovanja: string;
    duzinaPutovanja: number
    prosecnaOcena : number;
    konfiguracijaLeta: KonfiguracijaLeta;
+   opis: string;
+   vrstaLeta: VrstaLeta;
+   timePolaska: string;
+   timeDolaska: string;
     constructor()
      { }
 }
@@ -344,10 +347,11 @@ export class User {
   city: string;
   reset: boolean;
   lastPasswordResetDate: Date;
+  avioID: number;
 
 
   constructor(firstName: string, lastName: string, username: string, email: string, password: string, phone: string, city: string,
-              reset: boolean, lastPasswordResetDate: Date) {
+              reset: boolean, lastPasswordResetDate: Date, avioID: number) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.username = username;
@@ -357,6 +361,7 @@ export class User {
     this.city = city;
     this.reset = reset;
     this.lastPasswordResetDate = lastPasswordResetDate;
+    this.avioID=avioID;
   }
 
 }
@@ -443,4 +448,10 @@ export enum StatusRes {
   PickUp,
   Canceled,
   DropOff
+}
+
+export enum VrstaLeta {
+  POVRATNI,
+  JEDAN_PRAVAC,
+  VISE_DESTINACIJA
 }

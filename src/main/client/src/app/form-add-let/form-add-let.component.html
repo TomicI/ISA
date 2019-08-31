@@ -13,12 +13,57 @@
     <h2 class="text-center" >Dodavanje leta</h2>
   <form [formGroup]="regFormA" (ngSubmit)="onSubmit()" >
 
-    <div class="form-group form-inline">
+
+
+
+    <div class="form-group col-8" align="center">
+      <div class="input-group">
+        <input class="form-control" [readonly]="true" [minDate]="fromDate" name="d2" ngbDatepicker #d2="ngbDatepicker"
+               [formControlName]="'vremePolaska'">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary calendar" (click)="d2.toggle()" type="button"><i
+            class="fas fa-calendar"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group col-2">
+      <select class="custom-select" id="pickupTime" [formControlName]="'timePolaska'">
+        <option *ngFor="let hour of arrayOfHoursP" [value]="hour">
+          {{hour}}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group col-8" align="center">
+      <div class="input-group">
+        <input class="form-control" [readonly]="true" [minDate]="toDate" name="d3" ngbDatepicker #d3="ngbDatepicker"
+               [formControlName]="'vremeDolaska'">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary calendar" (click)="d3.toggle()" type="button"><i
+            class="fas fa-calendar"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group col-2">
+      <select class="custom-select" id="dropoffTime" [formControlName]="'timeDolaska'">
+        <option *ngFor="let hour of arrayOfHoursD" [value]="hour">
+          {{hour}}
+        </option>
+      </select>
+    </div>
+
+
+
+
+   <!-- <div class="form-group form-inline">
       <label for="dP" class="control-label col-sm-4">Datum polaska: </label>
       <div class="col-sm-8 text-left">
-      <input class="form-control shadow" name="datumP" id="datumP" type="date" formControlName="datumP">
-        </div>
+        <input class="form-control shadow" name="datumP" id="datumP" type="date" formControlName="datumP">
+      </div>
     </div>
+
 
     <div class="form-group form-inline">
         <label for="vP" class="control-label col-sm-4">Vreme polaska: </label>
@@ -40,33 +85,35 @@
           <input class="form-control shadow" name="vremeS" id="vremeS" type="text" formControlName="vremeS">
             </div>
         </div>
-      
+      -->
 
     <div class="form-group form-inline">
       <label for="aerP" class="control-label col-sm-4">Polazi sa: </label>
       <div class="col-sm-8 text-left">
-    <select  class="form-control" name="aerodromP" (change)="onChange($event.target.value)">
+    <select  class="form-control" name="aerodrom" (change)="onChangeA($event.target.value)">
            
-            <option *ngFor="let aer of aerodromi | async" [value]="aer.id">{{aer.nazivAerodroma}}</option>
+            <option *ngFor="let aer of aerodromi" [value]="aer.id">{{aer.nazivAerodroma}}</option>
     </select></div>
   </div>
     
   <div class="form-group form-inline">
       <label for="aerS" class="control-label col-sm-4">Dolazi na: </label>
       <div class="col-sm-8 text-left">
-    <select  class="form-control" name="aerodromS" (change)="onChange1($event.target.value)">
+    <select  class="form-control" name="destinacija" (change)="onChangeL($event.target.value)">
            
-            <option *ngFor="let aer of aerodromi | async" [value]="aer.id">{{aer.nazivAerodroma}}</option>
+            <option *ngFor="let des of destinacije " [value]="des.id">{{des.naziv}}</option>
     </select></div>
   </div>
-    
 
-  <div class="form-group form-inline">
-      <label for="brP" class="control-label col-sm-4">Broj putnika: </label>
+    <div class="form-group form-inline">
+      <label class="control-label col-sm-4">Konfiguracija: </label>
       <div class="col-sm-8 text-left">
-      <input class="form-control shadow" name="brojSedista" id="brojSedista" type="number" formControlName="brojSedista">
-        </div>
+        <select  class="form-control" name="konfiguracijaLeta" (change)="onChangeK($event.target.value)">
+
+          <option *ngFor="let konf of konfig " [value]="konf.id">{{konf.naziv}}</option>
+        </select></div>
     </div>
+
 
     <div class="form-group form-inline">
       <label for="brP" class="control-label col-sm-4">VP: </label>
@@ -80,6 +127,38 @@
       <div class="col-sm-8 text-left">
       <input class="form-control shadow" name="duzinaPutovanja" id="duzinaPutovanja" type="number" formControlName="duzinaPutovanja">
         </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label  class="control-label col-sm-4">Presedanja: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="presedanja" id="presedanja" type="String" formControlName="presedanja">
+      </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label class="control-label col-sm-4">Broj presedanja: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="brojPresedanja" id="brojPresedanja" type="number" formControlName="brojPresedanja">
+      </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label  class="control-label col-sm-4">Opis: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="opis" id="opis" type="String" formControlName="opis">
+      </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label for="aerS" class="control-label col-sm-4">Vrsta leta: </label>
+      <div class="col-sm-8 text-left">
+        <select  class="form-control" name="vrstaLeta" (change)="onChangeVL($event.target.value)">
+
+          <option [value]="1">Povratni</option>
+          <option [value]="2">Jedan pravac</option>
+          <option [value]="3">Vise destinacija</option>
+        </select></div>
     </div>
     
     <div class="col-sm-offset-2"> 

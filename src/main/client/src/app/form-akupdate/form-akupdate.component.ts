@@ -39,9 +39,7 @@ export class FormAKUpdateComponent implements OnInit {
       ( params =>  { const id = params['id'];
       if (id) {
         console.log(`Avikompanija with id '${id}' `);
-        this.aviokompanijaService.getAviokompanija(id).subscribe((aviokompanija: any) => {
-          
-        console.log(`Avikompanija with name `+ aviokompanija.naziv);
+        this.aviokompanijaService.getAviokompanija(id).then(aviokompanija=>{
           if (aviokompanija) {
             this.regFormU=this.formBuilder.group({
               id: aviokompanija.id,
@@ -51,12 +49,13 @@ export class FormAKUpdateComponent implements OnInit {
               prosecnaOcena: aviokompanija.prosecnaOcena
             })
 
-            
+
           } else {
             console.log(`Avikompanija with id '${id}' not found `);
           }
 
-        });
+        })
+
       }
     });
   }
@@ -65,7 +64,6 @@ export class FormAKUpdateComponent implements OnInit {
     this.submitted=true;
     console.log(this.regFormU.value);
     this.aviokompanijaService.updateAviokompanija(this.regFormU.value);
-    this.aviokompanije.getAviokomapnije();
     this.router.navigateByUrl('aviokom-list');
   }
 

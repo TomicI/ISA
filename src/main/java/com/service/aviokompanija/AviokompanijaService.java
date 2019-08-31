@@ -249,6 +249,7 @@ public class AviokompanijaService {
 
 		KonfiguracijaLeta konfiguracijaLeta = new KonfiguracijaLeta();
 		konfiguracijaLeta.setNaziv(konfiguracijaLetaDTO.getNaziv());
+		konfiguracijaLeta.setAviokompanija(aviokompanija.get());
 		konfiguracijaLetaRepository.save(konfiguracijaLeta);
 		aviokompanija.get().getKonfiguracijaLeta().add(konfiguracijaLeta);
 		aviokompanijaRepository.save(aviokompanija.get());
