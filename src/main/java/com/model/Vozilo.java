@@ -46,10 +46,13 @@ public class Vozilo {
 	private Double potrosnja;
 	@Column
 	private String dodatniopis;
+	@Column
+	private String grupa;
+
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "filijala_id",nullable=false)
-	private Filijala vozilo;
+	private Filijala filijala;
 	
 	@OneToMany(mappedBy = "vozilo",fetch = FetchType.LAZY)
 	private List<CenovnikRentACar> cenovnik ;
@@ -135,12 +138,12 @@ public class Vozilo {
 		this.klima = klima;
 	}
 
-	public Filijala getVozilo() {
-		return vozilo;
+	public Filijala getFilijala() {
+		return filijala;
 	}
 
-	public void setVozilo(Filijala vozilo) {
-		this.vozilo = vozilo;
+	public void setFilijala(Filijala filijala) {
+		this.filijala = filijala;
 	}
 
 	public Gorivo getGorivo() {
@@ -189,5 +192,13 @@ public class Vozilo {
 
 	public void setOcene(List<Ocena> ocene) {
 		this.ocene = ocene;
+	}
+
+	public String getGrupa() {
+		return grupa;
+	}
+
+	public void setGrupa(String grupa) {
+		this.grupa = grupa;
 	}
 }

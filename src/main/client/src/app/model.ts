@@ -134,10 +134,24 @@ export class Let {
    konfiguracijaLeta: KonfiguracijaLeta;
    opis: string;
    vrstaLeta: VrstaLeta;
-   timePolaska: string;
-   timeDolaska: string;
-    constructor()
-     { }
+
+
+  constructor(id: number, aerodrom: Aerodrom, destinacija: Lokacija, brojSedista: number, vremePolaska: Date, vremeDolaska: Date, presedanja: string, brojPresedanja: number, vremePutovanja: string, duzinaPutovanja: number, prosecnaOcena: number, konfiguracijaLeta: KonfiguracijaLeta, opis: string, vrstaLeta: VrstaLeta) {
+    this.id = id;
+    this.aerodrom = aerodrom;
+    this.destinacija = destinacija;
+    this.brojSedista = brojSedista;
+    this.vremePolaska = vremePolaska;
+    this.vremeDolaska = vremeDolaska;
+    this.presedanja = presedanja;
+    this.brojPresedanja = brojPresedanja;
+    this.vremePutovanja = vremePutovanja;
+    this.duzinaPutovanja = duzinaPutovanja;
+    this.prosecnaOcena = prosecnaOcena;
+    this.konfiguracijaLeta = konfiguracijaLeta;
+    this.opis = opis;
+    this.vrstaLeta = vrstaLeta;
+  }
 }
 
 export class RentACar {

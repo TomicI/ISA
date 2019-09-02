@@ -43,12 +43,8 @@ export class RentacarService {
     return this.http.put(`${this.RentACarURL}`, rentacar).toPromise();
   }
 
-  search(param): Observable<any> {
-    let params = new HttpParams();
-    params = params.append('locationp',param.locationp);
-    params = params.append('bring',param.bring);
-    params = params.append('pickup',param.pickup);
-    params = params.append('dropoff',param.dropoff);
+  search(params): Observable<any> {
+
 
     return this.http.get(`${this.RentACarURL}/search`, { params: params });
   }

@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { startWith, map } from 'rxjs/operators';
 import {Time} from "@angular/common";
 import {forEach} from "@angular/router/src/utils/collection";
+import {HttpParams} from "@angular/common/http";
 
 
 export interface SearchGroup {
@@ -215,7 +216,7 @@ export class SearchRentComponent implements OnInit {
       'dropoff': dateD
     };
 
-    console.log(this.params);
+
 
     this.router.navigate(['rentacar/search'], { queryParams: this.params });
 

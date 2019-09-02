@@ -7,9 +7,10 @@ import java.util.Set;
 
 import com.dto.RezervacijaDTO;
 import com.dto.aviokompanija.OcenaDTO;
-import com.model.Rezervacija;
+import com.model.*;
 import com.model.aviokompanija.Ocena;
 import com.security.ResponseMessage;
+import com.service.RezervacijaRentACarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dto.CenovnikRentACarDTO;
 import com.dto.VoziloDTO;
-import com.model.CenovnikRentACar;
-import com.model.Filijala;
-import com.model.Vozilo;
 import com.service.FilijalaService;
 import com.service.VoziloService;
 
@@ -37,130 +35,47 @@ public class VoziloController {
 	@Autowired
 	private VoziloService voziloService;
 	
-	@Autowired
-	private FilijalaService filijalaService;
-	
 	@RequestMapping(method=RequestMethod.POST,consumes="application/json")
 	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<VoziloDTO> saveVozilo(@RequestBody VoziloDTO voziloDTO){
-		
-		if (voziloDTO.getFilijalaDTO()==null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		Optional<Filijala> filijalaOptional = filijalaService.findOne(voziloDTO.getFilijalaDTO().getId());
-		
-		if (!filijalaOptional.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		
-		Vozilo vozilo = new Vozilo();
-		vozilo.setNaziv(voziloDTO.getNaziv());
-		vozilo.setMarka(voziloDTO.getMarka());
-		vozilo.setModel(voziloDTO.getModel());
-		vozilo.setMenjac(voziloDTO.getMenjac());
-		vozilo.setRezervoar(voziloDTO.getRezervoar());
-		vozilo.setGorivo(voziloDTO.getGorivo());
-		vozilo.setPotrosnja(voziloDTO.getPotrosnja());
-		vozilo.setBrojSedista(voziloDTO.getBrojSedista());
-		vozilo.setBrojTorbi(voziloDTO.getBrojTorbi());
-		vozilo.setBrojVrata(voziloDTO.getBrojVrata());
-		vozilo.setDodatniopis(voziloDTO.getDodatniopis());
-		vozilo.setKlima(voziloDTO.getKlima());
-		vozilo.setVozilo(filijalaOptional.get());
-		
-		vozilo = voziloService.save(vozilo);
-		
-		return new ResponseEntity<>(new VoziloDTO(vozilo),HttpStatus.CREATED);
+
+		return new ResponseEntity<>(new VoziloDTO(voziloService.insertVehicle(voziloDTO)),HttpStatus.CREATED);
 		
 	}
 
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseEntity<VoziloDTO> getVozilo(@PathVariable Long id){
+
+		return new ResponseEntity<>(new VoziloDTO(voziloService.getOne(id)),HttpStatus.OK);
 		
-		Optional<Vozilo> optionalVozilo = voziloService.findOne(id);
-		
-		if (!optionalVozilo.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
-		return new ResponseEntity<>(new VoziloDTO(optionalVozilo.get()),HttpStatus.OK);
-		
+	}
+
+	@RequestMapping(value="/rent",method=RequestMethod.GET)
+	public ResponseEntity<List<VoziloDTO>> getAllVehicleRent(){
+
+		return new ResponseEntity<>(voziloService.getAllVehicleRent(),HttpStatus.OK);
+
 	}
 	
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<Void> deleteVozilo(@PathVariable Long id){
-		
-		Optional<Vozilo> voziloOptional = voziloService.findOne(id);
-		
-		if (voziloOptional.isPresent()) {
-			voziloService.remove(id);
+			voziloService.removeVehicle(id);
 			return new ResponseEntity<>(HttpStatus.OK);
-		}else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
 	}
 	
 	@RequestMapping(value="/{id}/cenovnik",method=RequestMethod.GET)
 	public ResponseEntity<List<CenovnikRentACarDTO>> getCenovnik(@PathVariable Long id){
-		
-		Optional<Vozilo> voziloOptional = voziloService.findOne(id);
-		
-		if (!voziloOptional.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		List<CenovnikRentACar> rentACars = voziloOptional.get().getCenovnik();
-		
-		List<CenovnikRentACarDTO> cenovnikRDTO = new ArrayList<>();
-		
-		for (CenovnikRentACar c:rentACars) {
-			CenovnikRentACarDTO cenovnikDTO = new CenovnikRentACarDTO(c);
-			cenovnikRDTO.add(cenovnikDTO);
-		}
-		
-		return new ResponseEntity<>(cenovnikRDTO,HttpStatus.OK);
+
+		return new ResponseEntity<>(voziloService.getCenovnik(id),HttpStatus.OK);
 		
 	}	
 	
 	@RequestMapping(method=RequestMethod.PUT,consumes="application/json")
 	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<VoziloDTO> updateVozilo(@RequestBody VoziloDTO voziloDTO){
-		
-		Optional<Vozilo> voziloOptional = voziloService.findOne(voziloDTO.getId());
-		
-		if (!voziloOptional.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		Optional<Filijala> filijalaOptional = filijalaService.findOne(voziloDTO.getFilijalaDTO().getId());
-		
-		if (!filijalaOptional.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		
-		Vozilo vozilo = voziloOptional.get();
-		
-		vozilo.setNaziv(voziloDTO.getNaziv());
-		vozilo.setMarka(voziloDTO.getMarka());
-		vozilo.setModel(voziloDTO.getModel());
-		vozilo.setMenjac(voziloDTO.getMenjac());
-		vozilo.setRezervoar(voziloDTO.getRezervoar());
-		vozilo.setGorivo(voziloDTO.getGorivo());
-		vozilo.setPotrosnja(voziloDTO.getPotrosnja());
-		vozilo.setBrojSedista(voziloDTO.getBrojSedista());
-		vozilo.setBrojTorbi(voziloDTO.getBrojTorbi());
-		vozilo.setBrojVrata(voziloDTO.getBrojVrata());
-		vozilo.setDodatniopis(voziloDTO.getDodatniopis());
-		vozilo.setKlima(voziloDTO.getKlima());
-		
-		vozilo = voziloService.save(vozilo);
-		
-		return new ResponseEntity<>(new VoziloDTO(vozilo),HttpStatus.OK);
+
+		return new ResponseEntity<>(new VoziloDTO(voziloService.updateVehicle(voziloDTO)),HttpStatus.OK);
 		
 	}
 

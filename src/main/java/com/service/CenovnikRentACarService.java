@@ -70,9 +70,9 @@ public class CenovnikRentACarService {
 		RentACar rentACar = rentACarService.getOne(cenovnikDTO.getRentACarDTO().getId());
 
 
-		Filijala f = vozilo.getVozilo();
+		Filijala f = vozilo.getFilijala();
 
-		RentACar r = f.getFilijala();
+		RentACar r = f.getRentACar();
 
 		if (rentACar.getId()!=r.getId()){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vehicle doesn't belong to this branch!");

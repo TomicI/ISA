@@ -2,6 +2,7 @@ package com.model;
 
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -25,15 +26,12 @@ public class RentACar {
 	private String naziv;
 	@Column
 	private String opis;
-
-	
 	//cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
-
-	@OneToMany(mappedBy = "filijala",fetch = FetchType.LAZY)
-	private Set<Filijala> filijale = new HashSet<Filijala>();
+	@OneToMany(mappedBy="rentACar",fetch = FetchType.LAZY)
+	private List<Filijala> filijale ;
 
 	@OneToMany(mappedBy = "servis",fetch = FetchType.LAZY)
-	private Set<CenovnikRentACar> cenovnici = new HashSet<CenovnikRentACar>();
+	private List<CenovnikRentACar> cenovnici;
 	
 
 	public RentACar() {
@@ -95,32 +93,19 @@ public class RentACar {
 		return Objects.hashCode(id);
 	}
 
-	public Set<Filijala> getFilijale() {
+	public List<Filijala> getFilijale() {
 		return filijale;
 	}
 
-	public void setFilijale(Set<Filijala> filijale) {
+	public void setFilijale(List<Filijala> filijale) {
 		this.filijale = filijale;
 	}
 
-
-	/**
-	 * @return the cenovnici
-	 */
-	public Set<CenovnikRentACar> getCenovnici() {
+	public List<CenovnikRentACar> getCenovnici() {
 		return cenovnici;
 	}
 
-	/**
-	 * @param cenovnici the cenovnici to set
-	 */
-	public void setCenovnici(Set<CenovnikRentACar> cenovnici) {
+	public void setCenovnici(List<CenovnikRentACar> cenovnici) {
 		this.cenovnici = cenovnici;
 	}
-	
-	
-	
-	
-	
-	
 }

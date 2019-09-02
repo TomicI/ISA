@@ -11,6 +11,7 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormVozComponent } from '../form/form-voz/form-voz.component';
 import { DataSource } from '@angular/cdk/table';
+import {VehicleService} from "../services/vehicle.service";
 
 
 @Component({
@@ -121,6 +122,7 @@ export class PanelAdminRentComponent implements OnInit {
     private userServise: UserService,
     private rentacarService: RentacarService,
     private filijalaService: FilijalaService,
+    private vehicleService:VehicleService,
     private fb: FormBuilder,
     private modalService: NgbModal
   ) { }
@@ -147,7 +149,9 @@ export class PanelAdminRentComponent implements OnInit {
     this.filijalaSource.paginator = this.paginator;
 
 
-    await this.getAllVozila();
+    //await this.getAllVozila();
+
+    this.allVehicleRent();
 
     await this.getRates();
 
@@ -193,6 +197,18 @@ export class PanelAdminRentComponent implements OnInit {
     //   }
 
     // });
+
+  }
+
+  allVehicleRent(){
+
+    this.vehicleService.allVehicleRent().subscribe(data=>{
+      this.allVozila = data;
+      this.data = data;
+      this.dataSource = new MatTableDataSource(this.data);
+      this.dataSource.paginator = this.paginator2;
+      console.log(data);
+    });
 
   }
 
@@ -324,7 +340,7 @@ export class PanelAdminRentComponent implements OnInit {
     console.log('Submit kliknut vozilo!');
     this.modalRef.close();
     //this.showVehicles(this.filijala);
-    this.getAllVozila();
+    this.allVehicleRent();
 
   }
 

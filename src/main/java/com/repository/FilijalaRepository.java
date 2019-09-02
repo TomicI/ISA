@@ -10,4 +10,8 @@ public interface FilijalaRepository extends JpaRepository<Filijala,Long> {
     Filijala findByAdresa(String adresa);
     
     Boolean existsByAdresa(String adresa);
+
+    List<Filijala> findByRentACarId(Long rentacar_id);
+
+
 }

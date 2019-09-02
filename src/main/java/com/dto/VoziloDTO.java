@@ -81,7 +81,7 @@ public class VoziloDTO {
 		this.rezervoar=v.getRezervoar();
 		this.potrosnja= v.getPotrosnja();
 		this.dodatniopis = v.getDodatniopis();
-		this.filijalaDTO = new FilijalaDTO(v.getVozilo());
+		this.filijalaDTO = new FilijalaDTO(v.getFilijala());
 
 	}
 

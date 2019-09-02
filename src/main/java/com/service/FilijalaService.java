@@ -56,6 +56,10 @@ public class FilijalaService {
         return filijalaRepository.findById(id);
     }
 
+    public List<Filijala> findByRentACar(Long id){
+        return filijalaRepository.findByRentACarId(id);
+    }
+
     public Filijala getOne(Long id){
         Optional<Filijala> filijalaOptional = findOne(id);
 
@@ -68,10 +72,9 @@ public class FilijalaService {
 
     public List<VoziloDTO> findOneVeh(Long id) {
 
-        Set<Vozilo> vozila = getOne(id).getVozila();
+        List<Vozilo> vozila = getOne(id).getVozila();
 
         List<VoziloDTO> vozilaDTO = new ArrayList<VoziloDTO>();
-
 
 
         for (Vozilo v : vozila) {
@@ -87,7 +90,15 @@ public class FilijalaService {
     }
 
 
-    public List<RezervacijaRentACarDTO> search(String locationp, String bring, Date pickUp, Date dropOff) {
+    public List<RezervacijaRentACarDTO> search(
+            String locationp,
+            String bring,
+            Date pickUp,
+            Date dropOff,
+            String range,
+            String peo,
+            Menjac gear,
+            String group) {
 
         if (!existsByAdresa(locationp)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Branch doesn't exist!");
@@ -101,7 +112,7 @@ public class FilijalaService {
 
         Filijala filBring = find(bring);
 
-        RentACar r = rentACarService.findByNaziv(filSearch.getFilijala().getNaziv());
+        RentACar r = rentACarService.findByNaziv(filSearch.getRentACar().getNaziv());
 
 
         List<CenovnikRentACar> cenovnikServisa = cenovnikRentACarService.findByServis(r);
@@ -116,7 +127,7 @@ public class FilijalaService {
         List<Vozilo> vozila = voziloService.findAll();
 
         for (Vozilo v : vozila) {
-            if (v.getVozilo().equals(filSearch)) {
+            if (v.getFilijala().equals(filSearch)) {
 
                 int prolaz = 1;
 
@@ -384,7 +395,7 @@ public class FilijalaService {
 
         Filijala filijala = new Filijala();
         filijala.setAdresa(filijalaDTO.getAdresa());
-        filijala.setFilijala(rentACar);
+        filijala.setRentACar(rentACar);
 
         return save(filijala);
     }

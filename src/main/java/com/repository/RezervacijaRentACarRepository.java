@@ -10,6 +10,8 @@ import com.model.Vozilo;
 public interface RezervacijaRentACarRepository extends JpaRepository<RezervacijaRentACar,Long> {
 	
 	List<RezervacijaRentACar> findByVozilo(Vozilo vozilo);
+
+
 	
 
 }

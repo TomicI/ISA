@@ -19,6 +19,10 @@ export class FormVozComponent implements OnInit {
   regVoz: FormGroup;
   submitted = false;
 
+  error=false;
+
+  message:any;
+
   constructor(
     private formBuilder: FormBuilder,
     private rentaCarService: RentacarService,
@@ -47,21 +51,33 @@ export class FormVozComponent implements OnInit {
 
     if (this.edit === true) {
       console.log('Edit VEH');
-      await this.vehicleService.updateVehicle(this.voziloFormGroup.get('vozilo').value);
+      await this.vehicleService.updateVehicle(this.voziloFormGroup.get('vozilo').value).then(value => {
+        this.clickedVeh.emit(true);
+      }).catch(error=>{
+          this.message = error.error.message;
+          this.error = true;
+      });
     } else {
-      await this.vehicleService.saveVehicle(this.voziloFormGroup.get('vozilo').value);
+      await this.vehicleService.saveVehicle(this.voziloFormGroup.get('vozilo').value).then(value => {
+        this.clickedVeh.emit(true);
+      });
 
     }
 
-    this.clickedVeh.emit(true);
+
   }
 
   async delete() {
     const pom = this.voziloFormGroup.get('vozilo').get('id').value;
     if (this.edit === true) {
-      await this.vehicleService.removeVehicle(pom);
+      await this.vehicleService.removeVehicle(pom).then(value => {
+        this.clickedVeh.emit(true);
+      }).catch(error=>{
+        this.message = error.error.message;
+        this.error = true;
+      });
     }
-    this.clickedVeh.emit(true);
+
   }
 
 }

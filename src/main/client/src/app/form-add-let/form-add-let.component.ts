@@ -45,8 +45,6 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
     toDate: NgbDate;
 
 
-
-
     constructor(
       private router: Router,
       private route: ActivatedRoute,
@@ -59,10 +57,7 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
 
     ngOnInit() {
       this.date = new Date();
-      this.let=new Let();
-      this.let.aerodrom=new Aerodrom();
-      this.let.konfiguracijaLeta=new KonfiguracijaLeta();
-      this.let.destinacija=new Lokacija();
+
       for (var temp of this.arrayOfHours){
         this.date = new Date();
         const timeP = temp.split(':');
@@ -81,10 +76,6 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
       this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
 
 
-      this.pom1=new Let();
-      this.let=new Let();
-      this.let.aerodrom=new Aerodrom();
-      this.let.aerodrom.id=-1;
       this.aerodromService.getAllAerodromi().then(pom=>
       {
         console.log("aerodromi");
@@ -122,36 +113,64 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
     onSubmit(){
       this.submitted=true;
       //this.aerodrom.nazivAerodroma=this.regFormA.value.nazivAerodroma;
-      this.let=this.regFormA.value;
-      this.regFormA.value.aerodrom=this.let.aerodrom;
+      //this.let=this.regFormA.value;
+      //this.regFormA.value.aerodrom=this.let.aerodrom;
      /* console.log("presedanje " + this.pom1.id);
       console.log(this.pom1);
       this.regFormA.value.presedanje=this.pom1.id;*/
 
       // this.let.vremePolaska.setHours(this.regFormA.value.timePolaska.split(":")[0]);
 
-      this.date=new Date(this.regFormA.value.vremePolaska);
-      this.let.vremePolaska=new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate(), this.regFormA.value.timePolaska.split(":")[0], this.regFormA.value.timePolaska.split(":")[1], 0,0);
+      /*this.date = new Date(this.regFormA.value.vremePolaska);
+      this.let.vremePolaska = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate(), this.regFormA.value.timePolaska.split(":")[0], this.regFormA.value.timePolaska.split(":")[1], 0, 0);
       console.log("Vreme poslaska F ");
       console.log(this.regFormA.value.vremePolaska);
 
       console.log("Vreme poslaska L");
-      console.log(this.let.vremePolaska);
+      console.log(this.let.vremePolaska);*/
 
-      this.date=new Date(this.regFormA.value.vremeDolaska);
+      //this.date=new Date(this.regFormA.value.vremeDolaska);
       // this.let.vremePolaska.setMinutes(this.regFormA.value.timePolaska.split(":")[1]);
-      this.let.vremeDolaska=new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate(), this.regFormA.value.timeDolaska.split(":")[0], this.regFormA.value.timeDolaska.split(":")[1], 0,0);
+      //this.let.vremeDolaska=new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate(), this.regFormA.value.timeDolaska.split(":")[0], this.regFormA.value.timeDolaska.split(":")[1], 0,0);
      // this.let.vremeDolaska.setHours(this.regFormA.value.timeDolaska.split(":")[0]);
      //this.let.vremeDolaska.setMinutes(this.regFormA.value.timeDolaska.split(":")[1]);
+
+
 
      console.log("Vrednsoti let ");
      console.log(this.let);
 
+      const pickTime = this.regFormA.get('timePolaska').value;
+      const pickDate = this.regFormA.get('vremePolaska').value;
 
-      this.letService.saveLet(this.let).then(pom=>
-      {
-        console.log(pom);
-      })
+      const dropTime = this.regFormA.get('timeDolaska').value;
+      const dropDate = this.regFormA.get('vremeDolaska').value;
+
+      const timeP = pickTime.split(':');
+      const timeD = dropTime.split(':');
+
+      const dateP = new Date(pickDate.year, pickDate.month - 1, pickDate.day, timeP[0], timeP[1], 0);
+      const dateD = new Date(dropDate.year, dropDate.month - 1, dropDate.day, timeD[0], timeD[1], 0);
+
+      this.let = new Let(
+        null,
+        this.regFormA.get('aerodrom').value,
+        this.regFormA.get('destinacija').value,
+        null,
+        dateP,
+        dateD,
+        this.regFormA.get('presedanja').value,
+        this.regFormA.get('brojPresedanja').value,
+        this.regFormA.get('vremePutovanja').value,
+        this.regFormA.get('duzinaPutovanja').value,
+        0,
+        this.regFormA.get('konfiguracijaLeta').value,
+        this.regFormA.get('opis').value,
+        this.regFormA.get('vrstaLeta').value
+      );
+
+      console.log(this.let);
+
 
      // console.log("ovoooo " + this.pom1.__zone_symbol__value.presedanje);
     }

@@ -1,13 +1,16 @@
 package com.service;
 
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.dto.CenovnikRentACarDTO;
 import com.dto.VoziloDTO;
 import com.dto.aviokompanija.OcenaDTO;
-import com.model.Rezervacija;
-import com.model.RezervacijaRentACar;
+import com.model.*;
 import com.model.aviokompanija.Ocena;
 import com.model.user.User;
 import com.security.ResponseMessage;
@@ -18,8 +21,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.model.Vozilo;
 import com.repository.VoziloRepository;
+import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +38,12 @@ public class VoziloService {
 	private RezervacijaService rezervacijaService;
 
 	@Autowired
+	private RezervacijaRentACarService rezervacijaRentACarService;
+
+	@Autowired
+	private FilijalaService filijalaService;
+
+	@Autowired
 	private UserService userService;
 
 	@Autowired
@@ -42,6 +51,10 @@ public class VoziloService {
 	
 	public Optional<Vozilo> findOne(Long id){
 		return voziloRepository.findById(id);
+	}
+
+	public List<Vozilo> findByFilijala(Long filijala_id){
+		return voziloRepository.findByFilijalaId(filijala_id);
 	}
 
 	public Vozilo getOne(Long id){
@@ -63,8 +76,94 @@ public class VoziloService {
 	}
 	
 	public void remove(Long id) {
-		voziloRepository.deleteById(id);
+		try {
+			voziloRepository.deleteById(id);
+		}catch (Exception e){
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vehicle can't be deleted!");
+		}
+
+
 	}
+
+	public List<CenovnikRentACarDTO> getCenovnik(Long id){
+
+		Vozilo vozilo = getOne(id);
+
+		List<CenovnikRentACarDTO> cenovnikRentACarDTOS = new ArrayList<>();
+
+		for (CenovnikRentACar c:vozilo.getCenovnik()) {
+			CenovnikRentACarDTO cenovnikDTO = new CenovnikRentACarDTO(c);
+			cenovnikRentACarDTOS.add(cenovnikDTO);
+		}
+
+		return cenovnikRentACarDTOS;
+
+	}
+
+	public void removeVehicle(Long id){
+
+		getOne(id);
+		remove(id);
+	}
+
+	public Vozilo insertVehicle(VoziloDTO voziloDTO) {
+
+		if (voziloDTO.getFilijalaDTO()==null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+		}
+
+		Filijala filijala = filijalaService.getOne(voziloDTO.getFilijalaDTO().getId());
+
+		Vozilo vozilo = new Vozilo();
+
+		saveFromDTO(voziloDTO,vozilo);
+
+		return save(vozilo);
+
+	}
+
+	public Vozilo updateVehicle(VoziloDTO voziloDTO){
+		Vozilo vozilo = getOne(voziloDTO.getId());
+		Filijala filijala = filijalaService.getOne(voziloDTO.getFilijalaDTO().getId());
+
+		List<RezervacijaRentACar> rezervacijaRentACars = rezervacijaRentACarService.findByVoz(vozilo);
+
+		Date todayTemp = new Date();
+
+		for(RezervacijaRentACar r:rezervacijaRentACars){
+			if (!r.getOtkazana()){
+				if(r.getDatumPreuz().after(todayTemp) || r.getDatumVracanja().after(todayTemp)){
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vehicle has reservations!");
+				}
+			}
+		}
+
+		saveFromDTO(voziloDTO,vozilo);
+
+		return save(vozilo);
+
+	}
+
+
+	public List<VoziloDTO> getAllVehicleRent(){
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getByUsername(auth.getName());
+
+		System.out.println("PREUZIMANJE KOLA " + user.getRentACar().getId());
+
+		List<Filijala> filijale = filijalaService.findByRentACar(user.getRentACar().getId());
+
+		List<VoziloDTO> vozilaDTO = new ArrayList<>();
+
+		for (Filijala f:filijale){
+			vozilaDTO.addAll(filijalaService.findOneVeh(f.getId()));
+		}
+
+
+		return vozilaDTO;
+	}
+
 
 	public boolean ratePermission(Long resid,Long vehid){
 
@@ -136,6 +235,22 @@ public class VoziloService {
         return null;
 
     }
+
+    public void saveFromDTO(VoziloDTO voziloDTO,Vozilo vozilo){
+		vozilo.setNaziv(voziloDTO.getNaziv());
+		vozilo.setMarka(voziloDTO.getMarka());
+		vozilo.setModel(voziloDTO.getModel());
+		vozilo.setMenjac(voziloDTO.getMenjac());
+		vozilo.setRezervoar(voziloDTO.getRezervoar());
+		vozilo.setGorivo(voziloDTO.getGorivo());
+		vozilo.setPotrosnja(voziloDTO.getPotrosnja());
+		vozilo.setBrojSedista(voziloDTO.getBrojSedista());
+		vozilo.setBrojTorbi(voziloDTO.getBrojTorbi());
+		vozilo.setBrojVrata(voziloDTO.getBrojVrata());
+		vozilo.setDodatniopis(voziloDTO.getDodatniopis());
+		vozilo.setKlima(voziloDTO.getKlima());
+
+	}
 
 
 

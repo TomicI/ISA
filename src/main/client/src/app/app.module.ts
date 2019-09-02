@@ -74,6 +74,7 @@ import { KonfigListComponent } from './konfig-list/konfig-list.component';
 import { AddSegmentComponent } from './add-segment/add-segment.component';
 import { AddKatSedistaComponent } from './add-kat-sedista/add-kat-sedista.component';
 import {RouteCheckComponent} from "./route-check/route-check.component";
+import { ReservationPreviewComponent } from './reservation-preview/reservation-preview.component';
 
 
 @NgModule({
@@ -134,7 +135,8 @@ import {RouteCheckComponent} from "./route-check/route-check.component";
     FormKonfLetaComponent,
     KonfigListComponent,
     AddSegmentComponent,
-    AddKatSedistaComponent
+    AddKatSedistaComponent,
+    ReservationPreviewComponent
 
   ],
   imports: [

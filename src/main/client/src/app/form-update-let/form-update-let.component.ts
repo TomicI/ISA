@@ -28,7 +28,7 @@ export class FormUpdateLetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.letP=new Let();
+    //this.letP=new Let();
     this.aerodromService.getAllAerodromi().then(pom=>{this.aerodromi=pom;})
     
     this.regFormA=this.formBuilder.group({

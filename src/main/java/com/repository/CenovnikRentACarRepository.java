@@ -16,6 +16,7 @@ public interface CenovnikRentACarRepository extends JpaRepository<CenovnikRentAC
 	
 	List<CenovnikRentACar> findByVozilo(Vozilo vozilo);
 	List<CenovnikRentACar> findByServis(RentACar servis);
+
 	
 
 }

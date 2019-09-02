@@ -1,8 +1,10 @@
 package com.model;
 
 import com.model.aviokompanija.Ocena;
+import org.hibernate.engine.profile.Fetch;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -26,17 +28,17 @@ public class Filijala {
 	private String adresa;
 
 	@OneToMany(mappedBy = "filijala",fetch = FetchType.LAZY)
-	private Set<Ocena> ocene = new HashSet<>();
+	private List<Ocena> ocene ;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "rentacar_id",nullable=false)
-	private RentACar filijala;
+	private RentACar rentACar;
 	
-	@OneToMany(mappedBy = "vozilo",fetch = FetchType.LAZY)
-	private Set<Vozilo> vozila = new HashSet<Vozilo>();
+	@OneToMany(mappedBy = "filijala",fetch = FetchType.LAZY)
+	private List<Vozilo> vozila ;
 	
 	@OneToMany(mappedBy = "rezervacija",fetch = FetchType.LAZY)
-	private Set<RezervacijaRentACar> rezervacije = new HashSet<RezervacijaRentACar>();
+	private List<RezervacijaRentACar> rezervacije;
 
 
 	public Filijala() {
@@ -60,41 +62,35 @@ public class Filijala {
 	}
 
 
-	public RentACar getFilijala() {
-		return filijala;
+	public RentACar getRentACar() {
+		return rentACar;
 	}
 
-	public void setFilijala(RentACar filijala) {
-		this.filijala = filijala;
+	public void setRentACar(RentACar rentACar) {
+		this.rentACar = rentACar;
 	}
 
-	public Set<Vozilo> getVozila() {
-		return vozila;
-	}
-
-	public void setVozila(Set<Vozilo> vozila) {
-		this.vozila = vozila;
-	}
-
-	/**
-	 * @return the rezervacije
-	 */
-	public Set<RezervacijaRentACar> getRezervacije() {
-		return rezervacije;
-	}
-
-	/**
-	 * @param rezervacije the rezervacije to set
-	 */
-	public void setRezervacije(Set<RezervacijaRentACar> rezervacije) {
-		this.rezervacije = rezervacije;
-	}
-
-	public Set<Ocena> getOcene() {
+	public List<Ocena> getOcene() {
 		return ocene;
 	}
 
-	public void setOcene(Set<Ocena> ocene) {
+	public void setOcene(List<Ocena> ocene) {
 		this.ocene = ocene;
+	}
+
+	public List<Vozilo> getVozila() {
+		return vozila;
+	}
+
+	public void setVozila(List<Vozilo> vozila) {
+		this.vozila = vozila;
+	}
+
+	public List<RezervacijaRentACar> getRezervacije() {
+		return rezervacije;
+	}
+
+	public void setRezervacije(List<RezervacijaRentACar> rezervacije) {
+		this.rezervacije = rezervacije;
 	}
 }

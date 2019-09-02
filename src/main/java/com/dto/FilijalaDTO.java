@@ -22,7 +22,7 @@ public class FilijalaDTO {
 		
 		this.id=f.getId();
 		this.adresa = f.getAdresa();
-		this.rentACarDTO = new RentACarDTO(f.getFilijala());
+		this.rentACarDTO = new RentACarDTO(f.getRentACar());
 		
 	}
 	

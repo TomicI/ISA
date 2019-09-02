@@ -3,6 +3,7 @@ package com.controller;
 import java.util.*;
 
 import com.dto.aviokompanija.OcenaDTO;
+import com.model.*;
 import com.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,12 +22,6 @@ import com.dto.FilijalaDTO;
 import com.dto.RentACarDTO;
 import com.dto.RezervacijaRentACarDTO;
 import com.dto.VoziloDTO;
-import com.model.CenovnikRentACar;
-import com.model.Filijala;
-import com.model.RentACar;
-import com.model.RezervacijaRentACar;
-import com.model.StatusRes;
-import com.model.Vozilo;
 import com.repository.RentACarRepository;
 import com.security.ResponseMessage;
 
@@ -100,12 +95,20 @@ public class RentACarController {
 	
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public ResponseEntity<?> search(@RequestParam(value="locationp")String locationp,@RequestParam(value = "bring") String bring,@RequestParam(value = "pickup") Date pickUp, @RequestParam(value = "dropoff") Date dropOff) {
+	public ResponseEntity<?> search(@RequestParam(value="locationp")String locationp,
+									@RequestParam(value = "bring") String bring,
+									@RequestParam(value = "pickup") Date pickUp,
+									@RequestParam(value = "dropoff") Date dropOff,
+									@RequestParam(value = "range",required = false) String range,
+									@RequestParam(value = "peo",required = false) String peo,
+									@RequestParam(value = "gear",required = false) Menjac gear,
+									@RequestParam(value = "group" ,required = false) String group
+									) {
 
 		System.out.println(pickUp);
 		System.out.println(bring);
 
-		return new ResponseEntity<>(filijalaService.search(locationp, bring, pickUp, dropOff),HttpStatus.OK);
+		return new ResponseEntity<>(filijalaService.search(locationp, bring, pickUp, dropOff,range,peo,gear,group),HttpStatus.OK);
 
 	}
 

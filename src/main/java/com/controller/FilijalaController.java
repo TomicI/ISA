@@ -88,7 +88,7 @@ public class FilijalaController {
 		
 		RentACar rtemp = optionalUser.get().getRentACar();
 		
-		Set<Filijala> filLista = rtemp.getFilijale();
+		List<Filijala> filLista = rtemp.getFilijale();
 		
 		List<RezervacijaRentACarDTO> rezList = new ArrayList<RezervacijaRentACarDTO>();
 

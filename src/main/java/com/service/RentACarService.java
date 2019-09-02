@@ -48,7 +48,7 @@ public class RentACarService {
 	public List<FilijalaDTO> findOneFilijala(Long id) {
 
 
-		Set<Filijala> filijale = getOne(id).getFilijale();
+		List<Filijala> filijale = getOne(id).getFilijale();
 
 		List<FilijalaDTO> filijaleDTO = new ArrayList<>();
 
@@ -57,7 +57,7 @@ public class RentACarService {
 
 		for (Filijala f : filijale) {
 			FilijalaDTO filijalaDTO = new FilijalaDTO(f);
-			Set<Ocena> ocene = f.getOcene();
+			List<Ocena> ocene = f.getOcene();
 			sumOcena = 0.0;
 			broj = ocene.size();
 			for(Ocena o : ocene){
@@ -109,7 +109,7 @@ public class RentACarService {
 	}
 
 	public List<CenovnikRentACarDTO> getCenovnici(Long id){
-		Set<CenovnikRentACar> cenovnik = getOne(id).getCenovnici();
+		List<CenovnikRentACar> cenovnik = getOne(id).getCenovnici();
 
 		List<CenovnikRentACarDTO> cenovnikDTO = new ArrayList<CenovnikRentACarDTO>();
 

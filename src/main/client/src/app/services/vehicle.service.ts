@@ -24,7 +24,11 @@ export class VehicleService {
   }
 
   rateVehicle(ocena):Observable<any>{
-    return this.http.post(`${this.VehicleURL}/rate`,ocena)
+    return this.http.post(`${this.VehicleURL}/rate`,ocena);
+  }
+
+  allVehicleRent():Observable<any>{
+    return this.http.get(`${this.VehicleURL}/rent`);
   }
 
 

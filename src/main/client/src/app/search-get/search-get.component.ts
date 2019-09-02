@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { RentacarService } from '../services/rentacar.service';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {RentacarService} from '../services/rentacar.service';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
   selector: 'app-search-get',
@@ -18,19 +20,54 @@ export class SearchGetComponent implements OnInit {
 
   backBtn = false;
 
-  params: any = {};
+  resBool = false;
+  criBool = false;
 
-  reservations: any;
+  params:any;
+
+  reservations: any[];
+
+  filterFormGroup: FormGroup;
 
   message = '';
 
-  constructor(private route: ActivatedRoute, private rentService: RentacarService) { }
+  constructor(private route: ActivatedRoute, private rentService: RentacarService, private formBuilder: FormBuilder) {
+  }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.params = params;
-      this.rentService.search(this.params).toPromise().then(data => { 
-        this.reservations = data ;
+
+
+    this.filterFormGroup = this.formBuilder.group({
+      mini: false,
+      eco: false,
+      stan: false,
+      suv: false,
+      prem: false,
+      people: 'All',
+      range: 'All',
+      menjac: 'All'
+
+    });
+
+    this.route.queryParams.subscribe(param => {
+      this.params = param;
+
+      let params = new HttpParams();
+      params = params.append('locationp',param.locationp);
+      params = params.append('bring',param.bring);
+      params = params.append('pickup',param.pickup);
+      params = params.append('dropoff',param.dropoff);
+
+      console.log(params);
+
+      this.rentService.search(params).toPromise().then(data => {
+        this.reservations = data;
+        if (this.reservations.length != 0) {
+          this.resBool = true;
+
+        } else {
+          this.criBool = true;
+        }
       });
       console.log(params);
     });
@@ -58,8 +95,54 @@ export class SearchGetComponent implements OnInit {
 
     this.resPass = false;
     this.resView = true;
-    this.backBtn=false;
+    this.backBtn = false;
 
   }
+
+  onSubmit() {
+
+    let group = '';
+
+
+    console.log(this.filterFormGroup.value);
+
+    let mini = this.filterFormGroup.get('mini').value;
+    let eco = this.filterFormGroup.get('eco').value;
+    let stan = this.filterFormGroup.get('stan').value;
+    let suv = this.filterFormGroup.get('suv').value;
+    let prem = this.filterFormGroup.get('prem').value;
+    let people = this.filterFormGroup.get('people').value;
+    let range = this.filterFormGroup.get('range').value;
+    let menjac = this.filterFormGroup.get('menjac').value;
+
+    if (mini){
+        group+='-mini'
+    }
+
+    if (eco){
+      group+='-eco'
+
+    }
+    if (stan){
+      group+='-stan'
+    }
+    if (suv){
+      group+='-suv'
+    }
+    if (prem){
+      group+='-prem'
+    }
+
+
+
+    console.log(this.params)
+
+
+
+
+
+
+  }
+
 
 }
