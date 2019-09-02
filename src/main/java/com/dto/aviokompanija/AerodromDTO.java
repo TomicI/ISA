@@ -24,8 +24,15 @@ public class AerodromDTO {
 		super();
 		this.setId(id);
 		this.setNaziv(naziv);
-		this.setAviokompanija(new AviokompanijaDTO(aviokompanija));
-		this.setLokacija(new LokacijaDTO(lokacija));
+		if(aviokompanija!=null)
+			this.setAviokompanija(new AviokompanijaDTO(aviokompanija));
+		else
+			this.setAviokompanija(null);
+
+		if(lokacija!=null)
+			this.setLokacija(new LokacijaDTO(lokacija));
+		else
+			this.setLokacija(null);
 	}
 
 	public Long getId() {

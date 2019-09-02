@@ -46,4 +46,8 @@ export class LetService {
     return this.http.get<Lokacija[]>(this.LOK_API).toPromise();
   }
 
+  getLokacija(id: number): Promise<Lokacija> {
+    return this.http.get<Lokacija>(this.LOK_API+'/'+id).toPromise();
+  }
+
 }

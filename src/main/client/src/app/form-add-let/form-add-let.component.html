@@ -19,7 +19,7 @@
     <div class="form-group col-8" align="center">
       <div class="input-group">
         <input class="form-control" [readonly]="true" [minDate]="fromDate" name="d2" ngbDatepicker #d2="ngbDatepicker"
-               [formControlName]="'vremePolaska'">
+               (dateSelect)="onDateSelected()"  [formControlName]="'vremePolaska'">
         <div class="input-group-append">
           <button class="btn btn-outline-secondary calendar" (click)="d2.toggle()" type="button"><i
             class="fas fa-calendar"></i></button>
@@ -90,7 +90,7 @@
     <div class="form-group form-inline">
       <label for="aerP" class="control-label col-sm-4">Polazi sa: </label>
       <div class="col-sm-8 text-left">
-    <select  class="form-control" name="aerodrom" (change)="onChangeA($event.target.value)">
+    <select  class="form-control" name="aerodrom"  formControlName="aerodrom" (change)="onChangeA($event.target.value)">
             <option *ngFor="let aer of aerodromi" [value]="aer.id">{{aer.naziv}}</option>
     </select></div>
 
@@ -99,7 +99,7 @@
   <div class="form-group form-inline">
       <label for="aerS" class="control-label col-sm-4">Dolazi na: </label>
       <div class="col-sm-8 text-left">
-    <select  class="form-control" name="destinacija" (change)="onChangeL($event.target.value)">
+    <select  class="form-control" name="destinacija" formControlName="destinacija" (change)="onChangeL($event.target.value)">
            
             <option *ngFor="let des of destinacije " [value]="des.id">{{des.naziv}}</option>
     </select></div>
@@ -108,7 +108,7 @@
     <div class="form-group form-inline">
       <label class="control-label col-sm-4">Konfiguracija: </label>
       <div class="col-sm-8 text-left">
-        <select  class="form-control" name="konfiguracijaLeta" (change)="onChangeK($event.target.value)">
+        <select  class="form-control" name="konfiguracijaLeta"  formControlName="konfiguracijaLeta" (change)="onChangeK($event.target.value)">
 
           <option *ngFor="let konf of konfig " [value]="konf.id">{{konf.naziv}}</option>
         </select></div>
@@ -153,11 +153,11 @@
     <div class="form-group form-inline">
       <label for="aerS" class="control-label col-sm-4">Vrsta leta: </label>
       <div class="col-sm-8 text-left">
-        <select  class="form-control" name="vrstaLeta"  formControlName="vrstaLeta" (change)="onChangeVL($event.target.value)">
+        <select  class="form-control" name="vrstaLeta"  formControlName="vrstaLeta" (change)="onChangeVL($event.target.value)" >
 
-          <option [value]="1">Povratni</option>
-          <option [value]="2">Jedan pravac</option>
-          <option [value]="3">Vise destinacija</option>
+          <option [value]="0">Povratni</option>
+          <option [value]="1">Jedan pravac</option>
+          <option [value]="2">Vise destinacija</option>
         </select></div>
     </div>
     

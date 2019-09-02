@@ -42,9 +42,18 @@ public class LetDTO {
 		this.setPresedanja(presedanja);
 		this.setBrojPresedanja(brojPresedanja);
 		this.setVrstaLeta(vrstaLeta);
-		this.setAerodrom(new AerodromDTO(aerodrom));
-		this.setDestinacija(new LokacijaDTO(lokacija));
-		this.setKonfiguracijaLeta(new KonfiguracijaLetaDTO(konfiguracijaLeta));
+		if(aerodrom!=null)
+			this.setAerodrom(new AerodromDTO(aerodrom));
+		else
+			this.setAerodrom(null);
+		if(lokacija!=null)
+			this.setDestinacija(new LokacijaDTO(lokacija));
+		else
+			this.setDestinacija(null);
+		if(konfiguracijaLeta!=null)
+			this.setKonfiguracijaLeta(new KonfiguracijaLetaDTO(konfiguracijaLeta));
+		else
+			this.setKonfiguracijaLeta(null);
 	}
 
 

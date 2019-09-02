@@ -20,7 +20,9 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
     aerodromi: Aerodrom[]=[];
     destinacije: Lokacija[]=[];
     vrstaLeta: VrstaLeta;
-
+    aerodrom: Aerodrom;
+    desstinacija: Lokacija;
+    konfiguracija: KonfiguracijaLeta;
 
     konfig: KonfiguracijaLeta[]=[];
 
@@ -43,6 +45,8 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
 
     fromDate: NgbDate;
     toDate: NgbDate;
+
+
 
 
     constructor(
@@ -74,6 +78,8 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
 
       this.fromDate = this.calendar.getToday();
       this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
+
+
 
 
       this.aerodromService.getAllAerodromi().then(pom=>
@@ -152,10 +158,17 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
       const dateP = new Date(pickDate.year, pickDate.month - 1, pickDate.day, timeP[0], timeP[1], 0);
       const dateD = new Date(dropDate.year, dropDate.month - 1, dropDate.day, timeD[0], timeD[1], 0);
 
+
+
+
+
+
+
+
       this.let = new Let(
         null,
-        this.regFormA.get('aerodrom').value,
-        this.regFormA.get('destinacija').value,
+        this.aerodrom,
+        this.desstinacija,
         null,
         dateP,
         dateD,
@@ -164,44 +177,45 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
         this.regFormA.get('vremePutovanja').value,
         this.regFormA.get('duzinaPutovanja').value,
         0,
-        this.regFormA.get('konfiguracijaLeta').value,
+        this.konfiguracija,
         this.regFormA.get('opis').value,
         this.regFormA.get('vrstaLeta').value
       );
 
+      console.log("pre slanja");
       console.log(this.let);
 
+      this.letService.saveLet(this.let).then(pom=>{console.log("vratilo"); console.log(pom);})
 
      // console.log("ovoooo " + this.pom1.__zone_symbol__value.presedanje);
     }
 
     onChangeA(value: any){
       console.log(value);
-      this.let.aerodrom.id=value;
+      this.aerodromService.getAerodrom(value).then(pom=>{this.aerodrom=new Aerodrom(); this.aerodrom=pom;
+        console.log(this.aerodrom);})
     }
 
     onChangeL(value: any){
-      console.log(value);
-      this.let.destinacija.id=value;
+      this.letService.getLokacija(value).then(pom=>{this.desstinacija=new Lokacija();this.desstinacija=pom; console.log(this.desstinacija)})
+
     }
 
     onChangeVL(value: any){
       console.log(value);
       if(value==1)
-        this.let.vrstaLeta=VrstaLeta.JEDAN_PRAVAC;
+        this.regFormA.setValue({vrstaLeta : VrstaLeta.JEDAN_PRAVAC});
       if(value==2)
-        this.let.vrstaLeta=VrstaLeta.POVRATNI;
+        this.regFormA.setValue({vrstaLeta : VrstaLeta.POVRATNI});
       if(value==3)
-        this.let.vrstaLeta=VrstaLeta.VISE_DESTINACIJA;
+        this.regFormA.setValue({vrstaLeta : VrstaLeta.VISE_DESTINACIJA});
     }
 
     onChangeK(value: any){
       console.log(value);
 
-      this.aviokompanijaService.getKonfiguracija(value).then(pom=>{
-        console.log(pom);
-        this.let.konfiguracijaLeta=pom;
-      })
+      this.aviokompanijaService.getKonfiguracija(this.regFormA.get('konfiguracijaLeta').value).then(pom=>{this.konfiguracija=new KonfiguracijaLeta();this.konfiguracija=pom; console.log(this.konfiguracija)})
+
     }
 
 
@@ -228,7 +242,7 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
       this.toDate = this.calendar.getNext(this.regFormA.get('vremePolaska').value, 'd', 1);
       this.regFormA.setValue({
         vremePolaska: this.regFormA.get('vremePolaska').value,
-        vremeDolaska: this.calendar.getNext(this.regFormA.get('vremeDolaska').value, 'd', 1),
+        vremeDolaska: this.regFormA.get('vremePolaska').value,
         timePolaska: this.regFormA.get('timePolaska').value,
         timeDolaska: this.regFormA.get('timeDolaska').value
       });

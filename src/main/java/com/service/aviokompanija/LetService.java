@@ -71,35 +71,39 @@ public class LetService {
 		let.setVremePutovanja(letDTO.getVremePutovanja());
 		let.setVremePolaska(letDTO.getVremePolaska());
 		let.setVremeDolaska(letDTO.getVremeDolaska());
-		let.setProsecnaOcena(2.5);
+		let.setProsecnaOcena(0.0);
 		let.setVrstaLeta(letDTO.getVrstaLeta());
 
 
 		if(letDTO.getAerodrom() != null){
 			Optional<Aerodrom> aerodrom = aerodromRepository.findById(letDTO.getAerodrom().getId());
-
+			System.out.println("nije null aer");
 			if(!aerodrom.isPresent())
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aerodrom ne postoji");
 
 			aerodrom.get().getLetovi().add(let);
 			let.setAerodrom(aerodrom.get());
 			aerodromRepository.save(aerodrom.get());
+		}else{
+			System.out.println("null je aer");
 		}
 
 		if(letDTO.getDestinacija() != null){
 			Optional<Lokacija> lokacija = lokacijaRepository.findById(letDTO.getDestinacija().getId());
-
+			System.out.println("nije null des");
 			if(!lokacija.isPresent())
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Destinacija ne postoji");
 
 			lokacija.get().getLetovi().add(let);
 			let.setDestinacija(lokacija.get());
 			lokacijaRepository.save(lokacija.get());
+		}else{
+			System.out.println("null je des");
 		}
 
 		if(letDTO.getKonfiguracijaLeta() != null){
 			Optional<KonfiguracijaLeta> konfiguracija = konfiguracijaLetaRepository.findById(letDTO.getKonfiguracijaLeta().getId());
-
+			System.out.println("nije null konf");
 			if(!konfiguracija.isPresent())
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Konfiguracija ne postoji");
 
@@ -107,10 +111,12 @@ public class LetService {
 			let.setKonfiguracija(konfiguracija.get());
 			konfiguracijaLetaRepository.save(konfiguracija.get());
 
-			formirajSedista(let);
-		}
-		letRepository.save(let);
 
+		}else{
+			System.out.println("null je kof");
+		}
+		let=letRepository.save(let);
+		formirajSedista(let);
 		return new LetDTO(let);
 	}
 
@@ -207,12 +213,12 @@ public class LetService {
 					sediste.setZauzeto(false);
 					sediste.setSegment(segment);
 					sediste.setLet(let);
-					sedisteRepository.save(sediste);
+					sediste=sedisteRepository.save(sediste);
 					segment.getSedista().add(sediste);
 					let.getSedista().add(sediste);
 				}
 			}
-
+			letRepository.save(let);
 			segmentRepository.save(segment);
 		}
 	}
