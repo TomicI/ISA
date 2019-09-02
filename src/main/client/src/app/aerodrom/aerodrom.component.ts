@@ -29,7 +29,7 @@ export class AerodromComponent implements OnInit {
       this.aerodromService.getAerodrom(id).then(aerodrom=>
       {if (aerodrom) {
         this.aerodrom = aerodrom;
-        console.log(`Pronadjeno '${aerodrom.nazivAerodroma}' `);
+        console.log(`Pronadjeno '${aerodrom.naziv}' `);
         /*   this.aerodromService.getDestinacija(this.aerodrom.destinacijaID).subscribe((destinacija: any) => {
              if (destinacija) {
                this.destinacija = destinacija;

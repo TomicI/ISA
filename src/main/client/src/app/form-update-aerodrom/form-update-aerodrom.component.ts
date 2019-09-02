@@ -31,7 +31,7 @@ export class FormUpdateAerodromComponent implements OnInit {
     this.aerodrom=new Aerodrom();
     //this.destinacije=this.destinacija.getDestinacije();
     this.regFormA=this.formBuilder.group({
-      nazivAerodroma: ['']
+      naziv: ['']
     })
 
     this.route.params.subscribe
@@ -39,11 +39,11 @@ export class FormUpdateAerodromComponent implements OnInit {
       if (id) {
         console.log(`aerodrom with id '${id}' `);
         this.aerodromService.getAerodrom(id).then(aerodrom=>{
-          console.log(`aerodrom with name `+ aerodrom.nazivAerodroma);
+          console.log(`aerodrom with name `+ aerodrom.naziv);
           if (aerodrom) {
             this.aerodrom=aerodrom;
             this.regFormA=this.formBuilder.group({
-              nazivAerodroma: aerodrom.nazivAerodroma,
+              nazivAerodroma: aerodrom.naziv,
 
             })
 
@@ -59,7 +59,7 @@ export class FormUpdateAerodromComponent implements OnInit {
 
   onSubmit(){
     this.submitted=true;
-    this.aerodrom.nazivAerodroma=this.regFormA.value.nazivAerodroma;
+    this.aerodrom.naziv=this.regFormA.value.naziv;
     this.aerodromService.updateAerodrom(this.aerodrom);
   }
 

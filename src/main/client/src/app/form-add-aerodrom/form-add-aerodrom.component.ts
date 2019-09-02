@@ -32,13 +32,13 @@ export class FormAddAerodromComponent implements OnInit {
     console.log('Uslo u save !');
     
     this.regFormA=this.formBuilder.group({
-      nazivAerodroma: ['']
+      naziv: ['']
     })
   }
 
   onSubmit(){
     this.submitted=true;
-    this.aerodrom.nazivAerodroma=this.regFormA.value.nazivAerodroma;
+    this.aerodrom.naziv=this.regFormA.value.naziv;
     this.aerodromService.saveAerodrom(this.aerodrom);
   }
 

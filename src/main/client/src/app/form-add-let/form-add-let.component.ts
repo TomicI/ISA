@@ -85,7 +85,10 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
       this.let=new Let();
       this.let.aerodrom=new Aerodrom();
       this.let.aerodrom.id=-1;
-      this.aerodromService.getAllAerodromi().then(pom=>{
+      this.aerodromService.getAllAerodromi().then(pom=>
+      {
+        console.log("aerodromi");
+        console.log(pom);
         this.aerodromi=pom;
       })
 
@@ -119,25 +122,33 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
     onSubmit(){
       this.submitted=true;
       //this.aerodrom.nazivAerodroma=this.regFormA.value.nazivAerodroma;
-      
+      this.let=this.regFormA.value;
       this.regFormA.value.aerodrom=this.let.aerodrom;
      /* console.log("presedanje " + this.pom1.id);
       console.log(this.pom1);
       this.regFormA.value.presedanje=this.pom1.id;*/
 
-     this.let=this.regFormA.value;
+      // this.let.vremePolaska.setHours(this.regFormA.value.timePolaska.split(":")[0]);
 
-     this.let.vremePolaska.setDate(this.regFormA.value.vremePolaska);
-     this.let.vremePolaska.setHours(this.regFormA.value.timePolaska.split(":")[0]);
-     this.let.vremePolaska.setMinutes(this.regFormA.value.timePolaska.split(":")[1]);
-     this.let.vremeDolaska.setDate(this.regFormA.value.vremeDolaska);
-     this.let.vremeDolaska.setHours(this.regFormA.value.timeDolaska.split(":")[0]);
-     this.let.vremeDolaska.setMinutes(this.regFormA.value.timeDolaska.split(":")[1]);
+      this.date=new Date(this.regFormA.value.vremePolaska);
+      this.let.vremePolaska=new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate(), this.regFormA.value.timePolaska.split(":")[0], this.regFormA.value.timePolaska.split(":")[1], 0,0);
+      console.log("Vreme poslaska F ");
+      console.log(this.regFormA.value.vremePolaska);
+
+      console.log("Vreme poslaska L");
+      console.log(this.let.vremePolaska);
+
+      this.date=new Date(this.regFormA.value.vremeDolaska);
+      // this.let.vremePolaska.setMinutes(this.regFormA.value.timePolaska.split(":")[1]);
+      this.let.vremeDolaska=new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate(), this.regFormA.value.timeDolaska.split(":")[0], this.regFormA.value.timeDolaska.split(":")[1], 0,0);
+     // this.let.vremeDolaska.setHours(this.regFormA.value.timeDolaska.split(":")[0]);
+     //this.let.vremeDolaska.setMinutes(this.regFormA.value.timeDolaska.split(":")[1]);
 
      console.log("Vrednsoti let ");
      console.log(this.let);
 
-      this.letService.saveLet(this.regFormA.value).then(pom=>
+
+      this.letService.saveLet(this.let).then(pom=>
       {
         console.log(pom);
       })

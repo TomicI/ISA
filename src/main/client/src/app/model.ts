@@ -14,7 +14,7 @@ export class Aviokompanija {
 
 export class Aerodrom {
   id: number;
-  nazivAerodroma: string;
+  naziv: string;
   lokacija: Lokacija;
   constructor() { }
 
