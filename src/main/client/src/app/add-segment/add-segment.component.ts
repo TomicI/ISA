@@ -26,7 +26,7 @@ export class AddSegmentComponent implements OnInit {
   ngOnInit() {
     this.segment=new Segment();
     this.segment.kategorija=new KategorijaSedista();
-    this.segment.kofiguracija=new KonfiguracijaLeta();
+    this.segment.konfiguracija=new KonfiguracijaLeta();
     this.route.params.subscribe
     ( params => {
       this.id = params['id'];
@@ -34,7 +34,7 @@ export class AddSegmentComponent implements OnInit {
       this.aviokompanijaService.getKonfiguracija(this.id).then(pom=>
         { console.log("konfiguracija");
          console.log(pom);
-        this.segment.kofiguracija=pom;}
+        this.segment.konfiguracija=pom;}
       )
     })
     this.aviokompanijaService.getKategorije().then(pom=>{this.kateg=pom;})
@@ -60,7 +60,7 @@ export class AddSegmentComponent implements OnInit {
     this.aviokompanijaService.addSegment(this.id, this.segment).then(pom=>
       {
         console.log(this.segment);
-        this.router.navigateByUrl('konfig-list/'+this.segment.kofiguracija.aviokompanija.id);
+        this.router.navigateByUrl('konfig-list/'+this.segment.konfiguracija.aviokompanija.id);
       }
     )
   }

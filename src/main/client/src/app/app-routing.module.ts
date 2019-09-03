@@ -39,6 +39,8 @@ import {KonfigListComponent} from "./konfig-list/konfig-list.component";
 import {AddKatSedistaComponent} from "./add-kat-sedista/add-kat-sedista.component";
 import {AddSegmentComponent} from "./add-segment/add-segment.component";
 import {SearchLetComponent} from "./search-let/search-let.component";
+import {Karta} from "./model";
+import {KartaComponent} from "./karta/karta.component";
 
 
 const routes: Routes = [
@@ -111,7 +113,8 @@ const routes: Routes = [
   { path: 'konfig-list/:id', component: KonfigListComponent},
   { path: 'addKatSed/:id', component: AddKatSedistaComponent},
   { path: 'addSegment/:id', component: AddSegmentComponent},
-  { path: 'search', component: SearchLetComponent}
+  { path: 'search', component: SearchLetComponent},
+  { path: 'karta/:id', component: KartaComponent}
   ];
 
 @NgModule({

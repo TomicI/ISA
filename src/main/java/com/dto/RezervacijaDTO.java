@@ -36,8 +36,14 @@ public class RezervacijaDTO {
 		this.datumVremeP = r.getDatumVremeP();
 		this.datumVremeS = r.getDatumVremeS();
 		this.cena = r.getCena();
-		//this.kartaDTO = new KartaDTO(r.getKarta());
-		this.rezervacijaRentACarDTO = new RezervacijaRentACarDTO(r.getRezervacijaRentACar());
+		if(r.getKarta()!=null)
+			this.kartaDTO = new KartaDTO(r.getKarta());
+		else
+			this.kartaDTO=null;
+		if(r.getRezervacijaRentACar()!=null)
+			this.rezervacijaRentACarDTO = new RezervacijaRentACarDTO(r.getRezervacijaRentACar());
+		else
+			this.rezervacijaRentACarDTO=null;
 		this.userDTO = new UserDTO(r.getUser());
 	}
 

@@ -104,11 +104,9 @@ public class LetController {
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
 	public ResponseEntity<List<LetDTO>> pretraga(@RequestBody LetDTO letDTO){
-		try {
+
 			return new ResponseEntity<>(letService.pretraga(letDTO), HttpStatus.OK);
-		} catch (ParseException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+
 	}
 
 }

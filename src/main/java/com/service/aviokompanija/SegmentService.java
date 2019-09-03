@@ -1,8 +1,10 @@
 package com.service.aviokompanija;
 
+import com.dto.aviokompanija.SedisteDTO;
 import com.dto.aviokompanija.SegmentDTO;
 import com.model.aviokompanija.KategorijaSedista;
 import com.model.aviokompanija.KonfiguracijaLeta;
+import com.model.aviokompanija.Sediste;
 import com.model.aviokompanija.Segment;
 import com.repository.aviokompanija.KategorijaSedistaRepository;
 import com.repository.aviokompanija.KonfiguracijaLetaRepository;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,5 +105,22 @@ public class SegmentService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Segment ne postoji");
 
         segmentRepository.deleteById(id);
+    }
+
+    public List<SedisteDTO> getSedista(Long id, Long idL){
+        Optional<Segment> segment = segmentRepository.findById(id);
+        if(!segment.isPresent())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Segment ne postoji");
+
+        if(segment.get().getSedista().isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sedista ne postoje");
+
+        List<Sediste> p=new ArrayList<>();
+        for(Sediste s: segment.get().getSedista()){
+            if(s.getLet().getId()==idL)
+                p.add(s);
+        }
+
+        return liste.sedista(new ArrayList<>(p));
     }
 }

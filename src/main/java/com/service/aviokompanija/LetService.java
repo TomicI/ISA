@@ -45,6 +45,9 @@ public class LetService {
 	@Autowired
 	private AerodromRepository aerodromRepository;
 
+	@Autowired
+	private PrtljagRepository prtljagRepository;
+
 	private ListeDTO liste = new ListeDTO();
 
 	public List<LetDTO> getAll(){
@@ -236,20 +239,113 @@ public class LetService {
 		return ocena / let.getOcene().size();
 	}
 
-	public List<LetDTO> pretraga(LetDTO letDTO) throws ParseException {
+	public List<LetDTO> pretraga(LetDTO letDTO){
 		List<LetDTO> letovi=new ArrayList<>();
 		List<Let> svi=letRepository.findAll();
-		System.out.println("aer " + letDTO.getOpis() + " dest " + letDTO.getPresedanja()+ "   vremep " + letDTO.getVremePolaska() + " vrem iz b " + svi.get(0).getVremePolaska());
+		System.out.println("aer " + letDTO.getOpis() + " dest " + letDTO.getPresedanja()+ "   vremep " + letDTO.getVremePolaska() );
 
 		for(Let l: svi) {
-			if(l.getAerodrom().getNaziv().equals(letDTO.getOpis()) && l.getDestinacija().getNaziv().equals(letDTO.getPresedanja()) && l.getVremePolaska().compareTo(letDTO.getVremePolaska())==0)  {
-				LetDTO le=new LetDTO(l);
-				System.out.println(" poklapa se " + l.getId());
+			if(l.getAerodrom().getNaziv().equals(letDTO.getOpis()) && l.getDestinacija().getNaziv().equals(letDTO.getPresedanja()) && l.getVremePolaska().compareTo(letDTO.getVremePolaska())==0 )  {
+				if(letDTO.getDuzinaPutovanja()!= null && letDTO.getDuzinaPutovanja()>0 && letDTO.getVrstaLeta()!=null && letDTO.getBrojPresedanja()>0 ){
+					if(getAllSlobodna(l.getId()).size()>=letDTO.getDuzinaPutovanja() && l.getVrstaLeta().equals(letDTO.getVrstaLeta()) && getMaxTezinaPrtljaga(l.getId())>=letDTO.getBrojPresedanja()){
+						LetDTO le=new LetDTO(l);
+						System.out.println(" poklapa se 3 dodatna " + l.getId());
 
-				letovi.add(le);
+						letovi.add(le);
+					}
+				}
+				if(letDTO.getDuzinaPutovanja()!= null && letDTO.getDuzinaPutovanja()>0 && letDTO.getVrstaLeta()==null && letDTO.getBrojPresedanja()>0 ){
+					if(getAllSlobodna(l.getId()).size()>=letDTO.getDuzinaPutovanja()  && getMaxTezinaPrtljaga(l.getId())>=letDTO.getBrojPresedanja()){
+						LetDTO le=new LetDTO(l);
+						System.out.println(" poklapa se  br osoba i prtljag " + l.getId());
+
+						letovi.add(le);
+					}
+				}
+
+				if(letDTO.getDuzinaPutovanja()== null  && letDTO.getVrstaLeta()!=null && letDTO.getBrojPresedanja()>0 ){
+					if(l.getVrstaLeta().equals(letDTO.getVrstaLeta()) && getMaxTezinaPrtljaga(l.getId())>=letDTO.getBrojPresedanja()){
+						LetDTO le=new LetDTO(l);
+						System.out.println(" poklapa se vrsta leta i prtljag  " + l.getId());
+
+						letovi.add(le);
+					}
+				}
+
+
+				if(letDTO.getDuzinaPutovanja()!= null && letDTO.getDuzinaPutovanja()>0 && letDTO.getVrstaLeta()!=null && letDTO.getBrojPresedanja()==0 ){
+					if(getAllSlobodna(l.getId()).size()>=letDTO.getDuzinaPutovanja() && l.getVrstaLeta().equals(letDTO.getVrstaLeta()) ){
+						LetDTO le=new LetDTO(l);
+						System.out.println(" poklapa se broj osoba i vrsta leta  " + l.getId());
+
+						letovi.add(le);
+					}
+				}
+
+				if(letDTO.getDuzinaPutovanja()!= null && letDTO.getDuzinaPutovanja()>0 && letDTO.getVrstaLeta()==null && letDTO.getBrojPresedanja()==0 ){
+					if(getAllSlobodna(l.getId()).size()>=letDTO.getDuzinaPutovanja()){
+						LetDTO le=new LetDTO(l);
+						System.out.println(" poklapa se broj osoba " + l.getId());
+
+						letovi.add(le);
+					}
+				}
+
+				if(letDTO.getDuzinaPutovanja()== null && letDTO.getVrstaLeta()!=null && letDTO.getBrojPresedanja()==0 ){
+					if( l.getVrstaLeta().equals(letDTO.getVrstaLeta()) ){
+						LetDTO le=new LetDTO(l);
+						System.out.println(" poklapa se vrsta leta " + l.getId());
+
+						letovi.add(le);
+					}
+				}
+
+				if(letDTO.getDuzinaPutovanja()== null && letDTO.getVrstaLeta()==null && letDTO.getBrojPresedanja()>0 ){
+					if(getMaxTezinaPrtljaga(l.getId())>=letDTO.getBrojPresedanja()){
+						LetDTO le=new LetDTO(l);
+						System.out.println(" poklapa se broj presedanja " + l.getId());
+
+						letovi.add(le);
+					}
+				}
+
+				if(letDTO.getDuzinaPutovanja()== null &&  letDTO.getVrstaLeta()==null && letDTO.getBrojPresedanja()==0 ){
+					LetDTO le=new LetDTO(l);
+						System.out.println(" poklapa se bez dodatnih  " + l.getId());
+
+						letovi.add(le);
+				}
 			}
 		}
 
 		return letovi;
+	}
+
+	public List<Sediste> getAllSlobodna(Long id){
+		Optional<Let> l = letRepository.findById(id);
+		List<Sediste> sedistaSl = new ArrayList<>();
+		if(l.isPresent()) {
+			if (l.get().getSedista().isEmpty())
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sedista ne postoje");
+
+			for (Sediste s : l.get().getSedista()) {
+				if (!s.getZauzeto())
+					sedistaSl.add(s);
+			}
+		}
+		return sedistaSl;
+	}
+
+	public double getMaxTezinaPrtljaga(Long id){
+		Optional<Let> l = letRepository.findById(id);
+		double max=0;
+		if(l.isPresent()) {
+			List<Prtljag> prtljags=prtljagRepository.findByAviokompanija(l.get().getKonfiguracija().getAviokompanija());
+			for(Prtljag p: prtljags){
+				if(p.getTezina()>max)
+					max=p.getTezina();
+			}
+		}
+		return max;
 	}
 }

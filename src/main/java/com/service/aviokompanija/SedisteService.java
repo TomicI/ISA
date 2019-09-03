@@ -3,14 +3,18 @@ package com.service.aviokompanija;
 import com.dto.aviokompanija.KartaDTO;
 import com.dto.aviokompanija.SedisteDTO;
 import com.model.aviokompanija.Karta;
+import com.model.aviokompanija.Let;
+import com.model.aviokompanija.Prtljag;
 import com.model.aviokompanija.Sediste;
 import com.repository.aviokompanija.KartaRepository;
+import com.repository.aviokompanija.PrtljagRepository;
 import com.repository.aviokompanija.SedisteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +28,9 @@ public class SedisteService {
 	@Autowired
 	private KartaRepository kartaRepository;
 
+	@Autowired
+	private PrtljagRepository prtljagRepository;
+
 	private ListeDTO liste = new ListeDTO();
 
 	public List<SedisteDTO> getAll(){
@@ -34,6 +41,8 @@ public class SedisteService {
 
 		return liste.sedista(sedista);
 	}
+
+
 
 	public SedisteDTO findById(Long id){
 		Optional<Sediste> sediste = sedisteRepository.findById(id);
@@ -60,6 +69,23 @@ public class SedisteService {
 		if (!sediste.isPresent())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sediste ne postoji");
 
+		if(sedisteDTO.getKarta()!=null){
+			Optional<Karta>karta=kartaRepository.findById(sedisteDTO.getKarta().getId());
+			if(karta.isPresent()){
+				sediste.get().setKarta(karta.get());
+				karta.get().getSedista().add(sediste.get());
+				kartaRepository.save(karta.get());
+			}
+		}
+
+		if(sedisteDTO.getPrtljag()!=null){
+			Optional<Prtljag>karta=prtljagRepository.findById(sedisteDTO.getKarta().getId());
+			if(karta.isPresent()){
+				sediste.get().setPrtljag(karta.get());
+				karta.get().getSedista().add(sediste.get());
+				prtljagRepository.save(karta.get());
+			}
+		}
 		sediste.get().setZauzeto(sedisteDTO.getZauzeto());
 		sediste.get().setRed(sedisteDTO.getRed());
 		sediste.get().setKolona(sedisteDTO.getKolona());

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, FormControl} from "@angular/forms";
-import {Aerodrom, KonfiguracijaLeta, Let, Lokacija, VrstaLeta} from "../model";
+import {Aerodrom, Karta, KonfiguracijaLeta, Let, Lokacija, VrstaLeta} from "../model";
 import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AerodromSService} from "../aerodrom-s/aerodrom-s.service";
@@ -34,15 +34,18 @@ export class SearchLetComponent implements OnInit {
   myControl1 = new FormControl();
   fromDate: NgbDate;
   toDate: NgbDate;
+  tabela: boolean;
+  karta: Karta;
   constructor(
               private formBuilder: FormBuilder ,
               private aerodromService: AerodromSService,
               private letService:LetService,
               private calendar: NgbCalendar,
+              private router: Router,
               private aviokompanijaService: AviokompanijaService) { }
 
   ngOnInit() {
-
+    this.tabela=false;
     this.fromDate = this.calendar.getToday();
     this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
 
@@ -79,7 +82,8 @@ export class SearchLetComponent implements OnInit {
       presedanja: [''],
       brojPresedanja:[''],
       konfiguracijaLeta: [''],
-      vrstaLeta:['']
+      vrstaLeta:[null],
+      duzinaPutovanja:['']
     })
 
 
@@ -128,14 +132,32 @@ export class SearchLetComponent implements OnInit {
 
   }
 
+  onChangeVL(value: any){
+    console.log(value);
+    if(value==-1)
+      this.searchFormGroup.setValue({vrstaLeta : null});
+    if(value==1)
+      this.searchFormGroup.setValue({vrstaLeta : VrstaLeta.JEDAN_PRAVAC});
+    if(value==2)
+      this.searchFormGroup.setValue({vrstaLeta : VrstaLeta.POVRATNI});
+    if(value==3)
+      this.searchFormGroup.setValue({vrstaLeta : VrstaLeta.VISE_DESTINACIJA});
+  }
 
   onSubmit(){
     this.pretraga=this.searchFormGroup.value;
     this.pretraga.konfiguracijaLeta=new KonfiguracijaLeta();
-    this.pretraga.vrstaLeta=null;
+
+    if(this.searchFormGroup.get('vrstaLeta').value=="-1")
+      this.pretraga.vrstaLeta=null;
+
     console.log(this.pretraga);
 
-    this.letService.pretraga(this.pretraga).then(pom=>{console.log("vratilo"); console.log(pom);})
+    this.letService.pretraga(this.pretraga).then(pom=>{console.log("vratilo"); console.log(pom); this.rezultat=pom; this.tabela=true;})
 
+  }
+
+  sledeciKorak(l: number){
+    this.router.navigateByUrl('karta/'+l);
   }
 }

@@ -67,18 +67,23 @@ public class KartaService {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sediste je zauzeto");
 			let = sediste.get().getLet();
 			karta.getSedista().add(sediste.get());
+			karta.setLet(let);
+			karta=kartaRepository.save(karta);
 			sediste.get().setZauzeto(true);
 			sediste.get().setKarta(karta);
 			sedisteRepository.save(sediste.get());
 			karta.setCena(karta.getCena() + sediste.get().getSegment().getKategorija().getCena());
 		}
-
+		karta=kartaRepository.save(karta);
 		rezervacija.setKarta(karta);
-		karta.setRezervacija(rezervacija);
+
 		rezervacija.setCena(karta.getCena());
-		rezervacija.setDatumVremeP(new Date());
+		rezervacija.setDatumVremeP(let.getVremePolaska());
 		rezervacija.setDatumVremeS(let.getVremeDolaska());
-		rezervacijaRepository.save(rezervacija);
+		rezervacija.setUser(user.get());
+		rezervacija=rezervacijaRepository.save(rezervacija);
+
+		karta.setRezervacija(rezervacija);
 		kartaRepository.save(karta);
 
 		return new RezervacijaDTO(rezervacija);

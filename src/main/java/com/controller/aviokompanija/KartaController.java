@@ -2,6 +2,8 @@ package com.controller.aviokompanija;
 
 import com.dto.RezervacijaDTO;
 import com.dto.aviokompanija.KartaDTO;
+import com.model.user.User;
+import com.service.UserService;
 import com.service.aviokompanija.KartaService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -12,7 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -20,6 +24,9 @@ import java.util.List;
 public class KartaController {
 	@Autowired
 	private KartaService kartaService;
+
+	@Autowired
+	private UserService userService;
 
 	@RequestMapping(value="/brze_rezervacije", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "Vraca sve brze rezervacije", httpMethod = "GET", produces = "application/json")
@@ -33,14 +40,15 @@ public class KartaController {
 	}
 
 
-	@RequestMapping(value= "/{user_id}",method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "Kreira kartu", httpMethod = "POST", produces = "application/json", consumes = "application/json")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "OK", response = RezervacijaDTO.class),
 			@ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
-	public ResponseEntity<RezervacijaDTO> create(@PathVariable(value="user_id") Long id, @RequestBody List<Long> sedista){
-		return new ResponseEntity<>(kartaService.create(id, sedista), HttpStatus.CREATED);
+	public ResponseEntity<RezervacijaDTO> create(@RequestBody List<Long> sedista, Principal user){
+		Optional<User> u=this.userService.findByUsername(user.getName());
+		return new ResponseEntity<>(kartaService.create(u.get().getId(), sedista), HttpStatus.CREATED);
 	}
 }

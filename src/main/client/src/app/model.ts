@@ -94,7 +94,7 @@ export class Segment {
   duzina: number;
   sirina: number;
   redniBroj: number;
-  kofiguracija: KonfiguracijaLeta;
+  konfiguracija: KonfiguracijaLeta;
   kategorija: KategorijaSedista;
   constructor() { }
 

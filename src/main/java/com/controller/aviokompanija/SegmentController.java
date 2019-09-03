@@ -1,5 +1,6 @@
 package com.controller.aviokompanija;
 
+import com.dto.aviokompanija.SedisteDTO;
 import com.dto.aviokompanija.SegmentDTO;
 import com.service.aviokompanija.SegmentService;
 import io.swagger.annotations.ApiOperation;
@@ -75,5 +76,16 @@ public class SegmentController {
     public ResponseEntity<Void> delete(@PathVariable(value = "id") Long id){
         segmentService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}/sedista/{idL}",method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Vraca sva sedista", httpMethod = "GET", produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = List.class),
+            @ApiResponse(code = 204, message = "No Content"),
+            @ApiResponse(code = 400, message = "Bad Request")
+    })
+    public ResponseEntity<List<SedisteDTO>> segmenti(@PathVariable(value = "id") Long id, @PathVariable(value = "idL") Long idL){
+        return new ResponseEntity<>(segmentService.getSedista(id, idL), HttpStatus.OK);
     }
 }

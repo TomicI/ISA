@@ -24,8 +24,25 @@ public class SedisteDTO {
 		this.setKolona(kolona);
 		this.setRed(red);
 		this.setZauzeto(zauzeto);
-		this.setKarta(new KartaDTO(karta));
-		this.setPutnik(new PutnikDTO(putnik));
+		if(karta!=null)
+			this.setKarta(new KartaDTO(karta));
+		else
+			this.setKarta(null);
+
+		if(putnik!=null)
+			this.setPutnik(new PutnikDTO(putnik));
+		else
+			 this.setPutnik(null);
+
+		if(prtljag!=null)
+			this.setPrtljag(new PrtljagDTO(prtljag));
+		else
+			this.setPrtljag(null);
+
+		if(segment!=null)
+			this.setSegment(new SegmentDTO(segment));
+		else
+			this.setSegment(null);
 	}
 
 
