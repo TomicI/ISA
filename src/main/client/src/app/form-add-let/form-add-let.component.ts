@@ -162,9 +162,6 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
 
 
 
-
-
-
       this.let = new Let(
         null,
         this.aerodrom,

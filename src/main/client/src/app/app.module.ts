@@ -75,6 +75,8 @@ import { AddSegmentComponent } from './add-segment/add-segment.component';
 import { AddKatSedistaComponent } from './add-kat-sedista/add-kat-sedista.component';
 import {RouteCheckComponent} from "./route-check/route-check.component";
 import { ReservationPreviewComponent } from './reservation-preview/reservation-preview.component';
+import { SearchLetComponent } from './search-let/search-let.component';
+import {MatFormFieldModule, MatInputModule} from "@angular/material";
 
 
 @NgModule({
@@ -136,8 +138,8 @@ import { ReservationPreviewComponent } from './reservation-preview/reservation-p
     KonfigListComponent,
     AddSegmentComponent,
     AddKatSedistaComponent,
-    ReservationPreviewComponent
-
+    ReservationPreviewComponent,
+    SearchLetComponent
   ],
   imports: [
     BrowserModule,
@@ -151,6 +153,8 @@ import { ReservationPreviewComponent } from './reservation-preview/reservation-p
     MatAutocompleteModule,
     NgbModule.forRoot(),
     BrowserAnimationsModule,
+    MatFormFieldModule,
+    MatInputModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory

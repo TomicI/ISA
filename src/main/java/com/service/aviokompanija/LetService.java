@@ -11,6 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -230,5 +234,22 @@ public class LetService {
 		}
 
 		return ocena / let.getOcene().size();
+	}
+
+	public List<LetDTO> pretraga(LetDTO letDTO) throws ParseException {
+		List<LetDTO> letovi=new ArrayList<>();
+		List<Let> svi=letRepository.findAll();
+		System.out.println("aer " + letDTO.getOpis() + " dest " + letDTO.getPresedanja()+ "   vremep " + letDTO.getVremePolaska() + " vrem iz b " + svi.get(0).getVremePolaska());
+
+		for(Let l: svi) {
+			if(l.getAerodrom().getNaziv().equals(letDTO.getOpis()) && l.getDestinacija().getNaziv().equals(letDTO.getPresedanja()) && l.getVremePolaska().compareTo(letDTO.getVremePolaska())==0)  {
+				LetDTO le=new LetDTO(l);
+				System.out.println(" poklapa se " + l.getId());
+
+				letovi.add(le);
+			}
+		}
+
+		return letovi;
 	}
 }

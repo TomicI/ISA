@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -54,6 +55,8 @@ public class LetController {
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
 	public ResponseEntity<LetDTO> create(@RequestBody LetDTO letDTO){
+		System.out.println("od " + letDTO.getVremePolaska());
+		System.out.println("do " + letDTO.getVremeDolaska());
 		return new ResponseEntity<>(letService.create(letDTO), HttpStatus.CREATED);
 	}
 
@@ -91,6 +94,21 @@ public class LetController {
 										  @PathVariable(value = "user_id") Long userId,
 										  @PathVariable(value = "ocena") Integer ocena){
 		return new ResponseEntity<>(letService.oceni(id,userId,ocena),HttpStatus.OK);
+	}
+
+	@RequestMapping(value="/pretraga", method=RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Vraca sve letove", httpMethod = "PUT", produces = "application/json")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "OK", response = List.class),
+			@ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 400, message = "Bad Request")
+	})
+	public ResponseEntity<List<LetDTO>> pretraga(@RequestBody LetDTO letDTO){
+		try {
+			return new ResponseEntity<>(letService.pretraga(letDTO), HttpStatus.OK);
+		} catch (ParseException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 
 }

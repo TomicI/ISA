@@ -2,7 +2,7 @@ package com.dto.aviokompanija;
 
 import com.model.aviokompanija.*;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class LetDTO {
 
@@ -19,8 +19,6 @@ public class LetDTO {
 	private AerodromDTO aerodrom;
 	private LokacijaDTO destinacija;
 	private KonfiguracijaLetaDTO konfiguracijaLeta;
-	private String timePolaska;
-	private String timeDolaska;
 
 	
 	public LetDTO(Let let) {
@@ -41,7 +39,10 @@ public class LetDTO {
 		this.setOpis(opis);
 		this.setPresedanja(presedanja);
 		this.setBrojPresedanja(brojPresedanja);
-		this.setVrstaLeta(vrstaLeta);
+		if(vrstaLeta!=null)
+			this.setVrstaLeta(vrstaLeta);
+		else
+			this.setVrstaLeta(null);
 		if(aerodrom!=null)
 			this.setAerodrom(new AerodromDTO(aerodrom));
 		else
@@ -159,21 +160,5 @@ public class LetDTO {
 
 	public void setKonfiguracijaLeta(KonfiguracijaLetaDTO konfiguracijaLeta) {
 		this.konfiguracijaLeta = konfiguracijaLeta;
-	}
-
-	public String getTimePolaska() {
-		return timePolaska;
-	}
-
-	public void setTimePolaska(String timePolaska) {
-		this.timePolaska = timePolaska;
-	}
-
-	public String getTimeDolaska() {
-		return timeDolaska;
-	}
-
-	public void setTimeDolaska(String timeDolaska) {
-		this.timeDolaska = timeDolaska;
 	}
 }

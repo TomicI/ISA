@@ -38,6 +38,7 @@ import {FormKonfLetaComponent} from "./form-konf-leta/form-konf-leta.component";
 import {KonfigListComponent} from "./konfig-list/konfig-list.component";
 import {AddKatSedistaComponent} from "./add-kat-sedista/add-kat-sedista.component";
 import {AddSegmentComponent} from "./add-segment/add-segment.component";
+import {SearchLetComponent} from "./search-let/search-let.component";
 
 
 const routes: Routes = [
@@ -109,7 +110,8 @@ const routes: Routes = [
   { path: 'addKonf/:id', component: FormKonfLetaComponent},
   { path: 'konfig-list/:id', component: KonfigListComponent},
   { path: 'addKatSed/:id', component: AddKatSedistaComponent},
-  { path: 'addSegment/:id', component: AddSegmentComponent}
+  { path: 'addSegment/:id', component: AddSegmentComponent},
+  { path: 'search', component: SearchLetComponent}
   ];
 
 @NgModule({

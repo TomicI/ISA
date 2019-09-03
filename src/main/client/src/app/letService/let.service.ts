@@ -50,4 +50,8 @@ export class LetService {
     return this.http.get<Lokacija>(this.LOK_API+'/'+id).toPromise();
   }
 
+  pretraga(pom: Let): Promise<Let[]> {
+    return this.http.put<Let[]>(this.LET_API +'/pretraga', pom).toPromise();
+  }
+
 }

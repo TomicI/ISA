@@ -1,0 +1,95 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+<div class="container">
+
+  <div class="jumbotron">
+    <h1 class="display-4">Hello!</h1>
+    <p class="lead"></p>
+    <hr class="my-4">
+
+    <form id="formSearch" class="form-row col-20" [formGroup]="searchFormGroup" (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <div class="input-group col-sm-10">
+          <input class="form-control" placeholder="Depart" formControlName="vremePolaska" name="vremePolaska" [(ngModel)]="model"  type=date>
+
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-group col-sm-10">
+          <input class="form-control" placeholder="Return" formControlName="vremeDolaska" name="vremeDolaska" [(ngModel)]="model" type=date>
+
+        </div>
+      </div>
+
+      <div class="form-group form-inline">
+
+        <div class="col-sm-8 text-left">
+          <mat-form-field>
+            <input class="form-control shadow" matInput [matAutocomplete]="auto" [formControl]="myControl" [(ngModel)]="opis"  name="opis" id="opis" type="text" formControlName="opis" placeholder="From">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptions.value " [value]="option">
+                {{option}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-8 text-left">
+          <mat-form-field>
+            <input class="form-control shadow" matInput [matAutocomplete]="auto" [formControl]="myControl" name="presedanja" [(ngModel)]="presedanja" id="presedanja" type="text" formControlName="presedanja" placeholder="To">
+
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let option1 of filteredOptions1.value " [value]="option1">
+                {{option1}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </div>
+    </form>
+
+
+    <table class="table table-dark" [hidden]="!tabela">
+      <thead>
+      <tr>
+        <th>Datum polaska</th>
+        <th>Vreme polaska</th>
+        <th>Datum dolaska</th>
+        <th>Vreme dolaska</th>
+        <th>Aerodrom polazak</th>
+        <th>Aerodrom dolazak</th>
+        <th>Aviokompanija</th>
+        <th>Broj presedanja</th>
+        <th>Opis leta</th>
+        <th>Presedanja</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr *ngFor="let l of rezultat " style="width: 300px">
+        <td>{{l.vremePolaska}}</td>
+        <td>{{l.vremeDolaska}}</td>
+        <td>{{l.aerodrom.naziv}}</td>
+        <td>{{l.destinacija.naziv}}</td>
+        <td>{{l.brojPresedanja}}</td>
+        <td>{{l.presedanja}}</td>
+        <td>{{l.opis}}</td>
+        <td><button (click)=sledeciKorak(l)>Buy ticket</button></td>
+      </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+  </div>
+</div>
+
+
+
