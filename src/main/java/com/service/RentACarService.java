@@ -65,6 +65,8 @@ public class RentACarService {
 			}
 			if (sumOcena > 0)
 				filijalaDTO.setProsecnaOcena(sumOcena/broj);
+			else
+				filijalaDTO.setProsecnaOcena(0.0);
 			filijaleDTO.add(filijalaDTO);
 		}
 

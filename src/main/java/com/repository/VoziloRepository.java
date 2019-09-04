@@ -12,5 +12,7 @@ public interface VoziloRepository extends JpaRepository<Vozilo,Long> {
 
     List<Vozilo> findByFilijalaId(Long filijala_id);
 
+
+
 	
 }

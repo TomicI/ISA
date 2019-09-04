@@ -1,5 +1,6 @@
 package com.service;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import com.dto.FilijalaDTO;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import com.repository.FilijalaRepository;
@@ -100,6 +102,14 @@ public class FilijalaService {
             Menjac gear,
             String group) {
 
+
+        ArrayList<String> groups = new ArrayList<>();
+        int fromP = 0;
+        int toP = 0;
+
+        double fromPrice = 0.0;
+        double toPrice = 0.0;
+
         if (!existsByAdresa(locationp)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Branch doesn't exist!");
         }
@@ -107,6 +117,51 @@ public class FilijalaService {
         if (!existsByAdresa(bring)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Branch doesn't exist!");
         }
+
+        if (group!=null){
+            String[] gtemp= group.split("-");
+
+            for (String s:gtemp){
+                groups.add(s);
+            }
+
+
+        }
+
+        if (range!=null){
+            if (range.equals("0 - 30")){
+
+                fromPrice = 0;
+                toPrice = 30;
+
+            }else if (range.equals("30 - 60")){
+                fromPrice = 30;
+                toPrice = 60;
+
+            }else if(range.equals("60 - 100")){
+
+                fromPrice = 60;
+                toPrice = 100;
+
+            }else if(range.equals("Greater than 100")){
+
+                fromPrice = 100;
+
+            }
+        }
+
+        if (peo!=null){
+            if (peo.equals("2 - 4")){
+
+                fromP = 2;
+                toP = 4;
+
+            }else if (peo.equals("5 - 7")){
+                fromP = 5;
+                toP = 7;
+            }
+        }
+
 
         Filijala filSearch = find(locationp);
 
@@ -176,11 +231,26 @@ public class FilijalaService {
 
                     for (CenovnikRentACar c : cenovnikV) {
 
+                        if (range!=null){
+                            if (range.equals("Greater than 100") && c.getCena() < fromPrice){
+                                continue;
+                            }else if (c.getCena() < fromPrice || c.getCena() > toPrice) {
+                                continue;
+                            }
+                        }
+
+                        if (temp.before(c.getOdDatuma())){
+                            continue;
+                        }
+
                         System.out.println("Od datuma " + c.getOdDatuma());
                         System.out.println("Do datuma " + c.getDoDatuma());
 
                         System.out.println("Temp " + temp);
                         while (temp.before(c.getDoDatuma()) && temp.before(dropOff)) {
+
+
+
                             System.out.println("Cena " + temp + " " + c.getCena());
                             cen += c.getCena();
 
@@ -193,11 +263,66 @@ public class FilijalaService {
                             if (temp.compareTo(dropOff) == 0 || temp.compareTo(dropOff) == 1) {
                                 System.out.println("CENA " + cen);
 
-                                VoziloDTO voziloDTO = new VoziloDTO(v);
-                                voziloDTO.setProsecnaOcena(average(v));
+                                if (gear!=null && peo!=null && group!=null){
+                                    System.out.println("SVA TRI");
+                                    if (v.getMenjac()==gear && v.getBrojSedista()>=fromP && v.getBrojSedista()<=toP){
+                                        for (String s:groups){
+                                            if (v.getGrupa().equals(s)){
+                                                saveDTO(v,rezervacijePretrage,pickUp,dropOff,cen,filSearch,filBring);
+                                            }
+                                        }
 
-                                RezervacijaRentACarDTO rezTemp = new RezervacijaRentACarDTO(null, null, pickUp, dropOff, cen, false, StatusRes.Reserved, new FilijalaDTO(filSearch), new FilijalaDTO(filBring), voziloDTO);
-                                rezervacijePretrage.add(rezTemp);
+                                    }
+                                }else if (gear!=null && peo!=null){
+                                    System.out.println("Gear peo");
+                                    if (v.getMenjac()==gear && v.getBrojSedista()>=fromP && v.getBrojSedista()<=toP){
+                                        saveDTO(v,rezervacijePretrage,pickUp,dropOff,cen,filSearch,filBring);
+                                    }
+                                }else if (gear!=null && group!=null){
+                                    System.out.println("Gear Group");
+                                    if (v.getMenjac()==gear ){
+                                        for (String s:groups){
+                                            if (v.getGrupa().equals(s)){
+                                                saveDTO(v,rezervacijePretrage,pickUp,dropOff,cen,filSearch,filBring);
+                                            }
+                                        }
+                                    }
+                                } else if (peo != null && group != null) {
+                                    System.out.println("Peo Group");
+                                    if (v.getBrojSedista()>=fromP && v.getBrojSedista()<=toP){
+                                        for (String s:groups){
+                                            if (v.getGrupa().equals(s)){
+                                                saveDTO(v,rezervacijePretrage,pickUp,dropOff,cen,filSearch,filBring);
+                                            }
+                                        }
+                                    }
+
+                                } else if (gear != null) {
+                                    System.out.println("Gear ");
+                                    if (v.getMenjac() == gear) {
+                                        saveDTO(v,rezervacijePretrage,pickUp,dropOff,cen,filSearch,filBring);
+                                    }
+                                } else if (peo != null) {
+                                    System.out.println("peo");
+                                    System.out.println(fromP+" "+toP);
+                                    System.out.println(v.getBrojSedista());
+                                    if (v.getBrojSedista() >= fromP && v.getBrojSedista() <= toP) {
+                                        saveDTO(v,rezervacijePretrage,pickUp,dropOff,cen,filSearch,filBring);
+                                    }
+                                } else if (group != null) {
+                                    System.out.println("Group");
+                                    for (String s : groups) {
+                                        if (v.getGrupa().equals(s)) {
+                                            saveDTO(v,rezervacijePretrage,pickUp,dropOff,cen,filSearch,filBring);
+                                        }
+                                    }
+                                }else{
+                                    System.out.println("Filter )=0");
+                                    saveDTO(v,rezervacijePretrage,pickUp,dropOff,cen,filSearch,filBring);
+                                }
+
+
+
                                 break;
                             }
                         }
@@ -308,6 +433,14 @@ public class FilijalaService {
             return (sumOcena / broj);
 
         return 0;
+    }
+
+    public void saveDTO(Vozilo v,List<RezervacijaRentACarDTO> rezervacijePretrage,Date pickUp,Date dropOff,Double cen,Filijala filSearch,Filijala filBring){
+        VoziloDTO voziloDTO = new VoziloDTO(v);
+        voziloDTO.setProsecnaOcena(average(v));
+
+        RezervacijaRentACarDTO rezTemp = new RezervacijaRentACarDTO(null, null, pickUp, dropOff, cen,0.0, false,false,StatusRes.Reserved, new FilijalaDTO(filSearch), new FilijalaDTO(filBring), voziloDTO);
+        rezervacijePretrage.add(rezTemp);
     }
 
     public boolean ratePermission(Long resid,Long filid){

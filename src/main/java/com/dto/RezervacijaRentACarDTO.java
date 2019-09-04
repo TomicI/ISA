@@ -11,7 +11,9 @@ public class RezervacijaRentACarDTO {
 	private Date datumPreuz;
 	private Date datumVracanja;
 	private Double cena;
+	private Double popust;
 	private Boolean otkazana;
+	private Boolean naPopustu;
 	private StatusRes status;
 	private FilijalaDTO filijalaDTO;
 	private FilijalaDTO filijalaDropDTO;
@@ -23,22 +25,29 @@ public class RezervacijaRentACarDTO {
 		this.datumPreuz = r.getDatumPreuz();
 		this.datumVracanja = r.getDatumVracanja();
 		this.cena = r.getCena();
+		this.popust = r.getPopust();
 		this.filijalaDTO = new FilijalaDTO(r.getRezervacija());
 		this.filijalaDropDTO=new FilijalaDTO(r.getRezervacijaDrop());
 		this.voziloDTO = new VoziloDTO(r.getVozilo());
 		this.otkazana = r.getOtkazana();
+		this.naPopustu = r.getNaPopustu();
 		this.status = r.getStatus();
 	}
 
-	public RezervacijaRentACarDTO(Long id, Date datumRez, Date datumPreuz, Date datumVracanja, Double cena, Boolean otkazana ,
-			StatusRes status ,FilijalaDTO filijalaDTO,FilijalaDTO filijalaDropDTO,VoziloDTO voziloDTO) {
+	public RezervacijaRentACarDTO(Long id,
+								  Date datumRez, Date datumPreuz, Date datumVracanja,
+								  Double cena,Double popust, Boolean otkazana , Boolean naPopustu,
+								  StatusRes status ,FilijalaDTO filijalaDTO,
+								  FilijalaDTO filijalaDropDTO,VoziloDTO voziloDTO) {
 		super();
 		this.id = id;
 		this.datumRez = datumRez;
 		this.datumPreuz = datumPreuz;
 		this.datumVracanja = datumVracanja;
 		this.cena = cena;
+		this.popust = popust;
 		this.otkazana = otkazana;
+		this.naPopustu = naPopustu;
 		this.filijalaDTO = filijalaDTO;
 		this.filijalaDropDTO = filijalaDropDTO;
 		this.voziloDTO = voziloDTO;
@@ -132,4 +141,19 @@ public class RezervacijaRentACarDTO {
 		this.filijalaDropDTO = filijalaDropDTO;
 	}
 
+	public Double getPopust() {
+		return popust;
+	}
+
+	public void setPopust(Double popust) {
+		this.popust = popust;
+	}
+
+	public Boolean getNaPopustu() {
+		return naPopustu;
+	}
+
+	public void setNaPopustu(Boolean naPopustu) {
+		this.naPopustu = naPopustu;
+	}
 }

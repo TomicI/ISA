@@ -1,10 +1,7 @@
 package com.service;
 
 import java.security.Principal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.dto.RezervacijaDTO;
 import com.dto.RezervacijaRentACarDTO;
@@ -17,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.repository.RezervacijaRentACarRepository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -36,6 +36,8 @@ public class RezervacijaRentACarService {
 
 	@Autowired
 	private RezervacijaService rezervacijaService;
+
+
 	
 	public Optional<RezervacijaRentACar> findOne(Long id){
 		return rezRepository.findById(id);
@@ -80,9 +82,17 @@ public class RezervacijaRentACarService {
 		return new RezervacijaRentACarDTO(rezOptional.get());
 	}
 
+
+	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
 	public RezervacijaDTO saveRentReservation(RezervacijaRentACarDTO rezDTO,Principal user){
 
 		Optional<User> optionalUser = userService.findByUsername(user.getName());
+
+		Date today = new Date();
+
+		if (rezDTO.getDatumPreuz().before(today) || rezDTO.getDatumPreuz().equals(today)){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pick-up time not valid!");
+		}
 
 		if (!optionalUser.isPresent()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User doesn't exist!");
@@ -116,7 +126,7 @@ public class RezervacijaRentACarService {
 		RezervacijaRentACar rez = new RezervacijaRentACar();
 		Rezervacija rezervacija = new Rezervacija();
 
-		rez.setDatumRez(new Date());
+
 		rez.setDatumPreuz (rezDTO.getDatumPreuz());
 		rez.setDatumVracanja (rezDTO.getDatumVracanja());
 		rez.setCena (rezDTO.getCena());
@@ -124,24 +134,36 @@ public class RezervacijaRentACarService {
 		rez.setRezervacija(filijalaOptional.get());
 		rez.setRezervacijaDrop(filijalaDropOptional.get());
 
-		rez.setStatus(StatusRes.Reserved);
 		rez.setVozilo(voziloOptional.get());
 
-		rezervacija.setDatumVremeP(rezDTO.getDatumPreuz());
-		rezervacija.setDatumVremeS(rezDTO.getDatumVracanja());
-		rezervacija.setCena(rezDTO.getCena());
-		rezervacija.setUser(optionalUser.get());
-		rezervacija.setRezervacijaRentACar(rez);
+        rez.setDatumRez(new Date());
+        rez.setStatus(StatusRes.Reserved);
 
-		rezervacija.setKarta(null);
-		rezervacija.setRezervacijaSobe(null);
-
-		save(rez);
-
-		rezervacijaService.save(rezervacija);
+		if (!rezDTO.getNaPopustu()){
 
 
-		return new RezervacijaDTO(rezervacija);
+            rezervacija.setDatumVremeP(rezDTO.getDatumPreuz());
+            rezervacija.setDatumVremeS(rezDTO.getDatumVracanja());
+            rezervacija.setCena(rezDTO.getCena());
+            rezervacija.setUser(optionalUser.get());
+            rezervacija.setRezervacijaRentACar(rez);
+
+            rezervacija.setKarta(null);
+            rezervacija.setRezervacijaSobe(null);
+            rezervacijaService.save(rezervacija);
+            save(rez);
+            return new RezervacijaDTO(rezervacija);
+        }else{
+
+		    rez.setNaPopustu(true);
+		    rez.setPopust(rezDTO.getPopust());
+            save(rez);
+
+        }
+
+
+
+		return null;
 
 	}
 
@@ -206,6 +228,48 @@ public class RezervacijaRentACarService {
 		rez = save(rez);
 
 		return new ResponseMessage("Reservation canceled!");
+
+	}
+
+	public List<RezervacijaRentACarDTO> getAllAdmin(boolean res , Principal username){
+
+		System.out.println(res);
+
+		User user = userService.getByUsername(username.getName());
+
+		List<Filijala> filijale = filijalaService.findByRentACar(user.getRentACar().getId());
+
+		ArrayList<RezervacijaRentACarDTO> rezervacijaRentACarDTOS = new ArrayList<>();
+
+
+		for (Filijala f :filijale){
+
+			List<RezervacijaRentACar> rezList = f.getRezervacije();
+
+			for (RezervacijaRentACar r:rezList){
+
+				if (res){
+					if (!r.getNaPopustu()){
+						RezervacijaRentACarDTO rezervacijaRentACarDTO  = new RezervacijaRentACarDTO(r);
+
+						rezervacijaRentACarDTOS.add(rezervacijaRentACarDTO);
+					}
+				}else{
+					if (r.getNaPopustu()){
+
+						RezervacijaRentACarDTO rezervacijaRentACarDTO  = new RezervacijaRentACarDTO(r);
+
+						rezervacijaRentACarDTOS.add(rezervacijaRentACarDTO);
+					}
+				}
+
+
+
+			}
+
+		}
+
+		return rezervacijaRentACarDTOS;
 
 	}
 

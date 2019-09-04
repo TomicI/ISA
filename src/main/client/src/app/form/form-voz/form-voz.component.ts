@@ -34,6 +34,7 @@ export class FormVozComponent implements OnInit {
       nazivVozInput: null,
       markaVozInput: null,
       modelVozInput: null,
+      grupa:null,
       vrataVozSelect: null,
       sedVozSelect: null,
       torVozSelect: null,

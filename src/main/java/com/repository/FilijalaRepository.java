@@ -13,5 +13,4 @@ public interface FilijalaRepository extends JpaRepository<Filijala,Long> {
 
     List<Filijala> findByRentACarId(Long rentacar_id);
 
-
 }

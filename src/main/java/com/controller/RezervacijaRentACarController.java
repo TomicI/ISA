@@ -3,18 +3,15 @@ package com.controller;
 import java.security.Principal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import com.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import com.model.Filijala;
 import com.model.RezervacijaRentACar;
@@ -48,6 +45,14 @@ public class RezervacijaRentACarController {
 		
 		return new ResponseEntity<>(rezService.getOne(id),HttpStatus.OK);
 		
+	}
+
+	@RequestMapping(value="/resAdmin",method=RequestMethod.GET)
+	@PreAuthorize("hasRole('ADMIN_RENT')")
+	public ResponseEntity<List<RezervacijaRentACarDTO>> getAllAdmin(@RequestParam(value="res")boolean res,Principal username){
+
+		return new ResponseEntity<>(rezService.getAllAdmin(res,username),HttpStatus.OK);
+
 	}
 
 	@RequestMapping(value="/cancel/{id}",method=RequestMethod.GET)

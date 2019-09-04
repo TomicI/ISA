@@ -202,13 +202,19 @@ export class PanelAdminRentComponent implements OnInit {
 
   allVehicleRent(){
 
-    this.vehicleService.allVehicleRent().subscribe(data=>{
-      this.allVozila = data;
-      this.data = data;
-      this.dataSource = new MatTableDataSource(this.data);
-      this.dataSource.paginator = this.paginator2;
-      console.log(data);
-    });
+    if (this.filijala!=null){
+      this.showVehicles(this.filijala);
+    }else{
+      this.vehicleService.allVehicleRent().subscribe(data=>{
+        this.allVozila = data;
+        this.data = data;
+        this.dataSource = new MatTableDataSource(this.data);
+        this.dataSource.paginator = this.paginator2;
+        console.log(data);
+      });
+    }
+
+
 
   }
 
@@ -318,6 +324,7 @@ export class PanelAdminRentComponent implements OnInit {
 
     this.voziloFormGroup = this.fb.group({
       vozilo: this.fb.group(new Vozilo(
+        null,
         null,
         null,
         null,

@@ -2,15 +2,26 @@
   <div formGroupName="vozilo">
     <div class="form-group">
       <label for="nazivVozInput">Name</label>
-      <input type="text" class="form-control form-control-sm" id="nazivVozInput" [formControlName]="'naziv'" placeholder="">
+      <input type="text" class="form-control form-control-sm" id="nazivVozInput" [formControlName]="'naziv'" placeholder="" required="true">
     </div>
     <div class="form-group">
       <label for="markaVozInput">Brand</label>
-      <input type="text" class="form-control form-control-sm" id="markaVozInput" [formControlName]="'marka'" placeholder="">
+      <input type="text" class="form-control form-control-sm" id="markaVozInput" [formControlName]="'marka'" placeholder="" required="true">
     </div>
     <div class="form-group">
       <label for="modelVozInput">Model</label>
-      <input type="text" class="form-control form-control-sm" id="modelVozInput" [formControlName]="'model'" placeholder="">
+      <input type="text" class="form-control form-control-sm" id="modelVozInput" [formControlName]="'model'" placeholder="" required="true">
+    </div>
+
+    <div class="form-group">
+      <label for="groupVozSelect">Group</label>
+      <select class="form-control form-control-sm" id="groupVozSelect" [formControlName]="'grupa'">
+        <option value="mini">Mini</option>
+        <option value="eco">Economy</option>
+        <option value="stan">Standard</option>
+        <option value="suv">SUV</option>
+        <option value="prem">Premium</option>
+      </select>
     </div>
 
     <div class="form-group">

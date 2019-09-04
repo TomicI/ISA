@@ -24,6 +24,7 @@ export class SearchGetComponent implements OnInit {
   criBool = false;
 
   params:any;
+  httpParams:HttpParams;
 
   reservations: any[];
 
@@ -37,6 +38,42 @@ export class SearchGetComponent implements OnInit {
   ngOnInit() {
 
 
+    this.initForm();
+
+
+    this.route.queryParams.subscribe(param => {
+      this.params = param;
+
+
+      let params = new HttpParams();
+      params = params.append('locationp',param.locationp);
+      params = params.append('bring',param.bring);
+      params = params.append('pickup',param.pickup);
+      params = params.append('dropoff',param.dropoff);
+
+      this.httpParams = params;
+
+      console.log(params);
+
+      this.rentService.search(params).toPromise().then(data => {
+        this.reservations = data;
+
+        this.initForm();
+
+        if (this.reservations.length != 0) {
+          this.resBool = true;
+          this.criBool = false;
+        } else {
+          this.criBool = true;
+        }
+      });
+      console.log(params);
+    });
+
+  }
+
+  initForm(){
+
     this.filterFormGroup = this.formBuilder.group({
       mini: false,
       eco: false,
@@ -47,29 +84,6 @@ export class SearchGetComponent implements OnInit {
       range: 'All',
       menjac: 'All'
 
-    });
-
-    this.route.queryParams.subscribe(param => {
-      this.params = param;
-
-      let params = new HttpParams();
-      params = params.append('locationp',param.locationp);
-      params = params.append('bring',param.bring);
-      params = params.append('pickup',param.pickup);
-      params = params.append('dropoff',param.dropoff);
-
-      console.log(params);
-
-      this.rentService.search(params).toPromise().then(data => {
-        this.reservations = data;
-        if (this.reservations.length != 0) {
-          this.resBool = true;
-
-        } else {
-          this.criBool = true;
-        }
-      });
-      console.log(params);
     });
 
   }
@@ -101,8 +115,15 @@ export class SearchGetComponent implements OnInit {
 
   onSubmit() {
 
-    let group = '';
+    let params = new HttpParams();
 
+    params = params.append('locationp',this.params.locationp);
+    params = params.append('bring',this.params.bring);
+    params = params.append('pickup',this.params.pickup);
+    params = params.append('dropoff',this.params.dropoff);
+
+
+    let group = '';
 
     console.log(this.filterFormGroup.value);
 
@@ -134,11 +155,32 @@ export class SearchGetComponent implements OnInit {
     }
 
 
+    if (group!=''){
+      params = params.append('group',group);
+    }
 
-    console.log(this.params)
+    if (people!='All'){
+      params = params.append('peo',people);
+    }
 
+    if (range!='All'){
+      params = params.append('range',range);
+    }
 
+    if (menjac!='All'){
+      params = params.append('gear',menjac);
+    }
 
+    console.log(params);
+
+    this.rentService.search(params).toPromise().then(data => {
+      this.reservations = data;
+      if (this.reservations.length != 0) {
+        this.criBool = false;
+      } else {
+        this.criBool = true;
+      }
+    });
 
 
 

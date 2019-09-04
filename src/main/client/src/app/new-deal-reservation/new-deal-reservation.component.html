@@ -1,0 +1,157 @@
+<div class="container">
+
+  <div class="mt-2 col-md-12"></div>
+
+  <div class="row">
+
+    <div class="col-6">
+
+      <form id="formSearch" [formGroup]="searchFormGroup" (ngSubmit)="onSubmit()">
+
+        <div class="form-group">
+          <input type="search" class="form-control" matInput id="locationp" placeholder="Pick-up adress"
+                 [formControlName]="'locationp'" [matAutocomplete]="auto1">
+          <mat-autocomplete #auto1="matAutocomplete" (optionSelected)='autoPrvi($event.option.group.label)'>
+            <mat-optgroup *ngFor="let group of searchGroupOptions | async" [label]="group.rent">
+              <mat-option *ngFor="let adress of group.adress" [value]="adress">
+                {{adress}}
+              </mat-option>
+            </mat-optgroup>
+          </mat-autocomplete>
+
+          <div class="mt-2 "></div>
+          <div class="alert alert-danger"
+               *ngIf="searchFormGroup.controls.locationp.errors?.required && searchFormGroup.controls.locationp.touched">
+            Search field can't be empty!
+          </div>
+        </div>
+
+        <div class="form-group ">
+          <input type="search" class="form-control" matInput id="bring" placeholder="Drop-off adress"
+                 [formControlName]="'bring'" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-optgroup *ngFor="let group of searchGroupOptions2 | async" [label]="group.rent">
+              <mat-option *ngFor="let adress of group.adress" [value]="adress">
+                {{adress}}
+              </mat-option>
+            </mat-optgroup>
+          </mat-autocomplete>
+
+        </div>
+
+        <div class="form-group ">
+          <div class="input-group">
+            <input class="form-control" [readonly]="true" [minDate]="fromDate" name="d2" ngbDatepicker
+                   #d2="ngbDatepicker"
+                   (dateSelect)="onDateSelected()" [formControlName]="'pickDate'">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary calendar" (click)="d2.toggle()" type="button"><i
+                class="fas fa-calendar"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group ">
+          <select class="custom-select" id="pickupTime" [formControlName]="'pickTime'">
+            <option *ngFor="let hour of arrayOfHoursP" [value]="hour">
+              {{hour}}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group ">
+          <div class="input-group">
+            <input class="form-control" [readonly]="true" [minDate]="toDate" name="d3" ngbDatepicker #d3="ngbDatepicker"
+                   [formControlName]="'dropDate'">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary calendar" (click)="d3.toggle()" type="button"><i
+                class="fas fa-calendar"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group ">
+          <select class="custom-select" id="dropoffTime" [formControlName]="'dropTime'">
+            <option *ngFor="let hour of arrayOfHoursD" [value]="hour">
+              {{hour}}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group ">
+          <button type="submit" class="btn btn-outline-secondary" [disabled]="!searchFormGroup.valid">Search</button>
+        </div>
+
+      </form>
+
+    </div>
+
+
+    <div class="col-md-6">
+
+      <div class="card">
+
+        <div class="card-header">
+          <h5>Cars</h5>
+        </div>
+        <div class="list-group list-group-flush">
+
+          <li *ngFor="let res of reservations " class="list-group-item flex-column ">
+            <div class="d-flex justify-content-between">
+              <h6 class="mb-1">{{res.voziloDTO.naziv}}</h6>
+              <h6 class="mb-1"> {{res.cena}} €</h6>
+              <p>
+                <button class="btn btn-sm " type="button " (click)="resInfo(res)"><i class="fas fa-ellipsis-v"></i>
+                </button>
+              </p>
+            </div>
+
+
+          </li>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">{{reservation.voziloDTO.naziv}}</h5>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <p class="h6">PickUp adress : {{reservation.filijalaDTO.adresa}} </p>
+      <p class="h6">DropOff adress : {{reservation.filijalaDropDTO.adresa}} </p>
+      <h6>Pick-up: {{reservation.datumPreuz | date: 'dd/MM/yyyy HH:mm' }} </h6>
+      <h6>Drop-off: {{reservation.datumVracanja | date: 'dd/MM/yyyy HH:mm'}} </h6>
+
+
+      <div class="mt-2 "></div>
+
+      <form class="form" [formGroup]="priceGroup">
+        <div class="form-group">
+          <label for="priceInput" class="h6">Discount</label>
+          <input type="number" min="0" class="form-control form-control-sm" id="priceInput" [formControlName]="'price'"
+                 placeholder="">
+        </div>
+
+        <button class="btn btn-sm btn-primary" type="button" (click)="addDeal()">Add</button>
+
+      </form>
+
+
+    </div>
+    <div class="modal-footer">
+
+
+    </div>
+  </ng-template>
+
+
+</div>
+

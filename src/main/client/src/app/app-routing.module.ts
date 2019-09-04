@@ -39,8 +39,8 @@ import {KonfigListComponent} from "./konfig-list/konfig-list.component";
 import {AddKatSedistaComponent} from "./add-kat-sedista/add-kat-sedista.component";
 import {AddSegmentComponent} from "./add-segment/add-segment.component";
 import {SearchLetComponent} from "./search-let/search-let.component";
-import {Karta} from "./model";
 import {KartaComponent} from "./karta/karta.component";
+import {NewDealReservationComponent} from "./new-deal-reservation/new-deal-reservation.component";
 
 
 const routes: Routes = [
@@ -75,6 +75,7 @@ const routes: Routes = [
       },
     ]
   },
+  {path: 'newDeal', component: NewDealReservationComponent,canActivate: [AuthGuard],data: {roles: ['ROLE_ADMIN_RENT']}},
   {path: 'profile', component: PanelProfileComponent, canActivate: [AuthGuard], data: {roles: ["ROLE_USER_REG"]}},
   {path: 'settings', component: PanelSettingsComponent, canActivate: [AuthGuard], data: {roles: ["ROLE_USER_REG"]}},
   {path: 'signup', component: SignUpModalComponent},

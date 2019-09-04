@@ -197,6 +197,7 @@ export class Vozilo {
   naziv: string;
   marka: string;
   model: string;
+  grupa: string;
   brojSedista: number;
   brojVrata: number;
   brojTorbi: number;
@@ -214,6 +215,7 @@ export class Vozilo {
     naziv: string,
     marka: string,
     model: string,
+    grupa: string,
     brojSedista: number,
     brojVrata: number,
     brojTorbi: number,
@@ -230,6 +232,7 @@ export class Vozilo {
     this.naziv = naziv;
     this.marka = marka;
     this.model = model;
+    this.grupa = grupa;
     this.brojSedista = brojSedista;
     this.brojVrata = brojVrata;
     this.brojTorbi = brojTorbi;
@@ -276,10 +279,12 @@ export class RezervacijaRent {
   datumPreuz: Date;
   datumVracanja: Date;
   cena: number;
+  popust:number;
   filijalaDTO: Filijala;
   filijalaDropDTO: Filijala;
   status: StatusRes;
   otkazana: boolean;
+  naPopustu:boolean;
   voziloDTO: Vozilo;
   userDTO: User;
 
@@ -289,10 +294,12 @@ export class RezervacijaRent {
     datumPreuz: Date,
     datumVracanja: Date,
     cena: number,
+    popust:number,
     filijalaDTO: Filijala,
     filijalaDropDTO: Filijala,
     status: StatusRes,
     otkazana: boolean,
+    naPopustu:boolean,
     voziloDTO: Vozilo,
     userDTO: User,
   ) {
@@ -301,10 +308,12 @@ export class RezervacijaRent {
     this.datumPreuz = datumPreuz;
     this.datumVracanja = datumVracanja;
     this.cena = cena;
+    this.popust = popust;
     this.filijalaDTO = filijalaDTO;
     this.filijalaDropDTO = filijalaDTO;
     this.status = status;
     this.otkazana = otkazana;
+    this.naPopustu=naPopustu;
     this.voziloDTO = voziloDTO;
     this.userDTO = userDTO;
 

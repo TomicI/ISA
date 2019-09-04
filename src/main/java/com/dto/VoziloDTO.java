@@ -17,6 +17,8 @@ public class VoziloDTO {
 
 	private String model;
 
+	private String grupa;
+
 	private Integer brojSedista;
 
 	private Integer brojVrata;
@@ -45,7 +47,7 @@ public class VoziloDTO {
 	}
 	
 
-	public VoziloDTO(Long id, String naziv, String marka, String model, Integer brojSedista, Integer brojVrata,
+	public VoziloDTO(Long id, String naziv, String marka, String model,String grupa,Integer brojSedista, Integer brojVrata,
 			Double brojTorbi, Gorivo gorivo, Menjac menjac, Boolean klima, Double prosecnaOcena,Integer rezervoar,Double potrosnja,String dodatniopis,
 			FilijalaDTO filijalaDTO) {
 		super();
@@ -53,6 +55,7 @@ public class VoziloDTO {
 		this.naziv = naziv;
 		this.marka = marka;
 		this.model = model;
+		this.grupa = grupa;
 		this.brojSedista = brojSedista;
 		this.brojVrata = brojVrata;
 		this.brojTorbi = brojTorbi;
@@ -72,6 +75,7 @@ public class VoziloDTO {
 		this.naziv = v.getNaziv();
 		this.marka =v.getMarka();
 		this.model = v.getModel();
+		this.grupa = v.getGrupa();
 		this.brojSedista = v.getBrojSedista();
 		this.brojVrata = v.getBrojVrata();
 		this.brojTorbi =v.getBrojTorbi();
@@ -211,5 +215,12 @@ public class VoziloDTO {
 		this.dodatniopis = dodatniopis;
 	}
 
-	
+
+	public String getGrupa() {
+		return grupa;
+	}
+
+	public void setGrupa(String grupa) {
+		this.grupa = grupa;
+	}
 }

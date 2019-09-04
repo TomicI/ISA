@@ -115,6 +115,7 @@ public class VoziloService {
 		Filijala filijala = filijalaService.getOne(voziloDTO.getFilijalaDTO().getId());
 
 		Vozilo vozilo = new Vozilo();
+        vozilo.setFilijala(filijala);
 
 		saveFromDTO(voziloDTO,vozilo);
 
@@ -240,6 +241,7 @@ public class VoziloService {
 		vozilo.setNaziv(voziloDTO.getNaziv());
 		vozilo.setMarka(voziloDTO.getMarka());
 		vozilo.setModel(voziloDTO.getModel());
+		vozilo.setGrupa(voziloDTO.getGrupa());
 		vozilo.setMenjac(voziloDTO.getMenjac());
 		vozilo.setRezervoar(voziloDTO.getRezervoar());
 		vozilo.setGorivo(voziloDTO.getGorivo());

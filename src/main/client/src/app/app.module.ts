@@ -77,6 +77,7 @@ import {RouteCheckComponent} from "./route-check/route-check.component";
 import { ReservationPreviewComponent } from './reservation-preview/reservation-preview.component';
 import { SearchLetComponent } from './search-let/search-let.component';
 import {MatFormFieldModule, MatInputModule} from "@angular/material";
+import {NewDealReservationComponent} from "./new-deal-reservation/new-deal-reservation.component";
 
 
 
@@ -140,7 +141,8 @@ import {MatFormFieldModule, MatInputModule} from "@angular/material";
     AddSegmentComponent,
     AddKatSedistaComponent,
     ReservationPreviewComponent,
-    SearchLetComponent
+    SearchLetComponent,
+    NewDealReservationComponent
   ],
   imports: [
     BrowserModule,

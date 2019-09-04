@@ -15,14 +15,14 @@ public class UserDTO {
     private String lastName;
     private String email;
     private boolean enabled;
-    private Long avioID;
+    //private Long avioID;
 
     public UserDTO(User user){
-        this(user.getId(),user.getPoints(),user.getBrojPasosa(),user.getCity(),user.getPhone(),user.getUsername(),user.getFirstName(),user.getLastName(),user.getEmail(),user.isEnabled(), user.getAviokompanija().getId());
+        this(user.getId(),user.getPoints(),user.getBrojPasosa(),user.getCity(),user.getPhone(),user.getUsername(),user.getFirstName(),user.getLastName(),user.getEmail(),user.isEnabled());
     }
 
 
-    public UserDTO(Long id, int points, String brojPasosa, String city, String phone, String username,String firstName, String lastName, String email, boolean enabled, Long avioID) {
+    public UserDTO(Long id, int points, String brojPasosa, String city, String phone, String username,String firstName, String lastName, String email, boolean enabled) {
         this.id = id;
         this.points = points;
         this.brojPasosa = brojPasosa;
@@ -33,7 +33,7 @@ public class UserDTO {
         this.lastName = lastName;
         this.email = email;
         this.enabled = enabled;
-        this.avioID=avioID;
+        //this.avioID=avioID;
     }
 
     public Long getId() {
@@ -124,11 +124,11 @@ public class UserDTO {
         this.phone = phone;
     }
 
-    public Long getAvioID() {
-        return avioID;
-    }
+    //public Long getAvioID() {
+    //    return avioID;
+    //}
 
-    public void setAvioID(Long avioID) {
-        this.avioID = avioID;
-    }
+    //public void setAvioID(Long avioID) {
+    //   this.avioID = avioID;
+    //}
 }

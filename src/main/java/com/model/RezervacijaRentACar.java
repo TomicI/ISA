@@ -33,7 +33,13 @@ public class RezervacijaRentACar {
 	private Double cena;
 
 	@Column
+	private Double popust = 0.0;
+
+	@Column
 	private Boolean otkazana;
+
+	@Column
+	private Boolean naPopustu;
 
 	@Column
 	private StatusRes status;
@@ -144,4 +150,19 @@ public class RezervacijaRentACar {
 		this.rezervacijaDrop = rezervacijaDrop;
 	}
 
+	public Double getPopust() {
+		return popust;
+	}
+
+	public void setPopust(Double popust) {
+		this.popust = popust;
+	}
+
+	public Boolean getNaPopustu() {
+		return naPopustu;
+	}
+
+	public void setNaPopustu(Boolean naPopustu) {
+		this.naPopustu = naPopustu;
+	}
 }

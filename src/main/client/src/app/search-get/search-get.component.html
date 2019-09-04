@@ -8,7 +8,7 @@
     <div *ngIf="resBool" class="col-sm-6">
 
 
-      <div class="card mt-4">
+      <div class="card mt-4" style="width: 15rem">
 
         <div class="card-header">
           <h6>Filters</h6>
@@ -63,7 +63,7 @@
             <div class="form-group">
               <label for="peopleVozSelect">People</label>
               <select class="form-control form-control-sm" id="peopleVozSelect" [formControlName]="'people'">
-                <option>All</option>
+                <option value="All">All</option>
                 <option>2 - 4</option>
                 <option>5 - 7</option>
               </select>
@@ -72,7 +72,7 @@
             <div class="form-group">
               <label for="priceVozSelect">Price range</label>
               <select class="form-control form-control-sm" id="priceVozSelect" [formControlName]="'range'">
-                <option>All</option>
+                <option value="All">All</option>
                 <option>0 - 30</option>
                 <option>30 - 60</option>
                 <option>60 - 100</option>
@@ -83,7 +83,7 @@
             <div class="form-group">
               <label for="menjacVozSelect">Gear</label>
               <select class="form-control form-control-sm" id="menjacVozSelect" [formControlName]="'menjac'">
-                <option>All</option>
+                <option value="All">All</option>
                 <option value="AUTO">Automatic</option>
                 <option value="MANU">Manual</option>
               </select>
@@ -103,6 +103,10 @@
     </div>
 
     <div class="col-sm-6">
+
+      <div *ngIf="criBool">
+        <h3>No result for this criteria!</h3>
+      </div>
 
       <div class="card-deck">
         <div *ngFor="let res of reservations">
@@ -149,9 +153,7 @@
 
   </div>
 
-  <div *ngIf="criBool" class="row">
-    <h3>No result for this criteria!</h3>
-  </div>
+
 
 
 </div>

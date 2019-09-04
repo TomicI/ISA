@@ -58,7 +58,7 @@
 
             <div class="d-flex justify-content-between ">
               <h5>Password </h5>
-              <p>{{user.lastPasswordResetDate}}</p>
+              <p>{{user.lastPasswordResetDate | date: 'dd/MM/yyyy HH:MM'}}</p>
               <div>
                 <button class="btn" type="button" (click)="editPass()"><i class="far fa-edit"></i></button>
               </div>

@@ -35,10 +35,10 @@ insert into cenovnik_rentacar(od_datuma,do_datuma,cena,vozilo_id,servis_id) valu
 insert into cenovnik_rentacar(od_datuma,do_datuma,cena,vozilo_id,servis_id) values ('2019-01-01','2019-12-31',true,35,2);
 insert into cenovnik_rentacar(od_datuma,do_datuma,cena,vozilo_id,servis_id) values ('2019-02-01','2019-04-30',true,45,3);
 
-insert into rezervacija_rentacar(cena,datum_rez,datum_preuz,datum_vracanja, filijala_id , vozilo_id,user_id,status,otkazana) values 
+insert into rezervacija_rentacar(cena,datum_rez,datum_preuz,datum_vracanja, filijala_id , vozilo_id,status,otkazana) values
 (60,'2019-02-08','2019-02-10 12:00','2019-02-14',1,2,4,0,0);
 
-insert into rezervacija_rentacar(cena,datum_rez,datum_preuz,datum_vracanja, filijala_id , vozilo_id,user_id,status,otkazana) values 
+insert into rezervacija_rentacar(cena,datum_rez,datum_preuz,datum_vracanja, filijala_id , vozilo_id,status,otkazana) values
 (60,'2019-01-28','2019-02-02 12:00','2019-02-06',2,4,4,0,0);
 
 

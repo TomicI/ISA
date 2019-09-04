@@ -79,31 +79,7 @@ public class FilijalaController {
 
 		return new ResponseEntity<>(new FilijalaDTO(filijalaService.edit(filijalaDTO)),HttpStatus.OK);
 	}
-	
-	@RequestMapping(value = "/rezadmin", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('ADMIN_RENT')")
-	public ResponseEntity<?> allRez(Principal user) {
-		
-		Optional<User> optionalUser = userService.findByUsername(user.getName());
-		
-		RentACar rtemp = optionalUser.get().getRentACar();
-		
-		List<Filijala> filLista = rtemp.getFilijale();
-		
-		List<RezervacijaRentACarDTO> rezList = new ArrayList<RezervacijaRentACarDTO>();
 
-		for (Filijala f : filLista) {
-			for(RezervacijaRentACar r : f.getRezervacije()) {
-				RezervacijaRentACarDTO reztemp = new RezervacijaRentACarDTO(r);
-				rezList.add(reztemp);
-			}
-		}
-
-		
-	
-		return new ResponseEntity<>(rezList,HttpStatus.OK);
-		
-	}
 	
 	
 	
