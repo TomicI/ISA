@@ -1,5 +1,7 @@
 package com.dto.aviokompanija;
 
+import com.dto.RezervacijaDTO;
+import com.model.Rezervacija;
 import com.model.aviokompanija.Karta;
 import com.model.user.User;
 
@@ -11,10 +13,17 @@ public class KartaDTO {
 	private LetDTO let;
 	private User user;
 	private Double prosecnaOcena;
+	private Double cena;
+	//private RezervacijaDTO rezervacija;
+
 	public KartaDTO() {
 	}
 
 	public KartaDTO(Karta k) {
+		this.id=k.getId();
+		this.let=new LetDTO(k.getLet());
+		this.cena=k.getCena();
+		//this.rezervacija=new RezervacijaDTO(k.getRezervacija());
 	}
 
 
@@ -23,7 +32,7 @@ public class KartaDTO {
 
 		this.let=let;
 		this.user=user;
-				this.prosecnaOcena = prosecnaOcena;
+		this.prosecnaOcena = prosecnaOcena;
 
 	}
 	

@@ -2,6 +2,7 @@ package com.controller.aviokompanija;
 
 import com.dto.aviokompanija.LetDTO;
 import com.dto.aviokompanija.OcenaDTO;
+import com.dto.aviokompanija.SedisteDTO;
 import com.model.aviokompanija.Let;
 import com.service.aviokompanija.LetService;
 import io.swagger.annotations.ApiOperation;
@@ -55,8 +56,6 @@ public class LetController {
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
 	public ResponseEntity<LetDTO> create(@RequestBody LetDTO letDTO){
-		System.out.println("od " + letDTO.getVremePolaska());
-		System.out.println("do " + letDTO.getVremeDolaska());
 		return new ResponseEntity<>(letService.create(letDTO), HttpStatus.CREATED);
 	}
 
@@ -109,4 +108,15 @@ public class LetController {
 
 	}
 
+
+	@RequestMapping(value = "/sedista/{idL}",method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Vraca sva sedista", httpMethod = "GET", produces = "application/json")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "OK", response = List.class),
+			@ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 400, message = "Bad Request")
+	})
+	public ResponseEntity<List<SedisteDTO>> segmenti( @PathVariable(value = "idL") Long idL){
+		return new ResponseEntity<>(letService.getSedista(idL), HttpStatus.OK);
+	}
 }

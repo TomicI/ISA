@@ -3,7 +3,9 @@ package com.model.aviokompanija;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,11 +26,11 @@ public class KategorijaSedista {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "kategorija")
-	private Set<Segment> segmenti;
+	private List<Segment> segmenti;
 
 	public KategorijaSedista() {
 		super();
-		segmenti = new HashSet<>();
+		segmenti = new ArrayList<>();
 	}
 
 	public Long getId() {
@@ -63,11 +65,11 @@ public class KategorijaSedista {
 		this.aviokompanija = aviokompanija;
 	}
 
-	public Set<Segment> getSegmenti() {
+	public List<Segment> getSegmenti() {
 		return segmenti;
 	}
 
-	public void setSegmenti(HashSet<Segment> segmenti) {
+	public void setSegmenti(List<Segment> segmenti) {
 		this.segmenti = segmenti;
 	}
 }

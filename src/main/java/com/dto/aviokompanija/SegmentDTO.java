@@ -23,19 +23,23 @@ public class SegmentDTO {
         this.setSirina(sirina);
         this.setRedniBroj(redniBroj);
         if(konfiguracijaLeta!=null) {
-            System.out.println("Konf je null :O");
+            System.out.println("Konf je " + konfiguracijaLeta.getId());
             this.setKonfiguracija(new KonfiguracijaLetaDTO(konfiguracijaLeta));
         }
-        else
+        else {
             this.setKonfiguracija(null);
+            System.out.println("Konf je null");
+        }
 
         if(kategorija!=null) {
-            System.out.println("Kat je null :O");
+            System.out.println("Kat je null " + kategorijaSedista.getId());
             this.setKategorija(new KategorijaSedistaDTO(kategorijaSedista));
 
         }
-        else
+        else {
             this.setKonfiguracija(null);
+            System.out.println("Kat je null");
+        }
     }
 
     public Long getId() {

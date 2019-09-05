@@ -54,6 +54,17 @@ public class RezervacijaController {
 
     }
 
+    @RequestMapping(value = "/rez/{id}", method = RequestMethod.GET)
+    public ResponseEntity<RezervacijaDTO> getReservation(@PathVariable Long id) {
+        RezervacijaDTO r= as.getReservation(id);
+        if(r.getKartaDTO()!=null)
+            System.out.println("id karte " + r.getKartaDTO().getId());
+        else
+            System.out.println("karta je null");
+        return new ResponseEntity<>(r,HttpStatus.OK);
+
+    }
+
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity<RezervacijaDTO> saveRezervacija(@RequestBody RezervacijaDTO rezervacijaDTO) {
 

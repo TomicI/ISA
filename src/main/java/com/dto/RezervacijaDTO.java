@@ -36,10 +36,13 @@ public class RezervacijaDTO {
 		this.datumVremeP = r.getDatumVremeP();
 		this.datumVremeS = r.getDatumVremeS();
 		this.cena = r.getCena();
-		if(r.getKarta()!=null)
+		if(r.getKarta()!=null) {
 			this.kartaDTO = new KartaDTO(r.getKarta());
-		else
-			this.kartaDTO=null;
+			System.out.println("karta id "+ r.getKarta().getId());
+		}else {
+			this.kartaDTO = null;
+			System.out.println("karta je null");
+		}
 		if(r.getRezervacijaRentACar()!=null)
 			this.rezervacijaRentACarDTO = new RezervacijaRentACarDTO(r.getRezervacijaRentACar());
 		else

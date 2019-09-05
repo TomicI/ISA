@@ -24,7 +24,9 @@ public class Rezervacija {
 	@Column
 	private double cena;
 
-	@OneToOne
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "karta_id")
 	private Karta karta;
 
 	@OneToOne

@@ -17,6 +17,7 @@ export class KartaComponent implements OnInit {
   sedista: Sediste[]=[]
   rezervisana: number[]=[]
   karta: Karta;
+  price: number;
 
   constructor( private letService: LetService,
                private router: Router,
@@ -24,6 +25,7 @@ export class KartaComponent implements OnInit {
 
   ngOnInit() {
     this.karta=new Karta();
+    this.price=0;
     this.route.params.subscribe
     ( params =>  { const id = params['id'];
       if (id) {
@@ -33,28 +35,31 @@ export class KartaComponent implements OnInit {
           this.karta.let=new Let(pom.id, pom.aerodrom, pom.destinacija, pom.brojSedista, pom.vremePolaska, pom.vremeDolaska, pom.presedanja, pom.brojPresedanja, pom.vremePutovanja, pom.duzinaPutovanja, pom.prosecnaOcena, pom.konfiguracijaLeta, pom.opis, pom.vrstaLeta);
           console.log("konf");
           console.log(this.karta.let.konfiguracijaLeta);
-          this.letService.getSegmente(pom.konfiguracijaLeta.id).then(pom=>{
 
-            this.segmenti=pom;
-            this.letService.getSedista(this.segmenti[0].id, this.karta.let.id).then(pom => {
+            this.letService.getSedista( this.karta.let.id).then(pom => {
               console.log("sedista");
               console.log(pom);
               this.sedista = pom;
-              this.canDr(this.sedista, this.segmenti[0]);
+              this.canDr(this.sedista);
             });
 
 
-          })
+
 
 
         })
       }})
 
+      this.letService.getAllSegmente().then(pom=> {
 
+        console.log("segmeniti ");
+        console.log(pom);
+        this.segmenti = pom;
+      })
   }
 
 
-  canDr(sedista: Sediste[], segment: Segment) {
+  canDr(sedista: Sediste[]) {
 
 
     var canvas = new fabric.Canvas('mycanvas', {
@@ -70,6 +75,7 @@ export class KartaComponent implements OnInit {
     var letServiceJ = this.letService;
     var karta = this.karta;
     var rez=this.rezervisana;
+    var cena=this.price;
 
     for (var k = 0; k < sedista.length; k++) {
       console.log("ID sedista " + this.sedista[k].id);
@@ -78,7 +84,7 @@ export class KartaComponent implements OnInit {
         height: 30,
         opacity: 1,
         top: 30 + this.sedista[k].kolona * 50,
-        left: 10 + this.sedista[k].red * 50 + (10 + segment.sirina * 50) + 5,
+        left: 10 + this.sedista[k].red * 50 + this.sedista[k].segment.redniBroj*((10 + this.sedista[k].segment.sirina * 50) + 5),
         brojSedista: k
       });
       // canvas.selection = false; // disable group selection
@@ -91,11 +97,11 @@ export class KartaComponent implements OnInit {
       object.set('selectable', false);
       canvas.add(object);
     }
-    canvas.on('mouse:over', function(e) {
+   /* canvas.on('mouse:over', function(e) {
       if(e.target)
         e.target.segment.kategorija.cena;
       canvas.renderAll();
-    });
+    });*/
     canvas.on('mouse:down', function (e) {
       if (e.target) {
         if (pomocna[e.target.brojSedista].zauzeto) {
@@ -105,7 +111,7 @@ export class KartaComponent implements OnInit {
           pomocna[e.target.brojSedista].zauzeto = true;
           console.log("SEDISTE " + pomocna[e.target.brojSedista].id);
           rez.push(pomocna[e.target.brojSedista].id);
-
+          //cena=cena+pomocna[e.target.brojSedista].segment.kategorija.cena;
         /*  letJ.sedista = pomocna;
           letServiceJ.zauzmiSediste(letJ);
           karta.sediste = pomocna[e.target.brojSedista];
@@ -114,7 +120,7 @@ export class KartaComponent implements OnInit {
       }
       canvas.renderAll();
     });
-
+    this.price=cena;
     this.rezervisana=rez;
   }
 
@@ -125,10 +131,14 @@ export class KartaComponent implements OnInit {
     {
       console.log("vratilo");
       console.log(pom);
-      /*if(this.rezervisana.length>1)
-        this.router.navigateByUrl('unosPutnika/'+pom.id);
-      else
-        this.router.navigateByUrl('prtljag/'+pom.id);*/
+
+      if(this.rezervisana.length>1) {
+        var num = this.rezervisana.length - 1;
+        this.router.navigateByUrl('unosPutnika/' + pom.id + '/' + num);
+      }else{
+        window.alert("You reservation is created! ");
+        this.router.navigateByUrl('/home');
+      }
     })
   }
 }

@@ -9,7 +9,6 @@
 </head>
 <body>
   <br/>
-  <div *ngIf="user.avioID==null">
     <div class="jumbotron container text-center col-sm-6">
         <h2 class="text-center" >Unos nove aviokompanije</h2>
       <form [formGroup]="regForm" (ngSubmit)="onSubmit()" >
@@ -37,12 +36,8 @@
           <button type="submit" class="btn btn-primary">Sacuvaj</button>
         </div>
       </form>
-    </div>
   </div>
 
-  <div  align="center" class="container"  style=" width: 50%;  padding: 20px; margin-top: 50px"  *ngIf="user.avioID!=null">
-   <div><span><h2>You already have aircompany! Update info </h2> </span><span style="  margin-left: 10px"><a href="localhost:4200/avio-edit/{{user.avioID}}"><i class="fa fa-edit"></i></a></span></div>
 
-  </div>
 </body>
 </html>

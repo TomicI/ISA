@@ -32,7 +32,7 @@ public pom;
     return this.http.get<Aviokompanija>(this.AVIO_API +'/'+id).toPromise();
   }
   
-  saveAviokompanija(aviokompanija: Object): Promise<Aviokompanija>{
+  saveAviokompanija(aviokompanija: Aviokompanija): Promise<Aviokompanija>{
     console.log(aviokompanija);
     return this.http.post<Aviokompanija>(this.AVIO_API, aviokompanija).toPromise();
   }

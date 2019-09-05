@@ -35,7 +35,7 @@ export class FormDodajAviokomComponent implements OnInit {
       naziv: [''],
       adresa: [''],
       opis: [''],
-      prosecnaOcena:['']
+      prosecnaOcena:[0]
     })
   }
 
@@ -43,8 +43,12 @@ export class FormDodajAviokomComponent implements OnInit {
 
   onSubmit(){
     this.submitted=true;
+    console.log("pre");
+    console.log(this.regForm.value);
     this.aviokompanijaService.saveAviokompanija(this.regForm.value).then(pom=>
       {
+        console.log("vratilo");
+        console.log(pom);
         this.router.navigateByUrl('aviokom-list/');
       }
     )

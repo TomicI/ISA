@@ -3,6 +3,7 @@ package com.model.aviokompanija;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,7 +25,7 @@ public class KonfiguracijaLeta {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "konfiguracija")
-	private Set<Segment> segmenti;
+	private List<Segment> segmenti;
 
 	public KonfiguracijaLeta() {
 		super();
@@ -63,11 +64,11 @@ public class KonfiguracijaLeta {
 		this.letovi = letovi;
 	}
 
-	public Set<Segment> getSegmenti() {
+	public List<Segment> getSegmenti() {
 		return segmenti;
 	}
 
-	public void setSegmenti(Set<Segment> segmenti) {
+	public void setSegmenti(List<Segment> segmenti) {
 		this.segmenti = segmenti;
 	}
 }

@@ -2,24 +2,24 @@ package com.service.aviokompanija;
 
 import com.dto.RezervacijaDTO;
 import com.dto.aviokompanija.KartaDTO;
+import com.dto.aviokompanija.SedisteDTO;
 import com.model.Rezervacija;
 import com.model.aviokompanija.Karta;
 import com.model.aviokompanija.Let;
+import com.model.aviokompanija.Putnik;
 import com.model.aviokompanija.Sediste;
 import com.model.user.User;
 import com.repository.RezervacijaRepository;
 import com.repository.UserRepository;
 import com.repository.aviokompanija.KartaRepository;
+import com.repository.aviokompanija.PuntikRepository;
 import com.repository.aviokompanija.SedisteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class KartaService {
@@ -35,6 +35,9 @@ public class KartaService {
 
 	@Autowired
 	private RezervacijaRepository rezervacijaRepository;
+
+	@Autowired
+	private PuntikRepository puntikRepository;
 
 	private ListeDTO liste = new ListeDTO();
 
@@ -58,6 +61,7 @@ public class KartaService {
 		Rezervacija rezervacija = new Rezervacija();
 		Karta karta = new Karta();
 		karta.setCena(0);
+		boolean prvo=false;
 		Let let = new Let();
 		for(Long idSedista : sedista){
 			Optional<Sediste> sediste = sedisteRepository.findById(idSedista);
@@ -69,6 +73,20 @@ public class KartaService {
 			karta.getSedista().add(sediste.get());
 			karta.setLet(let);
 			karta=kartaRepository.save(karta);
+			if(!prvo){
+				Putnik p=new Putnik();
+				p.setPrezime(user.get().getLastName());
+				p.setIme(user.get().getFirstName());
+				p.setBrojPasosa(user.get().getBrojPasosa());
+				p.setUser(user.get());
+				if(p.getSedista()==null)
+					p.setSedista(new HashSet<>());
+
+				p.getSedista().add(sediste.get());
+				prvo=true;
+				p=puntikRepository.save(p);
+				sediste.get().setPutnik(p);
+			}
 			sediste.get().setZauzeto(true);
 			sediste.get().setKarta(karta);
 			sedisteRepository.save(sediste.get());
@@ -83,9 +101,30 @@ public class KartaService {
 		rezervacija.setUser(user.get());
 		rezervacija=rezervacijaRepository.save(rezervacija);
 
+
 		karta.setRezervacija(rezervacija);
 		kartaRepository.save(karta);
 
 		return new RezervacijaDTO(rezervacija);
+	}
+
+	public List<SedisteDTO> getSedista(Long id){
+		Optional<Karta> karta=kartaRepository.findById(id);
+
+		if(!karta.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Karta ne postoji");
+		if(karta.get().getSedista()==null)
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sedista ne postoji");
+
+		return liste.sedista(new ArrayList<>(karta.get().getSedista()));
+	}
+
+	public KartaDTO getKarta(Long id){
+		Optional<Karta> karta=kartaRepository.findById(id);
+
+		if(!karta.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Karta ne postoji");
+
+		return new KartaDTO(karta.get());
 	}
 }

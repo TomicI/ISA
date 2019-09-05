@@ -2,6 +2,7 @@ package com.controller.aviokompanija;
 
 import com.dto.aviokompanija.KonfiguracijaLetaDTO;
 import com.dto.aviokompanija.SegmentDTO;
+import com.model.aviokompanija.Segment;
 import com.service.aviokompanija.KonfiguracijaLetaService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -86,7 +87,9 @@ public class KonfiguracijaLetaController {
             @ApiResponse(code = 400, message = "Bad Request")
     })
     public ResponseEntity<List<SegmentDTO>> segmenti(@PathVariable(value = "id") Long id){
-        return new ResponseEntity<>(konfiguracijaLetaService.segmenti(id), HttpStatus.OK);
+        List<SegmentDTO> segmenti=konfiguracijaLetaService.segmenti(id);
+
+        return new ResponseEntity<>(segmenti, HttpStatus.OK);
     }
 
 }

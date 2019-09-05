@@ -1,0 +1,28 @@
+<div class="jumbotron container text-center col-sm-6">
+  <h2 class="text-center" >Unesite podatke za putnika broj {{brojSedista-pBrPuntika+1}}</h2>
+  <form [formGroup]="unosPurnikaForm" (ngSubmit)="onSubmit()" >
+    <div class="form-group form-inline">
+      <label class="control-label col-sm-4">Broj pasosa: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="brojPasosa" id="brojPasosa" type="String" formControlName="brojPasosa">
+      </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label class="control-label col-sm-4">Ime: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="ime" id="ime" type="String" formControlName="ime">
+      </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label class="control-label col-sm-4">Prezime: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="prezime" id="prezime" type="String" formControlName="prezime">
+      </div>
+    </div>
+    <div class="col-sm-offset-2">
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</div>
