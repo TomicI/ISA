@@ -129,5 +129,14 @@ public class RezervacijaService {
 	}
 
 
+	public RezervacijaDTO getReservation(Long id){
+		Optional<Rezervacija> r=rezervacijaRepository.findById(id);
 
+		if (!r.isPresent()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation doesn't exist!");
+		}
+
+		
+		return new RezervacijaDTO(r.get());
+	}
 }

@@ -26,7 +26,8 @@ public class Karta {
 	@OneToMany(mappedBy = "karta")
 	private Set<DodatnaUslugaAviokompanija> dodatneUsluge;
 
-	@OneToOne
+	@OneToOne(mappedBy = "karta", cascade = CascadeType.ALL,
+			fetch = FetchType.LAZY, optional = false)
 	private Rezervacija rezervacija;
 
 	@ManyToOne
@@ -86,4 +87,6 @@ public class Karta {
 	public void setLet(Let let) {
 		this.let = let;
 	}
+
+
 }

@@ -30,7 +30,19 @@ public class SegmentController {
             @ApiResponse(code = 400, message = "Bad Request")
     })
     public ResponseEntity<List<SegmentDTO>> getAll(){
-        return new ResponseEntity<>(segmentService.getAll(), HttpStatus.OK);
+        List<SegmentDTO> segmenti=segmentService.getAll();
+        for(SegmentDTO s: segmenti){
+            if(s.getKategorija() !=null)
+                System.out.println("Kat je C "+s.getKategorija().getId());
+            else
+                System.out.println("Kat je null C ");
+
+            if(s.getKonfiguracija() !=null)
+                System.out.println("Kon je C "+s.getKonfiguracija().getId());
+            else
+                System.out.println("Kon je null C");
+        }
+        return new ResponseEntity<>(segmenti, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}",method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

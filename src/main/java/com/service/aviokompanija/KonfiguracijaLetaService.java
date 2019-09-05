@@ -104,6 +104,17 @@ public class KonfiguracijaLetaService {
         if(konfiguracijaLeta.get().getSegmenti().isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Segmenti konfiguracije ne postoje");
 
+        for(Segment s: konfiguracijaLeta.get().getSegmenti()){
+            if(s.getKategorija() !=null)
+                System.out.println("Kat je "+s.getKategorija().getId());
+            else
+                System.out.println("Kat je null");
+
+            if(s.getKonfiguracija() !=null)
+                System.out.println("Kon je "+s.getKonfiguracija().getId());
+            else
+                System.out.println("Kon je null");
+        }
         return liste.segmenti(new ArrayList<>(konfiguracijaLeta.get().getSegmenti()));
     }
 }

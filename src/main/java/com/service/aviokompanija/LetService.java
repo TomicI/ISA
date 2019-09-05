@@ -2,6 +2,7 @@ package com.service.aviokompanija;
 
 import com.dto.aviokompanija.LetDTO;
 import com.dto.aviokompanija.OcenaDTO;
+import com.dto.aviokompanija.SedisteDTO;
 import com.model.aviokompanija.*;
 import com.model.user.User;
 import com.repository.UserRepository;
@@ -347,5 +348,17 @@ public class LetService {
 			}
 		}
 		return max;
+	}
+
+	public List<SedisteDTO> getSedista(Long idL){
+		Optional<Let> let = letRepository.findById(idL);
+		if(!let.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Let ne postoji");
+
+		if(let.get().getSedista().isEmpty())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sedista ne postoje");
+
+
+		return liste.sedista(new ArrayList<>(let.get().getSedista()));
 	}
 }

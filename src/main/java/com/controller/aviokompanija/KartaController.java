@@ -2,6 +2,7 @@ package com.controller.aviokompanija;
 
 import com.dto.RezervacijaDTO;
 import com.dto.aviokompanija.KartaDTO;
+import com.dto.aviokompanija.SedisteDTO;
 import com.model.user.User;
 import com.service.UserService;
 import com.service.aviokompanija.KartaService;
@@ -51,4 +52,28 @@ public class KartaController {
 		Optional<User> u=this.userService.findByUsername(user.getName());
 		return new ResponseEntity<>(kartaService.create(u.get().getId(), sedista), HttpStatus.CREATED);
 	}
+
+	@RequestMapping(value = "/sedista/{id}",method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Vraca sva sedista", httpMethod = "GET", produces = "application/json")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "OK", response = List.class),
+			@ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 400, message = "Bad Request")
+	})
+	public ResponseEntity<List<SedisteDTO>> getSedista(@PathVariable(value = "id") Long id){
+		return new ResponseEntity<>(kartaService.getSedista(id), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{id}",method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Vraca kartu", httpMethod = "GET", produces = "application/json")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "OK", response = List.class),
+			@ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 400, message = "Bad Request")
+	})
+	public ResponseEntity<KartaDTO> getKarta(@PathVariable(value = "id") Long id){
+		return new ResponseEntity<>(kartaService.getKarta(id), HttpStatus.OK);
+	}
+
+
 }

@@ -65,10 +65,10 @@ export class Prtljag {
 
 export class Putnik {
   id: number;
-  let: Let;
+  ime: string;
+  prezime: string;
+  brojPasosa: string;
   user: User;
-  ocena: number;
-  aviokompanija: Aviokompanija;
 
   constructor() { }
 
@@ -329,6 +329,7 @@ export class Rezervacija {
   cena: number;
   rezervacijaRentACarDTO: RezervacijaRent;
   userDTO: User;
+  kartaDTO: Karta;
 
   constructor(
     id: number,

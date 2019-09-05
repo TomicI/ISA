@@ -44,6 +44,7 @@ import {NewDealReservationComponent} from "./new-deal-reservation/new-deal-reser
 import {HomeRegisteredComponent} from "./home-registered/home-registered.component";
 import {InviteComponent} from "./invite/invite.component";
 import {ListComponent} from "./list/list.component";
+import {UnosPutnikaComponent} from "./unos-putnika/unos-putnika.component";
 
 
 const routes: Routes = [
@@ -121,7 +122,7 @@ const routes: Routes = [
   {path: 'letAdd/:id', component: FormAddLetComponent},
   {path: 'letovi/:id', component: LetComponent},
   {path: 'aviokompanijaProfil/:id', component: AviokomProfilComponent},
-  {path: 'addAvioKom', component: FormDodajAviokomComponent},
+  {path: 'addAviokom', component: FormDodajAviokomComponent},
   {
     path: 'resetPassword',
     component: AdminResetComponent,
@@ -129,13 +130,14 @@ const routes: Routes = [
     data: {roles: ['ROLE_ADMIN_RENT', 'ROLE_ADMIN_AVIO', 'ROLE_ADMIN_HOTEL']}
   },
   {path: 'addFriends', component: AddFriendsComponent},
-  {path: 'addKonf/:id', component: FormKonfLetaComponent},
-  {path: 'konfig-list/:id', component: KonfigListComponent},
-  {path: 'addKatSed/:id', component: AddKatSedistaComponent},
-  {path: 'addSegment/:id', component: AddSegmentComponent},
-  {path: 'search', component: SearchLetComponent},
-  {path: 'karta/:id', component: KartaComponent}
-];
+  { path: 'addKonf/:id', component: FormKonfLetaComponent},
+  { path: 'konfig-list/:id', component: KonfigListComponent},
+  { path: 'addKatSed/:id', component: AddKatSedistaComponent},
+  { path: 'addSegment/:id', component: AddSegmentComponent},
+  { path: 'search', component: SearchLetComponent},
+  { path: 'karta/:id', component: KartaComponent},
+  { path: 'unosPutnika/:kartaID/:brPutnika', component: UnosPutnikaComponent}
+  ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

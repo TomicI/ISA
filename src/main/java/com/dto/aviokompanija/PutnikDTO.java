@@ -16,10 +16,23 @@ public class PutnikDTO {
         this.setIme(putnik.getIme());
         this.setId(putnik.getId());
         this.setPrezime(putnik.getPrezime());
-        this.setUser(new UserDTO(putnik.getUser()));
+        if(putnik.getUser()!=null)
+            this.setUser(new UserDTO(putnik.getUser()));
+        else
+            this.setUser(null);
 
     }
 
+    public PutnikDTO() {
+    }
+
+    public PutnikDTO(Long id, String ime, String prezime, String brojPasosa, UserDTO user) {
+        this.id = id;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.brojPasosa = brojPasosa;
+        this.user = user;
+    }
 
     public Long getId() {
         return id;
