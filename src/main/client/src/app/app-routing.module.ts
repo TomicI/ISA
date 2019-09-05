@@ -41,12 +41,35 @@ import {AddSegmentComponent} from "./add-segment/add-segment.component";
 import {SearchLetComponent} from "./search-let/search-let.component";
 import {KartaComponent} from "./karta/karta.component";
 import {NewDealReservationComponent} from "./new-deal-reservation/new-deal-reservation.component";
+import {HomeRegisteredComponent} from "./home-registered/home-registered.component";
+import {InviteComponent} from "./invite/invite.component";
+import {ListComponent} from "./list/list.component";
 
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
   {path: 'rentacarform', component: FormsComponent},
   {path: 'home', component: HomeComponent},
+  {
+    path: 'homeReg', component: HomeRegisteredComponent, canActivate: [AuthGuard], data: {roles: ["ROLE_USER_REG"]},
+    children: [
+      {path: '', redirectTo: 'reservations', pathMatch: 'full'},
+      {
+      path: 'reservations',
+      component: UserReservationsComponent,
+      canActivate: [AuthGuard],
+      data: {roles: ["ROLE_USER_REG"]},
+      children: [
+        {path: '', component: ReservationOverviewComponent},
+        {path: 'details', component: ReservationDetailsComponent}
+      ]
+    },
+      {path: 'friends', component: UserFriendsComponent, canActivate: [AuthGuard], data: {roles: ["ROLE_USER_REG"]}},
+      {path: 'invites', component: InviteComponent, canActivate: [AuthGuard], data: {roles: ["ROLE_USER_REG"]}},
+    ]
+
+  },
+  { path: 'companies', component: ListComponent},
   {
     path: 'rentacar', component: SearchRentComponent,
     children: [
@@ -75,21 +98,17 @@ const routes: Routes = [
       },
     ]
   },
-  {path: 'newDeal', component: NewDealReservationComponent,canActivate: [AuthGuard],data: {roles: ['ROLE_ADMIN_RENT']}},
+  {
+    path: 'newDeal',
+    component: NewDealReservationComponent,
+    canActivate: [AuthGuard],
+    data: {roles: ['ROLE_ADMIN_RENT']}
+  },
   {path: 'profile', component: PanelProfileComponent, canActivate: [AuthGuard], data: {roles: ["ROLE_USER_REG"]}},
   {path: 'settings', component: PanelSettingsComponent, canActivate: [AuthGuard], data: {roles: ["ROLE_USER_REG"]}},
   {path: 'signup', component: SignUpModalComponent},
-  {
-    path: 'reservations',
-    component: UserReservationsComponent,
-    canActivate: [AuthGuard],
-    data: {roles: ["ROLE_USER_REG"]},
-    children: [
-      {path: '', component: ReservationOverviewComponent},
-      {path: 'details', component: ReservationDetailsComponent}
-    ]
-  },
-  {path: 'friends', component: UserFriendsComponent, canActivate: [AuthGuard], data: {roles: ["ROLE_USER_REG"]}},
+
+
   {path: 'aviokom-list', component: AviokomListComponent},
   {path: 'avio-edit/:id', component: AvioEditComponent},
   {path: 'form-akupdate/:id', component: FormAKUpdateComponent},
@@ -110,13 +129,13 @@ const routes: Routes = [
     data: {roles: ['ROLE_ADMIN_RENT', 'ROLE_ADMIN_AVIO', 'ROLE_ADMIN_HOTEL']}
   },
   {path: 'addFriends', component: AddFriendsComponent},
-  { path: 'addKonf/:id', component: FormKonfLetaComponent},
-  { path: 'konfig-list/:id', component: KonfigListComponent},
-  { path: 'addKatSed/:id', component: AddKatSedistaComponent},
-  { path: 'addSegment/:id', component: AddSegmentComponent},
-  { path: 'search', component: SearchLetComponent},
-  { path: 'karta/:id', component: KartaComponent}
-  ];
+  {path: 'addKonf/:id', component: FormKonfLetaComponent},
+  {path: 'konfig-list/:id', component: KonfigListComponent},
+  {path: 'addKatSed/:id', component: AddKatSedistaComponent},
+  {path: 'addSegment/:id', component: AddSegmentComponent},
+  {path: 'search', component: SearchLetComponent},
+  {path: 'karta/:id', component: KartaComponent}
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

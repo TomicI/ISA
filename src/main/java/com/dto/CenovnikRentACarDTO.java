@@ -15,10 +15,12 @@ public class CenovnikRentACarDTO {
 	private Boolean slobodan;
 	private VoziloDTO voziloDTO;
 	private RentACarDTO rentACarDTO;
-		
-	
+
+	public CenovnikRentACarDTO() {
+	}
+
 	public CenovnikRentACarDTO(Long id, Date odDatuma, Date doDatuma, Double cena, Boolean slobodan,
-			VoziloDTO voziloDTO,RentACarDTO rentACarDTO) {
+							   VoziloDTO voziloDTO, RentACarDTO rentACarDTO) {
 		super();
 		this.id = id;
 		this.odDatuma = odDatuma;

@@ -1,5 +1,6 @@
 package com.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +47,10 @@ public class CenovnikRentACarService {
 	
 	public List<CenovnikRentACar> findByVozilo(Vozilo v){
 		return cenovnikRentACarRepository.findByVozilo(v);
+	}
+
+	public List<CenovnikRentACar> findByVoziloId(Long id){
+		return cenovnikRentACarRepository.findByVoziloId(id);
 	}
 	
 	public List<CenovnikRentACar> findByServis(RentACar r){
@@ -101,6 +106,24 @@ public class CenovnikRentACarService {
 		}
 
 		return optionalCenovnik.get();
+	}
+
+	public Date getDate(Long id) {
+
+		List<CenovnikRentACar> cenovnikRentACars = findByVoziloId(id);
+
+		Date early = new Date();
+
+		for (CenovnikRentACar c : cenovnikRentACars) {
+
+			if (c.getDoDatuma().after(early)) {
+				early = c.getDoDatuma();
+			}
+
+		}
+
+		System.out.println(early);
+		return early;
 	}
 
 }

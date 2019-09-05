@@ -24,6 +24,10 @@ export class CenovnikService {
     return this.http.delete(`${this.CenovnikURL}/${id}`).toPromise();
   }
 
+  getDate(id):Observable<any>{
+    return this.http.get(`${this.CenovnikURL}/veh/${id}`);
+  }
+
 
 
 

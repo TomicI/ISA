@@ -12,6 +12,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormVozComponent } from '../form/form-voz/form-voz.component';
 import { DataSource } from '@angular/cdk/table';
 import {VehicleService} from "../services/vehicle.service";
+import {MatSort} from "@angular/material";
 
 
 @Component({
@@ -27,6 +28,8 @@ export class PanelAdminRentComponent implements OnInit {
   @ViewChild('paginator1') paginator: MatPaginator;
   @ViewChild('paginator2') paginator2: MatPaginator;
   @ViewChild('paginator3') paginator3: MatPaginator;
+
+  @ViewChild(MatSort) sort: MatSort;
 
   filijalaFormGroup: FormGroup;
   voziloFormGroup: FormGroup;
@@ -144,9 +147,14 @@ export class PanelAdminRentComponent implements OnInit {
 
     this.rentACar = await this.userServise.getUserRentACar().toPromise();
 
-    this.filData = await this.rentacarService.getAllFilijale(this.rentACar.id).toPromise();
-    this.filijalaSource = new MatTableDataSource(this.filData);
-    this.filijalaSource.paginator = this.paginator;
+    this.rentacarService.getAllFilijale(this.rentACar.id).subscribe(data=>{
+
+      this.filData = data;
+      this.filijalaSource = new MatTableDataSource(this.filData);
+      this.filijalaSource.paginator = this.paginator;
+      this.filijalaSource.sort = this.sort;
+    });
+
 
 
     //await this.getAllVozila();

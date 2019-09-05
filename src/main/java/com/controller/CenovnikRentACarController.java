@@ -32,6 +32,7 @@ public class CenovnikRentACarController {
 	private CenovnikRentACarService cenovnikService;
 
 
+
 	@RequestMapping(method=RequestMethod.POST,consumes="application/json")
 	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<CenovnikRentACarDTO> saveCenovnik(@RequestBody CenovnikRentACarDTO cenovnikDTO){
@@ -71,6 +72,12 @@ public class CenovnikRentACarController {
 	public ResponseEntity<CenovnikRentACarDTO> getCenovnik(@PathVariable Long id) {
 
 		return new ResponseEntity<>(new CenovnikRentACarDTO(cenovnikService.getOne(id)), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/veh/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Date> getDate(@PathVariable Long id) {
+
+		return new ResponseEntity<>(cenovnikService.getDate(id), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

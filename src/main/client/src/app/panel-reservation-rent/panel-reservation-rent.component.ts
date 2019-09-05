@@ -27,17 +27,24 @@ export class PanelReservationRentComponent implements OnInit {
 
   displayedColumnsReservation: string[] = [
     'no',
+    'veh',
     'resdate',
     'pickup',
+    'pickupB',
     'dropoff',
+    'dropoffB',
     'price',
+    'status'
   ];
 
   displayedColumnsReservationDeal: string[] = [
     'no',
+    'veh',
     'resdate',
     'pickup',
+    'pickupB',
     'dropoff',
+    'dropoffB',
     'price',
     'deal'
   ];

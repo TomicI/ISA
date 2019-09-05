@@ -2,10 +2,9 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { CenovnikService } from 'src/app/services/cenovnik.service';
 
-import { NgbDateParserFormatter, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
-
-import { NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
+import {NgbDateParserFormatter, NgbCalendar, NgbDate, NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
+import {Vozilo} from "../../model";
 
 
 @Component({
@@ -24,16 +23,48 @@ export class FormCenComponent implements OnInit {
 
   minDatum : NgbDate;
 
+  minimumDate: Date;
+
   odDate:Date;
   doDate:Date;
 
+  minDateStruct:NgbDateStruct;
+
   constructor(private formBuilder: FormBuilder, private cenService: CenovnikService,
-    private ngbDate: NgbDateParserFormatter,private calendar: NgbCalendar,) { }
+    private ngbDate: NgbDateParserFormatter,private calendar: NgbCalendar) { }
 
 
   ngOnInit() {
     this.minDatum = this.calendar.getToday();
+
+
+    let v : Vozilo = this.cenovnikFormGroup.get('CenovnikRent').get('voziloDTO').value;
+
+    console.log(v);
+
+
+
+    this.cenService.getDate(v.id).subscribe(data=>{
+      console.log(data);
+
+      this.minimumDate = data;
+
+      let tempDate = new Date(data);
+
+      //tempDate.setHours(tempDate.getHours()+2);
+
+      console.log(tempDate.getMonth());
+      console.log(tempDate.getDate());
+      console.log(tempDate.getDay());
+
+      this.minDatum = new NgbDate(tempDate.getFullYear(),tempDate.getMonth()+1,tempDate.getDate());
+
+
+      console.log(this.minDatum);
+
+    });
   }
+
 
   async submit() {
 

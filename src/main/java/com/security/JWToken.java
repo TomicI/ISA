@@ -23,7 +23,7 @@ public class JWToken {
 	@Value("secret")
 	private String secret;
 	
-	@Value("6000")
+	@Value("10000")
 	private int expires;
 	
 	

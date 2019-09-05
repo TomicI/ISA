@@ -91,7 +91,7 @@ export class ReservationOverviewComponent implements OnInit {
 
     console.log(this.params);
 
-    this.router.navigate(['reservations/details'], { queryParams: this.params });
+    this.router.navigate(['homeReg/reservations/details'], { queryParams: this.params });
 
   }
 

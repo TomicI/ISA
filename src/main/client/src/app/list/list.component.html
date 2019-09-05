@@ -1,0 +1,83 @@
+<div class="container">
+  <div class="mt-2 "></div>
+  <div class="row">
+
+    <div class="col-md-4">
+
+      <div class="card">
+
+        <div class="card-header  d-flex justify-content-between">
+          <h5>Airlines</h5>
+
+          <div class="form-group">
+            <select class="form-control form-control-sm" id="groupAirSelect" (change)="onChangeNameAir($event.target.value)">
+              <option value="all">...</option>
+              <option value="asc">Name asc</option>
+              <option value="des">Name des</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="list-group list-group-flush">
+
+          <li *ngFor="let av of avio " class="list-group-item flex-column ">
+            <div class="d-flex justify-content-between">
+              <h6 class="mb-1">{{av.naziv}}</h6>
+            </div>
+            <p class="mb-1">{{av.opis}}</p>
+            <p class="mb-1">{{av.prosecnaOcena}}</p>
+          </li>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+      <div class="card">
+
+        <div class="card-header">
+          <h5>Hotels</h5>
+        </div>
+
+
+      </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+      <div class="card">
+
+        <div class="card-header d-flex justify-content-between">
+          <h5>Cars</h5>
+
+          <div class="form-group">
+            <select class="form-control form-control-sm" id="groupVozSelect" (change)="onChangeVeh($event.target.value)">
+              <option value="all">...</option>
+              <option value="asc">Name asc</option>
+              <option value="des">Name des</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="list-group list-group-flush">
+
+          <li *ngFor="let rnt of rentACars " class="list-group-item flex-column ">
+            <div class="d-flex justify-content-between">
+              <h6 class="mb-1">{{rnt.naziv}}</h6>
+            </div>
+            <p class="mb-1">{{rnt.opis}}</p>
+          </li>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>

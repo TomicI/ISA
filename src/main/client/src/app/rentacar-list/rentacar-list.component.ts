@@ -22,7 +22,7 @@ export class RentacarListComponent implements OnInit {
 
   params: any = {};
   
-  rentACars: Observable<RentACar[]>;
+  rentACars: RentACar[];
   filijala: Observable<Object>;
 
   constructor(
@@ -43,7 +43,9 @@ export class RentacarListComponent implements OnInit {
   }
 
   getRentACars() {
-    this.rentACars = this.rentACarService.getAll();
+    this.rentACarService.getAll().subscribe(data=>{
+      this.rentACars= data;
+    });
   }
 
   getFilijala(id: number) {
