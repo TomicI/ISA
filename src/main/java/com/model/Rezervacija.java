@@ -2,6 +2,7 @@ package com.model;
 
 import com.model.aviokompanija.Karta;
 import com.model.aviokompanija.Ocena;
+import com.model.hotel.RezervacijaSobe;
 import com.model.user.User;
 
 import javax.persistence.*;

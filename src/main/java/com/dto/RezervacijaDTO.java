@@ -3,7 +3,7 @@ package com.dto;
 import com.dto.aviokompanija.KartaDTO;
 import com.model.Rezervacija;
 import com.model.RezervacijaRentACar;
-import com.model.RezervacijaSobe;
+import com.model.hotel.RezervacijaSobe;
 import com.model.aviokompanija.Karta;
 import com.model.user.User;
 

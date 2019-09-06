@@ -1,0 +1,59 @@
+<div class="container">
+
+  <div class="mt-2 col-md-12"></div>
+
+  <div class="jumbotron">
+      <h1 class="display-4">Search hotels</h1>
+      <p class="lead"></p>
+      <hr class="my-4">
+     
+      <div class="input-group row top-buffer">
+          <input class="form-control mr-sm-3" type="search" placeholder="Where..." aria-label="Search">
+         
+      </div>
+
+      <form class="form-inline">
+          <div class="form-group row top-buffer">
+            <div class="input-group">
+              <input class="form-control" placeholder="Check-in" name="dp" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">Pick<i class="far fa-edit"></i></button>
+              </div>
+            </div>
+
+            <div class="input-group col">
+              <input class="form-control" placeholder="Check-out" name="dp" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">Pick<i class="far fa-edit"></i></button>
+              </div>
+            </div>
+           
+          <div class="input-group">
+            
+              <div class="input-group col-md-3">
+                  <label for="guests">Guests: </label>
+                <input class="form-control" name="guests" type="number" min="1">
+              </div>
+              
+             
+                <div class="input-group col-md-3">
+                    <label for="persons">Persons: </label>
+                  <input class="form-control" name="persons" type="number" min="1">
+                </div>
+                </div>
+
+          </div>
+
+          <div class="form-group  row top-buffer">
+          <div class="col text-center">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </div>
+        </div>
+        </form>
+
+
+</div>
+
+
+</div>
+

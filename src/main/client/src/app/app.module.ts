@@ -76,13 +76,14 @@ import { AddKatSedistaComponent } from './add-kat-sedista/add-kat-sedista.compon
 import {RouteCheckComponent} from "./route-check/route-check.component";
 import { ReservationPreviewComponent } from './reservation-preview/reservation-preview.component';
 import { SearchLetComponent } from './search-let/search-let.component';
-import {MatFormFieldModule, MatInputModule, MatMenuModule, MatSortModule} from "@angular/material";
+import {MatMenuModule, MatSortModule} from "@angular/material";
 import {NewDealReservationComponent} from "./new-deal-reservation/new-deal-reservation.component";
 import { HomeRegisteredComponent } from './home-registered/home-registered.component';
 import { InviteComponent } from './invite/invite.component';
 import { ListComponent } from './list/list.component';
 import {MatFormFieldModule, MatInputModule} from "@angular/material";
 import { UnosPutnikaComponent } from './unos-putnika/unos-putnika.component';
+import { HotelPretragaComponent } from './hotel-pretraga/hotel-pretraga.component';
 
 
 
@@ -150,9 +151,10 @@ import { UnosPutnikaComponent } from './unos-putnika/unos-putnika.component';
     NewDealReservationComponent,
     HomeRegisteredComponent,
     InviteComponent,
-    ListComponent
+    ListComponent,
     SearchLetComponent,
-    UnosPutnikaComponent
+    UnosPutnikaComponent,
+    HotelPretragaComponent
   ],
   imports: [
     BrowserModule,

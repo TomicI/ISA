@@ -3,6 +3,7 @@ import {RentacarListComponent} from './rentacar-list/rentacar-list.component';
 import {FormsComponent} from './forms/forms.component';
 import {FilijalaComponent} from './filijala/filijala.component';
 import {HomeComponent} from './home/home.component';
+import{HotelPretragaComponent} from './hotel-pretraga/hotel-pretraga.component';
 import {LoginComponent} from './login/login.component';
 import {PanelComponent} from './panel/panel.component';
 import {SignUpModalComponent} from './sign-up-modal/sign-up-modal.component';
@@ -136,7 +137,8 @@ const routes: Routes = [
   { path: 'addSegment/:id', component: AddSegmentComponent},
   { path: 'search', component: SearchLetComponent},
   { path: 'karta/:id', component: KartaComponent},
-  { path: 'unosPutnika/:kartaID/:brPutnika', component: UnosPutnikaComponent}
+  { path: 'unosPutnika/:kartaID/:brPutnika', component: UnosPutnikaComponent},
+  {path: 'pretragaHotel', component: HotelPretragaComponent}
   ];
 
 @NgModule({
