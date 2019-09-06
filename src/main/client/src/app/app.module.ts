@@ -84,6 +84,7 @@ import { ListComponent } from './list/list.component';
 import {MatFormFieldModule, MatInputModule} from "@angular/material";
 import { UnosPutnikaComponent } from './unos-putnika/unos-putnika.component';
 import { HotelPretragaComponent } from './hotel-pretraga/hotel-pretraga.component';
+import { HotelPrikazComponent } from './hotel-prikaz/hotel-prikaz.component';
 
 
 
@@ -154,7 +155,8 @@ import { HotelPretragaComponent } from './hotel-pretraga/hotel-pretraga.componen
     ListComponent,
     SearchLetComponent,
     UnosPutnikaComponent,
-    HotelPretragaComponent
+    HotelPretragaComponent,
+    HotelPrikazComponent
   ],
   imports: [
     BrowserModule,
