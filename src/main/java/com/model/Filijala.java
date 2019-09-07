@@ -1,5 +1,6 @@
 package com.model;
 
+import com.model.aviokompanija.Lokacija;
 import com.model.aviokompanija.Ocena;
 import org.hibernate.engine.profile.Fetch;
 
@@ -26,6 +27,9 @@ public class Filijala {
 	
 	@Column(nullable = false,unique=true)
 	private String adresa;
+
+	@ManyToOne
+	private Lokacija lokacija;
 
 	@OneToMany(mappedBy = "filijala",fetch = FetchType.LAZY)
 	private List<Ocena> ocene ;
@@ -92,5 +96,13 @@ public class Filijala {
 
 	public void setRezervacije(List<RezervacijaRentACar> rezervacije) {
 		this.rezervacije = rezervacije;
+	}
+
+	public Lokacija getLokacija() {
+		return lokacija;
+	}
+
+	public void setLokacija(Lokacija lokacija) {
+		this.lokacija = lokacija;
 	}
 }

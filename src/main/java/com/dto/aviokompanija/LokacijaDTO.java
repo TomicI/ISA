@@ -7,20 +7,22 @@ public class LokacijaDTO {
     private Long id;
     private double geoSirina;
     private double geoVisina;
-    private String naziv;
+    private String adresa;
+    private String grad;
+    private String drzava;
 
     public LokacijaDTO(){
 
     }
 
     public LokacijaDTO(Lokacija lokacija){
-        super();
-        if(lokacija != null) {
-            this.setGeoSirina(lokacija.getGeoSirina());
-            this.setGeoVisina(lokacija.getGeoVisina());
-            this.setId(lokacija.getId());
-            this.setNaziv(lokacija.getNaziv());
-        }
+
+        this.geoSirina = lokacija.getGeoSirina();
+        this.geoVisina = lokacija.getGeoVisina();
+        this.adresa = lokacija.getAdresa();
+        this.grad = lokacija.getGrad();
+        this.drzava = lokacija.getDrzava();
+
     }
 
     public Long getId() {
@@ -47,11 +49,27 @@ public class LokacijaDTO {
         this.geoVisina = geoVisina;
     }
 
-    public String getNaziv() {
-        return naziv;
+    public String getAdresa() {
+        return adresa;
     }
 
-    public void setNaziv(String naziv) {
-        this.naziv = naziv;
+    public void setAdresa(String adresa) {
+        this.adresa = adresa;
+    }
+
+    public String getGrad() {
+        return grad;
+    }
+
+    public void setGrad(String grad) {
+        this.grad = grad;
+    }
+
+    public String getDrzava() {
+        return drzava;
+    }
+
+    public void setDrzava(String drzava) {
+        this.drzava = drzava;
     }
 }

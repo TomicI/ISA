@@ -81,7 +81,6 @@ import {NewDealReservationComponent} from "./new-deal-reservation/new-deal-reser
 import { HomeRegisteredComponent } from './home-registered/home-registered.component';
 import { InviteComponent } from './invite/invite.component';
 import { ListComponent } from './list/list.component';
-import {MatFormFieldModule, MatInputModule} from "@angular/material";
 import { UnosPutnikaComponent } from './unos-putnika/unos-putnika.component';
 
 
@@ -150,7 +149,7 @@ import { UnosPutnikaComponent } from './unos-putnika/unos-putnika.component';
     NewDealReservationComponent,
     HomeRegisteredComponent,
     InviteComponent,
-    ListComponent
+    ListComponent,
     SearchLetComponent,
     UnosPutnikaComponent
   ],

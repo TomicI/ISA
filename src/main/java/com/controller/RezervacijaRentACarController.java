@@ -47,6 +47,14 @@ public class RezervacijaRentACarController {
 		
 	}
 
+	@RequestMapping(value="/updateStatus",method=RequestMethod.GET)
+	public ResponseEntity<RezervacijaRentACarDTO> updateStatus(@RequestBody RezervacijaRentACarDTO rezervacijaRentACarDTO){
+
+		return new ResponseEntity<>(rezService.changeStatus(rezervacijaRentACarDTO),HttpStatus.OK);
+
+	}
+
+
 	@RequestMapping(value="/resAdmin",method=RequestMethod.GET)
 	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<List<RezervacijaRentACarDTO>> getAllAdmin(@RequestParam(value="res")boolean res,Principal username){
