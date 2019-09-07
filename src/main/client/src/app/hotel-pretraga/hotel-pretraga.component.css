@@ -1,1 +1,46 @@
 .top-buffer { margin-top:20px; }
+
+ul {
+    text-align: center;
+  
+  }
+  
+  .star {
+    font-size: 1.5rem;
+    color: #5590dd;
+  }
+  .filled {
+    color: #1e90ff;
+  }
+  
+  .left-side{
+    position: absolute;
+    left:5%;
+    width: 40%;
+  }
+  
+  .float-right{
+    position: absolute;
+    right:5%;
+    width: 40%;
+  }
+  
+  .myImage{
+    width: 650px;
+    height: 480px;
+  }
+  
+  .text-center{
+  
+    text-align: center;
+   
+    color: #000000;
+  }
+  
+  .category{
+
+    font-size: 1.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    color: #fdec00;
+  }
