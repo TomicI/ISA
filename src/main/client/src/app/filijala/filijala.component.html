@@ -6,9 +6,8 @@
         <div *ngFor="let fil of filijale">
           <div class="card mt-4" style="width: 18rem;height: 30rem">
             <div class="card-body">
-              <h5 class="card-title">{{fil.naziv}}</h5>
-              <p class="card-text">{{fil.adresa}}</p>
-              <app-map [(adress)]='fil.adresa'></app-map>
+              <h5 class="card-title">{{fil.lokacijaDTO.adresa}}</h5>
+              <app-map [(adress)]='fil.lokacijaDTO.adresa'></app-map>
             </div>
             <div class="card-footer">
               <div class="d-flex">

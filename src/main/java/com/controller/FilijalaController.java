@@ -37,13 +37,13 @@ public class FilijalaController {
 	
 	@Autowired
 	private FilijalaService filijalaService;
-	
-	@Autowired
-	private RentACarService rentACarService;
-	
-	@Autowired
-	private UserService userService;
-	
+
+	@RequestMapping(value="/all" , method=RequestMethod.GET,produces ="application/json" )
+	public ResponseEntity<List<FilijalaDTO>> getAll(){
+
+		return new ResponseEntity<>(filijalaService.getAll(),HttpStatus.OK);
+	}
+
 
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	@PreAuthorize("hasRole('ADMIN_RENT')")

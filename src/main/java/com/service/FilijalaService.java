@@ -560,6 +560,20 @@ public class FilijalaService {
         return filijalaRepository.findAll();
     }
 
+    public List<FilijalaDTO> getAll() {
+
+        List<Filijala> filijalas = findAll();
+
+        List<FilijalaDTO> filijalaDTOS = new ArrayList<>();
+
+        for(Filijala f:filijalas){
+
+            filijalaDTOS.add(new FilijalaDTO(f));
+
+        }
+        return filijalaDTOS;
+    }
+
     public Filijala save(Filijala f) {
         return filijalaRepository.save(f);
     }

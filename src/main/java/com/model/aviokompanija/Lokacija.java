@@ -21,7 +21,7 @@ public class Lokacija {
 	@Column
 	private double geoVisina;
 
-	@Column
+	@Column(unique = true)
 	private String adresa;
 
 	@Column

@@ -11,6 +11,10 @@ export class FilijalaService {
 
   constructor(private http: HttpClient) { }
 
+  getAll():Observable<any>{
+    return this.http.get<any>(`${this.FilijalaURL}/all`);
+  }
+
   getVozilaTabela(id: Number): Observable<any[]> {
     return this.http.get<any[]>(`${this.FilijalaURL}/${id}/vozila`);
   }

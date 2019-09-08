@@ -231,6 +231,11 @@ public class RezervacijaRentACarService {
 
 	}
 
+	public List<RezervacijaRentACarDTO> getDealRes(){
+
+        return null;
+	}
+
 	public List<RezervacijaRentACarDTO> getAllAdmin(boolean res , Principal username){
 
 		System.out.println(res);

@@ -29,20 +29,17 @@ export class FormFilComponent implements OnInit {
 
     console.log(this.filijalaFormGroup.value);
 
-    this.filForm = this.formBuilder.group({
-      adresaFilInput: null
-    });
 
   }
   async submit() {
-    console.log(JSON.stringify(this.filijalaFormGroup.get('filijala').value));
+    console.log(JSON.stringify(this.filijalaFormGroup.value));
     if (this.edit === true) {
       console.log('Edit mode');
 
-     await this.filijalaService.updateFilijala(this.filijalaFormGroup.get('filijala').value);
+     await this.filijalaService.updateFilijala(this.filijalaFormGroup.value);
  
     } else {
-     await this.filijalaService.saveFilijala(this.filijalaFormGroup.get('filijala').value);
+     await this.filijalaService.saveFilijala(this.filijalaFormGroup.value);
     }
 
     console.log('Kliknuo unutar forme!');
@@ -52,7 +49,7 @@ export class FormFilComponent implements OnInit {
 
 
   async delete() {
-    const pom = this.filijalaFormGroup.get('filijala').get('id').value;
+    const pom = this.filijalaFormGroup.get('id').value;
     if (this.edit === true) {
       console.log('Edit mode');
 

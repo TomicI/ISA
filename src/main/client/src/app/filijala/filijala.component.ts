@@ -19,7 +19,7 @@ export class FilijalaComponent implements OnInit {
 
   naziv = '';
 
-  filijale: Observable<Filijala[]>;
+  filijale: Filijala[];
 
 
   constructor(
@@ -40,9 +40,6 @@ export class FilijalaComponent implements OnInit {
           if (data[0]) {
             this.naziv = data[0].rentACarDTO.naziv;
           }
-          
-        
-
       });
 
 

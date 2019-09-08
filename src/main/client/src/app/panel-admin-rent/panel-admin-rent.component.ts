@@ -243,14 +243,24 @@ export class PanelAdminRentComponent implements OnInit {
 
   editFilijala(filijala) {
 
-    this.modal = 'Edit branch ' + filijala.adresa;
+    this.modal = 'Edit branch ' + filijala.lokacijaDTO.adresa;
 
     console.log(filijala);
 
     this.edit = true;
 
     this.filijalaFormGroup = this.fb.group({
-      filijala: this.fb.group(filijala)
+      id:filijala.id,
+      prosecnaOcena:filijala.prosecnaOcena,
+      rentACarDTO:filijala.rentACarDTO,
+      lokacijaDTO:this.fb.group({
+        id:filijala.lokacijaDTO.id,
+        drzava:filijala.lokacijaDTO.drzava,
+        grad:filijala.lokacijaDTO.grad,
+        adresa:filijala.lokacijaDTO.adresa,
+        geoVisina:filijala.lokacijaDTO.geoVisina,
+        geoSirina:filijala.lokacijaDTO.geoSirina
+      })
     });
     this.openVeh = false;
     this.proslo = true;
@@ -271,6 +281,21 @@ export class PanelAdminRentComponent implements OnInit {
     this.filijalaFormGroup = this.fb.group({
       filijala: this.fb.group(new Filijala(null, null, this.rentACar, null))
     });
+
+    this.filijalaFormGroup = this.fb.group({
+      id:null,
+      prosecnaOcena:0,
+      rentACarDTO:this.rentACar,
+      lokacijaDTO:this.fb.group({
+        id:null,
+        drzava:'',
+        grad:'',
+        adresa:'',
+        geoVisina:0,
+        geoSirina:0
+      })
+    });
+
     this.openVeh = false;
     this.proslo = true;
     this.openCen = false;
