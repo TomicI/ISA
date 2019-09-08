@@ -74,11 +74,17 @@ public class KartaService {
 			karta.setLet(let);
 			karta=kartaRepository.save(karta);
 			if(!prvo){
+
 				Putnik p=new Putnik();
-				p.setPrezime(user.get().getLastName());
-				p.setIme(user.get().getFirstName());
-				p.setBrojPasosa(user.get().getBrojPasosa());
-				p.setUser(user.get());
+				Optional<Putnik> putnik=this.puntikRepository.findByUser(user.get());
+				if(putnik.isPresent()){
+					p=putnik.get();
+				}else {
+					p.setPrezime(user.get().getLastName());
+					p.setIme(user.get().getFirstName());
+					p.setBrojPasosa(user.get().getBrojPasosa());
+					p.setUser(user.get());
+				}
 				if(p.getSedista()==null)
 					p.setSedista(new HashSet<>());
 

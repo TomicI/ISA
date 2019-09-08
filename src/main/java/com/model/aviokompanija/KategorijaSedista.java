@@ -23,9 +23,8 @@ public class KategorijaSedista {
 	
 	@ManyToOne
 	private Aviokompanija aviokompanija;
-	
-	@JsonIgnore
-	@OneToMany(mappedBy = "kategorija")
+
+	@OneToMany(mappedBy = "kategorija", fetch = FetchType.LAZY)
 	private List<Segment> segmenti;
 
 	public KategorijaSedista() {

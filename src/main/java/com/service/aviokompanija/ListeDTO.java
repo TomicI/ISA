@@ -84,6 +84,15 @@ public class ListeDTO {
     public List<SegmentDTO> segmenti(List<Segment> ulaznaLista){
         List<SegmentDTO> lista = new ArrayList<>();
         for (Segment segment : ulaznaLista) {
+            if(segment.getKonfiguracija()!=null)
+                System.out.println("seg konf lista null");
+            else
+                System.out.println("segment konf je " + segment.getKonfiguracija().getId());
+
+            if(segment.getKonfiguracija()!=null)
+                System.out.println("seg kat lista null");
+            else
+                System.out.println("segment kat je " + segment.getKategorija().getId());
             lista.add(new SegmentDTO(segment));
         }
         return lista;

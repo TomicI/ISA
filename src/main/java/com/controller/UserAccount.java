@@ -23,6 +23,7 @@ import com.repository.UserRepository;
 
 import com.service.FriendService;
 import com.service.InviteService;
+import com.service.RezervacijaService;
 import io.swagger.annotations.ApiOperation;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,9 @@ public class UserAccount {
 
     @Autowired
     FriendService friendService;
+
+    @Autowired
+    RezervacijaService rezervacijaService;
 
     @RequestMapping(value = "/getRent/{id}", method = RequestMethod.GET)
     public ResponseEntity<RentACarDTO> getUserRentACar(@PathVariable Long id) {
@@ -324,5 +328,14 @@ public class UserAccount {
 
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value = "/inviteFriend", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Salje poziv za prijateljstvo", httpMethod = "POST", produces = "application/json", consumes = "application/json")
+    @PreAuthorize("hasRole('USER_REG')")
+    public ResponseEntity<InviteDTO> inviteFriend(@RequestBody InviteDTO inviteDTO, Principal user){
+
+
+        return new ResponseEntity<>(this.rezervacijaService.inviteFriend(inviteDTO, user.getName()), HttpStatus.CREATED);
     }
 }

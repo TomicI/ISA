@@ -101,7 +101,7 @@
       <div class="col-sm-8 text-left">
     <select  class="form-control" name="destinacija" formControlName="destinacija" (change)="onChangeL($event.target.value)">
            
-            <option *ngFor="let des of destinacije " [value]="des.id">{{des.naziv}}</option>
+            <option *ngFor="let des of destinacije " [value]="des.id">{{des.grad}}, {{des.drzava}}</option>
     </select></div>
   </div>
 

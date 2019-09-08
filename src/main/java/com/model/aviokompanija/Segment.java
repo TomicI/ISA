@@ -24,10 +24,10 @@ public class Segment {
 	@Column
 	private int redniBroj;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private KonfiguracijaLeta konfiguracija;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private KategorijaSedista kategorija;
 	
 	@JsonIgnore

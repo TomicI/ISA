@@ -6,8 +6,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.dto.InviteDTO;
 import com.dto.RezervacijaDTO;
+import com.dto.UserDTO;
+import com.dto.aviokompanija.PutnikDTO;
+import com.model.Invite;
+import com.model.aviokompanija.Karta;
+import com.model.aviokompanija.Putnik;
+import com.model.aviokompanija.Sediste;
 import com.model.user.User;
+import com.repository.aviokompanija.KartaRepository;
+import com.repository.aviokompanija.SedisteRepository;
+import com.service.aviokompanija.KartaService;
+import com.service.aviokompanija.PutnikService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +34,18 @@ public class RezervacijaService {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	InviteService inviteService;
+
+	@Autowired
+	PutnikService putnikService;
+
+	@Autowired
+	KartaRepository kartaRepository;
+
+	@Autowired
+	SedisteRepository sedisteRepository;
 
 	@Autowired
 	private RezervacijaRepository rezervacijaRepository;
@@ -138,5 +161,49 @@ public class RezervacijaService {
 
 		
 		return new RezervacijaDTO(r.get());
+	}
+
+	public InviteDTO inviteFriend(InviteDTO inviteDTO, String username){
+		Invite invite=new Invite();
+
+		Optional<User> userS=this.userService.findByUsername(username);
+		Optional<User> userR=this.userService.findByUsername(inviteDTO.userReceive.getUsername());
+		Optional<Rezervacija> r= rezervacijaRepository.findById(inviteDTO.reservation.getId());
+		if(userS.isPresent() && userR.isPresent() && r.isPresent()) {
+			invite.setUserSent(userS.get());
+			invite.setUserReceive(userR.get());
+			invite.setDateSent(new Date());
+			invite.setReservation(r.get());
+			invite = this.inviteService.save(invite);
+
+			PutnikDTO p=new PutnikDTO();
+			p.setUser(new UserDTO(userR.get()));
+			p.setPrezime(userR.get().getLastName());
+			p.setIme(userR.get().getFirstName());
+			p.setBrojPasosa(userR.get().getBrojPasosa());
+			putnikService.create(r.get().getKarta().getId(), p);
+		}
+		return new InviteDTO(invite);
+	}
+
+	public void eFriend(InviteDTO inviteDTO, String username){
+		Optional<Invite> invite=this.inviteService.findByID(inviteDTO.getId());
+
+		if(invite.isPresent()) {
+			Optional<User> userR = this.userService.findByUsername(inviteDTO.userReceive.getUsername());
+			Optional<Rezervacija> r = rezervacijaRepository.findById(inviteDTO.reservation.getId());
+			if ( userR.isPresent() && r.isPresent() ) {
+				for(Sediste s: r.get().getKarta().getSedista()){
+					if(s.getPutnik().getUser()==userR.get()) {
+						s.setPutnik(null);
+						s.setZauzeto(false);
+						s.setKarta(null);
+						this.sedisteRepository.save(s);
+						break;
+					}
+				}
+			}
+		}
+		this.inviteService.delete(invite.get());
 	}
 }
