@@ -54,7 +54,7 @@ public class LokacijaController {
             @ApiResponse(code = 400, message = "Bad Request")
     })
     public ResponseEntity<LokacijaDTO> create(@RequestBody LokacijaDTO lokacijaDTO){
-        return new ResponseEntity<>(lokacijaService.create(lokacijaDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(new LokacijaDTO(lokacijaService.create(lokacijaDTO)), HttpStatus.CREATED);
     }
 
     @RequestMapping(method=RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,7 +65,7 @@ public class LokacijaController {
             @ApiResponse(code = 400, message = "Bad Request")
     })
     public ResponseEntity<LokacijaDTO> update(@RequestBody LokacijaDTO lokacijaDTO){
-        return new ResponseEntity<>(lokacijaService.update(lokacijaDTO), HttpStatus.OK);
+        return new ResponseEntity<>(new LokacijaDTO(lokacijaService.update(lokacijaDTO)), HttpStatus.OK);
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)

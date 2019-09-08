@@ -24,9 +24,6 @@ public class Filijala {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(nullable = false,unique=true)
-	private String adresa;
 
 	@ManyToOne
 	private Lokacija lokacija;
@@ -56,15 +53,6 @@ public class Filijala {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getAdresa() {
-		return adresa;
-	}
-
-	public void setAdresa(String adresa) {
-		this.adresa = adresa;
-	}
-
 
 	public RentACar getRentACar() {
 		return rentACar;

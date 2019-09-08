@@ -9,6 +9,9 @@ import com.repository.aviokompanija.LokacijaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -21,6 +24,18 @@ public class LokacijaService {
     private LokacijaRepository lokacijaRepository;
 
     private ListeDTO liste = new ListeDTO();
+
+    public Lokacija saveLokacija(Lokacija lokacija){
+        return lokacijaRepository.save(lokacija);
+    }
+
+    public boolean existsByAdresa(String adresa){
+        return lokacijaRepository.existsByAdresa(adresa);
+    }
+
+    public Lokacija findByAdresa(String adresa){
+        return lokacijaRepository.findByAdresa(adresa);
+    }
 
     public List<LokacijaDTO> getAll(){
         List<Lokacija> lokacije = lokacijaRepository.findAll();
@@ -40,24 +55,38 @@ public class LokacijaService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lokacija ne postoji");
     }
 
-    public LokacijaDTO create(LokacijaDTO lokacijaDTO){
+
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+    public Lokacija create(LokacijaDTO lokacijaDTO){
         Lokacija lokacija = new Lokacija();
 
         lokacija.setGeoSirina(lokacijaDTO.getGeoSirina());
         lokacija.setGeoVisina(lokacijaDTO.getGeoVisina());
-        lokacija.setNaziv(lokacijaDTO.getNaziv());
+        lokacija.setAdresa(lokacijaDTO.getAdresa());
+        lokacija.setDrzava(lokacijaDTO.getDrzava());
+        lokacija.setGrad(lokacijaDTO.getGrad());
 
         lokacijaRepository.save(lokacija);
-        return lokacijaDTO;
+        return lokacija;
     }
 
-    public LokacijaDTO update(LokacijaDTO lokacijaDTO){
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+    public Lokacija update(LokacijaDTO lokacijaDTO){
         Optional<Lokacija> lokacija = lokacijaRepository.findById(lokacijaDTO.getId());
         if (!lokacija.isPresent())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lokacija ne postoji");
 
-        lokacijaRepository.save(lokacija.get());
-        return new LokacijaDTO(lokacija.get());
+        Lokacija lokacijaGet = lokacija.get();
+
+        lokacijaGet.setGeoSirina(lokacijaDTO.getGeoSirina());
+        lokacijaGet.setGeoVisina(lokacijaDTO.getGeoVisina());
+        lokacijaGet.setAdresa(lokacijaDTO.getAdresa());
+        lokacijaGet.setDrzava(lokacijaDTO.getDrzava());
+        lokacijaGet.setGrad(lokacijaDTO.getGrad());
+
+        lokacijaRepository.save(lokacijaGet);
+        return lokacijaGet;
     }
 
     public void delete(Long id){

@@ -246,7 +246,7 @@ public class LetService {
 		System.out.println("aer " + letDTO.getOpis() + " dest " + letDTO.getPresedanja()+ "   vremep " + letDTO.getVremePolaska() );
 
 		for(Let l: svi) {
-			if(l.getAerodrom().getNaziv().equals(letDTO.getOpis()) && l.getDestinacija().getNaziv().equals(letDTO.getPresedanja()) && l.getVremePolaska().compareTo(letDTO.getVremePolaska())==0 )  {
+			if(l.getAerodrom().getNaziv().equals(letDTO.getOpis()) && l.getDestinacija().getAdresa().equals(letDTO.getPresedanja()) && l.getVremePolaska().compareTo(letDTO.getVremePolaska())==0 )  {
 				if(letDTO.getDuzinaPutovanja()!= null && letDTO.getDuzinaPutovanja()>0 && letDTO.getVrstaLeta()!=null && letDTO.getBrojPresedanja()>0 ){
 					if(getAllSlobodna(l.getId()).size()>=letDTO.getDuzinaPutovanja() && l.getVrstaLeta().equals(letDTO.getVrstaLeta()) && getMaxTezinaPrtljaga(l.getId())>=letDTO.getBrojPresedanja()){
 						LetDTO le=new LetDTO(l);

@@ -8,9 +8,11 @@ import com.dto.RezervacijaRentACarDTO;
 import com.dto.VoziloDTO;
 import com.dto.aviokompanija.OcenaDTO;
 import com.model.*;
+import com.model.aviokompanija.Lokacija;
 import com.model.aviokompanija.Ocena;
 import com.model.user.User;
 import com.security.ResponseMessage;
+import com.service.aviokompanija.LokacijaService;
 import com.service.aviokompanija.OcenaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,6 +55,9 @@ public class FilijalaService {
 
     @Autowired
     private OcenaService ocenaService;
+
+    @Autowired
+    private LokacijaService lokacijaService;
 
     public Optional<Filijala> findOne(Long id) {
         return filijalaRepository.findById(id);
@@ -110,11 +115,11 @@ public class FilijalaService {
         double fromPrice = 0.0;
         double toPrice = 0.0;
 
-        if (!existsByAdresa(locationp)) {
+        if (!lokacijaService.existsByAdresa(locationp)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Branch doesn't exist!");
         }
 
-        if (!existsByAdresa(bring)) {
+        if (!lokacijaService.existsByAdresa(bring)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Branch doesn't exist!");
         }
 
@@ -163,9 +168,14 @@ public class FilijalaService {
         }
 
 
-        Filijala filSearch = find(locationp);
+        Lokacija lokSearch = lokacijaService.findByAdresa(locationp);
 
-        Filijala filBring = find(bring);
+        Lokacija lokBring = lokacijaService.findByAdresa(bring);
+
+
+        Filijala filSearch =findByLokacija(lokSearch.getId());
+
+        Filijala filBring = findByLokacija(lokBring.getId());
 
         RentACar r = rentACarService.findByNaziv(filSearch.getRentACar().getNaziv());
 
@@ -518,6 +528,7 @@ public class FilijalaService {
     }
 
 
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     public Filijala insert(FilijalaDTO filijalaDTO){
 
         if (filijalaDTO.getRentACarDTO()==null) {
@@ -526,19 +537,21 @@ public class FilijalaService {
 
         RentACar rentACar = rentACarService.getOne(filijalaDTO.getRentACarDTO().getId());
 
+        Lokacija lokacija = lokacijaService.create(filijalaDTO.getLokacijaDTO());
+
         Filijala filijala = new Filijala();
-        filijala.setAdresa(filijalaDTO.getAdresa());
         filijala.setRentACar(rentACar);
+        filijala.setLokacija(lokacija);
 
         return save(filijala);
     }
 
 
-
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     public Filijala edit(FilijalaDTO filijalaDTO){
         Filijala filijala = getOne(filijalaDTO.getId());
 
-        filijala.setAdresa(filijalaDTO.getAdresa());
+        lokacijaService.update(filijalaDTO.getLokacijaDTO());
 
         return save(filijala);
     }
@@ -555,13 +568,12 @@ public class FilijalaService {
         filijalaRepository.deleteById(id);
     }
 
-    public Filijala find(String adresa) {
-        return filijalaRepository.findByAdresa(adresa);
+
+    public Filijala findByLokacija(Long id){
+        return filijalaRepository.findByLokacijaId(id);
     }
 
-    public boolean existsByAdresa(String adresa) {
-        return this.filijalaRepository.existsByAdresa(adresa);
-    }
+
 
 
 }

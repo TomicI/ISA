@@ -67,9 +67,9 @@ export class SearchLetComponent implements OnInit {
       this.destinacije=pom;
       this.destinacije.forEach(element => {
 
-          this.options1.push(element.naziv);
+          this.options1.push(element.adresa);
           console.log("lok");
-          console.log(element.naziv);
+          console.log(element.adresa);
       });
 
     })
