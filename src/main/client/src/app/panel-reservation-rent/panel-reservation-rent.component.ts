@@ -4,7 +4,7 @@ import {NgbCalendar, NgbDate, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { UserService } from '../services/user.service';
 import { FilijalaService } from '../services/filijala.service';
 import { RentacarService } from '../services/rentacar.service';
-import { RentACar, Filijala, RezervacijaRent } from '../model';
+import {RentACar, Filijala, RezervacijaRent, Vozilo} from '../model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import {ReservationService} from "../services/reservation.service";
@@ -20,27 +20,32 @@ import {ActivatedRoute, Router} from "@angular/router";
   providers: [FilijalaService, RentacarService]
 })
 export class PanelReservationRentComponent implements OnInit {
+
+  @ViewChild('content') private content;
   @ViewChild('paginator1') paginator: MatPaginator;
   @ViewChild('paginator2') paginator2: MatPaginator;
 
+  statusGroup: FormGroup;
 
+  modalRef: any;
+
+  reservationName;
 
   displayedColumnsReservation: string[] = [
     'no',
     'veh',
-    'resdate',
     'pickup',
     'pickupB',
     'dropoff',
     'dropoffB',
     'price',
-    'status'
+    'status',
+    'edit'
   ];
 
   displayedColumnsReservationDeal: string[] = [
     'no',
     'veh',
-    'resdate',
     'pickup',
     'pickupB',
     'dropoff',
@@ -50,6 +55,8 @@ export class PanelReservationRentComponent implements OnInit {
   ];
 
   rentACar: RentACar;
+
+  reservationRent:RezervacijaRent;
 
 
   filData: Filijala[];
@@ -71,6 +78,8 @@ export class PanelReservationRentComponent implements OnInit {
               private filijalaService: FilijalaService,
               private userServise: UserService,
               private reservationService:ReservationService,
+              private modalService: NgbModal,
+              private fb: FormBuilder
 
               ) { }
 
@@ -107,6 +116,19 @@ export class PanelReservationRentComponent implements OnInit {
   }
 
 
+  editReservation(reservation){
+
+    this.reservationRent = reservation;
+
+    this.reservationName = reservation.voziloDTO.naziv;
+
+    this.statusGroup = this.fb.group({
+      'status':reservation.status
+    });
+
+    this.modalRef = this.modalService.open(this.content);
+
+  }
 
 
   addDeal(){
@@ -115,6 +137,17 @@ export class PanelReservationRentComponent implements OnInit {
 
 
   }
+
+  submitStatus(){
+
+    this.reservationRent.status = this.statusGroup.value;
+
+    console.log(this.reservationRent);
+
+
+
+  }
+
 
 
 }

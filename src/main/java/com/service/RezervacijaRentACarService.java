@@ -275,6 +275,22 @@ public class RezervacijaRentACarService {
 
 
 
+	public RezervacijaRentACarDTO changeStatus(RezervacijaRentACarDTO rezervacijaRentACarDTO){
+
+		RezervacijaRentACar rezervacijaRentACar = getOneRes(rezervacijaRentACarDTO.getId());
+
+
+		rezervacijaRentACar.setStatus(rezervacijaRentACar.getStatus());
+
+		save(rezervacijaRentACar);
+
+		return new RezervacijaRentACarDTO(rezervacijaRentACar);
+	}
+
+
+
+
+
 
 
 }

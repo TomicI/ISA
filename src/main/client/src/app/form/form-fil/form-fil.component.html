@@ -1,15 +1,25 @@
-<form>
-  <div class="form-group" [formGroup]="filijalaFormGroup">
-    <label for="adresa">Adress</label>
-    <div formGroupName="filijala">
-      <input type="text" class="form-control" id="adresa" [formControlName]="'adresa'">
+<form [formGroup]="filijalaFormGroup">
+  <div formGroupName="filijala">
+    <div formGroupName="lokacijaDTO">
+      <div class="form-group">
+        <label for="adresa">Adress</label>
+
+        <input type="text" class="form-control" id="adresa" [formControlName]="'adresa'">
+
+
+        <input type="text" class="form-control" id="drzava" [formControlName]="'drzava'">
+
+
+        <input type="text" class="form-control" id="grad" [formControlName]="'grad'">
+
+      </div>
     </div>
   </div>
   <div class="btn-group">
-    <button type="button"  class="btn btn-primary btn-sm" (click)="submit()">Submit</button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="submit()">Submit</button>
     <button *ngIf="edit" type="button" class="btn btn-primary btn-sm" (click)="delete()">Delete</button>
   </div>
-  
+
 </form>
 
 

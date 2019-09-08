@@ -27,6 +27,8 @@ export class FormFilComponent implements OnInit {
 
   ngOnInit() {
 
+    console.log(this.filijalaFormGroup.value);
+
     this.filForm = this.formBuilder.group({
       adresaFilInput: null
     });

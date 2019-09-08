@@ -22,11 +22,15 @@ export class Aerodrom {
 
 export class Lokacija {
   id: number;
-  naziv: string;
   geoSirina: number;
   geoVisina: number;
+  adresa:string;
+  grad:string;
+  drzava:string;
 
   constructor() { }
+
+
 
 }
 
@@ -174,20 +178,21 @@ export class RentACar {
 
 export class Filijala {
   id: number;
-  adresa: string;
   prosecnaOcena: number;
   rentACarDTO: RentACar;
+  lokacijaDTO: Lokacija;
 
   constructor(
     id: number,
-    adresa: string,
     prosecnaOcena: number,
-    rentACarDTO: RentACar) {
+    rentACarDTO: RentACar,
+    lokacijaDTO:Lokacija
+  ) {
 
     this.id = id;
-    this.adresa = adresa;
     this.prosecnaOcena = prosecnaOcena;
     this.rentACarDTO = rentACarDTO;
+    this.lokacijaDTO = lokacijaDTO;
 
   }
 }

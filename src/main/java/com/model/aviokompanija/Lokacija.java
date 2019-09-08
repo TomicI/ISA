@@ -1,8 +1,11 @@
 package com.model.aviokompanija;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.model.Filijala;
+import com.service.RentACarService;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,7 +22,13 @@ public class Lokacija {
 	private double geoVisina;
 
 	@Column
-	private String naziv;
+	private String adresa;
+
+	@Column
+	private String grad;
+
+	@Column
+	private String drzava;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "lokacija", orphanRemoval=true)
@@ -31,6 +40,10 @@ public class Lokacija {
 
 	@OneToMany(mappedBy = "destinacija", orphanRemoval=true)
 	private Set<Let> letovi;
+
+	@OneToMany(mappedBy = "lokacija", orphanRemoval=true)
+	private List<Filijala> rentService;
+
 
 	public Long getId() {
 		return id;
@@ -56,12 +69,28 @@ public class Lokacija {
 		this.geoVisina = geoVisina;
 	}
 
-	public String getNaziv() {
-		return naziv;
+	public String getAdresa() {
+		return adresa;
 	}
 
-	public void setNaziv(String naziv) {
-		this.naziv = naziv;
+	public void setAdresa(String adresa) {
+		this.adresa = adresa;
+	}
+
+	public String getGrad() {
+		return grad;
+	}
+
+	public void setGrad(String grad) {
+		this.grad = grad;
+	}
+
+	public String getDrzava() {
+		return drzava;
+	}
+
+	public void setDrzava(String drzava) {
+		this.drzava = drzava;
 	}
 
 	public Set<Aviokompanija> getAviokompanije() {
@@ -86,5 +115,13 @@ public class Lokacija {
 
 	public void setLetovi(Set<Let> letovi) {
 		this.letovi = letovi;
+	}
+
+	public List<Filijala> getRentService() {
+		return rentService;
+	}
+
+	public void setRentService(List<Filijala> rentService) {
+		this.rentService = rentService;
 	}
 }

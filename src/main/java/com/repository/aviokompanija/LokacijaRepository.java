@@ -5,4 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LokacijaRepository extends JpaRepository<Lokacija, Long> {
 
+    boolean existsByAdresa(String adresa);
+
+    Lokacija findByAdresa(String adresa);
+
 }

@@ -269,7 +269,7 @@ export class PanelAdminRentComponent implements OnInit {
     this.edit = false;
 
     this.filijalaFormGroup = this.fb.group({
-      filijala: this.fb.group(new Filijala(null, null, null, this.rentACar))
+      filijala: this.fb.group(new Filijala(null, null, this.rentACar, null))
     });
     this.openVeh = false;
     this.proslo = true;

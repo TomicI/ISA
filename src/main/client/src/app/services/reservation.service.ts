@@ -45,6 +45,10 @@ export class ReservationService {
     return this.http.get(`${this.reservation}/${id}`);
   }
 
+  saveStatus(object):Observable<any>{
+    return this.http.post(`${this.rentACarRes}/updateStatus`,object);
+  }
+
 
 
 }

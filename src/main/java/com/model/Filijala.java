@@ -1,5 +1,6 @@
 package com.model;
 
+import com.model.aviokompanija.Lokacija;
 import com.model.aviokompanija.Ocena;
 import org.hibernate.engine.profile.Fetch;
 
@@ -23,9 +24,9 @@ public class Filijala {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(nullable = false,unique=true)
-	private String adresa;
+
+	@ManyToOne
+	private Lokacija lokacija;
 
 	@OneToMany(mappedBy = "filijala",fetch = FetchType.LAZY)
 	private List<Ocena> ocene ;
@@ -52,15 +53,6 @@ public class Filijala {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getAdresa() {
-		return adresa;
-	}
-
-	public void setAdresa(String adresa) {
-		this.adresa = adresa;
-	}
-
 
 	public RentACar getRentACar() {
 		return rentACar;
@@ -92,5 +84,13 @@ public class Filijala {
 
 	public void setRezervacije(List<RezervacijaRentACar> rezervacije) {
 		this.rezervacije = rezervacije;
+	}
+
+	public Lokacija getLokacija() {
+		return lokacija;
+	}
+
+	public void setLokacija(Lokacija lokacija) {
+		this.lokacija = lokacija;
 	}
 }
