@@ -6,6 +6,7 @@ import {HomeComponent} from './home/home.component';
 import{HotelPretragaComponent} from './hotel-pretraga/hotel-pretraga.component';
 import{HotelPrikazComponent} from './hotel-prikaz/hotel-prikaz.component';
 import {HotelRezervisiComponent} from './hotel-rezervisi/hotel-rezervisi.component';
+import {HotelSobaComponent} from './hotel-soba/hotel-soba.component';
 import {LoginComponent} from './login/login.component';
 import {PanelComponent} from './panel/panel.component';
 import {SignUpModalComponent} from './sign-up-modal/sign-up-modal.component';
@@ -142,7 +143,8 @@ const routes: Routes = [
   { path: 'unosPutnika/:kartaID/:brPutnika', component: UnosPutnikaComponent},
   {path: 'pretragaHotel', component: HotelPretragaComponent},
   {path: 'prikazHotela', component: HotelPrikazComponent},
-  {path: 'rezervisiHotel', component: HotelRezervisiComponent}
+  {path: 'rezervisiHotel', component: HotelRezervisiComponent},
+  {path: 'sobaHotel', component: HotelSobaComponent}
   ];
 
 @NgModule({

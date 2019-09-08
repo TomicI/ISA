@@ -85,7 +85,8 @@ import { UnosPutnikaComponent } from './unos-putnika/unos-putnika.component';
 import { HotelPretragaComponent } from './hotel-pretraga/hotel-pretraga.component';
 import { HotelPrikazComponent } from './hotel-prikaz/hotel-prikaz.component';
 import { HotelRezervisiComponent } from './hotel-rezervisi/hotel-rezervisi.component';
-
+import { HotelSobaComponent } from './hotel-soba/hotel-soba.component';
+import { MatInputModule, MatFormFieldModule} from '@angular/material';
 
 
 @NgModule({
@@ -157,7 +158,8 @@ import { HotelRezervisiComponent } from './hotel-rezervisi/hotel-rezervisi.compo
     UnosPutnikaComponent,
     HotelPretragaComponent,
     HotelPrikazComponent,
-    HotelRezervisiComponent
+    HotelRezervisiComponent,
+    HotelSobaComponent
   ],
   imports: [
     BrowserModule,
