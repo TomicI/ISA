@@ -47,7 +47,10 @@ public class RezervacijaDTO {
 			this.rezervacijaRentACarDTO = new RezervacijaRentACarDTO(r.getRezervacijaRentACar());
 		else
 			this.rezervacijaRentACarDTO=null;
-		this.userDTO = new UserDTO(r.getUser());
+		if(r.getUser()!=null)
+			this.userDTO = new UserDTO(r.getUser());
+		else
+			this.userDTO=null;
 	}
 
 	public Long getId() {

@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {LetService} from "../letService/let.service";
-import {Karta, Putnik, Rezervacija} from "../model";
+import {Invite, Karta, Putnik, Rezervacija, User} from "../model";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {UserService} from "../services/user.service";
 
 @Component({
   selector: 'app-unos-putnika',
@@ -17,13 +18,17 @@ export class UnosPutnikaComponent implements OnInit {
   pBrPuntika:number;
   brojSedista: number;
   unosPurnikaForm: FormGroup;
+  prijatelji: User[]=[];
+  invite: Invite;
 
   constructor(private letService: LetService,
               private router: Router,
               private route: ActivatedRoute,
-              private formBuilder: FormBuilder ) { }
+              private formBuilder: FormBuilder,
+              private userService: UserService) { }
 
   ngOnInit() {
+    this.invite=new Invite();
     this.route.params.subscribe( params =>  { const id = params['kartaID']; const id1= params['brPutnika'];
 
       if (id) {
@@ -51,6 +56,11 @@ export class UnosPutnikaComponent implements OnInit {
       ime:[''],
       prezime:['']
     });
+
+    this.userService.getFriends().then(pom=>{
+      console.log(pom);
+      this.prijatelji=pom;
+    })
   }
 
   onSubmit(){
@@ -67,4 +77,17 @@ export class UnosPutnikaComponent implements OnInit {
     });
   }
 
+  
+  
+  pozovi(i:number){
+    this.invite.userReceive=this.prijatelji[i];
+    this.invite.reservation=this.rezervacija;
+    this.userService.inviteFriend(this.invite).then(pom=>{
+        console.log("send invite ");
+        console.log(pom);
+       // location.reload();
+      }
+    )
+
+  }
 }

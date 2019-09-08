@@ -41,6 +41,30 @@ public class PutnikService {
         if(karta.get().getSedista().isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sedista ne postoje");
 
+        if(putnikDTO.getUser()!=null){
+            Optional<User> u=userRepository.findByUsername(putnikDTO.getUser().getUsername());
+            if(!u.isPresent())
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ne postoji");
+
+
+            Optional<Putnik> pom=putnikRepository.findByUser(u.get());
+
+            if(pom.isPresent())
+                putnik = pom.get();
+            else {
+                putnik.setUser(u.get());
+                if(u.get().getBrojPasosa()!=null)
+                    putnik.setBrojPasosa(u.get().getBrojPasosa());
+
+                putnik.setIme(u.get().getFirstName());
+                putnik.setPrezime(u.get().getLastName());
+            }
+        }else{
+            putnik.setBrojPasosa(putnikDTO.getBrojPasosa());
+            putnik.setIme(putnikDTO.getIme());
+            putnik.setPrezime(putnikDTO.getPrezime());
+        }
+
         Sediste pom=new Sediste();
         for(Sediste s: karta.get().getSedista()){
             if(s.getPutnik()==null  && s.getZauzeto()) {
@@ -51,18 +75,7 @@ public class PutnikService {
         if(putnik.getSedista()==null)
             putnik.setSedista(new HashSet<>());
         putnik.getSedista().add(pom);
-        putnik.setBrojPasosa(putnikDTO.getBrojPasosa());
 
-        if(putnikDTO.getUser()!=null){
-            Optional<User> u=userRepository.findByUsername(putnikDTO.getUser().getUsername());
-            if(!u.isPresent())
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ne postoji");
-
-            putnik.setUser(u.get());
-        }
-
-        putnik.setIme(putnikDTO.getIme());
-        putnik.setPrezime(putnikDTO.getPrezime());
         putnik=putnikRepository.save(putnik);
         pom.setPutnik(putnik);
         sedisteRepository.save(pom);

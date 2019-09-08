@@ -38,7 +38,21 @@ public class SegmentService {
         if(segmenti.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Segment ne postoji");
 
-        return liste.segmenti(segmenti);
+        List<SegmentDTO> lista = new ArrayList<>();
+
+        for (Segment segment : segmenti) {
+            if(segment.getKonfiguracija()!=null)
+                System.out.println("seg konf lista null");
+            else
+                System.out.println("segment konf je " + segment.getKonfiguracija().getId());
+
+            if(segment.getKonfiguracija()!=null)
+                System.out.println("seg kat lista null");
+            else
+                System.out.println("segment kat je " + segment.getKategorija().getId());
+            lista.add(new SegmentDTO(segment));
+        }
+        return lista;
     }
 
     public SegmentDTO findById(Long id){

@@ -23,8 +23,7 @@ public class KonfiguracijaLeta {
 	@OneToMany(mappedBy = "konfiguracija")
 	private Set<Let> letovi;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "konfiguracija")
+	@OneToMany(mappedBy = "konfiguracija", fetch = FetchType.LAZY)
 	private List<Segment> segmenti;
 
 	public KonfiguracijaLeta() {

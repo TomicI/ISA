@@ -43,6 +43,12 @@ export class UserService {
     return this.http.post(`${this.userAccount}/sendRequest`, invite).toPromise();
   }
 
+  inviteFriend(invite: Invite): Promise<Invite> {
+    console.log(invite);
+    console.log('POST');
+    return this.http.post<Invite>(`${this.userAccount}/inviteFriend`, invite).toPromise();
+  }
+
   getFriends():Promise<User[]>{
     return this.http.get<User[]>(`${this.userAccount}/friends/`).toPromise();
   }

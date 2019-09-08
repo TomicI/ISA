@@ -26,3 +26,11 @@
     </div>
   </form>
 </div>
+
+
+
+<div *ngFor="let u of prijatelji; let i = index" align="left" class="jumbotron container text-center col-sm-6"  style=" width: auto;  padding: 20px; margin-top: 50px; margin-left: 30px;" class="border border-light">
+  <div><span>{{u.username}}</span><span style="margin-left: 10px"><button (click)="pozovi(i)"><i class="fa fa-user-friends"></i></button></span></div>
+  <div>{{u.firstName}}  {{u.lastName}}</div>
+</div>
+

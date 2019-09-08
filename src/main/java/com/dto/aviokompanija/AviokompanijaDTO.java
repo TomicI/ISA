@@ -10,7 +10,7 @@ public class AviokompanijaDTO {
 	private String adresa;
 	private String opis;
 	private Double prosecnaOcena;
-	private LokacijaDTO lokacijaDTO;
+	private LokacijaDTO lokacija;
 
 	public AviokompanijaDTO() { }
 	
@@ -21,7 +21,10 @@ public class AviokompanijaDTO {
 		this.adresa = a.getAdresa();
 		this.opis = a.getOpis();
 		this.prosecnaOcena = a.getProsecnaOcena() ;
-		this.lokacijaDTO  = new LokacijaDTO(a.getLokacija());
+		if (a.getLokacija()!=null)
+			this.lokacija  = new LokacijaDTO(a.getLokacija());
+		else
+			this.lokacija  = null;
 	}
 
 
@@ -31,7 +34,7 @@ public class AviokompanijaDTO {
 		this.adresa = adresa;
 		this.opis = opis;
 		this.prosecnaOcena = prosecnaOcena;
-		this.lokacijaDTO = lokacijaDTO;
+		this.lokacija = lokacijaDTO;
 	}
 
 	public Long getId() {
@@ -75,10 +78,10 @@ public class AviokompanijaDTO {
 	}
 
 	public LokacijaDTO getLokacijaDTO() {
-		return lokacijaDTO;
+		return lokacija;
 	}
 
 	public void setLokacijaDTO(LokacijaDTO lokacijaDTO) {
-		this.lokacijaDTO = lokacijaDTO;
+		this.lokacija = lokacijaDTO;
 	}
 }

@@ -16,7 +16,7 @@ public class LokacijaDTO {
     }
 
     public LokacijaDTO(Lokacija lokacija){
-
+        this.id=lokacija.getId();
         this.geoSirina = lokacija.getGeoSirina();
         this.geoVisina = lokacija.getGeoVisina();
         this.adresa = lokacija.getAdresa();
