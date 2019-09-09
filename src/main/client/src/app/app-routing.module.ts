@@ -52,8 +52,9 @@ import {ResDetailComponent} from "./res-detail/res-detail.component";
 const routes: Routes = [
   {path: '', redirectTo: '/travel', pathMatch: 'full'},
   {path: 'rentacarform', component: FormsComponent},
-  {path: 'travel', component: HomeComponent,
-    children:[
+  {
+    path: 'travel', component: HomeComponent,
+    children: [
       {
         path: 'rentacar', component: SearchRentComponent,
         children: [
@@ -63,7 +64,9 @@ const routes: Routes = [
           {path: 'vehicle', component: VehicleComponent},
           {path: 'reservation', component: ResDetailComponent},
         ]
-      }
+      },
+      {path: 'flights', component: SearchLetComponent},
+
     ]
 
   },
@@ -74,21 +77,21 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'reservations', pathMatch: 'full'},
       {
-      path: 'reservations',
-      component: UserReservationsComponent,
-      canActivate: [AuthGuard],
-      data: {roles: ["ROLE_USER_REG"]},
-      children: [
-        {path: '', component: ReservationOverviewComponent},
-        {path: 'details', component: ReservationDetailsComponent}
-      ]
-    },
+        path: 'reservations',
+        component: UserReservationsComponent,
+        canActivate: [AuthGuard],
+        data: {roles: ["ROLE_USER_REG"]},
+        children: [
+          {path: '', component: ReservationOverviewComponent},
+          {path: 'details', component: ReservationDetailsComponent}
+        ]
+      },
       {path: 'friends', component: UserFriendsComponent, canActivate: [AuthGuard], data: {roles: ["ROLE_USER_REG"]}},
       {path: 'invites', component: InviteComponent, canActivate: [AuthGuard], data: {roles: ["ROLE_USER_REG"]}},
     ]
 
   },
-  { path: 'companies', component: ListComponent},
+  {path: 'companies', component: ListComponent},
 
   {path: 'login', component: LoginComponent},
   {
@@ -140,15 +143,15 @@ const routes: Routes = [
     data: {roles: ['ROLE_ADMIN_RENT', 'ROLE_ADMIN_AVIO', 'ROLE_ADMIN_HOTEL']}
   },
   {path: 'addFriends', component: AddFriendsComponent},
-  { path: 'addKonf/:id', component: FormKonfLetaComponent},
-  { path: 'konfig-list/:id', component: KonfigListComponent},
-  { path: 'addKatSed/:id', component: AddKatSedistaComponent},
-  { path: 'addSegment/:id', component: AddSegmentComponent},
-  { path: 'search', component: SearchLetComponent},
-  { path: 'karta/:id', component: KartaComponent},
-  { path: 'unosPutnika/:kartaID/:brPutnika', component: UnosPutnikaComponent},
-  { path: 'brzaRezervacija/:id', component: BrzaRezervacijaComponent}
-  ];
+  {path: 'addKonf/:id', component: FormKonfLetaComponent},
+  {path: 'konfig-list/:id', component: KonfigListComponent},
+  {path: 'addKatSed/:id', component: AddKatSedistaComponent},
+  {path: 'addSegment/:id', component: AddSegmentComponent},
+
+  {path: 'karta/:id', component: KartaComponent},
+  {path: 'unosPutnika/:kartaID/:brPutnika', component: UnosPutnikaComponent},
+  {path: 'brzaRezervacija/:id', component: BrzaRezervacijaComponent}
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
