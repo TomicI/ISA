@@ -4,6 +4,7 @@ import { TokenService } from '../auth/token.service';
 import { Router } from '@angular/router';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {CommunicationService} from "../services/communication.service";
 
 @Component({
   selector: 'app-res-detail',
@@ -13,7 +14,7 @@ import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 export class ResDetailComponent implements OnInit {
 
 
-  @Input() res: any;
+  res: any;
   @Input() view:boolean;
   @Output() clickedCen = new EventEmitter<boolean>();
   @Output() clickedRate = new EventEmitter<any>();
@@ -25,8 +26,24 @@ export class ResDetailComponent implements OnInit {
   message = '';
 
 
+  constructor(private tokenStorage: TokenService,
+              private communicationService:CommunicationService,
+              private reservationService: ReservationService ,
+              private router: Router,private modalService: NgbModal,
+              private formBuilder: FormBuilder) {
 
-  constructor(private tokenStorage: TokenService, private reservationService: ReservationService , private router: Router,private modalService: NgbModal,private formBuilder: FormBuilder) { }
+
+      this.communicationService.reservationEmitted$.subscribe(data=>{
+
+        console.log("Prosledjena rezervacija!");
+
+        console.log(data);
+
+        this.res = data;
+
+      });
+
+  }
 
   ngOnInit() {
 
@@ -39,7 +56,7 @@ export class ResDetailComponent implements OnInit {
     if (this.tokenStorage.getToken()) {
 
       this.reservationService.saveRes(this.res).then(data => {
-        this.message = 'Reservation was made!';
+        alert('Reservation was made!');
 
       });
 
@@ -47,13 +64,13 @@ export class ResDetailComponent implements OnInit {
       setTimeout(() => {
         this.message = '';
         this.clickedCen.emit(true);
-        this.router.navigate(['reservations']);
+        this.router.navigate(['homeReg']);
       }, 4000);
 
       
 
     } else {
-      this.message = 'You have to sign in!';
+      alert('You have to sign in!')
       setTimeout(() => {
          this.message = '';
       }, 4000);

@@ -274,7 +274,8 @@ export class SearchRentComponent implements OnInit {
 
 
 
-    this.router.navigate(['rentacar/search'], { queryParams: this.params });
+
+    this.router.navigate(['travel/rentacar/search'], { queryParams: this.params });
 
   }
 

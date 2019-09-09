@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {RentacarService} from '../services/rentacar.service';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpParams} from "@angular/common/http";
+import {CommunicationService} from "../services/communication.service";
 
 @Component({
   selector: 'app-search-get',
@@ -32,7 +33,11 @@ export class SearchGetComponent implements OnInit {
 
   message = '';
 
-  constructor(private route: ActivatedRoute, private rentService: RentacarService, private formBuilder: FormBuilder) {
+  constructor(private route: ActivatedRoute,
+              private rentService: RentacarService,
+              private formBuilder: FormBuilder,
+              private communicationService: CommunicationService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -98,7 +103,11 @@ export class SearchGetComponent implements OnInit {
   }
 
   rent(reservation) {
+
     this.resChoose = reservation;
+    this.router.navigate(['travel/rentacar/reservation']).then(()=>{
+        this.communicationService.reservationChange(reservation);
+    });
 
     this.resPass = true;
     this.resView = false;

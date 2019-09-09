@@ -45,12 +45,29 @@ import {HomeRegisteredComponent} from "./home-registered/home-registered.compone
 import {InviteComponent} from "./invite/invite.component";
 import {ListComponent} from "./list/list.component";
 import {UnosPutnikaComponent} from "./unos-putnika/unos-putnika.component";
+import {ResDetailComponent} from "./res-detail/res-detail.component";
 
 
 const routes: Routes = [
-  {path: '', redirectTo: '/home', pathMatch: 'full'},
+  {path: '', redirectTo: '/travel', pathMatch: 'full'},
   {path: 'rentacarform', component: FormsComponent},
-  {path: 'home', component: HomeComponent},
+  {path: 'travel', component: HomeComponent,
+    children:[
+      {
+        path: 'rentacar', component: SearchRentComponent,
+        children: [
+          {path: '', component: RentacarListComponent},
+          {path: 'branch', component: FilijalaComponent},
+          {path: 'search', component: SearchGetComponent},
+          {path: 'vehicle', component: VehicleComponent},
+          {path: 'reservation', component: ResDetailComponent},
+        ]
+      }
+    ]
+
+  },
+
+
   {
     path: 'homeReg', component: HomeRegisteredComponent, canActivate: [AuthGuard], data: {roles: ["ROLE_USER_REG"]},
     children: [
@@ -71,15 +88,7 @@ const routes: Routes = [
 
   },
   { path: 'companies', component: ListComponent},
-  {
-    path: 'rentacar', component: SearchRentComponent,
-    children: [
-      {path: '', component: RentacarListComponent},
-      {path: 'branch', component: FilijalaComponent},
-      {path: 'search', component: SearchGetComponent},
-      {path: 'vehicle', component: VehicleComponent},
-    ]
-  },
+
   {path: 'login', component: LoginComponent},
   {
     path: 'panel', component: PanelComponent,

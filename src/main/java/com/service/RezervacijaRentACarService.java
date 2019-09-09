@@ -82,6 +82,85 @@ public class RezervacijaRentACarService {
 		return new RezervacijaRentACarDTO(rezOptional.get());
 	}
 
+	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+	public RezervacijaDTO addToReservation(RezervacijaDTO rezervacijaDTO,Principal user){
+
+		User userSignedIn = userService.getByUsername(user.getName());
+
+		Rezervacija rezervacija = rezervacijaService.getOne(rezervacijaDTO.getId());
+
+		User userRes = rezervacija.getUser();
+
+
+		if(!userSignedIn.equals(userRes)){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong Reservation!");
+		}
+
+		RezervacijaRentACarDTO rezDTO  = rezervacijaDTO.getRezervacijaRentACarDTO();
+
+		if (rezDTO==null){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+		}
+
+		Date today = new Date();
+
+		if (rezDTO.getDatumPreuz().before(today) || rezDTO.getDatumPreuz().equals(today)){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pick-up time not valid!");
+		}
+
+		if (rezDTO.getFilijalaDTO()==null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch not defined!");
+		}
+
+		if (rezDTO.getFilijalaDropDTO()==null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch not defined!");
+		}
+
+		Optional<Filijala> filijalaOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
+		Optional<Filijala> filijalaDropOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
+
+		if (!filijalaOptional.isPresent()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not present!");
+		}
+
+		if (!filijalaDropOptional.isPresent()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Branch not present!");
+		}
+
+		Optional<Vozilo> voziloOptional = voziloService.findOne(rezDTO.getVoziloDTO().getId());
+
+		if (rezDTO.getVoziloDTO()==null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vehicle not defined!");
+		}
+
+
+		if (!voziloOptional.isPresent()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not present!");
+		}
+
+
+		RezervacijaRentACar rez = new RezervacijaRentACar();
+
+		rez.setDatumRez(new Date());
+		rez.setRezervacija(filijalaOptional.get());
+		rez.setRezervacijaDrop(filijalaDropOptional.get());
+		rez.setDatumPreuz (rezDTO.getDatumPreuz());
+		rez.setDatumVracanja (rezDTO.getDatumVracanja());
+		rez.setCena (rezDTO.getCena());
+		rez.setOtkazana(false);
+		rez.setVozilo(voziloOptional.get());
+		rez.setStatus(StatusRes.Reserved);
+		rez.setNaPopustu(false);
+		rez.setPopust(0.0);
+		save(rez);
+
+		rezervacija.setRezervacijaRentACar(rez);
+
+		rezervacijaService.save(rezervacija);
+
+		return new RezervacijaDTO(rezervacija);
+
+	}
 
 	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
 	public RezervacijaDTO saveRentReservation(RezervacijaRentACarDTO rezDTO,Principal user){

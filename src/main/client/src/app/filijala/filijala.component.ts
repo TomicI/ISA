@@ -73,7 +73,7 @@ export class FilijalaComponent implements OnInit {
       
     };
 
-    this.router.navigate(['rentacar/vehicle'], { queryParams: this.params });
+    this.router.navigate(['travel/rentacar/vehicle'], { queryParams: this.params });
 
   }
 

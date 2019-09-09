@@ -29,6 +29,9 @@ import org.springframework.stereotype.Service;
 
 import com.model.Rezervacija;
 import com.repository.RezervacijaRepository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -73,7 +76,8 @@ public class RezervacijaService {
 	public List<Rezervacija> findAll(){
 		return rezervacijaRepository.findAll();
 	}
-	
+
+	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
 	public Rezervacija save(Rezervacija r) {
 		return rezervacijaRepository.save(r);
 	}

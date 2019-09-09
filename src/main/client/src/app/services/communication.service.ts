@@ -10,10 +10,18 @@ export class CommunicationService {
 
   private emitChangeSource = new Subject<any>();
 
+  private reservationChoosen = new Subject<any>();
+
   changeEmitted$ = this.emitChangeSource.asObservable();
+
+  reservationEmitted$=this.reservationChoosen.asObservable();
 
   emitChange(obj) {
     console.log("EMITT");
     this.emitChangeSource.next(obj);
+  }
+
+  reservationChange(res){
+    this.reservationChoosen.next(res);
   }
 }

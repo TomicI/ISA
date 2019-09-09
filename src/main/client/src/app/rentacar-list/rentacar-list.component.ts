@@ -67,7 +67,7 @@ export class RentacarListComponent implements OnInit {
       'id': rnt.id,
       'rent':rnt.naziv
     };
-    this.router.navigate(['rentacar/branch'], { queryParams: this.params });
+    this.router.navigate(['travel/rentacar/branch'], { queryParams: this.params });
   }
 
 }

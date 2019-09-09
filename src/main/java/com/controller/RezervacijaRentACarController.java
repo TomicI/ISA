@@ -39,6 +39,12 @@ public class RezervacijaRentACarController {
 
 		return new ResponseEntity<>(rezService.saveRentReservation(rezDTO,user),HttpStatus.CREATED);
 	}
+
+	@RequestMapping(method=RequestMethod.PUT,consumes="application/json")
+	public ResponseEntity<RezervacijaDTO> addRezervacija (@RequestBody RezervacijaDTO rezDTO, Principal user){
+
+		return new ResponseEntity<>(rezService.addToReservation(rezDTO,user),HttpStatus.OK);
+	}
 	
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseEntity<RezervacijaRentACarDTO> getRezervacija(@PathVariable Long id){
@@ -46,6 +52,7 @@ public class RezervacijaRentACarController {
 		return new ResponseEntity<>(rezService.getOne(id),HttpStatus.OK);
 		
 	}
+
 
 	@RequestMapping(value="/updateStatus",method=RequestMethod.GET)
 	public ResponseEntity<RezervacijaRentACarDTO> updateStatus(@RequestBody RezervacijaRentACarDTO rezervacijaRentACarDTO){
