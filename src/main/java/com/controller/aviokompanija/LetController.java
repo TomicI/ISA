@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.text.ParseException;
 import java.util.List;
 
@@ -33,8 +34,8 @@ public class LetController {
 			@ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
-	public ResponseEntity<List<LetDTO>> getAll(){
-		return new ResponseEntity<>(letService.getAll(), HttpStatus.OK);
+	public ResponseEntity<List<LetDTO>> getAll(Principal user){
+		return new ResponseEntity<>(letService.getAll(user.getName()), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}",method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

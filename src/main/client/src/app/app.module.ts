@@ -82,6 +82,7 @@ import { HomeRegisteredComponent } from './home-registered/home-registered.compo
 import { InviteComponent } from './invite/invite.component';
 import { ListComponent } from './list/list.component';
 import { UnosPutnikaComponent } from './unos-putnika/unos-putnika.component';
+import { BrzaRezervacijaComponent } from './brza-rezervacija/brza-rezervacija.component';
 
 
 
@@ -151,7 +152,8 @@ import { UnosPutnikaComponent } from './unos-putnika/unos-putnika.component';
     InviteComponent,
     ListComponent,
     SearchLetComponent,
-    UnosPutnikaComponent
+    UnosPutnikaComponent,
+    BrzaRezervacijaComponent
   ],
   imports: [
     BrowserModule,

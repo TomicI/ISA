@@ -111,4 +111,6 @@ public pom;
   addSegment(id:number, letC: Segment): Promise<Segment>{
     return this.http.post<Segment>(this.SEGMENT_API+'/'+id, letC).toPromise();
   }
+
+
 }

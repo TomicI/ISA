@@ -45,6 +45,7 @@ import {HomeRegisteredComponent} from "./home-registered/home-registered.compone
 import {InviteComponent} from "./invite/invite.component";
 import {ListComponent} from "./list/list.component";
 import {UnosPutnikaComponent} from "./unos-putnika/unos-putnika.component";
+import {BrzaRezervacijaComponent} from "./brza-rezervacija/brza-rezervacija.component";
 import {ResDetailComponent} from "./res-detail/res-detail.component";
 
 
@@ -129,7 +130,7 @@ const routes: Routes = [
   {path: 'destinacijaAdd', component: FormAddDestinacijaComponent},
   {path: 'letUpdate/:id', component: FormUpdateLetComponent},
   {path: 'letAdd/:id', component: FormAddLetComponent},
-  {path: 'letovi/:id', component: LetComponent},
+  {path: 'letovi', component: LetComponent},
   {path: 'aviokompanijaProfil/:id', component: AviokomProfilComponent},
   {path: 'addAviokom', component: FormDodajAviokomComponent},
   {
@@ -145,7 +146,8 @@ const routes: Routes = [
   { path: 'addSegment/:id', component: AddSegmentComponent},
   { path: 'search', component: SearchLetComponent},
   { path: 'karta/:id', component: KartaComponent},
-  { path: 'unosPutnika/:kartaID/:brPutnika', component: UnosPutnikaComponent}
+  { path: 'unosPutnika/:kartaID/:brPutnika', component: UnosPutnikaComponent},
+  { path: 'brzaRezervacija/:id', component: BrzaRezervacijaComponent}
   ];
 
 @NgModule({

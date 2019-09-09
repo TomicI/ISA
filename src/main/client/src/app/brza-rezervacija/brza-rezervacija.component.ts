@@ -1,29 +1,28 @@
 import {Component, Input, OnInit} from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import {Karta, Let, Sediste, Segment} from "../model";
 import {LetService} from "../letService/let.service";
-import {fabric } from 'fabric/dist/fabric.min.js';
-import {UserService} from "../services/user.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {fabric} from "fabric/dist/fabric.min";
+
 
 @Component({
-  selector: 'app-karta',
-  templateUrl: './karta.component.html',
-  styleUrls: ['./karta.component.css'],
+  selector: 'app-brza-rezervacija',
+  templateUrl: './brza-rezervacija.component.html',
+  styleUrls: ['./brza-rezervacija.component.css'],
   providers: [LetService]
 })
-export class KartaComponent implements OnInit {
+export class BrzaRezervacijaComponent implements OnInit {
   @Input() letP:number
-  let: Let;
+  letL: Let;
   segmenti: Segment[]=[]
   sedista: Sediste[]=[]
-  rezervisana: number[]=[]
+  rezervisano: number[]=[];
   karta: Karta;
   price: number;
 
   constructor( private letService: LetService,
                private router: Router,
-               private route: ActivatedRoute,
-               private userService: UserService) { }
+               private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.karta=new Karta();
@@ -34,16 +33,17 @@ export class KartaComponent implements OnInit {
         this.letService.getLet(id).then(pom=>{
           console.log("let");
           console.log(pom);
+          this.letL=pom;
           this.karta.let=new Let(pom.id, pom.aerodrom, pom.destinacija, pom.brojSedista, pom.vremePolaska, pom.vremeDolaska, pom.presedanja, pom.brojPresedanja, pom.vremePutovanja, pom.duzinaPutovanja, pom.prosecnaOcena, pom.konfiguracijaLeta, pom.opis, pom.vrstaLeta);
           console.log("konf");
           console.log(this.karta.let.konfiguracijaLeta);
 
-            this.letService.getSedista( this.karta.let.id).then(pom => {
-              console.log("sedista");
-              console.log(pom);
-              this.sedista = pom;
-              this.canDr(this.sedista);
-            });
+          this.letService.getSedista( this.letL.id).then(pom => {
+            console.log("sedista");
+            console.log(pom);
+            this.sedista = pom;
+            this.canDr(this.sedista);
+          });
 
 
 
@@ -52,12 +52,12 @@ export class KartaComponent implements OnInit {
         })
       }})
 
-      this.letService.getAllSegmente().then(pom=> {
+    this.letService.getAllSegmente().then(pom=> {
 
-        console.log("segmeniti ");
-        console.log(pom);
-        this.segmenti = pom;
-      })
+      console.log("segmeniti ");
+      console.log(pom);
+      this.segmenti = pom;
+    })
   }
 
 
@@ -73,11 +73,11 @@ export class KartaComponent implements OnInit {
     });
 
     var pomocna=this.sedista;
-    var letJ = this.let;
+    var letJ = this.letL;
     var letServiceJ = this.letService;
-    var karta = this.karta;
-    var rez=this.rezervisana;
-    var cena=this.price;
+    var sediste ;
+    this.rezervisano.push(0);
+    var rez=this.rezervisano;
 
     for (var k = 0; k < sedista.length; k++) {
       console.log("ID sedista " + this.sedista[k].id);
@@ -99,52 +99,53 @@ export class KartaComponent implements OnInit {
       object.set('selectable', false);
       canvas.add(object);
     }
-   /* canvas.on('mouse:over', function(e) {
-      if(e.target)
-        e.target.segment.kategorija.cena;
-      canvas.renderAll();
-    });*/
+    /* canvas.on('mouse:over', function(e) {
+       if(e.target)
+         e.target.segment.kategorija.cena;
+       canvas.renderAll();
+     });*/
     canvas.on('mouse:down', function (e) {
       if (e.target) {
         if (pomocna[e.target.brojSedista].zauzeto) {
           window.alert("This seat is already reserved!");
         } else {
+          if(rez[rez.length-1]!=0){
+            sediste.set('fill', 'green');
+            pomocna[sediste.brojSedista].zauzeto = false;
+          }
           e.target.set('fill', 'red');
           pomocna[e.target.brojSedista].zauzeto = true;
           console.log("SEDISTE " + pomocna[e.target.brojSedista].id);
           rez.push(pomocna[e.target.brojSedista].id);
+          sediste=e.target;
           //cena=cena+pomocna[e.target.brojSedista].segment.kategorija.cena;
-        /*  letJ.sedista = pomocna;
-          letServiceJ.zauzmiSediste(letJ);
-          karta.sediste = pomocna[e.target.brojSedista];
-          letServiceJ.updateKarta(karta);*/
+          /*  letJ.sedista = pomocna;
+            letServiceJ.zauzmiSediste(letJ);
+            karta.sediste = pomocna[e.target.brojSedista];
+            letServiceJ.updateKarta(karta);*/
         }
       }
       canvas.renderAll();
     });
-
-    this.price=cena;
-    this.rezervisana=rez;
+    this.rezervisano=rez;
   }
 
   sledeciKorak(){
-    console.log("pre");
-    console.log(this.rezervisana);
-    this.letService.saveKarta(this.rezervisana).then(pom=>
-    {
-      console.log("vratilo");
-      console.log(pom);
-
-      if(this.rezervisana.length>1) {
-        var num = this.rezervisana.length - 1;
-        this.router.navigateByUrl('unosPutnika/' + pom.id + '/' + num);
-      }else{
-        window.alert("You reservation is created! ");
-        this.userService.sendMail(pom).then(pom=>{
-          console.log(pom);
-        })
-        this.router.navigateByUrl('/home');
-      }
-    })
+    console.log("price");
+    console.log(this.price);
+    console.log("rez");
+    console.log(this.rezervisano);
+    if(this.rezervisano[this.rezervisano.length-1]!=0 && this.price>0) {
+      this.letService.brzaRezervacija(this.rezervisano[this.rezervisano.length-1], this.price).then(pom => {
+        console.log("vraceno");
+        console.log(pom);
+        window.alert("Your reservation is create!");
+        location.reload();
+      })
+    } else {
+      window.alert("You have to write price and than select one seat!");
+      location.reload();
+    }
   }
+
 }

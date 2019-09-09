@@ -51,13 +51,22 @@ public class LetService {
 
 	private ListeDTO liste = new ListeDTO();
 
-	public List<LetDTO> getAll(){
-		List<Let> letovi = letRepository.findAll();
+	public List<LetDTO> getAll(String username){
+		Optional<User> user=userRepository.findByUsername(username);
+		List<LetDTO> letoviDTO = new ArrayList<>();
+		if(user.isPresent()){
+			List<Let> letovi = letRepository.findAll();
 
-		if(letovi.isEmpty())
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Letovi ne postoji");
+			if(letovi.isEmpty())
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Letovi ne postoji");
+			for(Let l: letovi){
+				if(l.getKonfiguracija().getAviokompanija()==user.get().getAviokompanija())
+					letoviDTO.add(new LetDTO(l));
+			}
 
-		return liste.letovi(letovi);
+		}
+
+		return letoviDTO;
 	}
 
 	public LetDTO findById(Long id){

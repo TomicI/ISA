@@ -19,7 +19,7 @@ export class LetService {
   constructor(private http: HttpClient) { }
   
   getAll(): Promise<Let[]> {
-    return this.http.get<Let[]>(this.LET_API + '/lista').toPromise();
+    return this.http.get<Let[]>(this.LET_API).toPromise();
   }
   
   getLet(id: number): Promise<Let> {
@@ -95,5 +95,9 @@ export class LetService {
 
   getRez(id: number): Promise<Rezervacija>{
     return this.http.get<Rezervacija>(this.REZ_API+'/rez/'+id).toPromise();
+  }
+
+  brzaRezervacija(sedste: number, popust: number): Promise<Karta>{
+    return this.http.post<Karta>(this.KAR_API+'/brzaRez/'+sedste, popust).toPromise();
   }
 }

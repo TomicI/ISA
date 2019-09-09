@@ -49,8 +49,18 @@ public class KartaController {
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
 	public ResponseEntity<RezervacijaDTO> create(@RequestBody List<Long> sedista, Principal user){
-		Optional<User> u=this.userService.findByUsername(user.getName());
-		return new ResponseEntity<>(kartaService.create(u.get().getId(), sedista), HttpStatus.CREATED);
+		return new ResponseEntity<>(kartaService.create(user.getName(), sedista), HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value="/brzaRez/{sediste}",method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Kreira brzu rezervaciju", httpMethod = "POST", produces = "application/json", consumes = "application/json")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "OK", response = RezervacijaDTO.class),
+			@ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 400, message = "Bad Request")
+	})
+	public ResponseEntity<KartaDTO> createBR(@PathVariable Long sediste, @RequestBody Double popust, Principal user){
+		return new ResponseEntity<>(kartaService.createBR(user.getName(), sediste, popust), HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/sedista/{id}",method= RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

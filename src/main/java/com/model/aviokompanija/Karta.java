@@ -17,6 +17,9 @@ public class Karta {
 	
 	@Column
 	private double cena;
+
+	@Column
+	private double popust;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "karta")
@@ -88,5 +91,11 @@ public class Karta {
 		this.let = let;
 	}
 
+	public double getPopust() {
+		return popust;
+	}
 
+	public void setPopust(double popust) {
+		this.popust = popust;
+	}
 }

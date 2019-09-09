@@ -17,6 +17,9 @@ import com.repository.aviokompanija.SedisteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
@@ -53,8 +56,9 @@ public class KartaService {
 		return liste.karte(brzeRezervacije);
 	}
 
-	public RezervacijaDTO create(Long id, List<Long> sedista){
-		Optional<User> user = userRepository.findById(id);
+	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+	public RezervacijaDTO create(String username, List<Long> sedista){
+		Optional<User> user = userRepository.findByUsername(username);
 		if(!user.isPresent())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ne postoji");
 
@@ -132,5 +136,34 @@ public class KartaService {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Karta ne postoji");
 
 		return new KartaDTO(karta.get());
+	}
+
+	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+	public KartaDTO createBR(String username, Long sedisteId, Double popust){
+		Optional<User> user = userRepository.findByUsername(username);
+		if(!user.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ne postoji");
+
+
+		Karta karta = new Karta();
+		karta.setPopust(popust);
+		Let let = new Let();
+		Optional<Sediste> sediste = sedisteRepository.findById(sedisteId);
+		if(!sediste.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sediste ne postoji");
+		if(sediste.get().getZauzeto())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sediste je zauzeto");
+		let = sediste.get().getLet();
+		karta.getSedista().add(sediste.get());
+		karta.setLet(let);
+		karta.setCena(sediste.get().getSegment().getKategorija().getCena());
+		sediste.get().setPutnik(null);
+		sediste.get().setZauzeto(true);
+
+		karta.setRezervacija(null);
+		karta=kartaRepository.save(karta);
+		sediste.get().setKarta(karta);
+		sedisteRepository.save(sediste.get());
+		return new KartaDTO(karta);
 	}
 }

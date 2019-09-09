@@ -15,27 +15,22 @@
   <table class="table table-dark">
     <thead>
       <tr>
-        <th>Datum polaska</th>
-        <th>Vreme polaska</th>
-        <th>Datum dolaska</th>
-        <th>Vreme dolaska</th>
+        <th>Datum i vreme polaska</th>
+        <th>Datum i vreme dolaska</th>
         <th>Aerodrom polazak</th>
         <th>Aerodrom dolazak</th>
-        <th>Broj sedista</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       
-      <tr *ngFor="let l of letovi | async" style="width: 300px"> 
+      <tr *ngFor="let l of letovi " style="width: 300px">
         
-              <td>{{l.datumP}}</td>
-              <td>{{l.vremeP}}</td>
-              <td>{{l.datumS}}</td>
-              <td>{{l.vremeS}}</td>
-              <td>{{l.aerodromP.nazivAerodroma}}</td>
-              <td>{{l.aerodromS.nazivAerodroma}}</td>
-              <td>{{l.brojSedista}}</td>
-              <td><a href="letUpdate/{{l.id}}">Update</a></td>
+              <td>{{l.vremePolaska}}</td>
+              <td>{{l.vremeDolaska}}</td>
+              <td>{{l.aerodrom.naziv}}</td>
+              <td>{{l.destinacija.naziv}}, {{l.destinacija.drzava}}</td>
+              <td><button (click)="dodaj(l.id)">Dodaj brzu rezervaciju</button></td>
       </tr>
     </tbody>
   </table>

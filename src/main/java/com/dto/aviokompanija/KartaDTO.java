@@ -14,6 +14,7 @@ public class KartaDTO {
 	private User user;
 	private Double prosecnaOcena;
 	private Double cena;
+	private Double popust;
 	//private RezervacijaDTO rezervacija;
 
 	public KartaDTO() {
@@ -23,6 +24,7 @@ public class KartaDTO {
 		this.id=k.getId();
 		this.let=new LetDTO(k.getLet());
 		this.cena=k.getCena();
+		this.popust=k.getPopust();
 		//this.rezervacija=new RezervacijaDTO(k.getRezervacija());
 	}
 
@@ -72,5 +74,21 @@ public class KartaDTO {
 
 	public void setProsecnaOcena(Double prosecnaOcena) {
 		this.prosecnaOcena = prosecnaOcena;
+	}
+
+	public Double getCena() {
+		return cena;
+	}
+
+	public void setCena(Double cena) {
+		this.cena = cena;
+	}
+
+	public Double getPopust() {
+		return popust;
+	}
+
+	public void setPopust(Double popust) {
+		this.popust = popust;
 	}
 }

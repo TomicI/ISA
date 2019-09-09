@@ -47,6 +47,7 @@ export class DodatnaUslugaAviokompanija {
 
 export class Karta {
   id: number;
+  popust: number;
   let: Let;
   user: User;
   prosecnaOcena: number;

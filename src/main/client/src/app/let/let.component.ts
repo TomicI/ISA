@@ -16,15 +16,13 @@ import { map } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LetComponent implements OnInit {
-  @Input() id: number;
+
   @Output()
     onChange : EventEmitter<void>= new EventEmitter<void>(); 
 
 
   letovi: Let[]=[];
   aerodromi: Aerodrom[]=[];
-  aerodromP:any;
-  aerodromS: any;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -33,21 +31,19 @@ export class LetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("ng sad ");
     this.aerodromService.getAllAerodromi().then(pom=>{this.aerodromi=pom});
-    this.route.params.subscribe
-      ( params =>  { const id = params['id'];
-      if (id) {
-        this.letService.getLetove(id).then(pom=>{
-          this.letovi=pom;
-          console.log(this.letovi);
 
-        })
-        
+    this.letService.getAll().then(pom=>{
+      this.letovi=pom;
+      console.log(this.letovi);
+    })
 
-      }});
 
     
+  }
+
+  dodaj(i:number){
+    this.router.navigateByUrl('brzaRezervacija/' + i );
   }
   /*
   
