@@ -1,5 +1,7 @@
 import * as moment from "moment";
 import _date = moment.unitOfTime._date;
+import {HostListener, Injectable} from "@angular/core";
+import {CanDeactivate} from "@angular/router";
 
 export class Aviokompanija {
   id: number;
@@ -485,3 +487,5 @@ export enum VrstaLeta {
   JEDAN_PRAVAC,
   VISE_DESTINACIJA
 }
+
+

@@ -52,6 +52,19 @@ public class KartaController {
 		return new ResponseEntity<>(kartaService.create(user.getName(), sedista), HttpStatus.CREATED);
 	}
 
+	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
+	@ApiOperation(value = "Brise kartu", httpMethod = "DELETE")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "OK", response = RezervacijaDTO.class),
+			@ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 400, message = "Bad Request")
+	})
+	public ResponseEntity<String> delete(@PathVariable Long id, Principal user){
+		kartaService.delete(user.getName(), id);
+		return new ResponseEntity<>( HttpStatus.OK);
+	}
+
+
 	@RequestMapping(value="/brzaRez/{sediste}",method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "Kreira brzu rezervaciju", httpMethod = "POST", produces = "application/json", consumes = "application/json")
 	@ApiResponses(value = {

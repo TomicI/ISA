@@ -166,4 +166,24 @@ public class KartaService {
 		sedisteRepository.save(sediste.get());
 		return new KartaDTO(karta);
 	}
+
+	public void delete(String username, Long kartaDTO){
+		Optional<User> user = userRepository.findByUsername(username);
+		if(!user.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ne postoji");
+
+		Optional<Karta> karta=kartaRepository.findById(kartaDTO);
+
+		if(!karta.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Karta ne postoji");
+
+		for(Sediste s: karta.get().getSedista()){
+			s.setPutnik(null);
+			s.setZauzeto(false);
+			s.setKarta(null);
+		}
+
+		rezervacijaRepository.delete(karta.get().getRezervacija());
+		kartaRepository.delete(karta.get());
+	}
 }

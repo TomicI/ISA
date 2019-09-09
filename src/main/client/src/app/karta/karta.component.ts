@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {Karta, Let, Sediste, Segment} from "../model";
 import {LetService} from "../letService/let.service";
@@ -11,14 +11,19 @@ import {UserService} from "../services/user.service";
   styleUrls: ['./karta.component.css'],
   providers: [LetService]
 })
-export class KartaComponent implements OnInit {
+export class KartaComponent implements OnInit{
   @Input() letP:number
+
+
+
+
   let: Let;
   segmenti: Segment[]=[]
   sedista: Sediste[]=[]
   rezervisana: number[]=[]
   karta: Karta;
   price: number;
+
 
   constructor( private letService: LetService,
                private router: Router,
@@ -59,6 +64,7 @@ export class KartaComponent implements OnInit {
         this.segmenti = pom;
       })
   }
+
 
 
   canDr(sedista: Sediste[]) {
@@ -134,7 +140,6 @@ export class KartaComponent implements OnInit {
     {
       console.log("vratilo");
       console.log(pom);
-
       if(this.rezervisana.length>1) {
         var num = this.rezervisana.length - 1;
         this.router.navigateByUrl('unosPutnika/' + pom.id + '/' + num);
