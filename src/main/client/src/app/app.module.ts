@@ -87,6 +87,7 @@ import { HotelPrikazComponent } from './hotel-prikaz/hotel-prikaz.component';
 import { HotelRezervisiComponent } from './hotel-rezervisi/hotel-rezervisi.component';
 import { HotelSobaComponent } from './hotel-soba/hotel-soba.component';
 import { MatInputModule, MatFormFieldModule} from '@angular/material';
+import { SobaRezervacijaComponent } from './soba-rezervacija/soba-rezervacija.component';
 
 
 @NgModule({
@@ -159,7 +160,8 @@ import { MatInputModule, MatFormFieldModule} from '@angular/material';
     HotelPretragaComponent,
     HotelPrikazComponent,
     HotelRezervisiComponent,
-    HotelSobaComponent
+    HotelSobaComponent,
+    SobaRezervacijaComponent
   ],
   imports: [
     BrowserModule,
