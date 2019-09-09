@@ -1,6 +1,6 @@
 <nav class="navbar navbar-light bg-light">
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['home']">Navbar</a>
+      <a class="navbar-brand" [routerLink]="['travel']">Navbar</a>
       <form class="form-inline">
         <button *ngIf="!isLoggedIn" class="btn btn-outline-primary" (click)="open(content)"> {{ isLoggedIn == true ? 'Logout' : 'Login' }}
         </button>

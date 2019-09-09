@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {CommunicationService} from "../services/communication.service";
+import {Rezervacija} from "../model";
 
 @Component({
   selector: 'app-res-detail',
@@ -13,6 +14,7 @@ import {CommunicationService} from "../services/communication.service";
 })
 export class ResDetailComponent implements OnInit {
 
+  reservation:Rezervacija;
 
   res: any;
   @Input() view:boolean;
@@ -39,7 +41,8 @@ export class ResDetailComponent implements OnInit {
 
         console.log(data);
 
-        this.res = data;
+        this.reservation=data;
+        this.res = data.rezervacijaRentACarDTO;
 
       });
 
@@ -55,22 +58,37 @@ export class ResDetailComponent implements OnInit {
 
     if (this.tokenStorage.getToken()) {
 
-      this.reservationService.saveRes(this.res).then(data => {
-        alert('Reservation was made!');
+      if (this.reservation.id){
+          this.reservationService.addRes(this.reservation).subscribe(data=>{
 
-      });
+            this.message='Reservation was added!';
+
+            setTimeout(() => {
+              this.message = '';
+              this.clickedCen.emit(true);
+              this.router.navigate(['homeReg']);
+            }, 4000);
+
+          });
+      }else{
+        this.reservationService.saveRes(this.res).then(data => {
+
+          this.message='Reservation was made!';
+
+          setTimeout(() => {
+            this.message = '';
+            this.clickedCen.emit(true);
+            this.router.navigate(['homeReg']);
+          }, 4000);
+
+        });
+      }
 
 
-      setTimeout(() => {
-        this.message = '';
-        this.clickedCen.emit(true);
-        this.router.navigate(['homeReg']);
-      }, 4000);
 
-      
 
     } else {
-      alert('You have to sign in!')
+      this.message = 'You have to sign in!';
       setTimeout(() => {
          this.message = '';
       }, 4000);

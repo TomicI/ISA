@@ -20,8 +20,8 @@
                 </div>
               </div>
               <h5>RentACar Name : {{rentACarRes.filijalaDTO.rentACarDTO.naziv}} </h5>
-              <p class="h6">PickUp adress : <button type="button" class="btn btn-link" (click)="mapOpen(rentACarRes.filijalaDTO.adresa)"> {{rentACarRes.filijalaDTO.adresa}} </button>  </p>
-              <p class="h6">DropOff adress :  <button type="button" class="btn btn-link" (click)="mapOpen(rentACarRes.filijalaDropDTO.adresa)"> {{rentACarRes.filijalaDropDTO.adresa}}  </button> </p>
+              <p class="h6">PickUp adress : <button type="button" class="btn btn-link"> {{rentACarRes.filijalaDTO.lokacijaDTO.adresa}} </button>  </p>
+              <p class="h6">DropOff adress :  <button type="button" class="btn btn-link" > {{rentACarRes.filijalaDropDTO.lokacijaDTO.adresa}}  </button> </p>
               <h6>Pick-up: {{rentACarRes.datumPreuz | date: 'dd/MM/yyyy HH:mm' }} </h6>
               <h6>Drop-off: {{rentACarRes.datumVracanja | date: 'dd/MM/yyyy HH:mm'}} </h6>
 

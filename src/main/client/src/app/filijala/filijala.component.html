@@ -4,9 +4,9 @@
 
   <div class="row">
 
-    <div *ngIf="reservationsRent" class="col-md-4">
+    <div *ngIf="reservationsRent.length!=0" class="col-4">
 
-      <div   class="card">
+      <div   class="card mt-4" >
 
         <div class="card-header">
           <h5>Deals</h5>
@@ -16,12 +16,18 @@
           <li *ngFor="let res of reservationsRent  " class="list-group-item flex-column ">
             <div class="d-flex justify-content-between">
               <h6 class="mb-1">{{res.voziloDTO.naziv}}</h6>
-              <h6 class="mb-1"> {{res.cena}} €</h6>
+              <del> <h6 class="mb-1"> {{res.cena}} €</h6> </del>
+              <h5 class="mb-1"> {{res.popust}} €</h5>
               <p>
-                <button class="btn btn-sm " type="button " (click)="resInfo(res)"><i class="fas fa-ellipsis-v"></i>
+                <button class="bltn btn-sm " type="button " (click)="resDeal(res)"><i class="fas fa-ellipsis-v"></i>
                 </button>
               </p>
             </div>
+
+            <p class="h6">PickUp adress :  {{res.filijalaDTO.lokacijaDTO.adresa}}  </p>
+            <p class="h6">DropOff adress :  {{res.filijalaDropDTO.lokacijaDTO.adresa}} </p>
+            <h6>Pick-up: {{res.datumPreuz | date: 'dd/MM/yyyy HH:mm' }} </h6>
+            <h6>Drop-off: {{res.datumVracanja | date: 'dd/MM/yyyy HH:mm'}} </h6>
 
 
           </li>
@@ -31,6 +37,7 @@
 
     </div>
 
+    <div *ngIf="reservationsRent" class="col-8">
 
       <div *ngIf="filijale" class="card-deck">
         <div *ngFor="let fil of filijale">
@@ -53,6 +60,7 @@
           </div>
         </div>
       </div>
+    </div>
 
 
 

@@ -227,6 +227,9 @@ public class RezervacijaRentACarService {
             rezervacija.setUser(optionalUser.get());
             rezervacija.setRezervacijaRentACar(rez);
 
+			rez.setNaPopustu(false);
+			rez.setPopust(0.0);
+
             rezervacija.setKarta(null);
             rezervacija.setRezervacijaSobe(null);
             rezervacijaService.save(rezervacija);
@@ -256,8 +259,10 @@ public class RezervacijaRentACarService {
 
 		Calendar cal = Calendar.getInstance();
 
+		System.out.println(rezOptional.get().getDatumPreuz().getTime() - cal.getTime().getTime());
 
-		if (( rezOptional.get().getDatumPreuz().getTime() - cal.getTime().getTime() ) <= 0) {
+
+		if (( rezOptional.get().getDatumPreuz().getTime() - cal.getTime().getTime() ) <= 48*3600*1000) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Reservation can't be canceled , cancelation has to be made 48 h prior to the Pick-up date !");
 		}
 

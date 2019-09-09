@@ -12,9 +12,13 @@ export class CommunicationService {
 
   private reservationChoosen = new Subject<any>();
 
+  private reservation = new Subject<any>();
+
   changeEmitted$ = this.emitChangeSource.asObservable();
 
   reservationEmitted$=this.reservationChoosen.asObservable();
+
+  reservationPassed$ = this.reservation.asObservable();
 
   emitChange(obj) {
     console.log("EMITT");
@@ -24,4 +28,9 @@ export class CommunicationService {
   reservationChange(res){
     this.reservationChoosen.next(res);
   }
+
+  reservationPassed(res){
+    this.reservation.next(res);
+  }
+
 }

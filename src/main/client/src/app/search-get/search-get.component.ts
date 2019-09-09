@@ -4,6 +4,7 @@ import {RentacarService} from '../services/rentacar.service';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpParams} from "@angular/common/http";
 import {CommunicationService} from "../services/communication.service";
+import {Rezervacija} from "../model";
 
 @Component({
   selector: 'app-search-get',
@@ -33,11 +34,18 @@ export class SearchGetComponent implements OnInit {
 
   message = '';
 
+  reservationPassed;
+
   constructor(private route: ActivatedRoute,
               private rentService: RentacarService,
               private formBuilder: FormBuilder,
               private communicationService: CommunicationService,
               private router: Router) {
+
+    this.communicationService.reservationPassed$.subscribe(data=>{
+      this.reservationPassed = data;
+    });
+
   }
 
   ngOnInit() {
@@ -58,7 +66,6 @@ export class SearchGetComponent implements OnInit {
 
       this.httpParams = params;
 
-      console.log(params);
 
       this.rentService.search(params).toPromise().then(data => {
         this.reservations = data;
@@ -72,7 +79,7 @@ export class SearchGetComponent implements OnInit {
           this.criBool = true;
         }
       });
-      console.log(params);
+
     });
 
   }
@@ -104,9 +111,14 @@ export class SearchGetComponent implements OnInit {
 
   rent(reservation) {
 
+    let resTemp:Rezervacija = new Rezervacija(null,null,null,null,reservation,null);
+    if (this.reservationPassed){
+      resTemp.id = this.reservationPassed;
+    }
+
     this.resChoose = reservation;
     this.router.navigate(['travel/rentacar/reservation']).then(()=>{
-        this.communicationService.reservationChange(reservation);
+        this.communicationService.reservationChange(resTemp);
     });
 
     this.resPass = true;

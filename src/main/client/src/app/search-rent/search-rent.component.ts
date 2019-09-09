@@ -173,9 +173,6 @@ export class SearchRentComponent implements OnInit {
 
   getFillAdress() {
 
-    console.log("EMIT DA LI JE ");
-    console.log(this.emit);
-
     if (!this.emit){
       for (const rent of this.rentACars) {
         this.rentACarService.getAllFilijale(rent.id).subscribe(data => {
@@ -221,7 +218,6 @@ export class SearchRentComponent implements OnInit {
 
   onDateSelected() {
 
-    this.communicationService.emitChange("Promena datuma");
 
     console.log('Promena');
 
@@ -236,7 +232,10 @@ export class SearchRentComponent implements OnInit {
       this.arrayOfHoursP = this.arrayOfHours;
     }
 
+
+
     this.toDate = this.calendar.getNext(this.searchFormGroup.get('pickDate').value, 'd', 1);
+
     this.searchFormGroup.setValue({
       locationp: this.searchFormGroup.get('locationp').value,
       bring:this.searchFormGroup.get('bring').value,
@@ -269,13 +268,22 @@ export class SearchRentComponent implements OnInit {
       'locationp': this.searchFormGroup.get('locationp').value,
       'bring': this.searchFormGroup.get('bring').value,
       'pickup': dateP,
-      'dropoff': dateD
+      'dropoff': dateD,
     };
 
 
+    this.router.navigate(['travel/rentacar/search'], { queryParams: this.params }).then(()=>{
+
+      if(this.branchEmit){
+        if(this.branchEmit.res){
+          console.log("Postoji res");
+          console.log(this.branchEmit.res);
+          this.communicationService.reservationPassed(this.branchEmit.res);
+        }
+      }
 
 
-    this.router.navigate(['travel/rentacar/search'], { queryParams: this.params });
+    });
 
   }
 

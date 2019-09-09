@@ -18,6 +18,10 @@ export class ReservationService {
     return await this.http.post(`${this.rentACarRes}`, res).toPromise();
   }
 
+  addRes(res: object):Observable<any>{
+    return this.http.put(`${this.rentACarRes}`, res);
+  }
+
   getResCancel(id: number): Promise<any> {
     return this.http.get(`${this.rentACarRes}/cancel/${id}`).toPromise();
   }

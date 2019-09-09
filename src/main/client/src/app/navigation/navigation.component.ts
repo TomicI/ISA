@@ -80,7 +80,7 @@ export class NavigationComponent implements OnInit {
   }
 
   reloadPage() {
-    window.location.href = "home";
+    window.location.href = "travel";
   }
 
 }

@@ -19,9 +19,6 @@ export class AppComponent {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationStart) {
         // Show loading indicator
-        console.log("PROMENILO SESESE")
-        console.log(event.url)
-
 
         const token = this.tokenStorage.getToken();
         if (token != null) {

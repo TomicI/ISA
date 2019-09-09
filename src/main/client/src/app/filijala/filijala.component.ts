@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { FilijalaService } from '../services/filijala.service';
-import {Filijala, RentACar, RezervacijaRent} from '../model';
+import {Filijala, RentACar, Rezervacija, RezervacijaRent} from '../model';
 import { RentacarService } from '../services/rentacar.service';
 import {CommunicationService} from "../services/communication.service";
 import {ReservationService} from "../services/reservation.service";
@@ -19,11 +19,14 @@ export class FilijalaComponent implements OnInit {
 
   params: any = {};
 
+
+  paramsUrl:any = {};
+
   naziv = '';
 
   filijale: Filijala[];
 
-  reservationsRent : RezervacijaRent[];
+  reservationsRent : RezervacijaRent[]=[];
 
 
   constructor(
@@ -40,6 +43,8 @@ export class FilijalaComponent implements OnInit {
 
 
     this.route.queryParams.subscribe(params => {
+
+      this.paramsUrl = params;
 
       this.rentacarService.getAllFilijale(params.id).subscribe(data => {
 
@@ -63,6 +68,18 @@ export class FilijalaComponent implements OnInit {
 
     });
 
+
+  }
+
+  resDeal(res){
+
+    let resTemp:Rezervacija = new Rezervacija(this.paramsUrl.res,null,null,null,res,null);
+
+    console.log(resTemp);
+
+    this.router.navigate(['travel/rentacar/reservation']).then(()=>{
+      this.communicationService.reservationChange(resTemp);
+    });
 
   }
 
