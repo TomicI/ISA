@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {Http} from "@angular/http";
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,18 @@ export class ReservationService {
     params = params.append('res',param);
 
     return this.http.get(`${this.rentACarRes}/resAdmin`,{params:params});
+  }
+
+  getAllDeals(param):Observable<any>{
+
+    let params = new HttpParams();
+    params = params.append('rentId',param.id);
+    params = params.append('pickUp',param.pickup);
+    params = params.append('dropOff',param.dropoff);
+
+
+    return this.http.get(`${this.rentACarRes}/allDeals`,{params:params});
+
   }
 
   getUserReservation():Observable<any>{

@@ -8,6 +8,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
 import { NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PARAMETERS } from '@angular/core/src/util/decorators';
+import {CommunicationService} from "../services/communication.service";
 
 @Component({
   selector: 'app-rentacar-list',
@@ -27,6 +28,7 @@ export class RentacarListComponent implements OnInit {
 
   constructor(
     private rentACarService: RentacarService,
+    private communicationService: CommunicationService,
     private route: ActivatedRoute,
     private calendar: NgbCalendar,
     private router: Router,
@@ -34,6 +36,8 @@ export class RentacarListComponent implements OnInit {
   }
 
   ngOnInit() {
+
+
 
     this.route.queryParams.subscribe(params => {
       console.log(params);
@@ -57,6 +61,7 @@ export class RentacarListComponent implements OnInit {
   }
 
   rentBranch(rnt) {
+
     console.log(rnt);
     this.params ={
       'id': rnt.id,

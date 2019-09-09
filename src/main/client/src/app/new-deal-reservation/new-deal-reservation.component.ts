@@ -159,7 +159,7 @@ export class NewDealReservationComponent implements OnInit {
 
     for (const fill of filijala) {
       name = fill.rentACarDTO.naziv;
-      adress.push(fill.adresa);
+      adress.push(fill.lokacijaDTO.adresa);
     }
 
     const arr = {
@@ -307,7 +307,13 @@ export class NewDealReservationComponent implements OnInit {
         //this.message = 'Reservation was made!';
 
         console.log(data);
+        alert("Reservation was made!")
+        this.onSubmit();
+        this.modalRef.close();
 
+
+      }).catch(err=>{
+        alert(err);
       });
 
 

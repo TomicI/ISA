@@ -63,6 +63,16 @@ public class RezervacijaRentACarController {
 
 	}
 
+
+	@RequestMapping(value="/allDeals",method=RequestMethod.GET)
+	public ResponseEntity<List<RezervacijaRentACarDTO>> getAllDeals(@RequestParam(value="rentId")Long rentId,
+																	@RequestParam(value="pickUp")Date pickUp,
+																	@RequestParam(value="dropOff")Date dropOff){
+
+		return new ResponseEntity<>(rezService.getDealRes(rentId,pickUp,dropOff),HttpStatus.OK);
+	}
+
+
 	@RequestMapping(value="/cancel/{id}",method=RequestMethod.GET)
 	public ResponseEntity<?> cancelStatus(@PathVariable Long id){
 

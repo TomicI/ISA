@@ -1,13 +1,17 @@
 <div class="container">
 
   <h4 >{{naziv}}</h4>
-   
+
+  <div class="row">
+
+    <div class="col-md-8">
+
     <div *ngIf="filijale" class="card-deck">
         <div *ngFor="let fil of filijale">
           <div class="card mt-4" style="width: 18rem;height: 30rem">
             <div class="card-body">
               <h5 class="card-title">{{fil.lokacijaDTO.adresa}}</h5>
-              <app-map [(adress)]='fil.lokacijaDTO.adresa'></app-map>
+<!--              <app-map [(adress)]='fil.lokacijaDTO.adresa'></app-map>-->
             </div>
             <div class="card-footer">
               <div class="d-flex">
@@ -22,7 +26,36 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="col-md-4">
+
+      <div class="card">
+
+        <div class="card-header">
+          <h5>Deals</h5>
+        </div>
+        <div class="list-group list-group-flush">
+
+          <li *ngFor="let res of reservationsRent  " class="list-group-item flex-column ">
+            <div class="d-flex justify-content-between">
+              <h6 class="mb-1">{{res.voziloDTO.naziv}}</h6>
+              <h6 class="mb-1"> {{res.cena}} €</h6>
+              <p>
+                <button class="btn btn-sm " type="button " (click)="resInfo(res)"><i class="fas fa-ellipsis-v"></i>
+                </button>
+              </p>
+            </div>
 
 
+          </li>
+        </div>
+
+      </div>
+
+    </div>
+
+
+</div>
       
 </div>

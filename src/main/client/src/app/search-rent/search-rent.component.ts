@@ -9,6 +9,7 @@ import { startWith, map } from 'rxjs/operators';
 import {Time} from "@angular/common";
 import {forEach} from "@angular/router/src/utils/collection";
 import {HttpParams} from "@angular/common/http";
+import {CommunicationService} from "../services/communication.service";
 
 
 export interface SearchGroup {
@@ -65,15 +66,37 @@ export class SearchRentComponent implements OnInit {
   rentACars: RentACar[] = [];
   filijala: Observable<Object>;
 
+  emit:boolean;
+  branchEmit:any;
+
   date:Date;
 
 
   constructor(
     private rentACarService: RentacarService,
+    private communicationService:CommunicationService,
     private route: ActivatedRoute,
     private calendar: NgbCalendar,
     private router: Router,
     private formBuilder: FormBuilder) {
+
+    communicationService.changeEmitted$.subscribe(data => {
+      console.log(data);
+
+      this.emit = true;
+      this.branchEmit = data;
+
+      for(const s of this.searchGroups){
+
+        if (s.rent!=data.rent){
+          var n = this.searchGroups.indexOf(s);
+          this.searchGroups.splice(n);
+        }
+
+      }
+
+    });
+
   }
 
   ngOnInit() {
@@ -133,26 +156,40 @@ export class SearchRentComponent implements OnInit {
     }
   }
 
-  async initAll() {
-    await this.getRentACars();
-    this.getFillAdress();
+  initAll() {
+    this.getRentACars();
+
 
   }
 
-  async getRentACars() {
+  getRentACars() {
 
-    this.rentACars = await this.rentACarService.getAll().toPromise();
+    this.rentACarService.getAll().subscribe(data=>{
+      this.rentACars = data;
+      this.getFillAdress();
+    });
 
   }
 
   getFillAdress() {
 
-    for (const rent of this.rentACars) {
-      this.rentACarService.getAllFilijale(rent.id).toPromise().then(data => {
-        this.getFill(data);
+    console.log("EMIT DA LI JE ");
+    console.log(this.emit);
 
+    if (!this.emit){
+      for (const rent of this.rentACars) {
+        this.rentACarService.getAllFilijale(rent.id).subscribe(data => {
+          this.getFill(data);
+
+        });
+      }
+    }else{
+      this.rentACarService.getAllFilijale(this.branchEmit.id).subscribe(data => {
+        this.getFill(data);
       });
     }
+
+
   }
 
   getFill(filijala) {
@@ -183,6 +220,8 @@ export class SearchRentComponent implements OnInit {
   }
 
   onDateSelected() {
+
+    this.communicationService.emitChange("Promena datuma");
 
     console.log('Promena');
 

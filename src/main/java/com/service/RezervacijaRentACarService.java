@@ -231,9 +231,54 @@ public class RezervacijaRentACarService {
 
 	}
 
-	public List<RezervacijaRentACarDTO> getDealRes(){
+	public List<RezervacijaRentACarDTO> getDealRes(Long rentId,Date pickUp,Date dropOff){
 
-        return null;
+		List<Filijala> filijale = filijalaService.findByRentACar(rentId);
+
+		Date te = new Date(pickUp.getTime());
+
+		System.out.println(te);
+
+		System.out.println(pickUp);
+		System.out.println(dropOff);
+
+
+		ArrayList<RezervacijaRentACarDTO> rezervacijaRentACarDTOS = new ArrayList<>();
+
+		for (Filijala f :filijale){
+
+
+			List<RezervacijaRentACar> rezList = f.getRezervacije();
+
+			for (RezervacijaRentACar r:rezList){
+
+					if (r.getNaPopustu()){
+
+
+
+						System.out.println("Rez na popustu");
+						System.out.println(r.getDatumPreuz());
+						System.out.println(r.getDatumVracanja());
+
+
+
+						if ( r.getDatumPreuz().after(pickUp) || r.getDatumPreuz().equals(pickUp) ){
+							System.out.println("Pickup Prosao");
+							if ( r.getDatumVracanja().before(dropOff) ||  r.getDatumVracanja().equals(dropOff) ){
+								System.out.println("Drop prosao");
+								RezervacijaRentACarDTO rezervacijaRentACarDTO  = new RezervacijaRentACarDTO(r);
+
+								rezervacijaRentACarDTOS.add(rezervacijaRentACarDTO);
+							}
+						}
+
+					}
+				}
+
+			}
+
+
+        return rezervacijaRentACarDTOS;
 	}
 
 	public List<RezervacijaRentACarDTO> getAllAdmin(boolean res , Principal username){

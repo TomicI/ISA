@@ -3,14 +3,16 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { FilijalaService } from '../services/filijala.service';
-import { Filijala, RentACar } from '../model';
+import {Filijala, RentACar, RezervacijaRent} from '../model';
 import { RentacarService } from '../services/rentacar.service';
+import {CommunicationService} from "../services/communication.service";
+import {ReservationService} from "../services/reservation.service";
 
 @Component({
   selector: 'app-filijala',
   templateUrl: './filijala.component.html',
   styleUrls: ['./filijala.component.css'],
-  providers: [FilijalaService]
+  providers: [FilijalaService,ReservationService]
 })
 
 export class FilijalaComponent implements OnInit {
@@ -21,27 +23,43 @@ export class FilijalaComponent implements OnInit {
 
   filijale: Filijala[];
 
+  reservationsRent : RezervacijaRent[];
+
 
   constructor(
     private filijalaService: FilijalaService,
     private rentacarService: RentacarService,
+    private reservationService: ReservationService,
+    private communicationService: CommunicationService,
     private route: ActivatedRoute,
     private router: Router,
   ) { }
 
   ngOnInit() {
 
+
+
     this.route.queryParams.subscribe(params => {
 
       this.rentacarService.getAllFilijale(params.id).subscribe(data => {
-       
+
           this.filijale = data;
-          console.log(data);
-          if (data[0]) {
-            this.naziv = data[0].rentACarDTO.naziv;
-          }
+          this.naziv = this.filijale[0].rentACarDTO.naziv;
+
+
+
       });
 
+      this.communicationService.emitChange(params);
+
+      if(params.pickup && params.dropoff){
+
+        this.reservationService.getAllDeals(params).subscribe(data=>{
+          console.log(data);
+          this.reservationsRent = data;
+        });
+
+      }
 
     });
 

@@ -73,8 +73,6 @@ export class PanelAdminRentComponent implements OnInit {
   displayedColumns: string[] = [
     'no',
     'naziv',
-    'marka',
-    'model',
     'brojSedista',
     'brojVrata',
     'brojTorbi',
@@ -83,7 +81,7 @@ export class PanelAdminRentComponent implements OnInit {
     'klima',
     'rezervoar',
     'potrosnja',
-    'dodatniopis',
+    'grupa',
     'prosecnaOcena',
     'edit',
     'rate'];
