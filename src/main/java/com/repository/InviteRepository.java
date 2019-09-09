@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface InviteRepository extends JpaRepository<Invite,Long> {
     Optional<List<Invite>> findByUserReceiveAndReservation(User userReceive, Rezervacija reservation);
+    Optional<List<Invite>> findByUserReceive(User userReceive);
     Optional<List<Invite>> findByUserSent(User userSent);
     Optional<Invite> findByUserSentAndUserReceiveAndReservation(User userSent, User userReceive, Rezervacija reservation);
 }

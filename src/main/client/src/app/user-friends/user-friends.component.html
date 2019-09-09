@@ -3,12 +3,22 @@
   <div align="center" class="container"  style=" width: 50%;  padding: 20px; margin-top: 50px" ><h2>Add friends <a href="http://localhost:4200/addFriends"><i class="fa fa-user-friends"></i></a></h2></div>
 </div>
 <div *ngIf="lista.length>0" align="left" class="container"  style=" width: auto;  padding: 20px; margin-top: 50px; margin-left: 30px;">
+  <h2>Friend requests</h2>
   <div *ngFor="let u of lista; let i = index" style=" width: 50%;  padding: 20px; margin-top: 30px" class="border border-light">
     <div><span>From (username): {{u.userSent.username}}</span><span style="margin-left: 10px"><button (click)="prihvati(i)"><i class="fa fa-check"></i></button></span><span style="margin-left: 10px"><button (click)="ne(i)"><i class="fa fa-times"></i></button></span></div>
       <div>{{u.userSent.firstName}}  {{u.userSent.lastName}}</div>
   </div>
 </div>
 
+<div *ngIf="listaI.length>0" align="left" class="container"  style=" width: auto;  padding: 20px; margin-top: 50px; margin-left: 30px;">
+  <h2>Invites for travel</h2>
+  <div *ngFor="let u of listaI; let i = index" style=" width: 50%;  padding: 20px; margin-top: 30px" class="border border-light">
+    <div><span>From (username): {{u.userSent.username}}</span><span style="margin-left: 10px"><button (click)="prihvatiI(i)"><i class="fa fa-check"></i></button></span><span style="margin-left: 10px"><button (click)="neI(i)"><i class="fa fa-times"></i></button></span></div>
+    <div>{{u.userSent.firstName}}  {{u.userSent.lastName}}</div>
+  </div>
+</div>
+<br/>
+<h2>Friends</h2>
 <div *ngFor="let u of listaF; let i = index" align="left" class="container"  style=" width: auto;  padding: 20px; margin-top: 50px; margin-left: 30px;" class="border border-light">
   <div><span>{{u.username}}</span><span style="margin-left: 10px"><button (click)="ukloni(i)"><i class="fa fa-user-minus"></i></button></span></div>
     <div>{{u.firstName}}  {{u.lastName}}</div>

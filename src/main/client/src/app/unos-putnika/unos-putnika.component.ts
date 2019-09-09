@@ -72,6 +72,9 @@ export class UnosPutnikaComponent implements OnInit {
         this.router.navigateByUrl('unosPutnika/' + this.rezervacija.id + '/' + this.pBrPuntika);
       }else{
         window.alert("You reservation is created! ");
+        this.userService.sendMail(this.rezervacija).then(pom=>{
+          console.log(pom);
+        })
         this.router.navigateByUrl('/home');
       }
     });
@@ -85,7 +88,16 @@ export class UnosPutnikaComponent implements OnInit {
     this.userService.inviteFriend(this.invite).then(pom=>{
         console.log("send invite ");
         console.log(pom);
-       // location.reload();
+        if (this.pBrPuntika - 1 > 0) {
+          this.pBrPuntika = this.pBrPuntika - 1;
+          this.router.navigateByUrl('unosPutnika/' + this.rezervacija.id + '/' + this.pBrPuntika);
+        }else{
+          window.alert("You reservation is created! ");
+          this.userService.sendMail(this.rezervacija).then(pom=>{
+            console.log(pom);
+          })
+          this.router.navigateByUrl('/home');
+        }
       }
     )
 

@@ -7,10 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import com.dto.InviteDTO;
-import com.dto.RentACarDTO;
-import com.dto.RezervacijaRentACarDTO;
-import com.dto.UserDTO;
+import com.dto.*;
 import com.model.Invite;
 import com.model.RentACar;
 import com.model.RezervacijaRentACar;
@@ -224,15 +221,7 @@ public class UserAccount {
     @RequestMapping(value = "/friendRequests",method = RequestMethod.GET)
     @PreAuthorize("hasRole('USER_REG')")
     public ResponseEntity<List<InviteDTO>> invitesForFriendship(Principal user) {
-        Optional<User> u=this.userRepository.findByUsername(user.getName());
-        List<InviteDTO> inviteDTOS=new ArrayList<>();
-        Optional<List<Invite>> invites=this.inviteRepository.findByUserReceiveAndReservation(u.get(), null);
-        if(u.isPresent() && invites.isPresent()){
-            for(Invite i: invites.get()){
-                inviteDTOS.add(new InviteDTO(i));
-            }
-        }
-        return new ResponseEntity<>(inviteDTOS,HttpStatus.OK);
+        return new ResponseEntity<>(this.inviteService.invitesForFriendship(user.getName()),HttpStatus.OK);
     }
 
 
@@ -241,101 +230,66 @@ public class UserAccount {
     @ApiOperation(value = "Salje poziv za prijateljstvo", httpMethod = "POST", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasRole('USER_REG')")
     public ResponseEntity<InviteDTO> sendRequest(@RequestBody InviteDTO inviteDTO, Principal user){
-        Invite invite=new Invite();
-
-        invite.setUserSent(this.userRepository.findByUsername(user.getName()).get());
-        invite.setUserReceive(this.userRepository.findByUsername(inviteDTO.userReceive.getUsername()).get());
-        invite.setDateSent(new Date());
-        invite.setReservation(null);
-        invite=this.inviteService.save(invite);
-
-
-            return new ResponseEntity<>(new InviteDTO(invite), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.inviteService.sendRequest(inviteDTO, user.getName()), HttpStatus.CREATED);
     }
     @RequestMapping(value = "/friends",method = RequestMethod.GET)
     @PreAuthorize("hasRole('USER_REG')")
     public ResponseEntity<List<UserDTO>> search( Principal user) {
-        Optional<User> us=this.userRepository.findByUsername(user.getName());
-
-        List<UserDTO> friendsDTO=new ArrayList<>();
-        if(us.isPresent()){
-            Optional<Friend> f= this.friendService.findById(us.get().getId());
-            if(f.isPresent()) {
-                for (User u : f.get().getFriends()){
-                    friendsDTO.add(new UserDTO(u));
-                }
-                return new ResponseEntity<>(friendsDTO, HttpStatus.OK);
-            }
-
-        }
-
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(this.inviteService.search(user.getName()), HttpStatus.OK);
     }
 
 
     @RequestMapping(value = "/aRequest", method=RequestMethod.PUT,consumes = "application/json" )
     @PreAuthorize("hasRole('USER_REG')")
     public ResponseEntity<UserDTO> aRequest(@RequestBody InviteDTO inviteDTO, Principal user){
-        Optional<User> us=this.userRepository.findByUsername(user.getName());
-        if(us.isPresent()) {
-            Optional<User> u=this.userRepository.findByUsername(inviteDTO.userSent.getUsername());
-            Optional<Friend> f = this.friendService.findById(us.get().getId());
-            Optional<Friend> f1 = this.friendService.findById(u.get().getId());
-
-            if(f.isPresent() && u.isPresent() && f1.isPresent()){
-                f.get().getFriends().add(u.get());
-                f1.get().getFriends().add(us.get());
-                Optional<Invite> in=this.inviteRepository.findById(inviteDTO.getId());
-                if(in.isPresent()){
-                    this.inviteRepository.delete(in.get());
-                }
-                return new ResponseEntity<>(new UserDTO(us.get()),HttpStatus.OK);
-            }
-
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(this.inviteService.aRequest(inviteDTO, user.getName()), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/eRequest", method=RequestMethod.PUT,consumes = "application/json" )
     @PreAuthorize("hasRole('USER_REG')")
     public ResponseEntity<UserDTO> eRequest(@RequestBody InviteDTO inviteDTO, Principal user){
-        Optional<User> us=this.userRepository.findByUsername(user.getName());
-        if(us.isPresent()) {
-            Optional<Invite> in = this.inviteRepository.findById(inviteDTO.getId());
-            if (in.isPresent()) {
-                this.inviteRepository.delete(in.get());
-                return new ResponseEntity<>(new UserDTO(us.get()), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(this.inviteService.eRequest(inviteDTO, user.getName()), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/deleteFriend", method=RequestMethod.PUT,consumes = "application/json" )
     @PreAuthorize("hasRole('USER_REG')")
     public ResponseEntity<UserDTO> deleteFriend(@RequestBody UserDTO userDTO, Principal user){
-        Optional<User> us=this.userRepository.findByUsername(user.getName());
-        if(us.isPresent()) {
-            Optional<Friend> f = this.friendService.findById(us.get().getId());
-            Optional<User> u=this.userRepository.findByUsername(userDTO.getUsername());
-            Optional<Friend> f1 = this.friendService.findById(u.get().getId());
-            if(f.isPresent() && u.isPresent()){
-                f.get().getFriends().remove(u.get());
-                f1.get().getFriends().remove(us.get());
-                this.friendService.save(f.get());
-                this.friendService.save(f1.get());
-                return new ResponseEntity<>(new UserDTO(us.get()),HttpStatus.OK);
-            }
-
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(this.inviteService.deleteFriend(userDTO, user.getName()), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/inviteFriend", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Salje poziv za prijateljstvo", httpMethod = "POST", produces = "application/json", consumes = "application/json")
+    @ApiOperation(value = "Salje poziv za put", httpMethod = "POST", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasRole('USER_REG')")
     public ResponseEntity<InviteDTO> inviteFriend(@RequestBody InviteDTO inviteDTO, Principal user){
-
-
         return new ResponseEntity<>(this.rezervacijaService.inviteFriend(inviteDTO, user.getName()), HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/aRequestI/{id}", method=RequestMethod.DELETE )
+    @ApiOperation(value = "Odbija poziv", httpMethod = "DELETE")
+    @PreAuthorize("hasRole('USER_REG')")
+    public ResponseEntity<Void> aRequestI(@PathVariable Long id){
+        System.out.println("id je " + id);
+        this.rezervacijaService.aFriend(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/eRequestI", method=RequestMethod.PUT,consumes = "application/json" )
+    @PreAuthorize("hasRole('USER_REG')")
+    public ResponseEntity<String> eRequestI(@RequestBody InviteDTO inviteDTO, Principal user){
+        this.rezervacijaService.eFriend(inviteDTO,user.getName());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/inviteRequests",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('USER_REG')")
+    public ResponseEntity<List<InviteDTO>> inviteRequests(Principal user) {
+        return new ResponseEntity<>(this.inviteService.inviteRequests(user.getName()),HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/sendMail", method=RequestMethod.PUT,consumes = "application/json" )
+    @PreAuthorize("hasRole('USER_REG')")
+    public ResponseEntity<String> sendMail(@RequestBody RezervacijaDTO rezervacijaDTO){
+        this.rezervacijaService.sendEMail(rezervacijaDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

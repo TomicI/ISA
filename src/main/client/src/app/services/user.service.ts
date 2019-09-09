@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {RentACar, User, NewPass, RezervacijaRent, Invite} from '../model';
+import {RentACar, User, NewPass, RezervacijaRent, Invite, Rezervacija} from '../model';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +35,10 @@ export class UserService {
 
   friendRequests(): Promise<Invite[]>{
     return this.http.get<Invite[]>(`${this.userAccount}/friendRequests`).toPromise();
+  }
+
+  inviteRequests(): Promise<Invite[]>{
+    return this.http.get<Invite[]>(`${this.userAccount}/inviteRequests`).toPromise();
   }
 
   async sendFriendrequest(invite: Object): Promise<Object> {
@@ -73,5 +77,20 @@ export class UserService {
 
   checkReset():Observable<any>{
     return this.http.get<any>(`${this.userAccount}/checkReset`);
+  }
+
+  aRequestI(id: number): Promise<String>{
+    console.log('Delete');
+    return this.http.delete<String>(`${this.userAccount}/aRequestI/`+id).toPromise();
+  }
+
+  eRequestI(invite: Object): Promise<String>{
+    console.log(invite);
+    console.log('PUT');
+    return this.http.put<String>(`${this.userAccount}/eRequestI`, invite).toPromise();
+  }
+
+  sendMail(reservation: Rezervacija): Promise<String>{
+    return this.http.put<String>(`${this.userAccount}/sendMail`, reservation).toPromise();
   }
 }
