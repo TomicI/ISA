@@ -1,0 +1,41 @@
+<div class="container">
+
+  <h4 *ngIf="karte.length!=0">{{karte[0].let.konfiguracijaLeta.aviokompanija.naziv}}</h4>
+
+  <div class="row">
+
+    <div *ngIf="karte.length!=0" class="col-12">
+
+      <div   class="card mt-4" >
+
+        <div class="card-header">
+          <h5>Deals</h5>
+        </div>
+        <div class="list-group list-group-flush">
+
+          <li *ngFor="let karta of karte ; let i=index " class="list-group-item flex-column ">
+            <div class="d-flex justify-content-between">
+              <p class="h6">From :  {{karta.let.aerodrom.naziv}}  </p>
+              <p class="h6">To :  {{karta.let.destinacija.adresa}} </p>
+              <del> <h6 class="mb-1" style="text-decoration: line-through;"> {{karta.cena}} €</h6> </del>
+              <h6 class="mb-1"> {{karta.popust}} €</h6>
+              <h6>{{karta.let.vremePolaska | date: 'dd/MM/yyyy HH:mm' }} - {{karta.let.vremeDolaska | date: 'dd/MM/yyyy HH:mm'}}</h6>
+              <h6>Seat: R{{sedista[i].red}}C{{sedista[i].kolona}}</h6>
+              <p>
+                <button class="bltn btn-sm " type="button " (click)="resDeal(i)"><i class="fas fa-handshake"></i>
+                </button>
+              </p>
+            </div>
+
+
+
+          </li>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

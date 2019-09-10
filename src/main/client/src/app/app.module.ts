@@ -83,6 +83,8 @@ import { InviteComponent } from './invite/invite.component';
 import { ListComponent } from './list/list.component';
 import { UnosPutnikaComponent } from './unos-putnika/unos-putnika.component';
 import { BrzaRezervacijaComponent } from './brza-rezervacija/brza-rezervacija.component';
+import { AviokomapnijaProfilComponent } from './aviokomapnija-profil/aviokomapnija-profil.component';
+import { BrzeRezervacijeListaComponent } from './brze-rezervacije-lista/brze-rezervacije-lista.component';
 
 
 
@@ -153,7 +155,9 @@ import { BrzaRezervacijaComponent } from './brza-rezervacija/brza-rezervacija.co
     ListComponent,
     SearchLetComponent,
     UnosPutnikaComponent,
-    BrzaRezervacijaComponent
+    BrzaRezervacijaComponent,
+    AviokomapnijaProfilComponent,
+    BrzeRezervacijeListaComponent
   ],
   imports: [
     BrowserModule,

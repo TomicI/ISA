@@ -104,4 +104,12 @@ export class LetService {
   deleteRezervacija(id: number): Promise<Object>{
     return this.http.delete(this.KAR_API+'/'+id).toPromise();
   }
+
+  getBrzeRezervacije(id: number): Promise<Karta[]>{
+    return this.http.get<Karta[]>(this.KAR_API+'/brze_rezervacije/'+id).toPromise();
+  }
+
+  saveBrzaRezervacija(karta: Karta): Promise<Rezervacija>{
+    return this.http.post<Rezervacija>(this.KAR_API+'/rezervisanje', karta).toPromise();
+  }
 }

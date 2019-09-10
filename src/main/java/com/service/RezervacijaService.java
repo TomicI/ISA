@@ -239,9 +239,15 @@ public class RezervacijaService {
 			SimpleMailMessage message = new SimpleMailMessage();
 			message.setTo(r.get().getUser().getEmail());
 			message.setSubject("You reservation is created!");
-			String textMessage="Reservation details: \n"
-					+"Price: "+ r.get().getKarta().getCena()+"\n"
-					+"From: "+r.get().getKarta().getLet().getAerodrom().getNaziv()+" at " + r.get().getKarta().getLet().getVremePolaska() +"\n"
+			String textMessage="Reservation details: \n";
+
+			if(r.get().getKarta().getPopust()>0){
+				textMessage+="Old price: " + r.get().getKarta().getCena()+"\n";
+				textMessage+="Price with discount: "+ r.get().getKarta().getPopust()+"\n";
+			}else{
+				textMessage+="Price: "+ r.get().getKarta().getCena()+"\n";
+			}
+			textMessage+="From: "+r.get().getKarta().getLet().getAerodrom().getNaziv()+" at " + r.get().getKarta().getLet().getVremePolaska() +"\n"
 					+"To: "+r.get().getKarta().getLet().getDestinacija().getGrad()+","+ r.get().getKarta().getLet().getDestinacija().getDrzava() +" at " + r.get().getKarta().getLet().getVremeDolaska()+"\n"
 					+"You have " + r.get().getKarta().getSedista().size();
 			List<Sediste> sedistes=new ArrayList<>(r.get().getKarta().getSedista());

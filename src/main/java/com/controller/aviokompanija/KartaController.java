@@ -26,18 +26,16 @@ public class KartaController {
 	@Autowired
 	private KartaService kartaService;
 
-	@Autowired
-	private UserService userService;
 
-	@RequestMapping(value="/brze_rezervacije", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value="/brze_rezervacije/{id}", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "Vraca sve brze rezervacije", httpMethod = "GET", produces = "application/json")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "OK", response = List.class),
 			@ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
-	public ResponseEntity<List<KartaDTO>> brzeRezervacije(){
-		return new ResponseEntity<>(kartaService.brzeRezervacije(), HttpStatus.OK);
+	public ResponseEntity<List<KartaDTO>> brzeRezervacije(@PathVariable Long id){
+		return new ResponseEntity<>(kartaService.brzeRezervacije(id), HttpStatus.OK);
 	}
 
 
@@ -99,4 +97,14 @@ public class KartaController {
 	}
 
 
+	@RequestMapping(value="/rezervisanje", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Kreira rezervaciju uz pomoc brze rezervacije", httpMethod = "POST", produces = "application/json", consumes = "application/json")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "OK", response = RezervacijaDTO.class),
+			@ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 400, message = "Bad Request")
+	})
+	public ResponseEntity<RezervacijaDTO> createBR(@RequestBody KartaDTO kartaDTO, Principal user){
+		return new ResponseEntity<>(kartaService.createRezB(user.getName(), kartaDTO.getId()), HttpStatus.CREATED);
+	}
 }

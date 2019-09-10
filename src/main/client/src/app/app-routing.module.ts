@@ -47,7 +47,8 @@ import {ListComponent} from "./list/list.component";
 import {UnosPutnikaComponent} from "./unos-putnika/unos-putnika.component";
 import {BrzaRezervacijaComponent} from "./brza-rezervacija/brza-rezervacija.component";
 import {ResDetailComponent} from "./res-detail/res-detail.component";
-
+import {AviokomapnijaProfilComponent} from "./aviokomapnija-profil/aviokomapnija-profil.component"
+import {BrzeRezervacijeListaComponent} from "./brze-rezervacije-lista/brze-rezervacije-lista.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/travel', pathMatch: 'full'},
@@ -65,7 +66,12 @@ const routes: Routes = [
           {path: 'reservation', component: ResDetailComponent},
         ]
       },
-      {path: 'flights', component: SearchLetComponent},
+      {path: 'flights', component: SearchLetComponent,
+        children:[
+          {path: '', component: SearchLetComponent},
+          {path: 'tickets/:id', component: BrzeRezervacijeListaComponent}
+        ]
+      },
 
     ]
 
@@ -136,6 +142,7 @@ const routes: Routes = [
   {path: 'letovi', component: LetComponent},
   {path: 'aviokompanijaProfil/:id', component: AviokomProfilComponent},
   {path: 'addAviokom', component: FormDodajAviokomComponent},
+  {path: 'aviokompanija/:id', component: AviokomapnijaProfilComponent},
   {
     path: 'resetPassword',
     component: AdminResetComponent,
@@ -150,7 +157,9 @@ const routes: Routes = [
 
   {path: 'karta/:id', component: KartaComponent},
   {path: 'unosPutnika/:kartaID/:brPutnika', component: UnosPutnikaComponent},
-  {path: 'brzaRezervacija/:id', component: BrzaRezervacijaComponent}
+  {path: 'brzaRezervacija/:id', component: BrzaRezervacijaComponent},
+  {path: 'tickets/:id', component: BrzeRezervacijeListaComponent}
+
 ];
 
 @NgModule({

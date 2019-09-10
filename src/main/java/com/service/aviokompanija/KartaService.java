@@ -4,13 +4,11 @@ import com.dto.RezervacijaDTO;
 import com.dto.aviokompanija.KartaDTO;
 import com.dto.aviokompanija.SedisteDTO;
 import com.model.Rezervacija;
-import com.model.aviokompanija.Karta;
-import com.model.aviokompanija.Let;
-import com.model.aviokompanija.Putnik;
-import com.model.aviokompanija.Sediste;
+import com.model.aviokompanija.*;
 import com.model.user.User;
 import com.repository.RezervacijaRepository;
 import com.repository.UserRepository;
+import com.repository.aviokompanija.AviokompanijaRepository;
 import com.repository.aviokompanija.KartaRepository;
 import com.repository.aviokompanija.PuntikRepository;
 import com.repository.aviokompanija.SedisteRepository;
@@ -42,17 +40,22 @@ public class KartaService {
 	@Autowired
 	private PuntikRepository puntikRepository;
 
+	@Autowired
+	private AviokompanijaRepository aviokompanijaRepository;
+
 	private ListeDTO liste = new ListeDTO();
 
 
-	public List<KartaDTO> brzeRezervacije(){
+	public List<KartaDTO> brzeRezervacije(Long id){
 		List<Karta> karte = kartaRepository.findAll();
+		Optional<Aviokompanija> aviokompanija=aviokompanijaRepository.findById(id);
 		List<Karta> brzeRezervacije = new ArrayList<>();
-		for(Karta karta : karte){
-			if(karta.getRezervacija() == null)
-				brzeRezervacije.add(karta);
+		if(aviokompanija.isPresent()) {
+			for (Karta karta : karte) {
+				if (karta.getRezervacija() == null && (karta.getLet().getKonfiguracija().getAviokompanija() == aviokompanija.get()) && karta.getSedista().size()==1 && karta.getPopust()>0)
+					brzeRezervacije.add(karta);
+			}
 		}
-
 		return liste.karte(brzeRezervacije);
 	}
 
@@ -185,5 +188,54 @@ public class KartaService {
 
 		rezervacijaRepository.delete(karta.get().getRezervacija());
 		kartaRepository.delete(karta.get());
+	}
+
+
+	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+	public RezervacijaDTO createRezB(String username, Long id){
+		Optional<User> user=userRepository.findByUsername(username);
+		if(!user.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ne postoji");
+
+		Optional<Karta> karta=kartaRepository.findById(id);
+
+		if(!karta.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Karta ne postoji");
+
+		if(karta.get().getSedista().size()!=1)
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ovo nije brza rezervacija");
+
+		Rezervacija rezervacija=new Rezervacija();
+		rezervacija.setUser(user.get());
+		rezervacija.setDatumVremeP(karta.get().getLet().getVremePolaska());
+		rezervacija.setDatumVremeS(karta.get().getLet().getVremeDolaska());
+		rezervacija.setKarta(karta.get());
+		rezervacija=rezervacijaRepository.save(rezervacija);
+
+		karta.get().setRezervacija(rezervacija);
+		for(Sediste s: karta.get().getSedista()){
+
+			if(s.getPutnik()!=null)
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Rezervisano vec");
+
+			s.setKarta(karta.get());
+			Putnik p=new Putnik();
+			Optional<Putnik> putnik=this.puntikRepository.findByUser(user.get());
+			if(putnik.isPresent()){
+				p=putnik.get();
+			}else {
+				p.setPrezime(user.get().getLastName());
+				p.setIme(user.get().getFirstName());
+				p.setBrojPasosa(user.get().getBrojPasosa());
+				p.setUser(user.get());
+				p=puntikRepository.save(p);
+			}
+			s.setPutnik(p);
+			sedisteRepository.save(s);
+		}
+		kartaRepository.save(karta.get());
+
+		return new RezervacijaDTO(rezervacija);
+
 	}
 }

@@ -28,13 +28,13 @@ public class AviokompanijaDTO {
 	}
 
 
-	public AviokompanijaDTO(Long id, String naziv, String adresa, String opis, Double prosecnaOcena, LokacijaDTO lokacijaDTO) {
+	public AviokompanijaDTO(Long id, String naziv, String adresa, String opis, Double prosecnaOcena, LokacijaDTO lokacija) {
 		this.id = id;
 		this.naziv = naziv;
 		this.adresa = adresa;
 		this.opis = opis;
 		this.prosecnaOcena = prosecnaOcena;
-		this.lokacija = lokacijaDTO;
+		this.lokacija = lokacija;
 	}
 
 	public Long getId() {
