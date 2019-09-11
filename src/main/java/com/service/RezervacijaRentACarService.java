@@ -267,6 +267,7 @@ public class RezervacijaRentACarService {
 
     }
 
+
     public ResponseMessage cancelStatus(Long id) {
 
         Optional<RezervacijaRentACar> rezOptional = findOne(id);
@@ -288,6 +289,7 @@ public class RezervacijaRentACarService {
 
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     public ResponseMessage cancelRes(RezervacijaRentACarDTO rezDTO) {
 
         if (rezDTO.getFilijalaDTO() == null) {

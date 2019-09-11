@@ -38,12 +38,11 @@ public class RentACar {
 		super();
 	}
 	
-	public RentACar(Long id, String naziv, String opis, Double prosecnaOcena) {
+	public RentACar(Long id, String naziv, String opis) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
 		this.opis = opis;
-
 	}
 
 

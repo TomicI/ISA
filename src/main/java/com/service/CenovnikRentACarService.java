@@ -15,6 +15,9 @@ import com.model.CenovnikRentACar;
 import com.model.RentACar;
 import com.model.Vozilo;
 import com.repository.CenovnikRentACarRepository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -23,7 +26,7 @@ public class CenovnikRentACarService {
 	@Autowired
 	private CenovnikRentACarRepository cenovnikRentACarRepository;
 
-	@Autowired
+	@Autowired(required = true)
 	private RentACarService rentACarService;
 
 	@Autowired
@@ -58,6 +61,7 @@ public class CenovnikRentACarService {
 	}
 
 
+	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
 	public CenovnikRentACar insertCenovnik(CenovnikRentACarDTO cenovnikDTO){
 
 
@@ -126,6 +130,7 @@ public class CenovnikRentACarService {
 		return early;
 	}
 
+	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
 	public CenovnikRentACarDTO edit(CenovnikRentACarDTO cenovnikDTO){
 
 		CenovnikRentACar rent = getOne(cenovnikDTO.getId());

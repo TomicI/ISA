@@ -21,6 +21,9 @@ import org.springframework.stereotype.Service;
 
 import com.model.RentACar;
 import com.repository.RentACarRepository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -103,6 +106,7 @@ public class RentACarService {
 		return rentACarRepository.save(rentACar);
 	}
 
+	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
 	public RentACar saveRentACar(RentACarDTO rentACarDTO){
 		RentACar rentACar = new RentACar();
 		rentACar.setId(rentACarDTO.getId());
@@ -132,6 +136,7 @@ public class RentACarService {
 		return cenovnikDTO;
 	}
 
+	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
 	public RentACar edit(RentACarDTO rentACarDTO){
 
 		if (exists(rentACarDTO.getNaziv())) {
