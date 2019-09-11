@@ -1,5 +1,6 @@
 package com.service.aviokompanija;
 
+import com.dto.aviokompanija.KategorijaSedistaDTO;
 import com.dto.aviokompanija.KonfiguracijaLetaDTO;
 import com.dto.aviokompanija.SegmentDTO;
 import com.model.aviokompanija.KategorijaSedista;
@@ -98,6 +99,7 @@ public class KonfiguracijaLetaService {
     }
     public List<SegmentDTO> segmenti(Long id){
         Optional<KonfiguracijaLeta> konfiguracijaLeta = konfiguracijaLetaRepository.findById(id);
+        List<SegmentDTO> segmentDTOS=new ArrayList<>();
         if(!konfiguracijaLeta.isPresent())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Konfiguracija leta ne postoji");
 
@@ -105,16 +107,11 @@ public class KonfiguracijaLetaService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Segmenti konfiguracije ne postoje");
 
         for(Segment s: konfiguracijaLeta.get().getSegmenti()){
-            if(s.getKategorija() !=null)
-                System.out.println("Kat je "+s.getKategorija().getId());
-            else
-                System.out.println("Kat je null");
-
-            if(s.getKonfiguracija() !=null)
-                System.out.println("Kon je "+s.getKonfiguracija().getId());
-            else
-                System.out.println("Kon je null");
+            SegmentDTO segmentDTO=new SegmentDTO(s);
+            segmentDTO.setKategorija(new KategorijaSedistaDTO(s.getKategorija()));
+            segmentDTO.setKonfiguracija(new KonfiguracijaLetaDTO(s.getKonfiguracija()));
+            segmentDTOS.add(segmentDTO);
         }
-        return liste.segmenti(new ArrayList<>(konfiguracijaLeta.get().getSegmenti()));
+        return segmentDTOS;
     }
 }

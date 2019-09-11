@@ -31,7 +31,10 @@ public class LetDTO {
 				  KonfiguracijaLeta konfiguracijaLeta) {
 		super();
 		this.setId(id);
-		this.setVremeDolaska(vremeDolaska);
+		if(vremeDolaska!=null)
+			this.setVremeDolaska(vremeDolaska);
+		else
+			this.setVremeDolaska(null);
 		this.setVremePolaska(vremePolaska);
 		this.setProsecnaOcena(prosecnaOcena);
 		this.setDuzinaPutovanja(duzinaPutovanja);

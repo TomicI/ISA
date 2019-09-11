@@ -93,6 +93,7 @@ export class Sediste {
   putnik: Putnik;
   prtljag: Prtljag;
   segment: Segment;
+  dodatnaUslugaAviokompanija: DodatnaUslugaAviokompanija;
   constructor() { }
 
 }

@@ -1,6 +1,9 @@
 package com.model.aviokompanija;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class DodatnaUslugaAviokompanija {
@@ -17,9 +20,10 @@ public class DodatnaUslugaAviokompanija {
 	
 	@Column
 	private Double cena;
-	
-	@ManyToOne
-	private Karta karta;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "dodatnaUslugaAviokompanija")
+	private Set<Sediste> sedista;
 	
 	@ManyToOne
 	private Aviokompanija aviokompanija;
@@ -60,13 +64,6 @@ public class DodatnaUslugaAviokompanija {
 		this.cena = cena;
 	}
 
-	public Karta getKarta() {
-		return karta;
-	}
-
-	public void setKarta(Karta karta) {
-		this.karta = karta;
-	}
 
 	public Aviokompanija getAviokompanija() {
 		return aviokompanija;
@@ -75,5 +72,12 @@ public class DodatnaUslugaAviokompanija {
 	public void setAviokompanija(Aviokompanija aviokompanija) {
 		this.aviokompanija = aviokompanija;
 	}
-	
+
+	public Set<Sediste> getSedista() {
+		return sedista;
+	}
+
+	public void setSedista(Set<Sediste> sedista) {
+		this.sedista = sedista;
+	}
 }

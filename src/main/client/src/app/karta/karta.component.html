@@ -1,5 +1,24 @@
 
   <h2>Get Your favorite seat! </h2>
   <div><h3>Cena: {{price}}</h3></div>
+  <div *ngIf="dodatneUsluge.length>0">
+    <span>Dodatne usluge:  </span>
+    <span>
+    <select (change)="onChangeDU($event.target.value)">
+      <option [value]="null">naziv-cena</option>
+      <option *ngFor="let dU of dodatneUsluge; let i=index " [value]="i">{{dU.naziv}}-{{dU.cena}}€</option>
+    </select>
+  </span></div>
+
+  <div *ngIf="prtljag.length>0">
+    <span>Prtljag: sirina/duzina/tezina-cena</span>
+    <span>
+      <select (change)="onChangeP($event.target.value)" >
+        <option [value]="null">sirina/duzina/tezina-cena</option>
+        <option *ngFor="let p of prtljag; let i=index " [value]="i">{{p.sirina}}/{{p.duzina}}/{{p.tezina}}-{{p.cena}}€</option>
+      </select>
+
+    </span>
+  </div>
   <button (click)=sledeciKorak()>Dalje</button>
   <canvas id="mycanvas" width="950" height="500" style="border: 6px solid"></canvas>

@@ -10,21 +10,19 @@ public class DodatnaUslugaAviokompanijaDTO {
 	private String naziv;
 	private String opis;
 	private Double cena;
-	private KartaDTO karta;
 	private AviokompanijaDTO aviokompanija;
 
 	
 	public DodatnaUslugaAviokompanijaDTO(DodatnaUslugaAviokompanija dodatnaUsluga) {
-		this(dodatnaUsluga.getId(),dodatnaUsluga.getNaziv(),dodatnaUsluga.getOpis(),dodatnaUsluga.getCena(),dodatnaUsluga.getKarta(),
+		this(dodatnaUsluga.getId(),dodatnaUsluga.getNaziv(),dodatnaUsluga.getOpis(),dodatnaUsluga.getCena(),
 				dodatnaUsluga.getAviokompanija());
 	}
 	
-	public DodatnaUslugaAviokompanijaDTO(Long id, String naziv, String opis, Double cena, Karta karta, Aviokompanija aviokompanija) {
+	public DodatnaUslugaAviokompanijaDTO(Long id, String naziv, String opis, Double cena, Aviokompanija aviokompanija) {
 		this.setId(id);
 		this.setNaziv(naziv);
 		this.setOpis(opis);
 		this.setCena(cena);
-		this.karta = new KartaDTO(karta);
 		this.aviokompanija = new AviokompanijaDTO(aviokompanija);
 	}
 
@@ -61,13 +59,6 @@ public class DodatnaUslugaAviokompanijaDTO {
 		this.cena = cena;
 	}
 
-	public KartaDTO getKarta() {
-		return karta;
-	}
-
-	public void setKarta(KartaDTO karta) {
-		this.karta = karta;
-	}
 
 	public AviokompanijaDTO getAviokompanija() {
 		return aviokompanija;

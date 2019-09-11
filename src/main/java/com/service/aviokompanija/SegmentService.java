@@ -1,5 +1,7 @@
 package com.service.aviokompanija;
 
+import com.dto.aviokompanija.KategorijaSedistaDTO;
+import com.dto.aviokompanija.KonfiguracijaLetaDTO;
 import com.dto.aviokompanija.SedisteDTO;
 import com.dto.aviokompanija.SegmentDTO;
 import com.model.aviokompanija.KategorijaSedista;
@@ -41,16 +43,10 @@ public class SegmentService {
         List<SegmentDTO> lista = new ArrayList<>();
 
         for (Segment segment : segmenti) {
-            if(segment.getKonfiguracija()!=null)
-                System.out.println("seg konf lista null");
-            else
-                System.out.println("segment konf je " + segment.getKonfiguracija().getId());
-
-            if(segment.getKonfiguracija()!=null)
-                System.out.println("seg kat lista null");
-            else
-                System.out.println("segment kat je " + segment.getKategorija().getId());
-            lista.add(new SegmentDTO(segment));
+            SegmentDTO segmentDTO=new SegmentDTO(segment);
+            segmentDTO.setKonfiguracija(new KonfiguracijaLetaDTO(segment.getKonfiguracija()));
+            segmentDTO.setKategorija(new KategorijaSedistaDTO(segment.getKategorija()));
+            lista.add(segmentDTO);
         }
         return lista;
     }

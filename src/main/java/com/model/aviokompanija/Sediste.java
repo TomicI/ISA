@@ -26,6 +26,9 @@ public class Sediste {
 	
 	@ManyToOne
 	private Prtljag prtljag;
+
+	@ManyToOne
+	private DodatnaUslugaAviokompanija dodatnaUslugaAviokompanija;
 	
 	@ManyToOne
 	private Segment segment;
@@ -108,5 +111,12 @@ public class Sediste {
 	public void setLet(Let let) {
 		this.let = let;
 	}
-		
+
+	public DodatnaUslugaAviokompanija getDodatnaUslugaAviokompanija() {
+		return dodatnaUslugaAviokompanija;
+	}
+
+	public void setDodatnaUslugaAviokompanija(DodatnaUslugaAviokompanija dodatnaUslugaAviokompanija) {
+		this.dodatnaUslugaAviokompanija = dodatnaUslugaAviokompanija;
+	}
 }

@@ -93,7 +93,17 @@ public class LetController {
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
 	public ResponseEntity<List<LetDTO>> pretraga(@RequestBody LetDTO letDTO){
+			if(letDTO.getVremeDolaska()!=null){
+				System.out.println("vD" + letDTO.getVremeDolaska());
+			}else{
+				System.out.println("null vd");
+			}
 
+			if(letDTO.getVremePolaska()!=null){
+				System.out.println("vP" + letDTO.getVremePolaska());
+			}else{
+				System.out.println("null vP");
+			}
 			return new ResponseEntity<>(letService.pretraga(letDTO), HttpStatus.OK);
 
 	}

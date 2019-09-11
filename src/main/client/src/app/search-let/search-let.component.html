@@ -1,118 +1,142 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+
 <div class="container">
 
-  <div class="jumbotron">
-    <h1 class="display-4">Hello!</h1>
-    <p class="lead"></p>
-    <hr class="my-4">
+  <div class="mt-2 col-md-12"></div>
 
-    <form id="formSearch" class="form-row col-20" [formGroup]="searchFormGroup" (ngSubmit)="onSubmit()">
+  <div class="row">
 
-      <div class="form-group">
-        <div class="input-group col-sm-10">
-          <input class="form-control" placeholder="Depart" formControlName="vremePolaska" name="vremePolaska" [(ngModel)]="model"  type=date>
+    <form id="formSearch" class="form-row col-12" [formGroup]="formSearch" (ngSubmit)="onSubmit()">
 
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="input-group col-sm-10">
-          <input class="form-control" placeholder="Return" formControlName="vremeDolaska" name="vremeDolaska" [(ngModel)]="model" type=date>
-
-        </div>
-      </div>
-
-      <div class="form-group form-inline">
-
-        <div class="col-sm-6 text-left">
-          <mat-form-field>
-            <input class="form-control shadow" matInput [matAutocomplete]="auto" [formControl]="myControl" [(ngModel)]="opis"  name="opis" id="opis" type="text" formControlName="opis" placeholder="From">
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let option of filteredOptions.value " [value]="option">
-                {{option}}
+      <div class="form-group col-6">
+        <mat-form-field>
+          <input type="search" class="form-control" matInput id="opis" placeholder="From" [formControlName]="'opis'" [matAutocomplete]="auto1">
+          <mat-autocomplete #auto1="matAutocomplete" >
+              <mat-option *ngFor="let aerodrom of filteredOptions | async " [value]="aerodrom">
+                {{aerodrom}}
               </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
+          </mat-autocomplete>
+        <div class="mt-2 col-md-12"></div>
+        <div class="alert alert-danger" *ngIf="formSearch.controls.opis.errors?.required && formSearch.controls.opis.touched">
+          Search field can't be empty!
         </div>
-        <div class="col-sm-6 text-left">
-          <mat-form-field>
-            <input class="form-control shadow" matInput [matAutocomplete]="auto1" [formControl]="myControl" name="presedanja" [(ngModel)]="presedanja" id="presedanja" type="text" formControlName="presedanja" placeholder="To">
+          </mat-form-field>
+      </div>
 
-            <mat-autocomplete #auto1="matAutocomplete">
-              <mat-option *ngFor="let option1 of filteredOptions1.value " [value]="option1">
-                {{option1}}
+      <div class="form-group col-6">
+        <mat-form-field>
+          <input type="search" class="form-control" matInput id="presedanja" placeholder="To" [formControlName]="'presedanja'" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete"  >
+              <mat-option *ngFor="let lokacija of filteredOptions1 | async" [value]="lokacija">
+                {{lokacija}}
               </mat-option>
-            </mat-autocomplete>
+          </mat-autocomplete>
           </mat-form-field>
+      </div>
+
+      <div class="form-group col-4">
+        <input type="number" class="form-control" matInput id="duzinaPutovanja" placeholder="Broj osoba" [formControlName]="'duzinaPutovanja'">
+        <div class="mt-2 col-md-12"></div>
+
+      </div>
+
+      <div class="form-group col-4">
+        <input type="number" class="form-control" matInput id="brojPresedanja" placeholder="Tezina prtljaga" [formControlName]="'brojPresedanja'">
+      </div>
+
+
+      <div class="form-group col-4">
+        <select  class="form-control" name="vrstaLeta"  formControlName="vrstaLeta" (change)="onChangeVL($event.target.value)" >
+          <option [value]="-1"> </option>
+          <option [value]="0">Povratni</option>
+          <option [value]="1">Jedan pravac</option>
+          <option [value]="2">Vise destinacija</option>
+        </select>
+      </div>
+
+      <div class="form-group col-3">
+        <div class="input-group">
+          <input class="form-control" [readonly]="true" [minDate]="fromDate" name="d2" ngbDatepicker #d2="ngbDatepicker"
+                 (dateSelect)="onDateSelected()" [formControlName]="'vremePolaska'">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="d2.toggle()" type="button"><i
+              class="fas fa-calendar"></i></button>
+          </div>
         </div>
-
       </div>
 
-      <div class="form-group form-inline">
-        <label class="control-label col-sm-4">Vrsta leta: </label>
-        <div class="col-sm-8 text-left">
-          <select  class="form-control" name="vrstaLeta"  formControlName="vrstaLeta" (change)="onChangeVL($event.target.value)" >
-            <option [value]="-1"> </option>
-            <option [value]="0">Povratni</option>
-            <option [value]="1">Jedan pravac</option>
-            <option [value]="2">Vise destinacija</option>
-          </select></div>
-      </div>
-
-      <div class="form-group form-inline">
-        <div class="col-sm-6 text-left">
-          <input class="form-control shadow" name="duzinaPutovanja" id="duzinaPutovanja" type="number" formControlName="duzinaPutovanja" placeholder="Broj osoba">
-        </div>
-
-        <div class="col-sm-6 text-left">
-          <input class="form-control shadow" name="brojPresedanja" id="brojPresedanja" type="number" formControlName="brojPresedanja" placeholder="Tezina prtljaga">
+      <div class="form-group col-3">
+        <div class="input-group">
+          <input class="form-control" [readonly]="true" [minDate]="toDate" name="d3" ngbDatepicker #d3="ngbDatepicker"
+                 [formControlName]="'vremeDolaska'" required="false">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="d3.toggle()" type="button"><i
+              class="fas fa-calendar"></i></button>
+          </div>
         </div>
       </div>
 
 
-
-      <div>
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <div class="form-group col-2">
+        <button type="submit" class="btn btn-outline-secondary" [disabled]="!formSearch.valid" >Search</button>
       </div>
+
     </form>
 
+  </div>
 
-    <table class="table table-dark" [hidden]="!tabela">
-      <thead>
-      <tr>
-        <th>Datum polaska</th>
-        <th>Datum dolaska</th>
-        <th>Aerodrom polazak</th>
-        <th>Destinacija</th>
-        <th>Aviokompanija</th>
-        <th>Broj presedanja</th>
-        <th>Presedanja</th>
-        <th>Opis</th>
-      </tr>
-      </thead>
-      <tbody>
+  <div class="col-sm-6">
 
-      <tr *ngFor="let l of rezultat " style="width: 300px">
-        <td>{{l.vremePolaska}}</td>
-        <td>{{l.vremeDolaska}}</td>
-        <td>{{l.aerodrom.naziv}}</td>
-        <td>{{l.destinacija.naziv}}</td>
-        <td>{{l.konfiguracijaLeta.aviokompanija.naziv}}</td>
-        <td>{{l.brojPresedanja}}</td>
-        <td>{{l.presedanja}}</td>
-        <td>{{l.opis}}</td>
-        <td><button (click)=sledeciKorak(l.id)>Buy ticket</button></td>
-      </tr>
-      </tbody>
-    </table>
+    <div *ngIf="rezultat.length==0 && tabela==true">
+      <h3>No result for this criteria!</h3>
+    </div>
+
+    <div *ngIf="rezultat.length>0 && tabela==true">
+      <select (change)="onChangeSort($event.target.value)">
+        <option [value]="11">Aviokompanija(A-Z)</option>
+        <option [value]="12">Aviokompanija(Z-A)</option>
+        <option [value]="21">Trajanje let(min-max)</option>
+        <option [value]="22">Trajanje leta(max-min)</option>
+        <option [value]="31">Cena (min-max)</option>
+        <option [value]="32">Cena (max-min)</option>
+      </select>
+    </div>
+
+    <div class="card-deck">
+      <div *ngFor="let rez of rezultat">
 
 
+        <div class="card mt-4" style="width: 18rem;height: 18rem">
+          <div class="card-header">
+            <div class="d-flex">
 
+              <h6 class="card-title">{{rez.konfiguracijaLeta.aviokompanija.naziv}} </h6>
+              <div class="ml-auto">
+                <h6> € {{getCena(rez.konfiguracijaLeta.id)}} </h6>
+              </div>
+            </div>
+          </div>
 
+          <div class="card-body">
+            <div><i class="fas fa-angle-up"></i>{{rez.vremePolaska | date: 'dd/MM/yyyy HH:mm' }}</div>
+            <div><i class="fas fa-angle-down"></i>{{rez.vremeDolaska | date: 'dd/MM/yyyy HH:mm' }}</div>
+            <div><i class="fas fa-clock"></i> {{rez.vremePutovanja}}</div>
+            <div><i class="fas fa-city"></i>  {{rez.brojPresedanja}} </div>
+          </div>
 
+          <div class="card-footer">
+            <div class="d-flex">
+              <div class="ml-auto">
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="sledeciKorak(rez)">Details</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
 
   </div>
+
+
+
 </div>
-
-
-

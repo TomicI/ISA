@@ -85,6 +85,7 @@ import { UnosPutnikaComponent } from './unos-putnika/unos-putnika.component';
 import { BrzaRezervacijaComponent } from './brza-rezervacija/brza-rezervacija.component';
 import { AviokomapnijaProfilComponent } from './aviokomapnija-profil/aviokomapnija-profil.component';
 import { BrzeRezervacijeListaComponent } from './brze-rezervacije-lista/brze-rezervacije-lista.component';
+import { LetDetailsComponent } from './let-details/let-details.component';
 
 import { CallbackPipe } from "./reservation-overview/callback.pipe";
 
@@ -157,8 +158,10 @@ import { CallbackPipe } from "./reservation-overview/callback.pipe";
     SearchLetComponent,
     UnosPutnikaComponent,
     BrzaRezervacijaComponent,
-    CallbackPipe
+    CallbackPipe,
     AviokomapnijaProfilComponent,
+    BrzeRezervacijeListaComponent,
+    LetDetailsComponent
   ],
   imports: [
     BrowserModule,

@@ -49,6 +49,7 @@ import {BrzaRezervacijaComponent} from "./brza-rezervacija/brza-rezervacija.comp
 import {ResDetailComponent} from "./res-detail/res-detail.component";
 import {AviokomapnijaProfilComponent} from "./aviokomapnija-profil/aviokomapnija-profil.component"
 import {BrzeRezervacijeListaComponent} from "./brze-rezervacije-lista/brze-rezervacije-lista.component";
+import {LetDetailsComponent} from "./let-details/let-details.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/travel', pathMatch: 'full'},
@@ -161,7 +162,8 @@ const routes: Routes = [
   {path: 'karta/:id', component: KartaComponent},
   {path: 'unosPutnika/:kartaID/:brPutnika', component: UnosPutnikaComponent},
   {path: 'brzaRezervacija/:id', component: BrzaRezervacijaComponent},
-  {path: 'tickets/:id', component: BrzeRezervacijeListaComponent}
+  {path: 'tickets/:id', component: BrzeRezervacijeListaComponent},
+  {path: 'details/:id', component: LetDetailsComponent}
 
 ];
 

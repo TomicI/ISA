@@ -1,15 +1,16 @@
 import {Component, HostListener, Input, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {Karta, Let, Sediste, Segment} from "../model";
+import {DodatnaUslugaAviokompanija, Karta, Let, Prtljag, Sediste, Segment} from "../model";
 import {LetService} from "../letService/let.service";
 import {fabric } from 'fabric/dist/fabric.min.js';
 import {UserService} from "../services/user.service";
+import {AviokompanijaService} from "../aviokompanija/aviokompanija.service";
 
 @Component({
   selector: 'app-karta',
   templateUrl: './karta.component.html',
   styleUrls: ['./karta.component.css'],
-  providers: [LetService]
+  providers: [LetService, AviokompanijaService, UserService]
 })
 export class KartaComponent implements OnInit{
   @Input() letP:number
@@ -20,15 +21,18 @@ export class KartaComponent implements OnInit{
   let: Let;
   segmenti: Segment[]=[]
   sedista: Sediste[]=[]
-  rezervisana: number[]=[]
+  rezervisana: Sediste[]=[]
   karta: Karta;
   price: number;
-
-
+  prtljag: Prtljag[]=[];
+  dodatneUsluge: DodatnaUslugaAviokompanija[]=[];
+  izabranaDU: DodatnaUslugaAviokompanija;
+  izabranPrtljag: Prtljag;
   constructor( private letService: LetService,
                private router: Router,
                private route: ActivatedRoute,
-               private userService: UserService) { }
+               private userService: UserService,
+               private aviokompanijaService: AviokompanijaService) { }
 
   ngOnInit() {
     this.karta=new Karta();
@@ -50,7 +54,13 @@ export class KartaComponent implements OnInit{
               this.canDr(this.sedista);
             });
 
+            this.aviokompanijaService.getPrtljag(this.karta.let.konfiguracijaLeta.aviokompanija.id).then(pom=>{
+              this.prtljag=pom;
+            })
 
+            this.aviokompanijaService.getDodatneUsluge(this.karta.let.konfiguracijaLeta.aviokompanija.id).then(pom=>{
+              this.dodatneUsluge=pom;
+            })
 
 
 
@@ -118,7 +128,8 @@ export class KartaComponent implements OnInit{
           e.target.set('fill', 'red');
           pomocna[e.target.brojSedista].zauzeto = true;
           console.log("SEDISTE " + pomocna[e.target.brojSedista].id);
-          rez.push(pomocna[e.target.brojSedista].id);
+          rez.push(pomocna[e.target.brojSedista]);
+         // cena+=pomocna[e.target.brojSedista].segment.kategorija.cena;
           //cena=cena+pomocna[e.target.brojSedista].segment.kategorija.cena;
         /*  letJ.sedista = pomocna;
           letServiceJ.zauzmiSediste(letJ);
@@ -136,6 +147,20 @@ export class KartaComponent implements OnInit{
   sledeciKorak(){
     console.log("pre");
     console.log(this.rezervisana);
+    if(this.izabranaDU!=null){
+      for(let i=0; i<this.rezervisana.length; i++){
+        this.rezervisana[i].dodatnaUslugaAviokompanija=this.izabranaDU;
+      }
+    }
+
+    if(this.izabranPrtljag!=null){
+      for(let i=0; i<this.rezervisana.length; i++){
+        this.rezervisana[i].prtljag=this.izabranPrtljag;
+      }
+    }
+
+    console.log("pre");
+    console.log(this.rezervisana);
     this.letService.saveKarta(this.rezervisana).then(pom=>
     {
       console.log("vratilo");
@@ -151,5 +176,19 @@ export class KartaComponent implements OnInit{
         this.router.navigateByUrl('/home');
       }
     })
+  }
+
+  onChangeDU(i: number){
+    console.log("promena du");
+    console.log(i);
+    console.log(this.dodatneUsluge[i]);
+      this.izabranaDU=this.dodatneUsluge[i];
+  }
+
+  onChangeP(i: number){
+    console.log("promena p");
+    console.log(i);
+    console.log(this.prtljag[i]);
+    this.izabranPrtljag=this.prtljag[i];
   }
 }

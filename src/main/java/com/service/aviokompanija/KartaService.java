@@ -2,16 +2,14 @@ package com.service.aviokompanija;
 
 import com.dto.RezervacijaDTO;
 import com.dto.aviokompanija.KartaDTO;
+import com.dto.aviokompanija.PrtljagDTO;
 import com.dto.aviokompanija.SedisteDTO;
 import com.model.Rezervacija;
 import com.model.aviokompanija.*;
 import com.model.user.User;
 import com.repository.RezervacijaRepository;
 import com.repository.UserRepository;
-import com.repository.aviokompanija.AviokompanijaRepository;
-import com.repository.aviokompanija.KartaRepository;
-import com.repository.aviokompanija.PuntikRepository;
-import com.repository.aviokompanija.SedisteRepository;
+import com.repository.aviokompanija.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -43,6 +41,12 @@ public class KartaService {
 	@Autowired
 	private AviokompanijaRepository aviokompanijaRepository;
 
+	@Autowired
+	private PrtljagRepository prtljagRepository;
+
+	@Autowired
+	private DodatnaUslugaAviokompanijaRepository dodatnaUslugaAviokompanijaRepository;
+
 	private ListeDTO liste = new ListeDTO();
 
 
@@ -60,7 +64,7 @@ public class KartaService {
 	}
 
 	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
-	public RezervacijaDTO create(String username, List<Long> sedista){
+	public RezervacijaDTO create(String username, List<SedisteDTO> sedista){
 		Optional<User> user = userRepository.findByUsername(username);
 		if(!user.isPresent())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ne postoji");
@@ -68,10 +72,11 @@ public class KartaService {
 		Rezervacija rezervacija = new Rezervacija();
 		Karta karta = new Karta();
 		karta.setCena(0);
+		double cena=0;
 		boolean prvo=false;
 		Let let = new Let();
-		for(Long idSedista : sedista){
-			Optional<Sediste> sediste = sedisteRepository.findById(idSedista);
+		for(SedisteDTO sedisteDTO : sedista){
+			Optional<Sediste> sediste = sedisteRepository.findById(sedisteDTO.getId());
 			if(!sediste.isPresent())
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sediste ne postoji");
 			if(sediste.get().getZauzeto())
@@ -100,10 +105,25 @@ public class KartaService {
 				p=puntikRepository.save(p);
 				sediste.get().setPutnik(p);
 			}
+			if(sedisteDTO.getPrtljag()!=null){
+				Optional<Prtljag> p=prtljagRepository.findById(sedisteDTO.getPrtljag().getId());
+				if(p.isPresent()){
+					sediste.get().setPrtljag(p.get());
+					cena+=p.get().getCena();
+				}
+			}
+
+			if(sedisteDTO.getDodatnaUslugaAviokompanija()!=null){
+				Optional<DodatnaUslugaAviokompanija> p=dodatnaUslugaAviokompanijaRepository.findById(sedisteDTO.getDodatnaUslugaAviokompanija().getId());
+				if(p.isPresent()){
+					sediste.get().setDodatnaUslugaAviokompanija(p.get());
+					cena+=p.get().getCena();
+				}
+			}
 			sediste.get().setZauzeto(true);
 			sediste.get().setKarta(karta);
 			sedisteRepository.save(sediste.get());
-			karta.setCena(karta.getCena() + sediste.get().getSegment().getKategorija().getCena());
+			karta.setCena(karta.getCena() + sediste.get().getSegment().getKategorija().getCena()+cena);
 		}
 		karta=kartaRepository.save(karta);
 		rezervacija.setKarta(karta);

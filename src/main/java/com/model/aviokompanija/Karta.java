@@ -24,10 +24,7 @@ public class Karta {
 	@JsonIgnore
 	@OneToMany(mappedBy = "karta")
 	private Set<Sediste> sedista;
-	
-	@JsonIgnore
-	@OneToMany(mappedBy = "karta")
-	private Set<DodatnaUslugaAviokompanija> dodatneUsluge;
+
 
 	@OneToOne(mappedBy = "karta", cascade = CascadeType.ALL,
 			fetch = FetchType.LAZY, optional = false)
@@ -39,7 +36,6 @@ public class Karta {
 	public Karta() {
 		super();
 		setSedista(new HashSet<>());
-		setDodatneUsluge(new HashSet<>());
 	}
 
 
@@ -65,14 +61,6 @@ public class Karta {
 
 	public void setSedista(Set<Sediste> sedista) {
 		this.sedista = sedista;
-	}
-
-	public Set<DodatnaUslugaAviokompanija> getDodatneUsluge() {
-		return dodatneUsluge;
-	}
-
-	public void setDodatneUsluge(Set<DodatnaUslugaAviokompanija> dodatneUsluge) {
-		this.dodatneUsluge = dodatneUsluge;
 	}
 
 	public Rezervacija getRezervacija() {

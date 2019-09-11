@@ -101,7 +101,7 @@ public pom;
   }
 
   getDodatneUsluge(id: number): Promise<DodatnaUslugaAviokompanija[]>{
-    return this.http.get<DodatnaUslugaAviokompanija[]>(this.AVIO_API+'/'+id+'/dodatna_usluga').toPromise();
+    return this.http.get<DodatnaUslugaAviokompanija[]>(this.AVIO_API+'/'+id+'/dodatne_usluge').toPromise();
   }
 
   setLocation(id: number, location: Lokacija): Promise<Lokacija>{

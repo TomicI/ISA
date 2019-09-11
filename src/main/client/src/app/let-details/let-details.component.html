@@ -1,0 +1,40 @@
+<div *ngIf="letL">
+
+  <div class="card-deck ">
+    <div class="card " style="width: 70rem">
+      <div class="card-header">
+        <div class="d-flex">
+          <h6>{{letL.konfiguracijaLeta.aviokompanija.naziv}} </h6>
+          <div class="ml-auto">
+            <h6>  € {{getMinMaxCena()}} </h6>
+          </div>
+        </div>
+        <p class="h6">From : {{letL.aerodrom.naziv}} </p>
+        <p class="h6">To :  {{letL.destinacija.adresa}}  </p>
+        <h6>Poletanje: {{letL.vremePolaska | date: 'dd/MM/yyyy HH:mm' }} </h6>
+        <h6>Sletanje: {{letL.vremeDolaska | date: 'dd/MM/yyyy HH:mm'}} </h6>
+
+      </div>
+
+      <div class="card-body">
+        <p *ngIf="letL.brojPresedanja>0"><b>Presedanja:</b> {{letL.presedanja}} </p>
+        <p *ngIf="letL.brojPresedanja>0"><b>Broj presedanja:</b> {{letL.brojPresedanja}} </p>
+        <h4 >Dodatne usluge:  </h4>
+        <div *ngFor="let dU of dodatneUsluge"><b>Naziv:</b> {{dU.naziv}} <b>Opis:</b> {{dU.opis}}  <b>Cena:</b> {{dU.cena}} <b>€</b></div>
+        <h4 >Prtljag:  </h4>
+        <div *ngFor="let prt of prtljag"><b>Duzina:</b> {{prt.duzina}} <b>Sirina:</b> {{prt.sirina}}  <b>Tezina:</b> {{prt.tezina}} <b>Cena:</b> {{prt.cena}}<b>€</b></div>
+      </div>
+
+      <div class="card-footer">
+        <div class="d-flex">
+          <div class="ml-auto">
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="rez()">Reserve</button>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+</div>

@@ -60,7 +60,7 @@ export class LetService {
     return this.http.put<Let[]>(this.LET_API +'/pretraga', pom).toPromise();
   }
 
-  saveKarta(sedsta: number[]): Promise<Rezervacija>{
+  saveKarta(sedsta: Sediste[]): Promise<Rezervacija>{
     return this.http.post<Rezervacija>(this.KAR_API, sedsta).toPromise();
   }
 

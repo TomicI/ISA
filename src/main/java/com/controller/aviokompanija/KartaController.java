@@ -46,7 +46,7 @@ public class KartaController {
 			@ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
-	public ResponseEntity<RezervacijaDTO> create(@RequestBody List<Long> sedista, Principal user){
+	public ResponseEntity<RezervacijaDTO> create(@RequestBody List<SedisteDTO> sedista, Principal user){
 		return new ResponseEntity<>(kartaService.create(user.getName(), sedista), HttpStatus.CREATED);
 	}
 

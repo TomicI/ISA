@@ -12,13 +12,14 @@ public class SedisteDTO {
 	private PutnikDTO putnik;
 	private PrtljagDTO prtljag;
 	private SegmentDTO segment;
+	private DodatnaUslugaAviokompanijaDTO dodatnaUslugaAviokompanija;
 
 	public SedisteDTO(Sediste sediste) {
 		this(sediste.getId(),sediste.getKolona(),sediste.getRed(),sediste.getZauzeto(),sediste.getKarta(),sediste.getPutnik(),sediste.getPrtljag(),
-				sediste.getSegment());
+				sediste.getSegment(), sediste.getDodatnaUslugaAviokompanija());
 	}
 	
-	public SedisteDTO(Long id, Integer kolona, Integer red, Boolean zauzeto, Karta karta, Putnik putnik, Prtljag prtljag, Segment segment) {
+	public SedisteDTO(Long id, Integer kolona, Integer red, Boolean zauzeto, Karta karta, Putnik putnik, Prtljag prtljag, Segment segment, DodatnaUslugaAviokompanija dodatnaUslugaAviokompanija) {
 		super();
 		this.setId(id);
 		this.setKolona(kolona);
@@ -43,6 +44,11 @@ public class SedisteDTO {
 			this.setSegment(new SegmentDTO(segment));
 		else
 			this.setSegment(null);
+
+		if(dodatnaUslugaAviokompanija!=null)
+			this.setDodatnaUslugaAviokompanija(new DodatnaUslugaAviokompanijaDTO(dodatnaUslugaAviokompanija));
+		else
+			this.setDodatnaUslugaAviokompanija(null);
 	}
 
 
@@ -108,5 +114,13 @@ public class SedisteDTO {
 
 	public void setSegment(SegmentDTO segment) {
 		this.segment = segment;
+	}
+
+	public DodatnaUslugaAviokompanijaDTO getDodatnaUslugaAviokompanija() {
+		return dodatnaUslugaAviokompanija;
+	}
+
+	public void setDodatnaUslugaAviokompanija(DodatnaUslugaAviokompanijaDTO dodatnaUslugaAviokompanija) {
+		this.dodatnaUslugaAviokompanija = dodatnaUslugaAviokompanija;
 	}
 }
