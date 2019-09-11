@@ -16,9 +16,20 @@ export class RatingService {
     return this.http.get(`${this.RatingURL}/permissionRent`,{ params: params } );
   }
 
+  getPermissionAir(params): Observable<any> {
+
+    return this.http.get(`${this.RatingURL}/permissionAir`,{ params: params } );
+  }
+
   saveRentACarRating(ratings: Object): Observable<any> {
     return this.http.post(`${this.RatingURL}/rentACar`,ratings );
   }
+
+  saveAirRating(ratings: Object): Observable<any> {
+
+    return this.http.post(`${this.RatingURL}/air`,ratings );
+  }
+
   getRating(params): Observable<any> {
 
     return this.http.get(`${this.RatingURL}/ratings`,{ params: params } );

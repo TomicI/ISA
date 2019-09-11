@@ -15,6 +15,7 @@ public class RezervacijaDTO {
 	private Date datumVremeP;
 	private Date datumVremeS;
 	private double cena;
+	private boolean otkazana;
 	private KartaDTO kartaDTO;
 	private RezervacijaRentACarDTO rezervacijaRentACarDTO;
 	private UserDTO userDTO;
@@ -36,12 +37,11 @@ public class RezervacijaDTO {
 		this.datumVremeP = r.getDatumVremeP();
 		this.datumVremeS = r.getDatumVremeS();
 		this.cena = r.getCena();
+		this.otkazana = r.isOtkazana();
 		if(r.getKarta()!=null) {
 			this.kartaDTO = new KartaDTO(r.getKarta());
-			System.out.println("karta id "+ r.getKarta().getId());
 		}else {
 			this.kartaDTO = null;
-			System.out.println("karta je null");
 		}
 		if(r.getRezervacijaRentACar()!=null)
 			this.rezervacijaRentACarDTO = new RezervacijaRentACarDTO(r.getRezervacijaRentACar());
@@ -107,5 +107,13 @@ public class RezervacijaDTO {
 
 	public void setUserDTO(UserDTO userDTO) {
 		this.userDTO = userDTO;
+	}
+
+	public boolean isOtkazana() {
+		return otkazana;
+	}
+
+	public void setOtkazana(boolean otkazana) {
+		this.otkazana = otkazana;
 	}
 }

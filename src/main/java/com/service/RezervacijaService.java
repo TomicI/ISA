@@ -1,13 +1,11 @@
 package com.service;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.dto.InviteDTO;
 import com.dto.RezervacijaDTO;
+import com.dto.RezervacijaRentACarDTO;
 import com.dto.UserDTO;
 import com.dto.aviokompanija.PutnikDTO;
 import com.model.Invite;
@@ -17,13 +15,17 @@ import com.model.aviokompanija.Sediste;
 import com.model.user.User;
 import com.repository.aviokompanija.KartaRepository;
 import com.repository.aviokompanija.SedisteRepository;
+import com.security.ResponseMessage;
 import com.service.aviokompanija.KartaService;
 import com.service.aviokompanija.PutnikService;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
@@ -56,11 +58,22 @@ public class RezervacijaService {
 	private RezervacijaRepository rezervacijaRepository;
 
 	@Autowired
+	private RezervacijaService rezervacijaService;
+
+	@Autowired
+	private KartaService kartaService;
+
+	@Autowired
+	private RezervacijaRentACarService rezervacijaRentACarService;
+
+	@Autowired
 	private JavaMailSender mailSender;
 	
 	public Optional<Rezervacija> findById(Long id) {
 		return rezervacijaRepository.findById(id);
 	}
+
+	public Optional<Rezervacija> findByRezervacijaRent(Long id){return rezervacijaRepository.findByRezervacijaRentACarId(id);}
 
 	public Rezervacija getOne(Long id){
 
@@ -101,12 +114,31 @@ public class RezervacijaService {
 		}
 
 		if (!optionalRezervacija.get().getUser().equals(optionalUser.get())){
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong reservation id!");
+			if (!inviteService.existsByResAndUser(id,optionalUser.get().getId(),true)){
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong reservation id!");
+			}
 		}
 
 		return new RezervacijaDTO(optionalRezervacija.get());
 
 	}
+
+	public List<RezervacijaDTO> findAllInvited(Principal user){
+
+        Optional<User> optionalUser = userService.findByUsername(user.getName());
+
+        if (!optionalUser.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User doesn't exist!");
+        }
+
+        List<RezervacijaDTO> rezervacijaDTOS = new ArrayList<>();
+        List<Invite> invites = inviteService.findByUserAndAcc(optionalUser.get().getId(),true);
+        for (Invite i:invites){
+            System.out.println(i.getId());
+               rezervacijaDTOS.add(new RezervacijaDTO(i.getReservation()));
+        }
+	    return rezervacijaDTOS;
+    }
 
 
 	public List<RezervacijaDTO> findAllUser(Principal user){
@@ -120,6 +152,7 @@ public class RezervacijaService {
 
 		List<Rezervacija> rezervacijeList = optionalUser.get().getRezervacija();
 
+
 		List<RezervacijaDTO> rezervacijaDTOS = new ArrayList<>();
 
 		for (Rezervacija r:rezervacijeList){
@@ -130,6 +163,8 @@ public class RezervacijaService {
 			}
 
 		}
+
+
 
 		return rezervacijaDTOS;
 
@@ -183,6 +218,7 @@ public class RezervacijaService {
 			invite.setUserReceive(userR.get());
 			invite.setDateSent(new Date());
 			invite.setReservation(r.get());
+			invite.setAccepted(false);
 			invite = this.inviteService.save(invite);
 
 			PutnikDTO p=new PutnikDTO();
@@ -228,7 +264,13 @@ public class RezervacijaService {
 	public void aFriend(Long inviteId){
 		Optional<Invite> invite=this.inviteService.findByID(inviteId);
 
-		this.inviteService.delete(invite.get());
+		if (!invite.isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong request id!");
+        }
+
+		invite.get().setAccepted(true);
+
+		this.inviteService.save(invite.get());
 	}
 
 	public void sendEMail(RezervacijaDTO rezervacijaDTO){
@@ -285,4 +327,60 @@ public class RezervacijaService {
 			mailSender.send(message);
 		}
 	}
+
+	public ResponseMessage cancelStatus(Long id){
+
+		Rezervacija rezervacija = rezervacijaService.getOne(id);
+
+		Calendar cal = Calendar.getInstance();
+
+		if (rezervacija.isOtkazana()){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Reservation already canceled !");
+
+		}
+
+		if (rezervacija.getDatumVremeP().getTime() - cal.getTime().getTime() < 3*3600*1000 ){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Reservation can't be canceled , cancelation has to be made 3 h prior to the departure !");
+		}
+
+		return new ResponseMessage(" Reservation can be canceled , cancelation has to be made 3 h prior to the departure date !" );
+
+	}
+
+	public ResponseMessage cancelConfirm(Long id){
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getByUsername(auth.getName());
+
+		Rezervacija rezervacija = rezervacijaService.getOne(id);
+		cancelStatus(id);
+
+		if (!rezervacija.getUser().equals(user)){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Reservation doesn't belong to this user!");
+		}
+
+		kartaService.cancel(rezervacija);
+
+		if (rezervacija.getRezervacijaRentACar()!=null){
+
+			rezervacijaRentACarService.cancelRes(new RezervacijaRentACarDTO(rezervacija.getRezervacijaRentACar()));
+		}
+
+		if (rezervacija.getRezervacijaSobe()!=null){
+
+
+		}
+
+		rezervacija.setOtkazana(true);
+		save(rezervacija);
+
+
+		return new ResponseMessage("Reservation cancelled");
+
+
+	}
+
+
+
+
 }

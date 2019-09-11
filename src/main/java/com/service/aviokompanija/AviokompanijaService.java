@@ -2,16 +2,23 @@ package com.service.aviokompanija;
 
 
 import com.dto.aviokompanija.*;
+import com.model.Rezervacija;
 import com.model.aviokompanija.*;
 import com.model.user.User;
 import com.repository.UserRepository;
 import com.repository.aviokompanija.*;
+import com.service.RezervacijaService;
+import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +50,12 @@ public class AviokompanijaService {
 	@Autowired
 	private DodatnaUslugaAviokompanijaRepository dodatnaUslugaAviokompanijaRepository;
 
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private RezervacijaService rezervacijaService;
+
 	private ListeDTO liste = new ListeDTO();
 
 	public List<AviokompanijaDTO> getAll(){
@@ -62,6 +75,16 @@ public class AviokompanijaService {
 
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aviokompanija ne postoji");
 	}
+
+	public Aviokompanija findOne(Long id){
+		Optional<Aviokompanija> aviokompanija = aviokompanijaRepository.findById(id);
+
+		if(aviokompanija.isPresent())
+			return aviokompanija.get();
+
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aviokompanija ne postoji");
+	}
+
 
 	public AviokompanijaDTO create(AviokompanijaDTO aviokompanijaDTO){
 		Aviokompanija aviokompanija = new Aviokompanija();
@@ -257,8 +280,17 @@ public class AviokompanijaService {
 		return new KonfiguracijaLetaDTO(konfiguracijaLeta);
 	}
 
+	public long ratePermission(Rezervacija rezervacija){
+
+		Aviokompanija aviokompanija = findOne(rezervacija.getKarta().getLet().getAerodrom().getAviokompanija().getId());
+
+		return aviokompanija.getId();
+
+	}
+
 	//Ubaciti proveru da li je on poslovao sa tom kompanijom
-	public OcenaDTO oceni(Long id, Long userId, Integer ocena){
+	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+	public Ocena oceni(Long id, User user, Integer ocena,Long res_id){
 		if(ocena < 1 || ocena > 5)
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ocena nije dobro prosledjena!");
 
@@ -266,31 +298,21 @@ public class AviokompanijaService {
 		if(!aviokompanija.isPresent())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aviokompanija ne postoji");
 
-		Optional<User> user = userRepository.findById(userId);
-		if(!user.isPresent())
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ne postoji");
-
-		for(Ocena oc : aviokompanija.get().getOcene()){
-			if(oc.getUser().getId() == userId){
-				oc.setOcena(ocena);
-				ocenaRepository.save(oc);
-				aviokompanija.get().setProsecnaOcena(proracunajSrednjuOcenu(aviokompanija.get()));
-				aviokompanijaRepository.save(aviokompanija.get());
-				return new OcenaDTO(oc);
-			}
-		}
+		Rezervacija rezervacija = rezervacijaService.getOne(res_id);
 
 		Ocena ocenaObj = new Ocena();
 		ocenaObj.setAviokompanija(aviokompanija.get());
 		ocenaObj.setOcena(ocena);
-		ocenaObj.setUser(user.get());
+		ocenaObj.setUser(user);
+		ocenaObj.setOcDate(new Date());
+		ocenaObj.setRezervacija(rezervacija);
 		ocenaRepository.save(ocenaObj);
 
 		aviokompanija.get().getOcene().add(ocenaObj);
 		aviokompanija.get().setProsecnaOcena(proracunajSrednjuOcenu(aviokompanija.get()));
 		aviokompanijaRepository.save(aviokompanija.get());
 
-		return new OcenaDTO(ocenaObj);
+		return ocenaObj;
 	}
 
 	public LokacijaDTO postaviLokaciju(Long id, Long lokacijaId){

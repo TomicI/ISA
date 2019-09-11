@@ -2,8 +2,60 @@
 
   <div class="mt-2 "></div>
 
+  <div class="row">
 
-  <div class="row" >
+    <div class="col-md-4">
+
+      <div *ngIf="karta">
+
+        <div class="card-deck ">
+          <div class="card " style="width: 70rem">
+            <div class="card-header">
+              <div class="d-flex">
+                <h6>{{karta.let.opis}} </h6>
+                <div class="ml-auto">
+                  <h6 *ngIf="karta.popust==0"> Total € {{karta.cena}} </h6>
+                  <h6 *ngIf="karta.popust>0"> Total € {{karta.popust}} </h6>
+                </div>
+              </div>
+              <h6>Airport : {{karta.let.aerodrom.naziv}} </h6>
+              <p class="h6">Departing :
+                <button type="button" class="btn btn-link"> {{karta.let.aerodrom.lokacija.adresa}} </button>
+              </p>
+              <p class="h6">Arriving :
+                <button type="button" class="btn btn-link"> {{karta.let.destinacija.adresa}}  </button>
+              </p>
+              <h6>Departure date: {{karta.let.vremePolaska| date: 'dd/MM/yyyy HH:mm' }} </h6>
+              <h6>Arriving date: {{karta.let.vremeDolaska| date: 'dd/MM/yyyy HH:mm'}} </h6>
+
+            </div>
+
+            <div class="card-body">
+              <p *ngIf="karta.let.brojPresedanja>0">Stops : {{karta.let.brojPresedanja}}</p>
+              <p>Lenght:  {{karta.let.duzinaPutovanja}} </p>
+              <p>Duration:  {{karta.let.vremePutovanja}} </p>
+              <p>Type:  {{karta.let.vrstaLeta}} </p>
+              <p>Description:  {{karta.let.opis}} </p>
+            </div>
+
+            <div class="card-footer">
+              <div class="d-flex">
+                <div *ngIf="rates"> Airline : {{rates.avio}}  Flight : {{rates.letoc}} </div>
+                <div class="ml-auto">
+                  <p class="mb-1 text-danger" *ngIf="reservation.otkazana"> CANCELED </p>
+                  <button *ngIf="!reservation.otkazana && rateAir " type="button"
+                          class="btn btn-outline-secondary btn-sm" (click)="rateAvio()">Rate
+                  </button>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+      </div>
+    </div>
 
 
     <div class="col-md-4">
@@ -16,12 +68,18 @@
               <div class="d-flex">
                 <h6>{{rentACarRes.voziloDTO.naziv}} </h6>
                 <div class="ml-auto">
-                  <h6> Total € {{rentACarRes.cena}} </h6>
+                  <h6 *ngIf="!rentACarRes.naPopustu"> Total € {{rentACarRes.cena}} </h6>
+                  <h6 *ngIf="rentACarRes.naPopustu"> Total € {{rentACarRes.popust}} </h6>
                 </div>
               </div>
               <h5>RentACar Name : {{rentACarRes.filijalaDTO.rentACarDTO.naziv}} </h5>
-              <p class="h6">PickUp adress : <button type="button" class="btn btn-link"> {{rentACarRes.filijalaDTO.lokacijaDTO.adresa}} </button>  </p>
-              <p class="h6">DropOff adress :  <button type="button" class="btn btn-link" > {{rentACarRes.filijalaDropDTO.lokacijaDTO.adresa}}  </button> </p>
+              <p class="h6">PickUp adress :
+                <button type="button" class="btn btn-link"> {{rentACarRes.filijalaDTO.lokacijaDTO.adresa}} </button>
+              </p>
+              <p class="h6">DropOff adress :
+                <button type="button"
+                        class="btn btn-link"> {{rentACarRes.filijalaDropDTO.lokacijaDTO.adresa}}  </button>
+              </p>
               <h6>Pick-up: {{rentACarRes.datumPreuz | date: 'dd/MM/yyyy HH:mm' }} </h6>
               <h6>Drop-off: {{rentACarRes.datumVracanja | date: 'dd/MM/yyyy HH:mm'}} </h6>
 
@@ -30,7 +88,7 @@
             <div class="card-body">
               <p>Brand: {{rentACarRes.voziloDTO.marka}} </p>
               <p>Model: {{rentACarRes.voziloDTO.model}} </p>
-              <p> <i class="fas fa-user"></i>  {{rentACarRes.voziloDTO.brojSedista}}
+              <p><i class="fas fa-user"></i>  {{rentACarRes.voziloDTO.brojSedista}}
                 <i class="fas fa-door-closed"></i> {{rentACarRes.voziloDTO.brojVrata}}
                 <i class="fas fa-suitcase"></i>  {{rentACarRes.voziloDTO.brojTorbi}} </p>
               <p *ngIf="rentACarRes.voziloDTO.klima"> AC : Yes </p>
@@ -47,7 +105,9 @@
                 <div *ngIf="rates"> Branch : {{rates.fil}} Vehicle : {{rates.voz}}</div>
                 <div class="ml-auto">
                   <p class="mb-1 text-danger" *ngIf="rentACarRes.otkazana"> CANCELED </p>
-                  <button *ngIf="!rentACarRes.otkazana && rateRent " type="button" class="btn btn-outline-secondary btn-sm" (click)="rate(rentACarRes)">Rate</button>
+                  <button *ngIf="!rentACarRes.otkazana && rateRent " type="button"
+                          class="btn btn-outline-secondary btn-sm" (click)="rate(rentACarRes)">Rate
+                  </button>
                 </div>
               </div>
             </div>
@@ -57,58 +117,98 @@
         </div>
 
       </div>
-
-
-      <ng-template #content let-c="close" let-d="dismiss">
-
-        <div class="modal-body ">
-          <div class="justify-content-center text-center">
-            <h5>Rating</h5>
-          </div>
-
-          <div class="row">
-            <div class="col text-center">
-
-              <form class="form-group" [formGroup]="rateGroup" >
-
-                <div class="form-group">
-                  <label for="branchRateSelect">Branch rate</label>
-                  <select class="form-control form-control-sm" id="branchRateSelect" [formControlName]="'branchRate'" >
-                    <option selected>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label for="vehicleRateSelect">Vehicle rate</label>
-                  <select class="form-control form-control-sm" id="vehicleRateSelect" [formControlName]="'vehicleRate'">
-                    <option selected>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-                </div>
-
-                <button type="button"  class="btn btn-primary btn-sm" (click)="rateSubmit()">Submit</button>
-
-              </form>
-
-            </div>
-          </div>
-
-        </div>
-
-      </ng-template>
-
-
     </div>
 
+    <ng-template #content let-c="close" let-d="dismiss">
 
+      <div *ngIf="ratingRent" class="modal-body ">
+        <div class="justify-content-center text-center">
+          <h5>Rating</h5>
+        </div>
+
+        <div class="row">
+          <div class="col text-center">
+
+            <form class="form-group" [formGroup]="rateGroup">
+
+              <div class="form-group">
+                <label for="branchRateSelect">Branch rate</label>
+                <select class="form-control form-control-sm" id="branchRateSelect" [formControlName]="'branchRate'">
+                  <option selected>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="vehicleRateSelect">Vehicle rate</label>
+                <select class="form-control form-control-sm" id="vehicleRateSelect"
+                        [formControlName]="'vehicleRate'">
+                  <option selected>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </select>
+              </div>
+
+              <button type="button" class="btn btn-primary btn-sm" (click)="rateSubmit()">Submit</button>
+
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+
+
+      <div *ngIf="ratingAir" class="modal-body ">
+        <div class="justify-content-center text-center">
+          <h5>Rating</h5>
+        </div>
+
+        <div class="row">
+          <div class="col text-center">
+
+            <form class="form-group" [formGroup]="rateGroup">
+
+              <div class="form-group">
+                <label for="airRateSelect">Airline rate</label>
+                <select class="form-control form-control-sm" id="airRateSelect" [formControlName]="'airRate'">
+                  <option selected>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="flightRateSelect">Flight rate</label>
+                <select class="form-control form-control-sm" id="flightRateSelect" [formControlName]="'flightRate'">
+                  <option selected>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </select>
+              </div>
+
+              <button type="button" class="btn btn-primary btn-sm" (click)="airSubmit()">Submit</button>
+
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+
+
+    </ng-template>
 
   </div>
 
 </div>
+

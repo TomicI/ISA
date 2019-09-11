@@ -59,6 +59,7 @@ export class ResDetailComponent implements OnInit {
     if (this.tokenStorage.getToken()) {
 
       if (this.reservation.id){
+
           this.reservationService.addRes(this.reservation).subscribe(data=>{
 
             this.message='Reservation was added!';

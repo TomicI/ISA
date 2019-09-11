@@ -13,4 +13,7 @@ public interface InviteRepository extends JpaRepository<Invite,Long> {
     Optional<List<Invite>> findByUserReceive(User userReceive);
     Optional<List<Invite>> findByUserSent(User userSent);
     Optional<Invite> findByUserSentAndUserReceiveAndReservation(User userSent, User userReceive, Rezervacija reservation);
+    List<Invite> findByUserReceiveIdAndAccepted(Long id,boolean accepted);
+    boolean existsByReservationIdAndUserReceiveIdAndAccepted(Long res_id,Long user_id,boolean acc);
+
 }

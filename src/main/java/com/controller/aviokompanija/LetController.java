@@ -4,6 +4,7 @@ import com.dto.aviokompanija.LetDTO;
 import com.dto.aviokompanija.OcenaDTO;
 import com.dto.aviokompanija.SedisteDTO;
 import com.model.aviokompanija.Let;
+import com.model.aviokompanija.Ocena;
 import com.service.aviokompanija.LetService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -83,18 +84,6 @@ public class LetController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@RequestMapping(value="/{id}/oceni/{user_id}/{ocena}", method=RequestMethod.POST, produces = "application/json")
-	@ApiOperation(value = "User sa id-em user_id ocenjuje let sa id-em id", httpMethod = "POST")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "OK", response = OcenaDTO.class),
-			@ApiResponse(code = 204, message = "No Content"),
-			@ApiResponse(code = 400, message = "Bad Request")
-	})
-	public ResponseEntity<OcenaDTO> oceni(@PathVariable(value = "id") Long id,
-										  @PathVariable(value = "user_id") Long userId,
-										  @PathVariable(value = "ocena") Integer ocena){
-		return new ResponseEntity<>(letService.oceni(id,userId,ocena),HttpStatus.OK);
-	}
 
 	@RequestMapping(value="/pretraga", method=RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "Vraca sve letove", httpMethod = "PUT", produces = "application/json")

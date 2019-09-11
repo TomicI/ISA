@@ -42,9 +42,7 @@ export class ReservationService {
 
     let params = new HttpParams();
     params = params.append('rentId',param.id);
-    params = params.append('pickUp',param.pickup);
-    params = params.append('dropOff',param.dropoff);
-
+    params = params.append('pickUp',param.pick);
 
     return this.http.get(`${this.rentACarRes}/allDeals`,{params:params});
 
@@ -58,12 +56,25 @@ export class ReservationService {
     return this.http.get(`${this.reservation}/getAllHistUser`);
   }
 
+  getUserReservationInv():Observable<any>{
+    return this.http.get(`${this.reservation}/getAllInvitedUser`);
+  }
+
   getUserReservationId(id:number):Observable<any>{
     return this.http.get(`${this.reservation}/${id}`);
   }
 
   saveStatus(object):Observable<any>{
     return this.http.post(`${this.rentACarRes}/updateStatus`,object);
+  }
+
+
+  reservationCancelStatus(id):Observable<any>{
+    return this.http.get(`${this.reservation}/cancel/${id}`);
+  }
+
+  reservationCancelConfirm(reservation):Observable<any>{
+    return this.http.put(`${this.reservation}/cancel`,reservation);
   }
 
 

@@ -86,6 +86,7 @@ import { BrzaRezervacijaComponent } from './brza-rezervacija/brza-rezervacija.co
 import { AviokomapnijaProfilComponent } from './aviokomapnija-profil/aviokomapnija-profil.component';
 import { BrzeRezervacijeListaComponent } from './brze-rezervacije-lista/brze-rezervacije-lista.component';
 
+import { CallbackPipe } from "./reservation-overview/callback.pipe";
 
 
 @NgModule({
@@ -156,8 +157,8 @@ import { BrzeRezervacijeListaComponent } from './brze-rezervacije-lista/brze-rez
     SearchLetComponent,
     UnosPutnikaComponent,
     BrzaRezervacijaComponent,
+    CallbackPipe
     AviokomapnijaProfilComponent,
-    BrzeRezervacijeListaComponent
   ],
   imports: [
     BrowserModule,

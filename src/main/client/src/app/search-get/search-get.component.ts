@@ -111,7 +111,7 @@ export class SearchGetComponent implements OnInit {
 
   rent(reservation) {
 
-    let resTemp:Rezervacija = new Rezervacija(null,null,null,null,reservation,null);
+    let resTemp:Rezervacija = new Rezervacija(null,null,null,null,false,reservation,null);
     if (this.reservationPassed){
       resTemp.id = this.reservationPassed;
     }

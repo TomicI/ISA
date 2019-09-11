@@ -12,6 +12,7 @@ public interface RezervacijaRentACarRepository extends JpaRepository<Rezervacija
 	List<RezervacijaRentACar> findByVozilo(Vozilo vozilo);
 
 
+
 	
 
 }

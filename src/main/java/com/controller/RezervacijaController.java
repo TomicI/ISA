@@ -34,6 +34,12 @@ public class RezervacijaController {
         return new ResponseEntity<>(as.findAllHistUser(user), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/getAllInvitedUser", method = RequestMethod.GET)
+    public ResponseEntity<List<RezervacijaDTO>> getAllInvitedUser(Principal user) {
+
+        return new ResponseEntity<>(as.findAllInvited(user), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/lista", method = RequestMethod.GET)
     public ResponseEntity<List<RezervacijaDTO>> getAll() {
 
@@ -103,4 +109,16 @@ public class RezervacijaController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @RequestMapping(value = "/cancel/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCancelSt(@PathVariable Long id) {
+        return new ResponseEntity<>(as.cancelStatus(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/cancel",method = RequestMethod.PUT, consumes = "application/json")
+    public ResponseEntity<?> cancelResevation(@RequestBody RezervacijaDTO rezervacijaDTO) {
+
+        return new ResponseEntity<>(as.cancelConfirm(rezervacijaDTO.getId()), HttpStatus.OK);
+    }
+
 }

@@ -3,17 +3,22 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {UserService} from "../services/user.service";
 import {ReservationService} from "../services/reservation.service";
 import {Router} from "@angular/router";
+import {Rezervacija} from "../model";
 
 @Component({
   selector: 'app-reservation-overview',
   templateUrl: './reservation-overview.component.html',
-  styleUrls: ['./reservation-overview.component.css']
+  styleUrls: ['./reservation-overview.component.css'],
+
 })
 export class ReservationOverviewComponent implements OnInit {
 
   @ViewChild('content') private content;
 
   cancelStatus = false;
+
+  cancelRes:boolean;
+  tempCancelRes:Rezervacija;
 
   modalRef: any;
 
@@ -27,9 +32,9 @@ export class ReservationOverviewComponent implements OnInit {
 
   rentACarRezNew;
 
-  reservationsNew;
+  reservationsNew:Rezervacija[];
 
-  reservationsOld;
+  reservationsOld:Rezervacija[];
 
   reservationsCanceled;
 
@@ -69,7 +74,25 @@ export class ReservationOverviewComponent implements OnInit {
 
   }
 
+  cancelAvio(reservation){
+
+    this.cancelRes = true;
+    this.tempCancelRes = reservation;
+
+    this.resService.reservationCancelStatus(reservation.id).subscribe(data => {
+      this.message = data.message;
+      this.cancelStatus = true;
+    },error => {
+      this.message = error.error.message;
+      this.cancelStatus = false;
+    });
+
+    this.modalRef = this.modalService.open(this.content);
+
+  }
+
   cancelVehRes(reservation) {
+    this.cancelRes = false;
     this.tempRez = reservation;
 
     this.resService.getResCancel(reservation.id).then(data => {
@@ -96,13 +119,26 @@ export class ReservationOverviewComponent implements OnInit {
   }
 
   async confirmCancel() {
-    await this.resService.confirmCancel(this.tempRez).then(data => {
-      this.modalRef.close();
-      this.initRez();
-    }).catch(error => {
-      this.message = error.error.message;
-      this.cancelStatus = false;
-    });
+
+    if (!this.cancelRes){
+      await this.resService.confirmCancel(this.tempRez).then(data => {
+        this.modalRef.close();
+        this.initRez();
+      }).catch(error => {
+        this.message = error.error.message;
+        this.cancelStatus = false;
+      });
+    }else{
+      this.resService.reservationCancelConfirm(this.tempCancelRes).subscribe(data => {
+        this.modalRef.close();
+        this.initRez();
+      },error => {
+        this.message = error.error.message;
+        this.cancelStatus = false;
+      });
+
+    }
+
   }
 
   checkBeforeCanceled(res):boolean{
@@ -111,6 +147,14 @@ export class ReservationOverviewComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  filterRez(rez: Rezervacija) {
+    return rez.rezervacijaRentACarDTO != null;
+  }
+
+  filterKarta(rez: Rezervacija) {
+    return rez.kartaDTO != null;
   }
 
 }

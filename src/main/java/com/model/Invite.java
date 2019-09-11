@@ -20,6 +20,8 @@ public class Invite {
     private Date dateSent;
     @ManyToOne
     private Rezervacija reservation;
+    @Column
+    private boolean accepted;
 
     public Invite() {
     }
@@ -62,5 +64,13 @@ public class Invite {
 
     public void setReservation(Rezervacija reservation) {
         this.reservation = reservation;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 }

@@ -17,6 +17,7 @@ export class Aviokompanija {
 export class Aerodrom {
   id: number;
   naziv: string;
+  aviokompanija:Aviokompanija;
   lokacija: Lokacija;
   constructor() { }
 
@@ -50,7 +51,7 @@ export class DodatnaUslugaAviokompanija {
 export class Karta {
   id: number;
   popust: number;
-  cena: number;
+  cena:number;
   let: Let;
   user: User;
   prosecnaOcena: number;
@@ -336,6 +337,7 @@ export class Rezervacija {
   datumVremeP: Date;
   datumVremeS: Date;
   cena: number;
+  otkazana: boolean;
   rezervacijaRentACarDTO: RezervacijaRent;
   userDTO: User;
   kartaDTO: Karta;
@@ -345,6 +347,7 @@ export class Rezervacija {
     datumVremeP: Date,
     datumVremeS: Date,
     cena: number,
+    otkazana: boolean,
     rezervacijaRentACarDTO: RezervacijaRent,
     UserDTO: User
   ){
@@ -352,6 +355,7 @@ export class Rezervacija {
     this.datumVremeP = datumVremeP;
     this.datumVremeS = datumVremeS;
     this.cena = cena;
+    this.otkazana = otkazana;
     this.rezervacijaRentACarDTO = rezervacijaRentACarDTO;
     this.userDTO = UserDTO;
   }

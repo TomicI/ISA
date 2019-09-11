@@ -12,6 +12,11 @@ public interface OcenaRepository extends JpaRepository<Ocena, Long> {
 
     Optional<Ocena> findByRezervacijaIdAndFilijalaIdAndUserId(Long rezervacija_id, Long filijala_id,Long user_id);
 
+    Optional<Ocena> findByRezervacijaIdAndAviokompanijaIdAndUserId(Long rezervacija_id,Long aviokompanija_id,Long user_id);
+
+    Optional<Ocena> findByRezervacijaIdAndLetIdAndUserId(Long rezervacija_id,Long let_id,Long user_id);
+
+
     List<Ocena> findByRezervacijaIdAndUserId(Long rezervacija_id,Long user_id);
 
 

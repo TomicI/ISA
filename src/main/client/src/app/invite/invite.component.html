@@ -1,3 +1,94 @@
-<p>
-  invite works!
-</p>
+<div class="container">
+
+  <div class="mt-2"></div>
+
+  <div class="row">
+
+    <div class="col">
+
+      <div *ngIf="listaI.length>0" class="card">
+
+        <div class="card-header">
+          <h5>Pending</h5>
+        </div>
+
+        <div class="list-group list-group-flush">
+
+          <li *ngFor="let u of listaI; let i = index" class="list-group-item flex-column ">
+            <div class="d-flex justify-content-between">
+              <p class="mb-1">From (username): {{u.userSent.username}}</p>
+              <p class="mb-0">
+                <button class="btn btn-sm " type="button " (click)="prihvatiI(i)"><i class="fa fa-check"></i></button>
+                <button class="btn btn-sm " type="button " (click)="neI(i)"><i class="fa fa-times"></i></button>
+              </p>
+            </div>
+            <div>
+              {{u.userSent.firstName}}  {{u.userSent.lastName}}
+            </div>
+
+            <p class="h6">Departing : {{u.reservation.kartaDTO.let.aerodrom.lokacija.adresa}}
+            </p>
+            <p class="h6">Arriving : {{u.reservation.kartaDTO.let.destinacija.adresa}}
+            </p>
+            <p class="mb-1">Pick-up : {{u.reservation.datumVremeP| date: 'dd/MM/yyyy HH:mm'}} </p>
+            <p class="mb-1">Drop-off : {{u.reservation.datumVremeS | date: 'dd/MM/yyyy HH:mm'}} </p>
+
+          </li>
+
+
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+
+  <div class="mt-2"></div>
+
+  <div class="row">
+
+    <div class="col">
+
+      <div *ngIf="reservationsInvite" class="card">
+
+        <div class="card-header">
+          <h5>Reservations</h5>
+        </div>
+
+        <div class="list-group list-group-flush">
+
+          <li *ngFor="let res of reservationsInvite; let i = index" class="list-group-item flex-column ">
+            <div class="d-flex justify-content-between">
+              <p>
+                From : {{res.userDTO.username}}
+              </p>
+              <p class="mb-0">
+                <button class="btn btn-sm " type="button " (click)="resDetail(res)"><i class="fas fa-ellipsis-v"></i></button>
+              </p>
+            </div>
+
+            <p class="mb-1 text-danger" *ngIf="res.otkazana"> CANCELED </p>
+            <div *ngIf="!res.otkazana">
+              <p class="h6">Departing : {{res.kartaDTO.let.aerodrom.lokacija.adresa}}
+              </p>
+              <p class="h6">Arriving : {{res.kartaDTO.let.destinacija.adresa}}
+              </p>
+              <p class="mb-1">Pick-up : {{res.datumVremeP| date: 'dd/MM/yyyy HH:mm'}} </p>
+              <p class="mb-1">Drop-off : {{res.datumVremeS | date: 'dd/MM/yyyy HH:mm'}} </p>
+            </div>
+          </li>
+
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+
+  </div>
+
+</div>

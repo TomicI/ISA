@@ -43,6 +43,9 @@ export class SearchRentComponent implements OnInit {
   searchFormGroup: FormGroup;
 
   params: any = {};
+  paramBranch:any={};
+
+  paramBranchE:any[] =[];
 
   minDatum = this.calendar.getToday();
 
@@ -83,9 +86,6 @@ export class SearchRentComponent implements OnInit {
     communicationService.changeEmitted$.subscribe(data => {
       console.log(data);
 
-      this.emit = true;
-      this.branchEmit = data;
-
       for(const s of this.searchGroups){
 
         if (s.rent!=data.rent){
@@ -97,20 +97,32 @@ export class SearchRentComponent implements OnInit {
 
     });
 
+
   }
 
   ngOnInit() {
 
-    this.getTimeForToday();
-
     this.route.queryParams.subscribe(params => {
       console.log(params);
+      this.paramBranch = params;
+
+      if(params.pick){
+
+        let tempDate:Date = new Date(params.pick);
+
+        console.log(tempDate);
+
+        this.fromDate = new NgbDate(tempDate.getFullYear(),tempDate.getMonth()+1,tempDate.getDate());
+
+      }else{
+        this.fromDate = this.calendar.getToday();
+
+      }
+
+      this.toDate = this.calendar.getNext(this.fromDate, 'd', 1);
+      this.getTimeForToday();
     });
 
-    this.fromDate = this.calendar.getToday();
-    this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
-
-    console.log(this.calendar.getToday());
 
     this.searchFormGroup = this.formBuilder.group({
       locationp: ['', [Validators.required]],
@@ -142,18 +154,40 @@ export class SearchRentComponent implements OnInit {
     this.arrayOfHoursP = [];
     this.date = new Date();
 
-    for (var temp of this.arrayOfHours){
-      this.date = new Date();
-      const timeP = temp.split(':');
-      this.date.setHours(timeP[0]);
-      this.date.setMinutes(timeP[1]);
+      for (var temp of this.arrayOfHours){
+        this.date = new Date();
+        const timeP = temp.split(':');
+        this.date.setHours(timeP[0]);
+        this.date.setMinutes(timeP[1]);
 
-      if (this.date > new Date()){
-     
-        this.arrayOfHoursP.push(temp);
+        if (this.date > new Date()){
+
+          this.arrayOfHoursP.push(temp);
+        }
       }
 
+   if (this.paramBranch){
+     if (this.paramBranch.pick){
+       this.arrayOfHoursP = [];
+       let tempDate:Date = new Date(this.paramBranch.pick);
+
+       for (var temp of this.arrayOfHours){
+         const timeP = temp.split(':');
+         tempDate.setHours(timeP[0]);
+         tempDate.setMinutes(timeP[1]);
+
+
+         if (tempDate > new Date(this.paramBranch.pick)){
+
+           this.arrayOfHoursP.push(temp);
+         }
+
+       }
+
+     }
+
     }
+
   }
 
   initAll() {
@@ -173,7 +207,7 @@ export class SearchRentComponent implements OnInit {
 
   getFillAdress() {
 
-    if (!this.emit){
+    if (!this.paramBranch.id){
       for (const rent of this.rentACars) {
         this.rentACarService.getAllFilijale(rent.id).subscribe(data => {
           this.getFill(data);
@@ -181,7 +215,7 @@ export class SearchRentComponent implements OnInit {
         });
       }
     }else{
-      this.rentACarService.getAllFilijale(this.branchEmit.id).subscribe(data => {
+      this.rentACarService.getAllFilijale(this.paramBranch.id).subscribe(data => {
         this.getFill(data);
       });
     }
@@ -212,12 +246,7 @@ export class SearchRentComponent implements OnInit {
 
   }
 
-  getFilijala(id: number) {
-    this.filijala = this.rentACarService.getAllFilijale(id);
-  }
-
   onDateSelected() {
-
 
     console.log('Promena');
 
@@ -231,7 +260,6 @@ export class SearchRentComponent implements OnInit {
       this.arrayOfHoursP = [];
       this.arrayOfHoursP = this.arrayOfHours;
     }
-
 
 
     this.toDate = this.calendar.getNext(this.searchFormGroup.get('pickDate').value, 'd', 1);
@@ -265,30 +293,31 @@ export class SearchRentComponent implements OnInit {
     console.log(this.searchFormGroup.value);
 
     this.params = {
-      'locationp': this.searchFormGroup.get('locationp').value,
-      'bring': this.searchFormGroup.get('bring').value,
-      'pickup': dateP,
-      'dropoff': dateD,
+          'id':this.paramBranch.id,
+          'rent':this.paramBranch.rent,
+          'res':this.paramBranch.res,
+          'pick':this.paramBranch.pick,
+          'locationp': this.searchFormGroup.get('locationp').value,
+          'bring': this.searchFormGroup.get('bring').value,
+          'pickup': dateP,
+          'dropoff': dateD,
     };
 
 
     this.router.navigate(['travel/rentacar/search'], { queryParams: this.params }).then(()=>{
 
-      if(this.branchEmit){
-        if(this.branchEmit.res){
+
+        if(this.paramBranch.res){
           console.log("Postoji res");
-          console.log(this.branchEmit.res);
-          this.communicationService.reservationPassed(this.branchEmit.res);
+          this.communicationService.reservationPassed(this.paramBranch.res);
         }
-      }
+
 
 
     });
 
   }
 
-  search() {
-  }
 
   autoPrvi(data){
 

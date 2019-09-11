@@ -10,7 +10,50 @@
           <h5>Flights</h5>
         </div>
 
-        <div class="card-body">
+        <div class="list-group list-group-flush">
+          <li class="list-group-item">Old</li>
+
+          <li *ngFor="let rez of reservationsOld | callback:filterKarta " class="list-group-item flex-column ">
+
+            <div class="d-flex justify-content-between">
+              <h6 class="mb-1">{{rez.kartaDTO.let.opis}}</h6>
+              <p class="mb-0">
+                <button class="btn btn-sm " type="button " (click)="resInfo(rez)"><i class="fas fa-ellipsis-v"></i>
+                </button>
+              </p>
+            </div>
+            <div *ngIf="!rez.otkazana">
+              <p class="mb-1">{{rez.kartaDTO.let.aerodrom.naziv}}</p>
+              <p class="mb-1">Pick-up : {{rez.datumVremeP| date: 'dd/MM/yyyy HH:mm'}} </p>
+              <p class="mb-1">Drop-off : {{rez.datumVremeS | date: 'dd/MM/yyyy HH:mm'}} </p>
+            </div>
+            <p class="mb-1 text-danger" *ngIf="rez.otkazana"> CANCELED </p>
+
+          </li>
+
+
+          <li class="list-group-item ">New</li>
+
+          <li *ngFor="let rez of reservationsNew | callback:filterKarta" class="list-group-item flex-column ">
+
+            <div  class="d-flex justify-content-between">
+              <h6 class="mb-1">{{rez.kartaDTO.let.opis}}</h6>
+              <button *ngIf="!rez.otkazana" class="btn btn-sm " type="button" (click)="cancelAvio(rez)"><i
+                class="fas fa-ban"></i></button>
+              <p class="mb-0">
+                <button class="btn btn-sm " type="button " (click)="resInfo(rez)"><i class="fas fa-ellipsis-v"></i>
+                </button>
+              </p>
+            </div>
+            <div *ngIf="!rez.otkazana">
+              <p class="mb-1">Pick-up : {{rez.datumVremeP| date: 'dd/MM/yyyy HH:mm'}} </p>
+              <p class="mb-1">Drop-off : {{rez.datumVremeS | date: 'dd/MM/yyyy HH:mm'}} </p>
+            </div>
+
+            <p class="mb-1 text-danger" *ngIf="rez.otkazana"> CANCELED </p>
+
+
+          </li>
 
         </div>
       </div>
@@ -43,7 +86,8 @@
 
           <li class="list-group-item">Old</li>
 
-          <li *ngFor="let rez of reservationsOld " class="list-group-item flex-column ">
+          <li *ngFor="let rez of reservationsOld | callback:filterRez " class="list-group-item flex-column ">
+
             <div class="d-flex justify-content-between">
               <h6 class="mb-1">{{rez.rezervacijaRentACarDTO.voziloDTO.naziv}}</h6>
               <p class="mb-0">
@@ -57,12 +101,14 @@
               <p class="mb-1">Drop-off : {{rez.rezervacijaRentACarDTO.datumVracanja | date: 'dd/MM/yyyy HH:mm'}} </p>
             </div>
             <p class="mb-1 text-danger" *ngIf="rez.rezervacijaRentACarDTO.otkazana"> CANCELED </p>
+
           </li>
 
 
           <li class="list-group-item ">New</li>
 
-          <li *ngFor="let rez of reservationsNew" class="list-group-item flex-column ">
+          <li *ngFor="let rez of reservationsNew | callback:filterRez" class="list-group-item flex-column ">
+
             <div class="d-flex justify-content-between">
               <h6 class="mb-1">{{rez.rezervacijaRentACarDTO.voziloDTO.naziv}}</h6>
               <p *ngIf="!rez.rezervacijaRentACarDTO.otkazana" class="mb-0">
@@ -80,7 +126,9 @@
               <p class="mb-1">Drop-off : {{rez.rezervacijaRentACarDTO.datumVracanja | date: 'dd/MM/yyyy HH:mm'}} </p>
             </div>
             <p class="mb-1 text-danger" *ngIf="rez.rezervacijaRentACarDTO.otkazana"> CANCELED </p>
+
           </li>
+
 
         </div>
 

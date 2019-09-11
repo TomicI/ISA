@@ -12,6 +12,7 @@ public class RateDTO {
     public RateDTO() {
     }
 
+
     public int getAvio() {
         return avio;
     }
@@ -20,11 +21,11 @@ public class RateDTO {
         this.avio = avio;
     }
 
-    public int getLet() {
+    public int getLetoc() {
         return letoc;
     }
 
-    public void setLet(int letoc) {
+    public void setLetoc(int letoc) {
         this.letoc = letoc;
     }
 

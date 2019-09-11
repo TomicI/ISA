@@ -10,7 +10,6 @@ import {Invite, User} from "../model";
 })
 export class UserFriendsComponent implements OnInit {
   lista: Invite[]=[];
-  listaI: Invite[]=[];
   listaF: User[]=[];
 
   constructor(private userService: UserService) { }
@@ -21,10 +20,6 @@ export class UserFriendsComponent implements OnInit {
       this.lista=pom;
     })
 
-    this.userService.inviteRequests().then(pom=>{
-      console.log(pom);
-      this.listaI=pom;
-    })
 
     this.userService.getFriends().then(pom=>{
       console.log(pom);
@@ -53,19 +48,5 @@ export class UserFriendsComponent implements OnInit {
     })
   }
 
-  prihvatiI(i: number){
-    console.log("invite id "+ this.listaI[i].id);
-    this.userService.aRequestI(this.listaI[i].id).then(pom=>{
-      console.log("Prihvati");
-      console.log(pom);
-      location.reload();
-    })
-  }
 
-  neI(i: number){
-    this.userService.eRequestI(this.listaI[i]).then(pom=>{
-      console.log(pom);
-      location.reload();
-    })
-  }
 }

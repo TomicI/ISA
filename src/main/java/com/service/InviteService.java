@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class InviteService {
@@ -29,6 +26,9 @@ public class InviteService {
     @Autowired
     private FriendService friendService;
 
+    @Autowired
+    private RezervacijaService rezervacijaService;
+
     public List<Invite> getAll() {
         return inviteRepository.findAll();
     }
@@ -38,6 +38,14 @@ public class InviteService {
     }
     public Optional<Invite> findByID(Long id){
         return this.inviteRepository.findById(id);
+    }
+
+    public List<Invite> findByUserAndAcc(Long id,boolean acc){
+        return this.inviteRepository.findByUserReceiveIdAndAccepted(id,acc);
+    }
+
+    public boolean existsByResAndUser(Long res_id,Long user_id,boolean acc){
+        return this.inviteRepository.existsByReservationIdAndUserReceiveIdAndAccepted(res_id,user_id,acc);
     }
 
     public void delete(Invite invite){
@@ -138,15 +146,34 @@ public class InviteService {
     }
 
     public List<InviteDTO> inviteRequests(String user) {
+        Calendar calendar = Calendar.getInstance();
         Optional<User> u = this.userRepository.findByUsername(user);
         List<InviteDTO> inviteDTOS = new ArrayList<>();
         Optional<List<Invite>> invites = this.inviteRepository.findByUserReceive(u.get());
         if (u.isPresent() && invites.isPresent()) {
             for (Invite i : invites.get()) {
-                if(i.getReservation()!= null)
-                    inviteDTOS.add(new InviteDTO(i));
+                if(i.getReservation()!= null && !i.isAccepted()){
+
+                    long timeRes = i.getReservation().getDatumVremeP().getTime()-calendar.getTime().getTime();
+                    long timeSent = calendar.getTime().getTime() - i.getDateSent().getTime();
+
+                    System.out.println(timeRes/(3600*1000));
+                    System.out.println(timeSent/(24*3600*1000));
+
+                    if ( (timeSent/(24*3600*1000)) >= 3 || (timeRes/(3600*1000)) <= 3 ){
+
+                        rezervacijaService.eFriend(new InviteDTO(i),user);
+
+                    }else{
+                        inviteDTOS.add(new InviteDTO(i));
+                    }
+
+                }
+
             }
         }
         return inviteDTOS;
     }
+
+
 }

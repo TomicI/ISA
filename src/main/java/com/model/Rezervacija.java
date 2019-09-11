@@ -24,6 +24,9 @@ public class Rezervacija {
 	@Column
 	private double cena;
 
+	@Column
+	private boolean otkazana;
+
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "karta_id")
@@ -116,5 +119,13 @@ public class Rezervacija {
 
 	public void setInvites(List<Invite> invites) {
 		this.invites = invites;
+	}
+
+	public boolean isOtkazana() {
+		return otkazana;
+	}
+
+	public void setOtkazana(boolean otkazana) {
+		this.otkazana = otkazana;
 	}
 }

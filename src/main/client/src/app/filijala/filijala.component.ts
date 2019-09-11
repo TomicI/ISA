@@ -57,7 +57,7 @@ export class FilijalaComponent implements OnInit {
 
       this.communicationService.emitChange(params);
 
-      if(params.pickup && params.dropoff){
+      if(params.pick){
 
         this.reservationService.getAllDeals(params).subscribe(data=>{
           console.log(data);
@@ -73,7 +73,7 @@ export class FilijalaComponent implements OnInit {
 
   resDeal(res){
 
-    let resTemp:Rezervacija = new Rezervacija(this.paramsUrl.res,null,null,null,res,null);
+    let resTemp:Rezervacija = new Rezervacija(this.paramsUrl.res,null,null,null,null,res,null);
 
     console.log(resTemp);
 

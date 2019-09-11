@@ -91,6 +91,18 @@ public class OcenaController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value="/permissionAir", method=RequestMethod.GET)
+    @ApiOperation(value = "Vraca ocenu RentACar", httpMethod = "GET", produces = "application/json",consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 204, message = "No Content"),
+            @ApiResponse(code = 400, message = "Bad Request")
+    })
+    public ResponseEntity<?> getPermissionAir(@RequestParam(value="resid") Long resid){
+        ocenaService.getPermisionAvio(resid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @RequestMapping(value="/rentACar", method=RequestMethod.POST)
     @ApiOperation(value = "Dodaje ocenu RentACar", httpMethod = "POST", produces = "application/json", consumes = "application/json")
     @ApiResponses(value = {
@@ -100,6 +112,18 @@ public class OcenaController {
     })
     public ResponseEntity<?> saveRentACarRating(@RequestBody List<OcenaDTO> ocene ){
         ocenaService.saveOcenaRentACar(ocene);
+        return new ResponseEntity<>(new ResponseMessage("Rating saved!"),HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/air", method=RequestMethod.POST)
+    @ApiOperation(value = "Dodaje ocenu Aviokompanije i Leta", httpMethod = "POST", produces = "application/json", consumes = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 204, message = "No Content"),
+            @ApiResponse(code = 400, message = "Bad Request")
+    })
+    public ResponseEntity<?> saveAirRating(@RequestBody List<OcenaDTO> ocene ){
+        ocenaService.saveRateAir(ocene);
         return new ResponseEntity<>(new ResponseMessage("Rating saved!"),HttpStatus.OK);
     }
 

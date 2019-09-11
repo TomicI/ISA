@@ -107,7 +107,7 @@ public class KartaService {
 		}
 		karta=kartaRepository.save(karta);
 		rezervacija.setKarta(karta);
-
+		rezervacija.setOtkazana(false);
 		rezervacija.setCena(karta.getCena());
 		rezervacija.setDatumVremeP(let.getVremePolaska());
 		rezervacija.setDatumVremeS(let.getVremeDolaska());
@@ -188,6 +188,23 @@ public class KartaService {
 
 		rezervacijaRepository.delete(karta.get().getRezervacija());
 		kartaRepository.delete(karta.get());
+	}
+
+	public void cancel(Rezervacija rezervacija){
+
+		Optional<Karta> karta=kartaRepository.findById(rezervacija.getKarta().getId());
+
+		if(!karta.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Karta ne postoji");
+
+		for(Sediste s: karta.get().getSedista()){
+			s.setPutnik(null);
+			s.setZauzeto(false);
+			s.setKarta(null);
+		}
+
+		kartaRepository.save(karta.get());
+
 	}
 
 

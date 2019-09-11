@@ -15,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -36,6 +39,15 @@ public class OcenaService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AviokompanijaService aviokompanijaService;
+
+    @Autowired
+    private LetService letService;
+
+    @Autowired
+    private RezervacijaService rezervacijaService;
 
     private ListeDTO liste = new ListeDTO();
 
@@ -63,6 +75,13 @@ public class OcenaService {
 
     public Optional<Ocena> findByRezervacijaAndFilijala(Long rezervacija_id,Long filijala_id,Long user_id){
         return ocenaRepository.findByRezervacijaIdAndFilijalaIdAndUserId(rezervacija_id,filijala_id,user_id);
+    }
+
+    public Optional<Ocena> findByRezervacijaIdAndAviokompanijaIdAndUserId(Long rezervacija_id,Long aviokompanija_id,Long user_id){
+        return ocenaRepository.findByRezervacijaIdAndAviokompanijaIdAndUserId(rezervacija_id,aviokompanija_id,user_id);
+    }
+    public Optional<Ocena> findByRezervacijaIdAndLetIdAndUserId(Long rezervacija_id,Long let_id,Long user_id){
+        return ocenaRepository.findByRezervacijaIdAndLetIdAndUserId(rezervacija_id,let_id,user_id);
     }
 
     public List<Ocena> findByRezervavijaAndUser(Long rezervacija_id,Long user_id){
@@ -114,7 +133,7 @@ public class OcenaService {
             if (o.getAviokompanija()!=null){
                 rateDTO.setAvio(o.getOcena());
             }else if (o.getLet()!=null){
-                rateDTO.setLet(o.getOcena());
+                rateDTO.setLetoc(o.getOcena());
             }else if (o.getVozilo()!=null){
                 rateDTO.setVoz(o.getOcena());
             }else if (o.getFilijala()!=null){
@@ -132,6 +151,32 @@ public class OcenaService {
 
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+    public void getPermisionAvio(Long res_id){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        Rezervacija rezervacija = rezervacijaService.getOne(res_id);
+
+        if (rezervacija.getDatumVremeS().after(new Date())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation didn't end!");
+        }
+
+        long avio_id = aviokompanijaService.ratePermission(rezervacija);
+
+        if(findByRezervacijaIdAndAviokompanijaIdAndUserId(res_id,avio_id,user.getId()).isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Airline already rated!");
+        }
+
+        long let_id = letService.ratePermission(rezervacija);
+
+        if(findByRezervacijaIdAndLetIdAndUserId(res_id,let_id,user.getId()).isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Airline already rated!");
+        }
+
+
+    }
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
     public void saveOcenaRentACar(List<OcenaDTO> ocenaDTOS){
 
         if (ocenaDTOS.isEmpty()){
@@ -141,6 +186,27 @@ public class OcenaService {
         voziloService.rateVehicle(ocenaDTOS.get(0));
 
         filijalaService.rateFilijala(ocenaDTOS.get(1));
+    }
+
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
+    public void saveRateAir(List<OcenaDTO> ocenaDTOS){
+
+        if (ocenaDTOS.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "List is empty!");
+        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        getPermisionAvio(ocenaDTOS.get(0).getRezervacijaDTO().getId());
+
+        OcenaDTO ocenaDTOAvio = ocenaDTOS.get(0);
+        OcenaDTO ocenaDTOFlight = ocenaDTOS.get(1);
+
+
+        aviokompanijaService.oceni(ocenaDTOAvio.getAviokompanijaDTO().getId(),user,ocenaDTOAvio.getOcena(),ocenaDTOAvio.getRezervacijaDTO().getId());
+        letService.oceni(ocenaDTOFlight.getLetDTO().getId(),user,ocenaDTOFlight.getOcena(),ocenaDTOFlight.getRezervacijaDTO().getId());
+
     }
 
     public List<OcenaDTO> getOcenaRentACar(Long res_id,Long veh_id,Long fil_id){

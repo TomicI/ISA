@@ -56,6 +56,7 @@ const routes: Routes = [
   {
     path: 'travel', component: HomeComponent,
     children: [
+      {path: '', redirectTo: 'flights', pathMatch: 'full'},
       {
         path: 'rentacar', component: SearchRentComponent,
         children: [
@@ -72,6 +73,7 @@ const routes: Routes = [
           {path: 'tickets/:id', component: BrzeRezervacijeListaComponent}
         ]
       },
+
 
     ]
 
@@ -94,10 +96,11 @@ const routes: Routes = [
       },
       {path: 'friends', component: UserFriendsComponent, canActivate: [AuthGuard], data: {roles: ["ROLE_USER_REG"]}},
       {path: 'invites', component: InviteComponent, canActivate: [AuthGuard], data: {roles: ["ROLE_USER_REG"]}},
+      {path: 'companies', component: ListComponent},
     ]
 
   },
-  {path: 'companies', component: ListComponent},
+
 
   {path: 'login', component: LoginComponent},
   {

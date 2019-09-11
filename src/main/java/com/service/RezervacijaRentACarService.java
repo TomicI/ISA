@@ -21,204 +21,212 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class RezervacijaRentACarService {
-	
-	@Autowired
-	private RezervacijaRentACarRepository rezRepository;
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private RezervacijaRentACarRepository rezRepository;
 
-	@Autowired
-	private  FilijalaService filijalaService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private VoziloService voziloService;
+    @Autowired
+    private FilijalaService filijalaService;
 
-	@Autowired
-	private RezervacijaService rezervacijaService;
+    @Autowired
+    private VoziloService voziloService;
 
-
-	
-	public Optional<RezervacijaRentACar> findOne(Long id){
-		return rezRepository.findById(id);
-	}
-	
-	public List<RezervacijaRentACar> findAll(){
-		return rezRepository.findAll();
-	}
-	
-	public RezervacijaRentACar save(RezervacijaRentACar r) {
-		return rezRepository.save(r);
-	}
-	
-	public void remove (Long id) {
-		rezRepository.deleteById(id);
-	}
-	
-	public List<RezervacijaRentACar> findByVoz(Vozilo voz){
-		return rezRepository.findByVozilo(voz);
-	}
-
-	public RezervacijaRentACar getOneRes(Long id){
-
-		Optional<RezervacijaRentACar> rezOptional  = findOne(id);
-
-		if (!rezOptional .isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation doesn't exist!");
-		}
-
-		return rezOptional.get();
-
-	}
-
-	public RezervacijaRentACarDTO getOne(Long id){
-
-		Optional<RezervacijaRentACar> rezOptional  = findOne(id);
-
-		if (!rezOptional .isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation doesn't exist!");
-		}
-
-		return new RezervacijaRentACarDTO(rezOptional.get());
-	}
-
-	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
-	public RezervacijaDTO addToReservation(RezervacijaDTO rezervacijaDTO,Principal user){
-
-		User userSignedIn = userService.getByUsername(user.getName());
-
-		Rezervacija rezervacija = rezervacijaService.getOne(rezervacijaDTO.getId());
-
-		User userRes = rezervacija.getUser();
+    @Autowired
+    private RezervacijaService rezervacijaService;
 
 
-		if(!userSignedIn.equals(userRes)){
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong Reservation!");
-		}
+    public Optional<RezervacijaRentACar> findOne(Long id) {
+        return rezRepository.findById(id);
+    }
 
-		RezervacijaRentACarDTO rezDTO  = rezervacijaDTO.getRezervacijaRentACarDTO();
+    public List<RezervacijaRentACar> findAll() {
+        return rezRepository.findAll();
+    }
 
-		if (rezDTO==null){
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-		}
+    public RezervacijaRentACar save(RezervacijaRentACar r) {
+        return rezRepository.save(r);
+    }
 
-		Date today = new Date();
+    public void remove(Long id) {
+        rezRepository.deleteById(id);
+    }
 
-		if (rezDTO.getDatumPreuz().before(today) || rezDTO.getDatumPreuz().equals(today)){
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pick-up time not valid!");
-		}
+    public List<RezervacijaRentACar> findByVoz(Vozilo voz) {
+        return rezRepository.findByVozilo(voz);
+    }
 
-		if (rezDTO.getFilijalaDTO()==null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch not defined!");
-		}
+    public RezervacijaRentACar getOneRes(Long id) {
 
-		if (rezDTO.getFilijalaDropDTO()==null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch not defined!");
-		}
+        Optional<RezervacijaRentACar> rezOptional = findOne(id);
 
-		Optional<Filijala> filijalaOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
-		Optional<Filijala> filijalaDropOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
+        if (!rezOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation doesn't exist!");
+        }
 
-		if (!filijalaOptional.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not present!");
-		}
+        return rezOptional.get();
 
-		if (!filijalaDropOptional.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Branch not present!");
-		}
+    }
 
-		Optional<Vozilo> voziloOptional = voziloService.findOne(rezDTO.getVoziloDTO().getId());
+    public RezervacijaRentACarDTO getOne(Long id) {
 
-		if (rezDTO.getVoziloDTO()==null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vehicle not defined!");
-		}
+        Optional<RezervacijaRentACar> rezOptional = findOne(id);
 
+        if (!rezOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation doesn't exist!");
+        }
 
-		if (!voziloOptional.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not present!");
-		}
+        return new RezervacijaRentACarDTO(rezOptional.get());
+    }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+    public RezervacijaDTO addToReservation(RezervacijaDTO rezervacijaDTO, Principal user) {
 
-		RezervacijaRentACar rez = new RezervacijaRentACar();
+        User userSignedIn = userService.getByUsername(user.getName());
 
-		rez.setDatumRez(new Date());
-		rez.setRezervacija(filijalaOptional.get());
-		rez.setRezervacijaDrop(filijalaDropOptional.get());
-		rez.setDatumPreuz (rezDTO.getDatumPreuz());
-		rez.setDatumVracanja (rezDTO.getDatumVracanja());
-		rez.setCena (rezDTO.getCena());
-		rez.setOtkazana(false);
-		rez.setVozilo(voziloOptional.get());
-		rez.setStatus(StatusRes.Reserved);
-		rez.setNaPopustu(false);
-		rez.setPopust(0.0);
-		save(rez);
+        Rezervacija rezervacija = rezervacijaService.getOne(rezervacijaDTO.getId());
 
-		rezervacija.setRezervacijaRentACar(rez);
-
-		rezervacijaService.save(rezervacija);
-
-		return new RezervacijaDTO(rezervacija);
-
-	}
-
-	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
-	public RezervacijaDTO saveRentReservation(RezervacijaRentACarDTO rezDTO,Principal user){
-
-		Optional<User> optionalUser = userService.findByUsername(user.getName());
-
-		Date today = new Date();
-
-		if (rezDTO.getDatumPreuz().before(today) || rezDTO.getDatumPreuz().equals(today)){
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pick-up time not valid!");
-		}
-
-		if (!optionalUser.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User doesn't exist!");
-		}
-
-		if (rezDTO.getFilijalaDTO()==null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch not defined!");
-		}
-
-		if (rezDTO.getVoziloDTO()==null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch not defined!");
-		}
-
-		Optional<Filijala> filijalaOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
-		Optional<Vozilo> voziloOptional = voziloService.findOne(rezDTO.getVoziloDTO().getId());
-
-		Optional<Filijala> filijalaDropOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
-
-		if (!filijalaOptional.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not present!");
-		}
-
-		if (!voziloOptional.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not present!");
-		}
-
-		if (!filijalaDropOptional.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Branch not present!");
-		}
-
-		RezervacijaRentACar rez = new RezervacijaRentACar();
-		Rezervacija rezervacija = new Rezervacija();
+        User userRes = rezervacija.getUser();
 
 
-		rez.setDatumPreuz (rezDTO.getDatumPreuz());
-		rez.setDatumVracanja (rezDTO.getDatumVracanja());
-		rez.setCena (rezDTO.getCena());
-		rez.setOtkazana(false);
-		rez.setRezervacija(filijalaOptional.get());
-		rez.setRezervacijaDrop(filijalaDropOptional.get());
+        if (!userSignedIn.equals(userRes)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong Reservation!");
+        }
 
-		rez.setVozilo(voziloOptional.get());
+        RezervacijaRentACarDTO rezDTO = rezervacijaDTO.getRezervacijaRentACarDTO();
+
+        if (rezDTO == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        Date today = new Date();
+
+        if (rezDTO.getDatumPreuz().before(today) || rezDTO.getDatumPreuz().equals(today)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pick-up time not valid!");
+        }
+
+        if (rezDTO.getFilijalaDTO() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch not defined!");
+        }
+
+        if (rezDTO.getFilijalaDropDTO() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch not defined!");
+        }
+
+        Optional<Filijala> filijalaOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
+        Optional<Filijala> filijalaDropOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
+
+        if (!filijalaOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not present!");
+        }
+
+        if (!filijalaDropOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Branch not present!");
+        }
+
+        Optional<Vozilo> voziloOptional = voziloService.findOne(rezDTO.getVoziloDTO().getId());
+
+        if (rezDTO.getVoziloDTO() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vehicle not defined!");
+        }
+
+
+        if (!voziloOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not present!");
+        }
+
+        if (rezervacijaDTO.getRezervacijaRentACarDTO().getId()!=null){
+
+            RezervacijaRentACar rezervacijaRentACar = getOneRes(rezervacijaDTO.getRezervacijaRentACarDTO().getId());
+
+            rezervacija.setRezervacijaRentACar(rezervacijaRentACar);
+
+        }else{
+            RezervacijaRentACar rez = new RezervacijaRentACar();
+
+
+            rez.setDatumRez(new Date());
+            rez.setRezervacija(filijalaOptional.get());
+            rez.setRezervacijaDrop(filijalaDropOptional.get());
+            rez.setDatumPreuz(rezDTO.getDatumPreuz());
+            rez.setDatumVracanja(rezDTO.getDatumVracanja());
+            rez.setCena(rezDTO.getCena());
+            rez.setOtkazana(false);
+            rez.setVozilo(voziloOptional.get());
+            rez.setStatus(StatusRes.Reserved);
+            rez.setNaPopustu(false);
+            rez.setPopust(0.0);
+            save(rez);
+
+            rezervacija.setRezervacijaRentACar(rez);
+
+        }
+
+
+        rezervacijaService.save(rezervacija);
+
+        return new RezervacijaDTO(rezervacija);
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+    public RezervacijaDTO saveRentReservation(RezervacijaRentACarDTO rezDTO, Principal user) {
+
+        Optional<User> optionalUser = userService.findByUsername(user.getName());
+
+        Date today = new Date();
+
+        if (rezDTO.getDatumPreuz().before(today) || rezDTO.getDatumPreuz().equals(today)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pick-up time not valid!");
+        }
+
+        if (!optionalUser.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User doesn't exist!");
+        }
+
+        if (rezDTO.getFilijalaDTO() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch not defined!");
+        }
+
+        if (rezDTO.getVoziloDTO() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch not defined!");
+        }
+
+        Optional<Filijala> filijalaOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
+        Optional<Vozilo> voziloOptional = voziloService.findOne(rezDTO.getVoziloDTO().getId());
+
+        Optional<Filijala> filijalaDropOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
+
+        if (!filijalaOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not present!");
+        }
+
+        if (!voziloOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vehicle not present!");
+        }
+
+        if (!filijalaDropOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Branch not present!");
+        }
+
+        RezervacijaRentACar rez = new RezervacijaRentACar();
+        Rezervacija rezervacija = new Rezervacija();
+
+
+        rez.setDatumPreuz(rezDTO.getDatumPreuz());
+        rez.setDatumVracanja(rezDTO.getDatumVracanja());
+        rez.setCena(rezDTO.getCena());
+        rez.setOtkazana(false);
+        rez.setRezervacija(filijalaOptional.get());
+        rez.setRezervacijaDrop(filijalaDropOptional.get());
+
+        rez.setVozilo(voziloOptional.get());
 
         rez.setDatumRez(new Date());
         rez.setStatus(StatusRes.Reserved);
 
-		if (!rezDTO.getNaPopustu()){
+        if (!rezDTO.getNaPopustu()) {
 
 
             rezervacija.setDatumVremeP(rezDTO.getDatumPreuz());
@@ -226,205 +234,188 @@ public class RezervacijaRentACarService {
             rezervacija.setCena(rezDTO.getCena());
             rezervacija.setUser(optionalUser.get());
             rezervacija.setRezervacijaRentACar(rez);
+            rezervacija.setOtkazana(false);
 
-			rez.setNaPopustu(false);
-			rez.setPopust(0.0);
+            rez.setNaPopustu(false);
+            rez.setPopust(0.0);
 
             rezervacija.setKarta(null);
             rezervacija.setRezervacijaSobe(null);
             rezervacijaService.save(rezervacija);
             save(rez);
             return new RezervacijaDTO(rezervacija);
-        }else{
+        } else {
 
-		    rez.setNaPopustu(true);
-		    rez.setPopust(rezDTO.getPopust());
+            rez.setNaPopustu(true);
+            rez.setPopust(rezDTO.getPopust());
             save(rez);
 
         }
 
 
+        return null;
 
-		return null;
+    }
 
-	}
+    public ResponseMessage cancelStatus(Long id) {
 
-	public ResponseMessage cancelStatus(Long id){
+        Optional<RezervacijaRentACar> rezOptional = findOne(id);
 
-		Optional<RezervacijaRentACar> rezOptional  = findOne(id);
+        if (!rezOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation doesn't exist!");
+        }
 
-		if (!rezOptional .isPresent()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reservation doesn't exist!");
-		}
+        Calendar cal = Calendar.getInstance();
 
-		Calendar cal = Calendar.getInstance();
-
-		System.out.println(rezOptional.get().getDatumPreuz().getTime() - cal.getTime().getTime());
-
-
-		if (( rezOptional.get().getDatumPreuz().getTime() - cal.getTime().getTime() ) <= 48*3600*1000) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Reservation can't be canceled , cancelation has to be made 48 h prior to the Pick-up date !");
-		}
-
-		return new ResponseMessage(" Reservation can be canceled , cancelation has to be made 48 h prior to the Pick-up date !" );
-
-	}
-
-	public ResponseMessage cancelRes(RezervacijaRentACarDTO rezDTO){
-
-		if (rezDTO.getFilijalaDTO()==null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Branch not defined!");
-		}
-
-		if (rezDTO.getVoziloDTO()==null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Vehicle not defined!");
-		}
+        System.out.println(rezOptional.get().getDatumPreuz().getTime() - cal.getTime().getTime());
 
 
-		Optional<Filijala> filijalaOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
-		Optional<Vozilo> voziloOptional = voziloService.findOne(rezDTO.getVoziloDTO().getId());
+        if ((rezOptional.get().getDatumPreuz().getTime() - cal.getTime().getTime()) <= 48 * 3600 * 1000) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation can't be canceled , cancelation has to be made 48 h prior to the Pick-up date !");
+        }
+
+        return new ResponseMessage(" Reservation can be canceled , cancelation has to be made 48 h prior to the Pick-up date !");
+
+    }
+
+    public ResponseMessage cancelRes(RezervacijaRentACarDTO rezDTO) {
+
+        if (rezDTO.getFilijalaDTO() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Branch not defined!");
+        }
+
+        if (rezDTO.getVoziloDTO() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vehicle not defined!");
+        }
 
 
-		if (!filijalaOptional.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-		}
-
-		if (!voziloOptional.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-		}
+        Optional<Filijala> filijalaOptional = filijalaService.findOne(rezDTO.getFilijalaDTO().getId());
+        Optional<Vozilo> voziloOptional = voziloService.findOne(rezDTO.getVoziloDTO().getId());
 
 
+        if (!filijalaOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
 
-		Optional<RezervacijaRentACar> rezOptional = findOne(rezDTO.getId());
-
-		Calendar cal = Calendar.getInstance();
-
-
-		if (( rezOptional.get().getDatumPreuz().getTime() - cal.getTime().getTime() ) <= 0) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Reservation can't be canceled , cancelation has to be made 48 h prior to the Pick-up date !");
-		}
-
-		RezervacijaRentACar rez = rezOptional.get();
-
-		rez.setOtkazana(true);
-		rez.setStatus(StatusRes.Canceled);
-
-		rez = save(rez);
-
-		return new ResponseMessage("Reservation canceled!");
-
-	}
-
-	public List<RezervacijaRentACarDTO> getDealRes(Long rentId,Date pickUp,Date dropOff){
-
-		List<Filijala> filijale = filijalaService.findByRentACar(rentId);
-
-		Date te = new Date(pickUp.getTime());
-
-		System.out.println(te);
-
-		System.out.println(pickUp);
-		System.out.println(dropOff);
+        if (!voziloOptional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
 
 
-		ArrayList<RezervacijaRentACarDTO> rezervacijaRentACarDTOS = new ArrayList<>();
+        Optional<RezervacijaRentACar> rezOptional = findOne(rezDTO.getId());
 
-		for (Filijala f :filijale){
-
-
-			List<RezervacijaRentACar> rezList = f.getRezervacije();
-
-			for (RezervacijaRentACar r:rezList){
-
-					if (r.getNaPopustu()){
+        Calendar cal = Calendar.getInstance();
 
 
+        RezervacijaRentACar rez = rezOptional.get();
 
-						System.out.println("Rez na popustu");
-						System.out.println(r.getDatumPreuz());
-						System.out.println(r.getDatumVracanja());
+        rez.setOtkazana(true);
+        rez.setStatus(StatusRes.Canceled);
+
+        save(rez);
+
+        return new ResponseMessage("Reservation canceled!");
+
+    }
+
+    public List<RezervacijaRentACarDTO> getDealRes(Long rentId, Date pickUp) {
+
+        List<Filijala> filijale = filijalaService.findByRentACar(rentId);
+
+        Date te = new Date(pickUp.getTime());
+
+        System.out.println(te);
+
+        System.out.println(pickUp);
+
+        ArrayList<RezervacijaRentACarDTO> rezervacijaRentACarDTOS = new ArrayList<>();
+
+        for (Filijala f : filijale) {
 
 
+            List<RezervacijaRentACar> rezList = f.getRezervacije();
 
-						if ( r.getDatumPreuz().after(pickUp) || r.getDatumPreuz().equals(pickUp) ){
-							System.out.println("Pickup Prosao");
-							if ( r.getDatumVracanja().before(dropOff) ||  r.getDatumVracanja().equals(dropOff) ){
-								System.out.println("Drop prosao");
-								RezervacijaRentACarDTO rezervacijaRentACarDTO  = new RezervacijaRentACarDTO(r);
+            for (RezervacijaRentACar r : rezList) {
 
-								rezervacijaRentACarDTOS.add(rezervacijaRentACarDTO);
-							}
-						}
+                if (r.getNaPopustu()) {
 
-					}
-				}
+                    if (!rezervacijaService.findByRezervacijaRent(r.getId()).isPresent()) {
 
-			}
+                        System.out.println("Rez na popustu");
+                        System.out.println(r.getDatumPreuz());
+                        System.out.println(r.getDatumVracanja());
+
+                        if (r.getDatumPreuz().after(pickUp) || r.getDatumPreuz().equals(pickUp)) {
+                            System.out.println("Pickup Prosao");
+                            RezervacijaRentACarDTO rezervacijaRentACarDTO = new RezervacijaRentACarDTO(r);
+
+                            rezervacijaRentACarDTOS.add(rezervacijaRentACarDTO);
+                        }
+                    }
+
+
+                }
+
+            }
+        }
 
 
         return rezervacijaRentACarDTOS;
-	}
+    }
 
-	public List<RezervacijaRentACarDTO> getAllAdmin(boolean res , Principal username){
+    public List<RezervacijaRentACarDTO> getAllAdmin(boolean res, Principal username) {
 
-		System.out.println(res);
+        System.out.println(res);
 
-		User user = userService.getByUsername(username.getName());
+        User user = userService.getByUsername(username.getName());
 
-		List<Filijala> filijale = filijalaService.findByRentACar(user.getRentACar().getId());
+        List<Filijala> filijale = filijalaService.findByRentACar(user.getRentACar().getId());
 
-		ArrayList<RezervacijaRentACarDTO> rezervacijaRentACarDTOS = new ArrayList<>();
-
-
-		for (Filijala f :filijale){
-
-			List<RezervacijaRentACar> rezList = f.getRezervacije();
-
-			for (RezervacijaRentACar r:rezList){
-
-				if (res){
-					if (!r.getNaPopustu()){
-						RezervacijaRentACarDTO rezervacijaRentACarDTO  = new RezervacijaRentACarDTO(r);
-
-						rezervacijaRentACarDTOS.add(rezervacijaRentACarDTO);
-					}
-				}else{
-					if (r.getNaPopustu()){
-
-						RezervacijaRentACarDTO rezervacijaRentACarDTO  = new RezervacijaRentACarDTO(r);
-
-						rezervacijaRentACarDTOS.add(rezervacijaRentACarDTO);
-					}
-				}
+        ArrayList<RezervacijaRentACarDTO> rezervacijaRentACarDTOS = new ArrayList<>();
 
 
+        for (Filijala f : filijale) {
 
-			}
+            List<RezervacijaRentACar> rezList = f.getRezervacije();
 
-		}
+            for (RezervacijaRentACar r : rezList) {
 
-		return rezervacijaRentACarDTOS;
+                if (res) {
+                    if (!r.getNaPopustu()) {
+                        RezervacijaRentACarDTO rezervacijaRentACarDTO = new RezervacijaRentACarDTO(r);
 
-	}
+                        rezervacijaRentACarDTOS.add(rezervacijaRentACarDTO);
+                    }
+                } else {
+                    if (r.getNaPopustu()) {
 
+                        RezervacijaRentACarDTO rezervacijaRentACarDTO = new RezervacijaRentACarDTO(r);
 
-
-	public RezervacijaRentACarDTO changeStatus(RezervacijaRentACarDTO rezervacijaRentACarDTO){
-
-		RezervacijaRentACar rezervacijaRentACar = getOneRes(rezervacijaRentACarDTO.getId());
-
-
-		rezervacijaRentACar.setStatus(rezervacijaRentACar.getStatus());
-
-		save(rezervacijaRentACar);
-
-		return new RezervacijaRentACarDTO(rezervacijaRentACar);
-	}
+                        rezervacijaRentACarDTOS.add(rezervacijaRentACarDTO);
+                    }
+                }
 
 
+            }
+
+        }
+
+        return rezervacijaRentACarDTOS;
+
+    }
 
 
+    public RezervacijaRentACarDTO changeStatus(RezervacijaRentACarDTO rezervacijaRentACarDTO) {
 
+        RezervacijaRentACar rezervacijaRentACar = getOneRes(rezervacijaRentACarDTO.getId());
+
+
+        rezervacijaRentACar.setStatus(rezervacijaRentACar.getStatus());
+
+        save(rezervacijaRentACar);
+
+        return new RezervacijaRentACarDTO(rezervacijaRentACar);
+    }
 
 
 }

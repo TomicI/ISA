@@ -286,6 +286,7 @@ public class UserAccount {
         return new ResponseEntity<>(this.inviteService.inviteRequests(user.getName()),HttpStatus.OK);
     }
 
+
     @RequestMapping(value = "/sendMail", method=RequestMethod.PUT,consumes = "application/json" )
     @PreAuthorize("hasRole('USER_REG')")
     public ResponseEntity<String> sendMail(@RequestBody RezervacijaDTO rezervacijaDTO){

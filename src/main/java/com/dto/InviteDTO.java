@@ -17,11 +17,14 @@ public class InviteDTO {
 
     public RezervacijaDTO reservation;
 
-    public InviteDTO(Long id, UserDTO userSent, UserDTO userReceive, Date dateSent, Rezervacija reservation) {
+    public boolean accepted;
+
+    public InviteDTO(Long id, UserDTO userSent, UserDTO userReceive, Date dateSent, Rezervacija reservation,boolean accepted) {
         this.id = id;
         this.userSent = userSent;
         this.userReceive = userReceive;
         this.dateSent = dateSent;
+        this.accepted = accepted;
         if(reservation!= null)
             this.reservation = new RezervacijaDTO(reservation);
         else
@@ -29,7 +32,7 @@ public class InviteDTO {
     }
 
     public InviteDTO(Invite invite){
-        this(invite.getId(), new UserDTO(invite.getUserSent()), new UserDTO(invite.getUserReceive()), invite.getDateSent(), invite.getReservation());
+        this(invite.getId(), new UserDTO(invite.getUserSent()), new UserDTO(invite.getUserReceive()), invite.getDateSent(), invite.getReservation(),invite.isAccepted());
     }
 
 
@@ -71,5 +74,13 @@ public class InviteDTO {
 
     public void setReservation(RezervacijaDTO reservation) {
         this.reservation = reservation;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 }

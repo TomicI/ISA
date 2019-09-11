@@ -3,13 +3,18 @@ package com.service.aviokompanija;
 import com.dto.aviokompanija.LetDTO;
 import com.dto.aviokompanija.OcenaDTO;
 import com.dto.aviokompanija.SedisteDTO;
+import com.model.Rezervacija;
 import com.model.aviokompanija.*;
 import com.model.user.User;
 import com.repository.UserRepository;
 import com.repository.aviokompanija.*;
+import com.service.RezervacijaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
@@ -49,7 +54,21 @@ public class LetService {
 	@Autowired
 	private PrtljagRepository prtljagRepository;
 
+	@Autowired
+	private RezervacijaService rezervacijaService;
+
 	private ListeDTO liste = new ListeDTO();
+
+	public Let getOne(Long let_id){
+
+		Optional<Let> let = letRepository.findById(let_id);
+
+		if(let.isPresent())
+			return let.get();
+
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Let ne postoji");
+
+	}
 
 	public List<LetDTO> getAll(String username){
 		Optional<User> user=userRepository.findByUsername(username);
@@ -185,7 +204,9 @@ public class LetService {
 		letRepository.deleteById(id);
 	}
 
-	public OcenaDTO oceni(Long id, Long userId, Integer ocena){
+
+	@Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+	public Ocena oceni(Long id, User user, Integer ocena,Long res_id){
 		if(ocena < 1 || ocena > 5)
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ocena nije dobro prosledjena!");
 
@@ -193,31 +214,21 @@ public class LetService {
 		if(!let.isPresent())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aviokompanija ne postoji");
 
-		Optional<User> user = userRepository.findById(userId);
-		if(!user.isPresent())
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ne postoji");
-
-		for(Ocena oc : let.get().getOcene()){
-			if(oc.getUser().getId() == userId){
-				oc.setOcena(ocena);
-				ocenaRepository.save(oc);
-				let.get().setProsecnaOcena(proracunajSrednjuOcenu(let.get()));
-				letRepository.save(let.get());
-				return new OcenaDTO(oc);
-			}
-		}
+		Rezervacija rezervacija = rezervacijaService.getOne(res_id);
 
 		Ocena ocenaObj = new Ocena();
 		ocenaObj.setLet(let.get());
 		ocenaObj.setOcena(ocena);
-		ocenaObj.setUser(user.get());
+		ocenaObj.setUser(user);
+		ocenaObj.setRezervacija(rezervacija);
+		ocenaObj.setOcDate(new Date());
 		ocenaRepository.save(ocenaObj);
 
 		let.get().getOcene().add(ocenaObj);
 		let.get().setProsecnaOcena(proracunajSrednjuOcenu(let.get()));
 		letRepository.save(let.get());
 
-		return new OcenaDTO(ocenaObj);
+		return ocenaObj;
 	}
 
 	private void formirajSedista(Let let){
@@ -369,5 +380,13 @@ public class LetService {
 
 
 		return liste.sedista(new ArrayList<>(let.get().getSedista()));
+	}
+
+	public long ratePermission(Rezervacija rezervacija){
+
+		Let let = getOne(rezervacija.getKarta().getLet().getId());
+
+		return let.getId();
+
 	}
 }

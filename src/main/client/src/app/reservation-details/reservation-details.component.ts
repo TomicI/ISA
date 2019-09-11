@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {Ocena, Rate, Rezervacija, RezervacijaRent, Vozilo} from "../model";
+import {Karta, Ocena, Rate, Rezervacija, RezervacijaRent, Vozilo} from "../model";
 import {ReservationService} from "../services/reservation.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
@@ -21,6 +21,11 @@ export class ReservationDetailsComponent implements OnInit {
   clickedMap;
 
   rateRent:boolean;
+  rateAir:boolean;
+
+  ratingRent:boolean;
+  ratingAir:boolean;
+
 
   modalRef: any;
 
@@ -30,6 +35,7 @@ export class ReservationDetailsComponent implements OnInit {
 
   reservation:Rezervacija;
   rentACarRes:RezervacijaRent;
+  karta:Karta;
 
   constructor(private route: ActivatedRoute,
               private reservationService:ReservationService,
@@ -43,7 +49,9 @@ export class ReservationDetailsComponent implements OnInit {
 
     this.rateGroup = this.formBuilder.group({
       branchRate:new FormControl({value:"1",disabled:false}),
-      vehicleRate: "1"
+      vehicleRate: "1",
+      airRate:"1",
+      flightRate:"1"
     });
 
     this.route.queryParams.subscribe(params => {
@@ -51,7 +59,6 @@ export class ReservationDetailsComponent implements OnInit {
 
       this.reservationService.getUserReservationId(this.params.res).subscribe(data=>{
         this.reservation = data;
-        this.rentACarRes=data.rezervacijaRentACarDTO;
 
         let params = new HttpParams();
         params = params.append('resid',this.reservation.id.toString());
@@ -60,17 +67,36 @@ export class ReservationDetailsComponent implements OnInit {
           this.rates=data;
         });
 
-        params = params.append('vehid',this.rentACarRes.voziloDTO.id.toString());
-        params = params.append('filid',this.rentACarRes.filijalaDTO.id.toString());
+        if (data.rezervacijaRentACarDTO){
+          this.rentACarRes=data.rezervacijaRentACarDTO;
+
+          params = params.append('vehid',this.rentACarRes.voziloDTO.id.toString());
+          params = params.append('filid',this.rentACarRes.filijalaDTO.id.toString());
+
+          this.ratingService.getPermission(params).subscribe(data=>{
+            this.rateRent = true;
+          },error=>{
+            this.rateRent = false;
+          });
+
+        }
+
+        if(data.kartaDTO){
+
+          this.karta = data.kartaDTO;
+
+          this.ratingService.getPermissionAir(params).subscribe(data=>{
+            this.rateAir = true;
+          },error=>{
+            this.rateAir = false;
+          });
 
 
-        this.ratingService.getPermission(params).subscribe(data=>{
-          this.rateRent = true;
-        },error=>{
-          this.rateRent = false;
-        });
+        }
 
-        let ocenaTemp:Ocena;
+
+
+
 
        /* this.ratingService.getRating(params).subscribe(data=>{
           console.log(data);
@@ -144,9 +170,67 @@ export class ReservationDetailsComponent implements OnInit {
 
   }
 
+  airSubmit(){
+
+    let ocenaAir:Ocena;
+    let ocenaFlight:Ocena;
+
+    ocenaAir = new Ocena(
+      null,
+      this.rateGroup.get('airRate').value,
+      null,
+      this.karta.let.aerodrom.aviokompanija,
+      null,
+      null,
+      null,
+      null,
+      this.reservation);
+
+    ocenaFlight = new Ocena(
+      null,
+      this.rateGroup.get('flightRate').value,
+      null,
+      null,
+      this.karta.let,
+      null,
+      null,
+      null,
+      this.reservation);
+
+    let ocene:Ocena[];
+    ocene = new Array();
+
+    ocene.push(ocenaAir);
+    ocene.push(ocenaFlight);
+
+    console.log(ocene);
+
+    this.ratingService.saveAirRating(ocene).subscribe(data=>{
+      console.log(data);
+      this.ngOnInit();
+    },error1 => {
+      alert(error1.error.message);
+    } ) ;
+
+    this.modalRef.close();
+
+  }
+
   rate(res){
 
+    this.ratingRent = true;
+    this.ratingAir = false;
+
     this.modalRef = this.modalService.open(this.content);
+
+  }
+
+  rateAvio(){
+    this.ratingRent = false;
+    this.ratingAir = true;
+
+    this.modalRef = this.modalService.open(this.content);
+
 
   }
 

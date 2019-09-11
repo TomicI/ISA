@@ -1,6 +1,7 @@
 package com.controller.aviokompanija;
 
 import com.dto.aviokompanija.*;
+import com.model.aviokompanija.Ocena;
 import com.model.user.User;
 import com.service.UserService;
 import com.service.aviokompanija.AviokompanijaService;
@@ -198,18 +199,6 @@ public class AviokompanijaController {
 		return new ResponseEntity<>(aviokompanijaService.napraviDodatnuUslugu(id,dodatnaUslugaAviokompanijaDTO),HttpStatus.OK);
 	}
 
-	@RequestMapping(value="/{id}/oceni/{user_id}/{ocena}", method=RequestMethod.POST, produces = "application/json")
-	@ApiOperation(value = "User sa id-em user_id ocenjuje kompaniju sa id-em id", httpMethod = "POST")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "OK", response = OcenaDTO.class),
-			@ApiResponse(code = 204, message = "No Content"),
-			@ApiResponse(code = 400, message = "Bad Request")
-	})
-	public ResponseEntity<OcenaDTO> oceni(@PathVariable(value = "id") Long id,
-													  @PathVariable(value = "user_id") Long userId,
-													  @PathVariable(value = "ocena") Integer ocena){
-		return new ResponseEntity<>(aviokompanijaService.oceni(id,userId,ocena),HttpStatus.OK);
-	}
 
 	@RequestMapping(value = "{id}/postavi_lokaciju", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "Kreira let za prosledjeni aerodrom", httpMethod = "PUT", produces = "application/json", consumes = "application/json")
