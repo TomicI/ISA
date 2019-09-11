@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import {Karta, Let, Lokacija, Putnik, Rezervacija, Sediste, Segment} from '../model';
+import {Hotel, Karta, Let, Lokacija, Putnik, RentACar, Rezervacija, Sediste, Segment} from '../model';
 
 @Injectable()
 export class LetService {
@@ -15,6 +15,7 @@ export class LetService {
   public PUTNIK_API='//localhost:8080/api/putnik';
   public SEDISTA_API='//localhost:8080/api/sedista';
   public REZ_API='//localhost:8080/api/rezervacija';
+  public RAC_API='//localhost:8080/api/rentacar';
 
   constructor(private http: HttpClient) { }
   
@@ -31,6 +32,8 @@ export class LetService {
     console.log(this.LET_API+ '/letovi/' + id);
     return this.http.get<Let[]>(this.LET_API +'/letovi/'+id).toPromise();
   }
+
+
 
   saveLet(letC: Let): Promise<Let>{
     console.log(letC);
@@ -111,5 +114,17 @@ export class LetService {
 
   saveBrzaRezervacija(karta: Karta): Promise<Rezervacija>{
     return this.http.post<Rezervacija>(this.KAR_API+'/rezervisanje', karta).toPromise();
+  }
+
+  getRentACarLokacije(grad: string, drzava: string): Promise<RentACar[]>{
+    return this.http.get<RentACar[]>(this.RAC_API+'/search/'+grad+'/'+drzava).toPromise();
+  }
+
+  getHoteliLokacija(grad: string, drzava: string): Promise<Hotel[]>{
+    return this.http.get<Hotel[]>(this.REZ_API+'/search/'+grad+'/'+drzava).toPromise();
+  }
+
+  reserveHotel(id: number, rezervacija: Rezervacija): Promise<Hotel[]>{
+    return this.http.put<Hotel[]>(this.REZ_API+'/reserveHotel/'+id, rezervacija).toPromise();
   }
 }

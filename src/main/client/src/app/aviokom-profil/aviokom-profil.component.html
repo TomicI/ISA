@@ -1,4 +1,4 @@
-<div  align="center" class="jumbotron container col-sm-6"  style=" width: auto;  padding: 20px; margin-top: 50px; ">
+<!--<div  align="center" class="jumbotron container col-sm-6"  style=" width: auto;  padding: 20px; margin-top: 50px; ">
   <div align="left" style="width: 70%">
   <div align="left"><span><h2>Profil aviokompanije: </h2></span> <span style="margin-left: 10px"><a href="http://localhost:4200/avio-edit/{{aviokomapnija.id}}"><i class="fa fa-edit"></i></a></span></div>
 
@@ -12,4 +12,135 @@
   <div><a href="http://localhost:4200/addKonf/{{aviokomapnija.id}}">Dodaj konfiguraciju leta</a></div>
   <div><a href="http://localhost:4200/addKatSed/{{aviokomapnija.id}}">Dodaj kategoriju sedista</a></div>
   <div><a href="http://localhost:4200/letovi">Dodaj brzu rezervaciju</a></div>
+</div>-->
+
+<div class="container">
+
+  <div *ngIf="aviokomapnija">
+
+    <h4>Welcome {{aviokomapnija.naziv}}  </h4>
+    <h2>Prosecna ocena: {{aviokomapnija.prosecnaOcena}}</h2>
+    <div><a href="http://localhost:4200/konfig-list/{{aviokomapnija.id}}">Konfiguracije leta</a></div>
+    <div><a href="http://localhost:4200/addKonf/{{aviokomapnija.id}}">Dodaj konfiguraciju leta</a></div>
+    <div><a href="http://localhost:4200/addKatSed/{{aviokomapnija.id}}">Dodaj kategoriju sedista</a></div>
+    <div><a href="http://localhost:4200/letovi">Dodaj brzu rezervaciju</a></div>
+    <div><a href="http://localhost:4200/letAdd/{{aviokomapnija.id}}">Dodaj let</a></div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-12">
+
+      <div class="card" style="width: 65rem;">
+
+        <div class="card-header">
+          <div class="d-flex">
+            <div>
+              Aerodromi
+            </div>
+            <div class="ml-auto">
+              <a class="link" (click)="addAerodrom()"><i class="fas fa-plus-circle"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
+        <table mat-table [dataSource]="aerodromSource" matSort class="mat-elevation-z8 matchip mb-0">
+
+          <ng-container matColumnDef="no">
+            <th mat-header-cell *matHeaderCellDef> No. </th>
+            <td mat-cell *matCellDef="let aerodrom;let i=index">{{i+1}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="naziv">
+            <th mat-header-cell *matHeaderCellDef > Naziv </th>
+            <td mat-cell *matCellDef="let aerodrom"> {{aerodrom.naziv}} </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="adresa">
+            <th mat-header-cell *matHeaderCellDef > Adress </th>
+            <td mat-cell *matCellDef="let aerodrom"> {{aerodrom.lokacijaDTO.adresa}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef>Edit</th>
+            <td mat-cell *matCellDef="let aerodrom">
+              <button class="btn" type="button" (click)="editAerodrom(aerodrom)"><i
+                class="far fa-edit"></i></button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+
+
+        </table>
+
+        <mat-paginator #paginator1 [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+
+
+      </div>
+
+
+
+      <div class="card" style="width: 65rem;">
+
+        <div class="card-header">
+          <div class="d-flex">
+            <div>
+              Cenovnik
+            </div>
+          </div>
+        </div>
+
+
+        <table mat-table [dataSource]="cenovnikSource" matSort class="mat-elevation-z8 matchip mb-0">
+
+          <ng-container matColumnDef="no">
+            <th mat-header-cell *matHeaderCellDef> No. </th>
+            <td mat-cell *matCellDef="let letC;let i=index">{{i+1}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="od">
+            <th mat-header-cell *matHeaderCellDef > Od </th>
+            <td mat-cell *matCellDef="let letC"> {{letC.aerodrom.naziv}} </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="do">
+            <th mat-header-cell *matHeaderCellDef > Do </th>
+            <td mat-cell *matCellDef="let letC"> {{letC.destinacija.grad}}, {{letC.destinacija.drzava}} </td>
+          </ng-container>
+
+
+
+          <ng-container matColumnDef="datum">
+            <th mat-header-cell *matHeaderCellDef > Vreme i datum poletanja i sletanja </th>
+            <td mat-cell *matCellDef="let letC">{{letC.vremePolaska | date: 'dd/MM/yyyy HH:mm' }} - {{letC.vremeDolaska | date: 'dd/MM/yyyy HH:mm'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="cena">
+            <th mat-header-cell *matHeaderCellDef > Cena </th>
+            <td mat-cell *matCellDef="let letC;let i=index">{{getMinMaxCena(letC.konfiguracijaLeta.id)}} €</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsC"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsC;"></tr>
+
+
+
+        </table>
+
+        <mat-paginator #paginator2 [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+
+
+      </div>
+    </div>
+
+
+  </div>
+
 </div>

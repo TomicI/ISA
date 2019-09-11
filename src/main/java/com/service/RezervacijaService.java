@@ -8,11 +8,15 @@ import com.dto.RezervacijaDTO;
 import com.dto.RezervacijaRentACarDTO;
 import com.dto.UserDTO;
 import com.dto.aviokompanija.PutnikDTO;
+import com.model.Hotel;
 import com.model.Invite;
+import com.model.RezervacijaSobe;
 import com.model.aviokompanija.Karta;
 import com.model.aviokompanija.Putnik;
 import com.model.aviokompanija.Sediste;
 import com.model.user.User;
+import com.repository.HotelRepository;
+import com.repository.RezervacijaSobeRepository;
 import com.repository.aviokompanija.KartaRepository;
 import com.repository.aviokompanija.SedisteRepository;
 import com.security.ResponseMessage;
@@ -68,6 +72,12 @@ public class RezervacijaService {
 
 	@Autowired
 	private JavaMailSender mailSender;
+
+	@Autowired
+	private HotelRepository hotelRepository;
+
+	@Autowired
+	private RezervacijaSobeRepository rezervacijaSobeRep;
 	
 	public Optional<Rezervacija> findById(Long id) {
 		return rezervacijaRepository.findById(id);
@@ -252,6 +262,8 @@ public class RezervacijaService {
 						s.setPutnik(null);
 						s.setZauzeto(false);
 						s.setKarta(null);
+						s.setPrtljag(null);
+						s.setDodatnaUslugaAviokompanija(null);
 						this.sedisteRepository.save(s);
 						break;
 					}
@@ -321,7 +333,8 @@ public class RezervacijaService {
 			if(r.get().getRezervacijaSobe()!= null){
 				textMessage+="\n";
 				textMessage+="Hotel \n";
-				textMessage+="From " + r.get().getRezervacijaSobe().getOdDatuma() + " to " + r.get().getRezervacijaSobe().getDoDatuma();
+				textMessage+=r.get().getRezervacijaSobe().getSoba().getNaziv()+"\n";
+				//textMessage+="From " + r.get().getRezervacijaSobe().getOdDatuma() + " to " + r.get().getRezervacijaSobe().getDoDatuma();
 			}
 			message.setText(textMessage);
 			mailSender.send(message);
@@ -380,7 +393,24 @@ public class RezervacijaService {
 
 	}
 
+	public RezervacijaDTO reserveHotel( Long id, RezervacijaDTO rezervacijaDTO){
+		Optional<Hotel> hotel=hotelRepository.findById(id);
+		RezervacijaDTO rezDTO=new RezervacijaDTO();
+		Optional<Rezervacija> rezervacija=rezervacijaRepository.findById(rezervacijaDTO.getId());
+		if(rezervacija.isPresent()){
+			if(hotel.isPresent()){
+				RezervacijaSobe rezervacijaSobe=new RezervacijaSobe();
+				rezervacijaSobe.setSoba(hotel.get());
+				rezervacijaSobe=this.rezervacijaSobeRep.save(rezervacijaSobe);
+				rezervacija.get().setRezervacijaSobe(rezervacijaSobe);
+				rezDTO=new RezervacijaDTO(rezervacijaRepository.save(rezervacija.get()));
+			}
+		}
 
+
+
+		return rezDTO;
+	}
 
 
 }

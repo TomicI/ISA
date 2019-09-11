@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -52,8 +53,8 @@ public class AerodromController {
 			@ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
-	public ResponseEntity<AerodromDTO> create(@RequestBody AerodromDTO aerodromDTO){
-		return new ResponseEntity<>(aerodromService.create(aerodromDTO), HttpStatus.CREATED);
+	public ResponseEntity<AerodromDTO> create(@RequestBody AerodromDTO aerodromDTO, Principal user){
+		return new ResponseEntity<>(aerodromService.create(aerodromDTO, user.getName()), HttpStatus.CREATED);
 	}
 
 	@RequestMapping(method=RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -63,8 +64,8 @@ public class AerodromController {
 			@ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
-	public ResponseEntity<AerodromDTO> update(@RequestBody AerodromDTO aerodromDTO){
-		return new ResponseEntity<>(aerodromService.update(aerodromDTO), HttpStatus.OK);
+	public ResponseEntity<AerodromDTO> update(@RequestBody AerodromDTO aerodromDTO, Principal user){
+		return new ResponseEntity<>(aerodromService.update(aerodromDTO, user.getName()), HttpStatus.OK);
 	}
 
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)

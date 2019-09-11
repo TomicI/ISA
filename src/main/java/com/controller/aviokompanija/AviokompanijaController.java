@@ -69,6 +69,7 @@ public class AviokompanijaController {
 			@ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
+	@PreAuthorize("hasRole('ADMIN_AVIO')")
 	public ResponseEntity<AviokompanijaDTO> update(@RequestBody AviokompanijaDTO aviokompanijaDTO){
 		return new ResponseEntity<>(aviokompanijaService.update(aviokompanijaDTO), HttpStatus.OK);
 	}
@@ -103,6 +104,7 @@ public class AviokompanijaController {
 			@ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
+	@PreAuthorize("hasRole('ADMIN_AVIO')")
 	public ResponseEntity<AerodromDTO> napraviAerodrom(@PathVariable(value = "id") Long id,
 															 @RequestBody AerodromDTO aerodromDTO){
 		return new ResponseEntity<>(aviokompanijaService.napraviAerodrom(id,aerodromDTO),HttpStatus.OK);
@@ -137,6 +139,7 @@ public class AviokompanijaController {
 			@ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
+	@PreAuthorize("hasRole('ADMIN_AVIO')")
 	public ResponseEntity<PrtljagDTO> napraviPrtljag(@PathVariable(value = "id") Long id,
 													   @RequestBody PrtljagDTO prtljagDTO){
 		return new ResponseEntity<>(aviokompanijaService.napraviPrtljag(id,prtljagDTO),HttpStatus.OK);
@@ -171,6 +174,7 @@ public class AviokompanijaController {
 			@ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
+	@PreAuthorize("hasRole('ADMIN_AVIO')")
 	public ResponseEntity<KonfiguracijaLetaDTO> napraviKonfiguraciju(@PathVariable(value = "id") Long id,
 													 @RequestBody KonfiguracijaLetaDTO konfiguracijaLetaDTO){
 		return new ResponseEntity<>(aviokompanijaService.napraviKonfiguraciju(id,konfiguracijaLetaDTO),HttpStatus.OK);
@@ -194,6 +198,7 @@ public class AviokompanijaController {
 			@ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
+	@PreAuthorize("hasRole('ADMIN_AVIO')")
 	public ResponseEntity<DodatnaUslugaAviokompanijaDTO> napraviDodatnuUslugu(@PathVariable(value = "id") Long id,
 																	 @RequestBody DodatnaUslugaAviokompanijaDTO dodatnaUslugaAviokompanijaDTO){
 		return new ResponseEntity<>(aviokompanijaService.napraviDodatnuUslugu(id,dodatnaUslugaAviokompanijaDTO),HttpStatus.OK);
@@ -211,5 +216,28 @@ public class AviokompanijaController {
 		return new ResponseEntity<>(aviokompanijaService.postaviLokaciju(id, lokacija.getId()), HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/admin",method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Vraca aviokompaniju sa prosledjenim id-em", httpMethod = "GET", produces = "application/json")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "OK", response = AviokompanijaDTO.class),
+			@ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 400, message = "Bad Request")
+	})
+	@PreAuthorize("hasRole('ADMIN_AVIO')")
+	public ResponseEntity<AviokompanijaDTO> findByAdmin(Principal user){
+		return new ResponseEntity<>(aviokompanijaService.findByAdmin(user.getName()),HttpStatus.OK);
+	}
+
+
+	@RequestMapping(value="/admin/letovi", method=RequestMethod.GET, produces = "application/json")
+	@ApiOperation(value = "Vraca sve letove u okviru kompanije", httpMethod = "GET")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "OK", response = LetDTO.class),
+			@ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 400, message = "Bad Request")
+	})
+	public ResponseEntity<List<LetDTO>> letoviAdmin(Principal user){
+		return new ResponseEntity<>(aviokompanijaService.letoviAdmin(user.getName()),HttpStatus.OK);
+	}
 
 }

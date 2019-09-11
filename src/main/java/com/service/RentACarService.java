@@ -10,7 +10,9 @@ import com.dto.FilijalaDTO;
 import com.dto.RentACarDTO;
 import com.model.CenovnikRentACar;
 import com.model.Filijala;
+import com.model.aviokompanija.Lokacija;
 import com.model.aviokompanija.Ocena;
+import com.repository.aviokompanija.LokacijaRepository;
 import com.security.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,12 @@ public class RentACarService {
 	
 	@Autowired
 	private RentACarRepository rentACarRepository;
+
+	@Autowired
+	private LokacijaRepository lokacijaRepository;
+
+	@Autowired
+	private FilijalaService filijalaService;
 	
 	public	RentACar findByNaziv(String naziv) {
 		return rentACarRepository.findOneByNaziv(naziv);
@@ -150,7 +158,22 @@ public class RentACarService {
 
 
 
-	
-	
+
+	public List<RentACarDTO> findByLokacijaFilijale(String grad, String drzava){
+		List<Lokacija> lokacijas=lokacijaRepository.findByGradAndDrzava(grad, drzava);
+		List<RentACar> servisi=new ArrayList<>();
+		List<RentACarDTO> servisiDTO=new ArrayList<>();
+
+		for(Lokacija l :lokacijas){
+			Filijala filijala=filijalaService.findByLokacija(l.getId());
+			if(filijala!=null && !servisi.contains(filijala.getRentACar())){
+				servisi.add(filijala.getRentACar());
+				servisiDTO.add(new RentACarDTO(filijala.getRentACar()));
+			}
+
+		}
+
+		return servisiDTO;
+	}
 
 }

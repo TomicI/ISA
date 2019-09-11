@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en" >
 <head>
   <title>Profil aviokompanija</title>
@@ -45,7 +45,7 @@
                 </div>
             </div>
           </div>
-          <!--
+
           <div class="row ">
           <div class="col-sm-8 offset-md-3">
               <agm-map [latitude]="location.latitude" [longitude]="location.longitude" >
@@ -54,7 +54,53 @@
             </div>
           </div>-->
          
-    </div>
+ <!--   </div>
     <div id="divMapa"></div>
     </body>
-    </html>
+    </html>-->
+
+<div class="jumbotron container text-center col-sm-6">
+  <h2 class="text-center" >Azuriranje aviokompanije</h2>
+  <form [formGroup]="regFormA" (ngSubmit)="onSubmit()" >
+
+    <div class="form-group form-inline">
+      <label for="naziv" class="control-label col-sm-4">Naziv: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="naziv" id="naziv" type="text" formControlName="naziv">
+      </div>
+    </div>
+
+
+    <div class="form-group form-inline">
+      <label for="adresa" class="control-label col-sm-4">Adresa: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="adresa" id="adresa" type="text" formControlName="adresa">
+      </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label for="grad" class="control-label col-sm-4">Grad:  </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="grad" id="grad" type="text" formControlName="grad">
+      </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label for="drzava" class="control-label col-sm-4">Drzava: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="drzava" id="drzava" type="text" formControlName="drzava">
+      </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label for="opis" class="control-label col-sm-4">Opis: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="opis" id="opis" type="text" formControlName="opis">
+      </div>
+    </div>
+
+    <div class="col-sm-offset-2">
+      <button type="submit" class="btn btn-primary">Sacuvaj</button>
+    </div>
+  </form>
+</div>

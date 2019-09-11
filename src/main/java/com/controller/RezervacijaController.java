@@ -1,7 +1,9 @@
 package com.controller;
 
 import com.dto.RezervacijaDTO;
+import com.model.Hotel;
 import com.model.Rezervacija;
+import com.service.HotelService;
 import com.service.RezervacijaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,9 @@ public class RezervacijaController {
 
     @Autowired
     private RezervacijaService as;
+
+    @Autowired
+    private HotelService hotelService;
 
     @RequestMapping(value = "/getAllUser", method = RequestMethod.GET)
     public ResponseEntity<List<RezervacijaDTO>> getAllUser(Principal user) {
@@ -121,4 +126,16 @@ public class RezervacijaController {
         return new ResponseEntity<>(as.cancelConfirm(rezervacijaDTO.getId()), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/search/{grad}/{drzava}", method = RequestMethod.GET)
+    public ResponseEntity<List<Hotel>> getHotele(@PathVariable(value = "grad") String grad, @PathVariable(value="drzava") String drzava) {
+
+        return new ResponseEntity<>(hotelService.findByLokacija(grad, drzava), HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "/reserveHotel/{id}",method = RequestMethod.PUT, consumes = "application/json")
+    public ResponseEntity<RezervacijaDTO> reserveHotel(@PathVariable Long id, @RequestBody RezervacijaDTO rezervacijaDTO) {
+
+        return new ResponseEntity<>(as.reserveHotel(id, rezervacijaDTO), HttpStatus.OK);
+    }
 }

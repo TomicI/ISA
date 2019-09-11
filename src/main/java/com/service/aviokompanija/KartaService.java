@@ -204,6 +204,8 @@ public class KartaService {
 			s.setPutnik(null);
 			s.setZauzeto(false);
 			s.setKarta(null);
+			s.setDodatnaUslugaAviokompanija(null);
+			s.setPrtljag(null);
 		}
 
 		rezervacijaRepository.delete(karta.get().getRezervacija());
@@ -221,6 +223,8 @@ public class KartaService {
 			s.setPutnik(null);
 			s.setZauzeto(false);
 			s.setKarta(null);
+			s.setDodatnaUslugaAviokompanija(null);
+			s.setPrtljag(null);
 		}
 
 		kartaRepository.save(karta.get());

@@ -11,6 +11,7 @@ import com.model.*;
 import com.model.aviokompanija.Lokacija;
 import com.model.aviokompanija.Ocena;
 import com.model.user.User;
+import com.repository.aviokompanija.LokacijaRepository;
 import com.security.ResponseMessage;
 import com.service.aviokompanija.LokacijaService;
 import com.service.aviokompanija.OcenaService;
@@ -58,6 +59,8 @@ public class FilijalaService {
 
     @Autowired
     private LokacijaService lokacijaService;
+
+
 
     public Optional<Filijala> findOne(Long id) {
         return filijalaRepository.findById(id);

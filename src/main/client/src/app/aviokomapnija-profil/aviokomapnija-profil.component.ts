@@ -30,7 +30,7 @@ export class AviokomapnijaProfilComponent implements OnInit {
             this.aviokomapnija = pom;
             console.log("vraceno");
             console.log(this.aviokomapnija);
-            this.adress=this.aviokomapnija.lokacija.adresa;
+            this.adress=this.aviokomapnija.lokacijaDTO.adresa;
           } else {
             console.log(`Aviokompanija with id '${id}' not found `);
           }

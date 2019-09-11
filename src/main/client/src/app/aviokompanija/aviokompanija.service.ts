@@ -31,7 +31,12 @@ public pom;
     console.log(this.AVIO_API+ '/' + id);
     return this.http.get<Aviokompanija>(this.AVIO_API +'/'+id).toPromise();
   }
-  
+
+  getAviokompanijaAdmin(): Promise<Aviokompanija> {
+    return this.http.get<Aviokompanija>(this.AVIO_API +'/admin').toPromise();
+  }
+
+
   saveAviokompanija(aviokompanija: Aviokompanija): Promise<Aviokompanija>{
     console.log(aviokompanija);
     return this.http.post<Aviokompanija>(this.AVIO_API, aviokompanija).toPromise();
@@ -112,5 +117,7 @@ public pom;
     return this.http.post<Segment>(this.SEGMENT_API+'/'+id, letC).toPromise();
   }
 
-
+  getLetoveAdmin(): Promise<Let[]> {
+    return this.http.get<Let[]>(this.AVIO_API +'/admin/letovi/').toPromise();
+  }
 }

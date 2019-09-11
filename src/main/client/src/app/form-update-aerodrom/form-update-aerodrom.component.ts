@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
   selector: 'app-form-update-aerodrom',
   templateUrl: './form-update-aerodrom.component.html',
   styleUrls: ['./form-update-aerodrom.component.css'],
-  providers: [AerodromSService, DestinacijaComponent]
+  providers: [AerodromSService]
 })
 export class FormUpdateAerodromComponent implements OnInit {
   @Input() aerodrom:Aerodrom;
@@ -23,28 +23,30 @@ export class FormUpdateAerodromComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder ,
     private route: ActivatedRoute,
-    private aerodromService: AerodromSService,
-    private destinacija : Lokacija) { }
+    private aerodromService: AerodromSService) { }
 
 
   ngOnInit() {
     this.aerodrom=new Aerodrom();
     //this.destinacije=this.destinacija.getDestinacije();
     this.regFormA=this.formBuilder.group({
-      naziv: ['']
+      naziv: [''],
+      adresa:[''],
+      grad: [''],
+      drzava: ['']
     })
 
     this.route.params.subscribe
       ( params =>  { const id = params['id'];
       if (id) {
-        console.log(`aerodrom with id '${id}' `);
         this.aerodromService.getAerodrom(id).then(aerodrom=>{
-          console.log(`aerodrom with name `+ aerodrom.naziv);
           if (aerodrom) {
             this.aerodrom=aerodrom;
             this.regFormA=this.formBuilder.group({
-              nazivAerodroma: aerodrom.naziv,
-
+              naziv: aerodrom.naziv,
+              adresa: aerodrom.lokacijaDTO.adresa,
+              grad: aerodrom.lokacijaDTO.grad,
+              drzava: aerodrom.lokacijaDTO.drzava
             })
 
           } else {
@@ -60,11 +62,17 @@ export class FormUpdateAerodromComponent implements OnInit {
   onSubmit(){
     this.submitted=true;
     this.aerodrom.naziv=this.regFormA.value.naziv;
-    this.aerodromService.updateAerodrom(this.aerodrom);
+    this.aerodrom.lokacijaDTO=new Lokacija();
+    this.aerodrom.lokacijaDTO.adresa=this.regFormA.value.adresa;
+    this.aerodrom.lokacijaDTO.grad=this.regFormA.value.grad;
+    this.aerodrom.lokacijaDTO.drzava=this.regFormA.value.drzava;
+
+    this.aerodromService.updateAerodrom(this.aerodrom).then(pom=>
+    {
+      console.log("vratilo");
+      console.log(pom);
+      this.router.navigateByUrl('aviokompanijaProfil');
+    });
   }
 
-  onChange(value: any){
-    console.log(value);
-    this.aerodrom.lokacija.id=value;
-  }
 }

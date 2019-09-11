@@ -16,34 +16,36 @@ export class FormAddAerodromComponent implements OnInit {
 
   regFormA: FormGroup;
   submitted = false;
-  destinacije: Observable<Lokacija[]>;
   aerodrom: Aerodrom;
   constructor(
     private router: Router,
     private formBuilder: FormBuilder ,
     private aerodromService: AerodromSService,
-    private destinacija : Lokacija,
     ) { }
 
   ngOnInit() {
     this.aerodrom=new Aerodrom();
-    //this.destinacije=this.destinacija.getDestinacije();
-    console.log(this.destinacije);
-    console.log('Uslo u save !');
     
     this.regFormA=this.formBuilder.group({
-      naziv: ['']
+      naziv: [''],
+      adresa:[''],
+      grad: [''],
+      drzava: ['']
     })
   }
 
   onSubmit(){
     this.submitted=true;
     this.aerodrom.naziv=this.regFormA.value.naziv;
-    this.aerodromService.saveAerodrom(this.aerodrom);
-  }
+    this.aerodrom.lokacijaDTO=new Lokacija();
+    this.aerodrom.lokacijaDTO.adresa=this.regFormA.value.adresa;
+    this.aerodrom.lokacijaDTO.grad=this.regFormA.value.grad;
+    this.aerodrom.lokacijaDTO.drzava=this.regFormA.value.drzava;
 
-  onChange(value: any){
-    console.log(value);
-    this.aerodrom.lokacija=value;
+    this.aerodromService.saveAerodrom(this.aerodrom).then(pom=>{
+      console.log("vratilo");
+      console.log(pom);
+      this.router.navigateByUrl('aviokompanijaProfil');
+    });
   }
 }

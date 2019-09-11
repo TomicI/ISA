@@ -1,43 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Unos novog aerodroma</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-</head>
-<body>
-  <br/>
+
 <div class="jumbotron container text-center col-sm-6">
     <h2 class="text-center" >Azuriranje aerodroma</h2>
   <form [formGroup]="regFormA" (ngSubmit)="onSubmit()" >
 
     <div class="form-group form-inline">
-      <label for="naziv" class="control-label col-sm-4">Naziv </label>
+      <label for="naziv" class="control-label col-sm-4">Naziv: </label>
       <div class="col-sm-8 text-left">
-      <input class="form-control shadow" name="nazivAerodroma" id="nazivAerodroma" type="text" formControlName="nazivAerodroma">
+      <input class="form-control shadow" name="naziv" id="naziv" type="text" formControlName="naziv">
         </div>
     </div>
-    
+
 
     <div class="form-group form-inline">
-      <label for="destaID" class="control-label col-sm-4">Destinacija </label>
+      <label for="adresa" class="control-label col-sm-4">Adresa: </label>
       <div class="col-sm-8 text-left">
-    <select  class="form-control" name="destinacijaID" (change)="onChange($event.target.value)">
-            <option value="-1"></option>
-            <option *ngFor="let des of destinacije | async" [ngValue]="des.id" [selected]="des.id == aerodrom.destinacijaID">{{des.nazivDestinacije}}</option>
-    </select></div>
-  </div>
-    
-    
-  
-    
+        <input class="form-control shadow" name="adresa" id="adresa" type="text" formControlName="adresa">
+      </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label for="grad" class="control-label col-sm-4">Grad:  </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="grad" id="grad" type="text" formControlName="grad">
+      </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label for="drzava" class="control-label col-sm-4">Drzava: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="drzava" id="drzava" type="text" formControlName="drzava">
+      </div>
+    </div>
+
     <div class="col-sm-offset-2"> 
         <button type="submit" class="btn btn-primary">Sacuvaj</button>
       </div>
   </form>
 </div>
 
-</body>
-</html>

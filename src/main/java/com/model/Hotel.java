@@ -1,18 +1,15 @@
 package com.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.model.aviokompanija.Lokacija;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+
 @Entity
 public class Hotel {
 	
@@ -24,19 +21,23 @@ public class Hotel {
 	private String opis;
 	@Column
 	private Double prosecnaOcena;
-	
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Lokacija lokacija;
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "soba",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Soba> soba = new HashSet<Soba>();
-	
+	@JsonIgnore
 	@OneToMany(mappedBy = "hotel",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<CenovnikHotel> cenovnik = new HashSet<CenovnikHotel>();
-	
+	@JsonIgnore
 	@OneToMany(mappedBy = "hotelDU",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<DodatneUslugeHotel> dodatneUsluge = new HashSet<DodatneUslugeHotel>();
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="hot_id")
+	@Column(name = "hot_id")
 	private Long id;
 	
 	public Hotel() {
@@ -79,5 +80,12 @@ public class Hotel {
 	public void setVozila(Set<Soba> soba) {
 		this.soba = soba;
 	}
-	
+
+	public Lokacija getLokacija() {
+		return lokacija;
+	}
+
+	public void setLokacija(Lokacija lokacija) {
+		this.lokacija = lokacija;
+	}
 }

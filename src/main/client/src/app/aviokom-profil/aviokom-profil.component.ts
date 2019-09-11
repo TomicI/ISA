@@ -1,40 +1,127 @@
-import {Component, Input, OnInit} from '@angular/core';
-import { Aviokompanija} from "../model";
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Aerodrom, Aviokompanija, Let, Segment} from "../model";
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { AviokompanijaService } from '../aviokompanija/aviokompanija.service';
+import {MatPaginator, MatTableDataSource} from "@angular/material";
+import {LetService} from "../letService/let.service";
 
 @Component({
   selector: 'app-aviokom-profil',
   templateUrl: './aviokom-profil.component.html',
   styleUrls: ['./aviokom-profil.component.css'],
-  providers: [AviokompanijaService]
+  providers: [AviokompanijaService, LetService]
 })
 export class AviokomProfilComponent implements OnInit {
-  @Input() id: number;
 
+  @ViewChild('paginator1') paginator: MatPaginator;
+  @ViewChild('paginator2') paginator2: MatPaginator;
   aviokomapnija: Aviokompanija;
+  aerodromi: Aerodrom[]=[];
+  aerodromSource;
+  segmenti: Segment[]=[];
+  letL: Let[]=[];
+  cenovnikSource;
+
+  displayedColumns: string[] = [
+    'no',
+    'naziv',
+    'adresa',
+    'edit'];
+
+  displayedColumnsC: string[] = [
+    'no',
+    'od',
+    'do',
+    'datum',
+    'cena'];
+
+
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private aviokompanijaService: AviokompanijaService) { }
+              private aviokompanijaService: AviokompanijaService,
+              private letService: LetService) { }
 
   ngOnInit() {
     this.aviokomapnija=new Aviokompanija();
-    this.route.params.subscribe
-    ( params => {
-      const id = params['id'];
-      if (id) {
-        console.log(`Avikompanija with id '${id}' `);
-        this.aviokompanijaService.getAviokompanija(id).then(pom=>{
-          if (pom) {
-            this.aviokomapnija = pom;
-            console.log(`Pronadjeno '${pom.naziv}' `);
 
-          } else {
-            console.log(`Aviokompanija with id '${id}' not found `);
-          }
-        })
+    this.aviokompanijaService.getAviokompanijaAdmin().then(pom=>{
+      if (pom) {
+           this.aviokomapnija = pom;
+           this.aviokompanijaService.getAerodorome(pom.id).then(pom=>{
+             this.aerodromi=pom;
+             this.aerodromSource=new MatTableDataSource(this.aerodromi);
+             this.aerodromSource.paginator = this.paginator;
+           })
+
+      } else {
+        console.log(`Aviokompanija not found `);
       }
-    });
+    })
+
+    this.aviokompanijaService.getLetoveAdmin().then(pom=>{
+      console.log("letovi");
+      console.log(pom);
+      this.letL=pom;
+      this.cenovnikSource=new MatTableDataSource(this.letL);
+      this.cenovnikSource.paginator=this.paginator2;
+    })
+
+    this.letService.getAllSegmente().then(pom=>{
+      console.log("segmenti");
+      console.log(pom);
+      this.segmenti=pom;
+    })
+  }
+
+
+  addAerodrom(){
+    this.router.navigateByUrl('aerodromAdd');
+  }
+
+  editAerodrom(aerodrom: Aerodrom){
+    console.log("edit");
+    console.log(aerodrom);
+    this.router.navigateByUrl('aerodromUpdate/'+aerodrom.id);
+  }
+
+  getMinMaxCena(konf: number): string{
+    console.log("konf");
+    console.log(konf);
+    var min = 0;
+    var max = 0;
+    var prvi=0;
+      if(this.segmenti.length>1) {
+
+        for (let i = 0; i < this.segmenti.length; i++) {
+          if(this.segmenti[i].konfiguracija.id==konf){
+            if(prvi ==0 ){
+              min=this.segmenti[i].kategorija.cena;
+              max=this.segmenti[i].kategorija.cena;
+              prvi=1;
+            }
+            if(this.segmenti[i].kategorija.cena<min)
+              min=this.segmenti[i].kategorija.cena;
+            if(this.segmenti[i].kategorija.cena>max)
+              max=this.segmenti[i].kategorija.cena;
+          }
+
+        }
+      }
+      if(min==0 &&  max==0){
+        return '/';
+      }
+      if(min ==0){
+        return max.toString();
+      }
+      if(max==0){
+        return min.toString();
+      }
+      if(min==max){
+        return max.toString();
+      }
+      if(min>0 && max>0){
+        return min.toString()+"-"+max.toString();
+      }
   }
 }
 

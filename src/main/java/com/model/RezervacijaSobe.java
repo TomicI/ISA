@@ -20,6 +20,9 @@ public class RezervacijaSobe {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Soba sobaRez;
 
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Hotel soba;
+
 	public Long getId() {
 		return id;
 	}
@@ -59,5 +62,12 @@ public class RezervacijaSobe {
 	public void setSobaRez(Soba sobaRez) {
 		this.sobaRez = sobaRez;
 	}
-	
+
+	public Hotel getSoba() {
+		return soba;
+	}
+
+	public void setSoba(Hotel soba) {
+		this.soba = soba;
+	}
 }

@@ -1,8 +1,6 @@
 package com.service.aviokompanija;
 
-import com.dto.aviokompanija.LetDTO;
-import com.dto.aviokompanija.OcenaDTO;
-import com.dto.aviokompanija.SedisteDTO;
+import com.dto.aviokompanija.*;
 import com.model.Rezervacija;
 import com.model.aviokompanija.*;
 import com.model.user.User;
@@ -462,8 +460,14 @@ public class LetService {
 		if(let.get().getSedista().isEmpty())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sedista ne postoje");
 
-
-		return liste.sedista(new ArrayList<>(let.get().getSedista()));
+		List<SedisteDTO> sedisteDTOS=new ArrayList<>();
+		for(Sediste s: let.get().getSedista()){
+			SedisteDTO sedisteDTO=new SedisteDTO(s);
+			sedisteDTO.getSegment().setKonfiguracija(new KonfiguracijaLetaDTO(s.getSegment().getKonfiguracija()));
+			sedisteDTO.getSegment().setKategorija(new KategorijaSedistaDTO(s.getSegment().getKategorija()));
+			sedisteDTOS.add(sedisteDTO);
+		}
+		return sedisteDTOS;
 	}
 
 	public long ratePermission(Rezervacija rezervacija){

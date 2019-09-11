@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 
 import { AviokompanijaService } from '../aviokompanija/aviokompanija.service';
-import { Aviokompanija } from '../model';
+import {Aviokompanija, Lokacija} from '../model';
 import { AviokomListComponent } from '../aviokom-list/aviokom-list.component';
 import { routerNgProbeToken } from '@angular/router/src/router_module';
 import { variable } from '@angular/compiler/src/output/output_ast';
@@ -12,6 +12,7 @@ import * as mapboxgl  from 'mapbox-gl';
 //import  {geo} from 'mapbox-geocoding';
 import 'mapbox-gl/dist/mapbox-gl.css';  
 import {FeatureCollection} from 'mapbox-gl';
+import {FormBuilder, FormGroup} from "@angular/forms";
 /*
 import { MapsAPILoader, AgmMap } from '@agm/core';
 import { GoogleMapsAPIWrapper } from '@agm/core/services';
@@ -46,7 +47,9 @@ interface Location {
   providers: [AviokompanijaService, AviokomListComponent]
 })
 export class AvioEditComponent implements OnInit {
-	@Input() aviokompanija: Aviokompanija;
+	aviokompanija: Aviokompanija;
+  regFormA: FormGroup;
+  submitted = false;
   /*geocoder:any;
   latitude= 45.2671352;
   longitude= 19.83354959999997;
@@ -61,7 +64,7 @@ export class AvioEditComponent implements OnInit {
     zoom: 5
   };*/
      
-  
+  /*
   map: mapboxgl.Map;  
   popup: any; 
   lat=37.75;
@@ -69,14 +72,15 @@ export class AvioEditComponent implements OnInit {
 
   pom:FeatureCollection;
   markers:any;
-  adresa: any;
+  adresa: any;*/
   constructor(private route: ActivatedRoute,
+              private formBuilder: FormBuilder ,
               private router: Router,
               private aviokompanijaService: AviokompanijaService,
               private aviokompanije: AviokomListComponent,
               
             //  public mapsApiLoader: MapsAPILoader,
-              private zone: NgZone,
+            //  private zone: NgZone,
              // private wrapper: GoogleMapsAPIWrapper
              ) {/*this.mapsApiLoader = mapsApiLoader;
               this.zone = zone;
@@ -94,9 +98,31 @@ export class AvioEditComponent implements OnInit {
 
 
  ngOnInit() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiaXYzIiwiYSI6ImNqcmw4dTFkZzA1a2E0M280cmN5ZzB2azcifQ.onqhM8uoPAXAYdE9JRJX0g';
-   // geo.setAccessToken('pk.eyJ1IjoiaXYzIiwiYSI6ImNqcmw4dTFkZzA1a2E0M280cmN5ZzB2azcifQ.onqhM8uoPAXAYdE9JRJX0g');
    this.aviokompanija=new Aviokompanija();
+   this.regFormA=this.formBuilder.group({
+     naziv: [''],
+     adresa:[''],
+     grad: [''],
+     drzava: [''],
+     opis:['']
+   })
+
+   this.aviokompanijaService.getAviokompanijaAdmin().then(pom=>{
+     console.log("avkom");
+     console.log(pom);
+     this.aviokompanija=pom;
+     this.regFormA=this.formBuilder.group({
+       naziv: pom.naziv,
+       adresa: pom.lokacijaDTO.adresa,
+       grad: pom.lokacijaDTO.grad,
+       drzava: pom.lokacijaDTO.drzava,
+       opis: pom.opis
+     })
+
+   })
+    //mapboxgl.accessToken = 'pk.eyJ1IjoiaXYzIiwiYSI6ImNqcmw4dTFkZzA1a2E0M280cmN5ZzB2azcifQ.onqhM8uoPAXAYdE9JRJX0g';
+   // geo.setAccessToken('pk.eyJ1IjoiaXYzIiwiYSI6ImNqcmw4dTFkZzA1a2E0M280cmN5ZzB2azcifQ.onqhM8uoPAXAYdE9JRJX0g');
+  // this.aviokompanija=new Aviokompanija();
   //  this.route.params.subscribe
   //     ( params =>  { const id = params['id'];
   //     if (id) {
@@ -121,6 +147,23 @@ export class AvioEditComponent implements OnInit {
 
   }
 
+  onSubmit(){
+    this.submitted=true;
+    this.aviokompanija.naziv=this.regFormA.value.naziv;
+    this.aviokompanija.lokacijaDTO=new Lokacija();
+    this.aviokompanija.lokacijaDTO.adresa=this.regFormA.value.adresa;
+    this.aviokompanija.lokacijaDTO.grad=this.regFormA.value.grad;
+    this.aviokompanija.lokacijaDTO.drzava=this.regFormA.value.drzava;
+    this.aviokompanija.opis=this.regFormA.value.opis;
+
+    this.aviokompanijaService.updateAviokompanija(this.aviokompanija).then(pom=>
+    {
+      console.log("vratilo");
+      console.log(pom);
+      this.router.navigateByUrl('aviokompanijaProfil');
+    });
+  }
+/*
   ngAfterViewInit(){
     if(this.pom){
     this.map = new mapboxgl.Map({
@@ -175,7 +218,7 @@ export class AvioEditComponent implements OnInit {
   }*/
 
 
-
+/*
   deleteAk(id){
     this.aviokompanijaService.deleteAviokompanija(id).then(pom=>{
       console.log('Uspesno obrisano! ');

@@ -120,11 +120,11 @@ export class UnosPutnikaComponent implements OnInit, OnDestroy {
           this.pBrPuntika = this.pBrPuntika - 1;
           this.router.navigateByUrl('unosPutnika/' + this.rezervacija.id + '/' + this.pBrPuntika);
         }else{
-          window.alert("You reservation is created! ");
+          /*window.alert("You reservation is created! ");
           this.userService.sendMail(this.rezervacija).then(pom=>{
             console.log(pom);
-          })
-          this.router.navigateByUrl('/travel');
+          })*/
+          this.router.navigateByUrl('afterReservation/'+ this.rezervacija.kartaDTO.let.destinacija.grad+'/'+ this.rezervacija.kartaDTO.let.destinacija.drzava+'/'+this.rezervacija.id);
         }
       }
     )

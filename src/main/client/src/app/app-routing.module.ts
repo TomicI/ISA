@@ -50,6 +50,7 @@ import {ResDetailComponent} from "./res-detail/res-detail.component";
 import {AviokomapnijaProfilComponent} from "./aviokomapnija-profil/aviokomapnija-profil.component"
 import {BrzeRezervacijeListaComponent} from "./brze-rezervacije-lista/brze-rezervacije-lista.component";
 import {LetDetailsComponent} from "./let-details/let-details.component";
+import {AfterReservationComponent} from "./after-reservation/after-reservation.component";
 import {CanDeactivateService} from "./security/can-deactivate.service";
 
 const routes: Routes = [
@@ -137,7 +138,7 @@ const routes: Routes = [
 
 
   {path: 'aviokom-list', component: AviokomListComponent},
-  {path: 'avio-edit/:id', component: AvioEditComponent},
+  {path: 'avio-edit', component: AvioEditComponent},
   {path: 'form-akupdate/:id', component: FormAKUpdateComponent},
   {path: 'aerodrom/:id', component: AerodromComponent},
   {path: 'aerodromAdd', component: FormAddAerodromComponent},
@@ -147,9 +148,10 @@ const routes: Routes = [
   {path: 'letUpdate/:id', component: FormUpdateLetComponent},
   {path: 'letAdd/:id', component: FormAddLetComponent},
   {path: 'letovi', component: LetComponent},
-  {path: 'aviokompanijaProfil/:id', component: AviokomProfilComponent},
+  {path: 'aviokompanijaProfil', component: AviokomProfilComponent},
   {path: 'addAviokom', component: FormDodajAviokomComponent},
   {path: 'aviokompanija/:id', component: AviokomapnijaProfilComponent},
+
   {
     path: 'resetPassword',
     component: AdminResetComponent,
@@ -166,7 +168,9 @@ const routes: Routes = [
   {path: 'unosPutnika/:kartaID/:brPutnika', component: UnosPutnikaComponent},
   {path: 'brzaRezervacija/:id', component: BrzaRezervacijaComponent},
   {path: 'tickets/:id', component: BrzeRezervacijeListaComponent},
-  {path: 'details/:id', component: LetDetailsComponent}
+  {path: 'details/:id', component: LetDetailsComponent},
+  {path: 'afterReservation/:grad/:drzava/:rezId', component: AfterReservationComponent}
+
 
 ];
 

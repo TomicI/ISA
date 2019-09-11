@@ -119,7 +119,11 @@ public class RentACarController {
 
 	}
 
-	
 
+	@RequestMapping(value = "/search/{grad}/{drzava}", method = RequestMethod.GET)
+	public ResponseEntity<List<RentACarDTO>> getAll(@PathVariable(value = "grad") String grad, @PathVariable(value="drzava") String drzava) {
+
+		return new ResponseEntity<>(rentACarService.findByLokacijaFilijale(grad, drzava), HttpStatus.OK);
+	}
 
 }

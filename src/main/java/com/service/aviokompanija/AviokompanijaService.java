@@ -114,22 +114,22 @@ public class AviokompanijaService {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aviokompanija ne postoji");
 
 		aviokompanija.get().setNaziv(aviokompanijaDTO.getNaziv());
-		aviokompanija.get().setAdresa(aviokompanijaDTO.getAdresa());
 		aviokompanija.get().setOpis(aviokompanijaDTO.getOpis());
-		aviokompanija.get().setProsecnaOcena(aviokompanijaDTO.getProsecnaOcena());
 
-		if(aviokompanijaDTO.getLokacijaDTO()!= null && (aviokompanijaDTO.getLokacijaDTO().getId() != aviokompanija.get().getLokacija().getId())){
+
+		if(aviokompanijaDTO.getLokacijaDTO()!= null){
 			Optional<Lokacija> lokacija = lokacijaRepository.findById(aviokompanijaDTO.getLokacijaDTO().getId());
 			if(!lokacija.isPresent())
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lokacija ne postoji");
 
-			aviokompanija.get().setLokacija(lokacija.get());
-			lokacija.get().getAviokompanije().add(aviokompanija.get());
+			lokacija.get().setDrzava(aviokompanijaDTO.getLokacijaDTO().getDrzava());
+			lokacija.get().setAdresa(aviokompanijaDTO.getLokacijaDTO().getAdresa());
+			lokacija.get().setGrad(aviokompanijaDTO.getLokacijaDTO().getGrad());
 			lokacijaRepository.save(lokacija.get());
 		}
 
-		aviokompanijaRepository.save(aviokompanija.get());
-		return new AviokompanijaDTO(aviokompanija.get());
+
+		return new AviokompanijaDTO(aviokompanijaRepository.save(aviokompanija.get()));
 	}
 
 	public void delete(Long id){
@@ -342,5 +342,41 @@ public class AviokompanijaService {
 		}
 
 		return ocena / aviokompanija.getOcene().size();
+	}
+
+	public AviokompanijaDTO findByAdmin(String username){
+		Optional<User> user=userRepository.findByUsername(username);
+		if(user.isPresent() && user.get().getAviokompanija()!=null){
+			return new AviokompanijaDTO(user.get().getAviokompanija());
+
+		}
+
+
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aviokompanija ne postoji");
+	}
+
+	public List<LetDTO> letoviAdmin(String username){
+		Optional<User> user=userRepository.findByUsername(username);
+		if(!user.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ne postoji");
+
+		if(user.get().getAviokompanija()==null)
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User nema aviokompaniju");
+
+		Optional<Aviokompanija> aviokompanija = aviokompanijaRepository.findById(user.get().getAviokompanija().getId());
+		if(!aviokompanija.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aviokompanija ne postoji");
+
+		List<Let> letovi = new ArrayList<>();
+
+
+		for(KonfiguracijaLeta konfiguracijaLeta : aviokompanija.get().getKonfiguracijaLeta()){
+			letovi.addAll(konfiguracijaLeta.getLetovi());
+		}
+
+		if(letovi.isEmpty())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Letovi ne postoje");
+
+		return liste.letovi(letovi);
 	}
 }

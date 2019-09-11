@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="col-sm-6" align="center">
+    <button (click)="zavrsiRez()">Zavrsi rezervaciju</button>
+  </div>
+
+  <div class="col-sm-6">
+    <div *ngFor="let rez of hoteli">
+
+
+      <div class="card mt-4" style="width: 18rem;height: 18rem">
+        <div class="card-header">
+          <div class="d-flex">
+
+            <h6 class="card-title">Hotel</h6>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div><h2>{{rez.naziv}}</h2></div>
+          <div><h4>{{rez.opis}}</h4></div>
+        <div class="card-footer">
+          <div class="d-flex">
+            <div class="ml-auto">
+              <button type="button" class="btn btn-outline-secondary btn-sm" (click)="sledeciKorakH(rez.id)">Reserve</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6">
+    <div *ngFor="let rez of rentACar">
+
+
+      <div class="card mt-4" style="width: 18rem;height: 18rem">
+        <div class="card-header">
+          <div class="d-flex">
+
+            <h6 class="card-title">Rent a car service</h6>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div><h2>{{rez.naziv}}</h2></div>
+          <div><h4>{{rez.opis}}</h4></div>
+          <div class="card-footer">
+            <div class="d-flex">
+              <div class="ml-auto">
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="sledeciKorakR(rez)">Details</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

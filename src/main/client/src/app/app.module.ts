@@ -88,6 +88,7 @@ import { BrzeRezervacijeListaComponent } from './brze-rezervacije-lista/brze-rez
 import { LetDetailsComponent } from './let-details/let-details.component';
 
 import { CallbackPipe } from "./reservation-overview/callback.pipe";
+import { AfterReservationComponent } from './after-reservation/after-reservation.component';
 import { StatsComponent } from './stats/stats.component';
 
 
@@ -163,7 +164,9 @@ import { StatsComponent } from './stats/stats.component';
     AviokomapnijaProfilComponent,
     BrzeRezervacijeListaComponent,
     LetDetailsComponent,
-    StatsComponent
+    StatsComponent,
+    LetDetailsComponent,
+    AfterReservationComponent
   ],
   imports: [
     BrowserModule,

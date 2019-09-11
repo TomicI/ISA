@@ -9,7 +9,7 @@ export class Aviokompanija {
   adresa: string;
   opis: string;
   prosecnaOcena: number;
-  lokacija: Lokacija;
+  lokacijaDTO: Lokacija;
   constructor() { }
 
 }
@@ -18,7 +18,7 @@ export class Aerodrom {
   id: number;
   naziv: string;
   aviokompanija:Aviokompanija;
-  lokacija: Lokacija;
+  lokacijaDTO: Lokacija;
   constructor() { }
 
 }
@@ -469,6 +469,13 @@ export class Invite{
   reservation: Rezervacija;
 
   Inivte(){}
+}
+
+export class Hotel{
+  id: number;
+  naziv: string;
+  opis: string;
+  Hotel(){}
 }
 
 export enum Menjac {
