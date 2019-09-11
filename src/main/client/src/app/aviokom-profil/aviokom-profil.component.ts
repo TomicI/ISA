@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {Aerodrom, Aviokompanija, Let, Segment} from "../model";
+import {Aerodrom, Aviokompanija, DodatnaUslugaAviokompanija, Let, Prtljag, Segment} from "../model";
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { AviokompanijaService } from '../aviokompanija/aviokompanija.service';
 import {MatPaginator, MatTableDataSource} from "@angular/material";
@@ -21,6 +21,10 @@ export class AviokomProfilComponent implements OnInit {
   segmenti: Segment[]=[];
   letL: Let[]=[];
   cenovnikSource;
+  prtljag: Prtljag[]=[];
+  prtljagSource;
+  dodatneUsluge: DodatnaUslugaAviokompanija[]=[];
+  dodatnaUslugaSource;
 
   displayedColumns: string[] = [
     'no',
@@ -35,6 +39,22 @@ export class AviokomProfilComponent implements OnInit {
     'datum',
     'cena'];
 
+  displayedColumnsP: string[] = [
+    'no',
+    'duzina',
+    'sirina',
+    'tezina',
+    'cena'
+    ];
+
+  displeydColumnsD: string[]=[
+    'no',
+    'naziv',
+    'opis',
+    'cena'
+
+  ];
+
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -48,9 +68,23 @@ export class AviokomProfilComponent implements OnInit {
       if (pom) {
            this.aviokomapnija = pom;
            this.aviokompanijaService.getAerodorome(pom.id).then(pom=>{
+             console.log("aerodromi");
+             console.log(pom);
              this.aerodromi=pom;
              this.aerodromSource=new MatTableDataSource(this.aerodromi);
              this.aerodromSource.paginator = this.paginator;
+
+             this.aviokompanijaService.getPrtljag(this.aviokomapnija.id).then(pom=>{
+               this.prtljag=pom;
+               this.prtljagSource=new MatTableDataSource(this.prtljag);
+             }
+
+             );
+
+             this.aviokompanijaService.getDodatneUsluge(this.aviokomapnija.id).then(pom=>{
+               this.dodatneUsluge=pom;
+               this.dodatnaUslugaSource=new MatTableDataSource(this.dodatneUsluge);
+             })
            })
 
       } else {
@@ -71,6 +105,8 @@ export class AviokomProfilComponent implements OnInit {
       console.log(pom);
       this.segmenti=pom;
     })
+
+
   }
 
 
@@ -122,6 +158,15 @@ export class AviokomProfilComponent implements OnInit {
       if(min>0 && max>0){
         return min.toString()+"-"+max.toString();
       }
+  }
+
+  addPrtljag(){
+    this.router.navigateByUrl('addPrtljag');
+  }
+
+  addDU(){
+    this.router.navigateByUrl('addDodatnaUsluga');
+
   }
 }
 

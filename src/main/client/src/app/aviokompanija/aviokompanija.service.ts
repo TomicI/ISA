@@ -73,8 +73,12 @@ public pom;
     return this.http.get<Prtljag[]>(this.AVIO_API+'/'+id+'/prtljag').toPromise();
   }
 
-  createPrtljag(id: number, prtljag:Prtljag): Promise<Prtljag>{
-    return this.http.post<Prtljag>(this.AVIO_API+'/'+id+'/prtljag', prtljag).toPromise();
+  createPrtljag(prtljag:Prtljag): Promise<Prtljag>{
+    return this.http.post<Prtljag>(this.AVIO_API+'/prtljag', prtljag).toPromise();
+  }
+
+  createDodUsl(dodatnaUsluga:DodatnaUslugaAviokompanija): Promise<DodatnaUslugaAviokompanija>{
+    return this.http.post<DodatnaUslugaAviokompanija>(this.AVIO_API+'/dodatna_usluga', dodatnaUsluga).toPromise();
   }
 
   getLetovi(id: number): Promise<Let[]>{

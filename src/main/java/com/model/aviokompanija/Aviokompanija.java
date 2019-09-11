@@ -59,6 +59,12 @@ public class Aviokompanija {
 		konfiguracijaLeta = new HashSet<>();
 	}
 
+	public Aviokompanija(Long id, String naziv, String opis) {
+		this.id=id;
+		this.naziv = naziv;
+		this.opis = opis;
+	}
+
 	public Long getId() {
 		return id;
 	}

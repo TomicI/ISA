@@ -203,8 +203,16 @@ public class AviokompanijaService {
 		return liste.dodatneUsluge(new ArrayList<>(aviokompanija.get().getDodatneUsluge()));
 	}
 
-	public DodatnaUslugaAviokompanijaDTO napraviDodatnuUslugu(Long id, DodatnaUslugaAviokompanijaDTO dodatnaUslugaAviokompanijaDTO){
-		Optional<Aviokompanija> aviokompanija = aviokompanijaRepository.findById(id);
+	public DodatnaUslugaAviokompanijaDTO napraviDodatnuUslugu(String username, DodatnaUslugaAviokompanijaDTO dodatnaUslugaAviokompanijaDTO){
+		Optional<User> user=userRepository.findByUsername(username);
+		if(!user.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ne postoji");
+
+		if(user.get().getAviokompanija()==null)
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User nema aviokompaniju");
+
+
+		Optional<Aviokompanija> aviokompanija = aviokompanijaRepository.findById(user.get().getAviokompanija().getId());
 		if(!aviokompanija.isPresent())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aviokompanija ne postoji");
 
@@ -220,8 +228,15 @@ public class AviokompanijaService {
 		return new DodatnaUslugaAviokompanijaDTO(dodatnaUslugaAviokompanija);
 	}
 
-	public PrtljagDTO napraviPrtljag(Long id, PrtljagDTO prtljagmDTO){
-		Optional<Aviokompanija> aviokompanija = aviokompanijaRepository.findById(id);
+	public PrtljagDTO napraviPrtljag(String username, PrtljagDTO prtljagmDTO){
+		Optional<User> user=userRepository.findByUsername(username);
+		if(!user.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User ne postoji");
+
+		if(user.get().getAviokompanija()==null)
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User nema aviokompaniju");
+
+		Optional<Aviokompanija> aviokompanija = aviokompanijaRepository.findById(user.get().getAviokompanija().getId());
 		if(!aviokompanija.isPresent())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aviokompanija ne postoji");
 
@@ -230,6 +245,7 @@ public class AviokompanijaService {
 		prtljag.setSirina(prtljagmDTO.getSirina());
 		prtljag.setTezina(prtljagmDTO.getTezina());
 		prtljag.setCena(prtljagmDTO.getCena());
+		prtljag.setAviokompanija(aviokompanija.get());
 		prtljagRepository.save(prtljag);
 		aviokompanija.get().getPrtljag().add(prtljag);
 		aviokompanijaRepository.save(aviokompanija.get());

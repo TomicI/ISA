@@ -1,4 +1,4 @@
-import {Component, isDevMode, OnInit} from '@angular/core';
+import {Component, isDevMode, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, FormControl} from "@angular/forms";
 import {Aerodrom, Karta, KonfiguracijaLeta, Let, Lokacija, Segment, VrstaLeta} from "../model";
 import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
@@ -8,6 +8,7 @@ import {LetService} from "../letService/let.service";
 import {AviokompanijaService} from "../aviokompanija/aviokompanija.service";
 import {map, startWith} from 'rxjs/operators';
 import {Observable} from "rxjs";
+import {MatPaginator, MatSort, MatTableDataSource} from "@angular/material";
 
 @Component({
   selector: 'app-search-let',
@@ -21,6 +22,9 @@ export class SearchLetComponent implements OnInit {
   destinacije: Lokacija[]=[];
   vrstaLeta: VrstaLeta;
   konfiguracija: KonfiguracijaLeta;
+
+  @ViewChild('paginator1') paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   konfig: KonfiguracijaLeta[]=[];
 
@@ -37,6 +41,20 @@ export class SearchLetComponent implements OnInit {
   tabela: boolean;
   karta: Karta;
   segmenti: Segment[]=[];
+  rezultaSource;
+
+  displayedColumns: string[] = [
+    'no',
+    'vremePolaska',
+    'vremeDolaska',
+    'brojPresedanja',
+     'vremeTrajanja',
+    'nazivAviokompanije',
+    'cena',
+    'details'
+
+  ];
+
   constructor(
               private formBuilder: FormBuilder ,
               private aerodromService: AerodromSService,
@@ -161,6 +179,8 @@ export class SearchLetComponent implements OnInit {
       var vremeDolaska = this.formSearch.get('vremeDolaska').value;
       const vDolaska = new Date(vremeDolaska.year, vremeDolaska.month - 1, vremeDolaska.day, 0, 0, 0);
       this.pretraga.vremeDolaska = vDolaska;
+
+
     }
     const vPolaska=new Date(vremePolaska.year, vremePolaska.month-1, vremePolaska.day, 0,0,0);
 
@@ -179,6 +199,9 @@ export class SearchLetComponent implements OnInit {
       this.rezultat=pom;
       this.onChangeSort(11);
       this.tabela=true;
+      this.rezultaSource=new MatTableDataSource(this.rezultat);
+      this.rezultaSource.paginator = this.paginator;
+      this.rezultaSource.sort = this.sort;
     })
 
   }
@@ -223,5 +246,49 @@ export class SearchLetComponent implements OnInit {
     }
 
 
+  }
+
+  getMinMaxCena(konf: number): string{
+    console.log("konf");
+    console.log(konf);
+    var min = 0;
+    var max = 0;
+    var prvi=0;
+    if(this.segmenti.length>1) {
+
+      for (let i = 0; i < this.segmenti.length; i++) {
+        if(this.segmenti[i].konfiguracija.id==konf){
+          if(prvi ==0 ){
+            min=this.segmenti[i].kategorija.cena;
+            max=this.segmenti[i].kategorija.cena;
+            prvi=1;
+          }
+          if(this.segmenti[i].kategorija.cena<min)
+            min=this.segmenti[i].kategorija.cena;
+          if(this.segmenti[i].kategorija.cena>max)
+            max=this.segmenti[i].kategorija.cena;
+        }
+
+      }
+    }
+    if(min==0 &&  max==0){
+      return '/';
+    }
+    if(min ==0){
+      return max.toString();
+    }
+    if(max==0){
+      return min.toString();
+    }
+    if(min==max){
+      return max.toString();
+    }
+    if(min>0 && max>0){
+      return min.toString()+"-"+max.toString();
+    }
+  }
+
+  applyFilter(filterValue: string) {
+    this.rezultaSource.filter = filterValue.trim().toLowerCase();
   }
 }

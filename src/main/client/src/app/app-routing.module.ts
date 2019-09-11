@@ -52,6 +52,8 @@ import {BrzeRezervacijeListaComponent} from "./brze-rezervacije-lista/brze-rezer
 import {LetDetailsComponent} from "./let-details/let-details.component";
 import {AfterReservationComponent} from "./after-reservation/after-reservation.component";
 import {CanDeactivateService} from "./security/can-deactivate.service";
+import {AddPrtljagComponent} from "./add-prtljag/add-prtljag.component";
+import {AddDodUslComponent} from "./add-dod-usl/add-dod-usl.component";
 import {StatsComponent} from "./stats/stats.component";
 
 const routes: Routes = [
@@ -177,7 +179,10 @@ const routes: Routes = [
   {path: 'brzaRezervacija/:id', component: BrzaRezervacijaComponent},
   {path: 'tickets/:id', component: BrzeRezervacijeListaComponent},
   {path: 'details/:id', component: LetDetailsComponent},
-  {path: 'afterReservation/:grad/:drzava/:rezId', component: AfterReservationComponent}
+  {path: 'afterReservation/:grad/:drzava/:rezId', component: AfterReservationComponent},
+  {path: 'addPrtljag', component: AddPrtljagComponent},
+  {path: 'addDodatnaUsluga', component: AddDodUslComponent}
+
 
 
 ];

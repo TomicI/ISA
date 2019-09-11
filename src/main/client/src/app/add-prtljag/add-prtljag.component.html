@@ -1,0 +1,38 @@
+<div class="jumbotron container text-center col-sm-6">
+  <h2 class="text-center" >Dodaj aerodrom</h2>
+  <form [formGroup]="regFormA" (ngSubmit)="onSubmit()" >
+
+    <div class="form-group form-inline">
+      <label for="duzina" class="control-label col-sm-4">Duzina: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="duzina" id="duzina" type="number" formControlName="duzina">
+      </div>
+    </div>
+
+
+    <div class="form-group form-inline">
+      <label for="sirina" class="control-label col-sm-4">Sirina: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="sirina" id="sirina" type="number" formControlName="sirina">
+      </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label for="tezina" class="control-label col-sm-4">Tezina:  </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="tezina" id="tezina" type="number" formControlName="tezina">
+      </div>
+    </div>
+
+    <div class="form-group form-inline">
+      <label for="cena" class="control-label col-sm-4">Cena: </label>
+      <div class="col-sm-8 text-left">
+        <input class="form-control shadow" name="cena" id="cena" type="number" formControlName="cena">
+      </div>
+    </div>
+
+    <div class="col-sm-offset-2">
+      <button type="submit" class="btn btn-primary">Sacuvaj</button>
+    </div>
+  </form>
+</div>

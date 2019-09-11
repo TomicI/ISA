@@ -132,7 +132,7 @@ public class AviokompanijaController {
 		return new ResponseEntity<>(aviokompanijaService.prtljag(id),HttpStatus.OK);
 	}
 
-	@RequestMapping(value="/{id}/prtljag", method=RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value="/prtljag", method=RequestMethod.POST, produces = "application/json")
 	@ApiOperation(value = "Kreira prtljag za aviokompaniju", httpMethod = "POST")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "OK", response = PrtljagDTO.class),
@@ -140,9 +140,8 @@ public class AviokompanijaController {
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
 	@PreAuthorize("hasRole('ADMIN_AVIO')")
-	public ResponseEntity<PrtljagDTO> napraviPrtljag(@PathVariable(value = "id") Long id,
-													   @RequestBody PrtljagDTO prtljagDTO){
-		return new ResponseEntity<>(aviokompanijaService.napraviPrtljag(id,prtljagDTO),HttpStatus.OK);
+	public ResponseEntity<PrtljagDTO> napraviPrtljag(@RequestBody PrtljagDTO prtljagDTO, Principal user){
+		return new ResponseEntity<>(aviokompanijaService.napraviPrtljag(user.getName(),prtljagDTO),HttpStatus.OK);
 	}
 
 	@RequestMapping(value="/{id}/letovi", method=RequestMethod.GET, produces = "application/json")
@@ -191,7 +190,7 @@ public class AviokompanijaController {
 		return new ResponseEntity<>(aviokompanijaService.dodatneUsluge(id),HttpStatus.OK);
 	}
 
-	@RequestMapping(value="/{id}/dodatna_usluga", method=RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value="/dodatna_usluga", method=RequestMethod.POST, produces = "application/json")
 	@ApiOperation(value = "Kreira konfiguraciju leta za aviokompaniju", httpMethod = "POST")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "OK", response = DodatnaUslugaAviokompanijaDTO.class),
@@ -199,9 +198,8 @@ public class AviokompanijaController {
 			@ApiResponse(code = 400, message = "Bad Request")
 	})
 	@PreAuthorize("hasRole('ADMIN_AVIO')")
-	public ResponseEntity<DodatnaUslugaAviokompanijaDTO> napraviDodatnuUslugu(@PathVariable(value = "id") Long id,
-																	 @RequestBody DodatnaUslugaAviokompanijaDTO dodatnaUslugaAviokompanijaDTO){
-		return new ResponseEntity<>(aviokompanijaService.napraviDodatnuUslugu(id,dodatnaUslugaAviokompanijaDTO),HttpStatus.OK);
+	public ResponseEntity<DodatnaUslugaAviokompanijaDTO> napraviDodatnuUslugu( @RequestBody DodatnaUslugaAviokompanijaDTO dodatnaUslugaAviokompanijaDTO, Principal user){
+		return new ResponseEntity<>(aviokompanijaService.napraviDodatnuUslugu(user.getName(),dodatnaUslugaAviokompanijaDTO),HttpStatus.OK);
 	}
 
 

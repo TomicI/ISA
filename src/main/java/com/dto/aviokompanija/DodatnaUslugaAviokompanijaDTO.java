@@ -23,7 +23,11 @@ public class DodatnaUslugaAviokompanijaDTO {
 		this.setNaziv(naziv);
 		this.setOpis(opis);
 		this.setCena(cena);
-		this.aviokompanija = new AviokompanijaDTO(aviokompanija);
+		if(aviokompanija!=null)
+			this.aviokompanija = new AviokompanijaDTO(aviokompanija);
+		else
+			this.aviokompanija=null;
+
 	}
 
 

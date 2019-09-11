@@ -37,10 +37,10 @@ export class FormAddAerodromComponent implements OnInit {
   onSubmit(){
     this.submitted=true;
     this.aerodrom.naziv=this.regFormA.value.naziv;
-    this.aerodrom.lokacijaDTO=new Lokacija();
-    this.aerodrom.lokacijaDTO.adresa=this.regFormA.value.adresa;
-    this.aerodrom.lokacijaDTO.grad=this.regFormA.value.grad;
-    this.aerodrom.lokacijaDTO.drzava=this.regFormA.value.drzava;
+    this.aerodrom.lokacija=new Lokacija();
+    this.aerodrom.lokacija.adresa=this.regFormA.value.adresa;
+    this.aerodrom.lokacija.grad=this.regFormA.value.grad;
+    this.aerodrom.lokacija.drzava=this.regFormA.value.drzava;
 
     this.aerodromService.saveAerodrom(this.aerodrom).then(pom=>{
       console.log("vratilo");

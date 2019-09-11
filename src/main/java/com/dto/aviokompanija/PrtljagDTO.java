@@ -21,7 +21,10 @@ public class PrtljagDTO {
 		this.setSirina(sirina);
 		this.setTezina(tezina);
 		this.setCena(cena);
-		this.setAviokompanija(new AviokompanijaDTO(aviokompanija));
+		if(aviokompanija!=null)
+			this.setAviokompanija(new AviokompanijaDTO(aviokompanija));
+		else
+			this.setAviokompanija(null);
 	}
 
 	public Long getId() {

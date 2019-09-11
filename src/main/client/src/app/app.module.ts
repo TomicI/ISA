@@ -90,6 +90,8 @@ import { LetDetailsComponent } from './let-details/let-details.component';
 import { CallbackPipe } from "./reservation-overview/callback.pipe";
 import { AfterReservationComponent } from './after-reservation/after-reservation.component';
 import { StatsComponent } from './stats/stats.component';
+import { AddPrtljagComponent } from './add-prtljag/add-prtljag.component';
+import { AddDodUslComponent } from './add-dod-usl/add-dod-usl.component';
 
 
 @NgModule({
@@ -166,7 +168,9 @@ import { StatsComponent } from './stats/stats.component';
     LetDetailsComponent,
     StatsComponent,
     LetDetailsComponent,
-    AfterReservationComponent
+    AfterReservationComponent,
+    AddPrtljagComponent,
+    AddDodUslComponent
   ],
   imports: [
     BrowserModule,

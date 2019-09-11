@@ -61,7 +61,7 @@
 
           <ng-container matColumnDef="adresa">
             <th mat-header-cell *matHeaderCellDef > Adress </th>
-            <td mat-cell *matCellDef="let aerodrom"> {{aerodrom.lokacijaDTO.adresa}} </td>
+            <td mat-cell *matCellDef="let aerodrom"> {{aerodrom.lokacija.adresa}} </td>
           </ng-container>
 
           <ng-container matColumnDef="edit">
@@ -138,6 +138,117 @@
 
 
       </div>
+
+
+      <div class="card" style="width: 65rem;">
+
+        <div class="card-header">
+          <div class="d-flex">
+            <div>
+              Prtljag
+            </div>
+            <div class="ml-auto">
+              <a class="link" (click)="addPrtljag()"><i class="fas fa-plus-circle"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
+        <table mat-table [dataSource]="prtljagSource" matSort class="mat-elevation-z8 matchip mb-0">
+
+          <ng-container matColumnDef="no">
+            <th mat-header-cell *matHeaderCellDef> No. </th>
+            <td mat-cell *matCellDef="let prt;let i=index">{{i+1}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="duzina">
+            <th mat-header-cell *matHeaderCellDef > Duzina </th>
+            <td mat-cell *matCellDef="let prt"> {{prt.duzina}} </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="sirina">
+            <th mat-header-cell *matHeaderCellDef > Sirina </th>
+            <td mat-cell *matCellDef="let prt"> {{prt.sirina}}</td>
+          </ng-container>
+
+
+
+          <ng-container matColumnDef="tezina">
+            <th mat-header-cell *matHeaderCellDef > Tezina </th>
+            <td mat-cell *matCellDef="let prt">{{prt.tezina }}  </td>
+          </ng-container>
+
+          <ng-container matColumnDef="cena">
+            <th mat-header-cell *matHeaderCellDef > Cena </th>
+            <td mat-cell *matCellDef="let prt">{{prt.cena}} €</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsP"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsP;"></tr>
+
+
+
+        </table>
+
+
+
+
+      </div>
+      <div class="card" style="width: 65rem;">
+
+        <div class="card-header">
+          <div class="d-flex">
+            <div>
+              Dodatne usluge
+            </div>
+            <div class="ml-auto">
+              <a class="link" (click)="addDU()"><i class="fas fa-plus-circle"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      <table mat-table [dataSource]="dodatnaUslugaSource" matSort class="mat-elevation-z8 matchip mb-0">
+
+        <ng-container matColumnDef="no">
+          <th mat-header-cell *matHeaderCellDef> No. </th>
+          <td mat-cell *matCellDef="let dod;let i=index">{{i+1}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="naziv">
+          <th mat-header-cell *matHeaderCellDef > Naziv </th>
+          <td mat-cell *matCellDef="let dod"> {{dod.naziv}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="opis">
+          <th mat-header-cell *matHeaderCellDef > Opis </th>
+          <td mat-cell *matCellDef="let dod"> {{dod.opis}} </td>
+        </ng-container>
+
+
+
+        <ng-container matColumnDef="cena">
+          <th mat-header-cell *matHeaderCellDef > Cena </th>
+          <td mat-cell *matCellDef="let dod">{{dod.cena}} €</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displeydColumnsD"></tr>
+        <tr mat-row *matRowDef="let row; columns: displeydColumnsD;"></tr>
+
+
+
+      </table>
+
+
+
+
+    </div>
+
+
+
     </div>
 
 

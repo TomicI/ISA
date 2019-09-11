@@ -97,7 +97,7 @@ public class AerodromService {
 		aerodrom.get().setNaziv(aerodromDTO.getNaziv());
 
 		if(aerodromDTO.getLokacija()!= null ){
-			Optional<Lokacija> lokacija = lokacijaRepository.findById(aerodromDTO.getLokacija().getId());
+			Optional<Lokacija> lokacija = lokacijaRepository.findById(aerodrom.get().getLokacija().getId());
 			if(!lokacija.isPresent())
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lokacija ne postoji");
 			lokacija.get().setAdresa(aerodromDTO.getLokacija().getAdresa());
