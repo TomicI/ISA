@@ -14,6 +14,8 @@
               <option value="all">...</option>
               <option value="asc">Name asc</option>
               <option value="des">Name des</option>
+              <option value="max">Rate high</option>
+              <option value="min">Rate low</option>
             </select>
           </div>
         </div>
@@ -23,6 +25,10 @@
           <li *ngFor="let av of avio " class="list-group-item flex-column ">
             <div class="d-flex justify-content-between">
               <h6 class="mb-1">{{av.naziv}}</h6>
+              <p class="mb-0">
+                <button class="btn btn-sm " type="button " (click)="avioLink(av)"><i class="fas fa-ellipsis-v"></i>
+                </button>
+              </p>
             </div>
             <p class="mb-1">{{av.opis}}</p>
             <p class="mb-1">{{av.prosecnaOcena}}</p>
@@ -67,6 +73,10 @@
           <li *ngFor="let rnt of rentACars " class="list-group-item flex-column ">
             <div class="d-flex justify-content-between">
               <h6 class="mb-1">{{rnt.naziv}}</h6>
+              <p class="mb-0">
+                <button class="btn btn-sm " type="button " (click)="rentLink(rnt)"><i class="fas fa-ellipsis-v"></i>
+                </button>
+              </p>
             </div>
             <p class="mb-1">{{rnt.opis}}</p>
           </li>

@@ -126,4 +126,26 @@ public class CenovnikRentACarService {
 		return early;
 	}
 
+	public CenovnikRentACarDTO edit(CenovnikRentACarDTO cenovnikDTO){
+
+		CenovnikRentACar rent = getOne(cenovnikDTO.getId());
+
+		rent.setOdDatuma(cenovnikDTO.getOdDatuma());
+		rent.setDoDatuma(cenovnikDTO.getDoDatuma());
+		rent.setCena(cenovnikDTO.getCena());
+
+		rent = save(rent);
+
+		return new CenovnikRentACarDTO(rent);
+
+	}
+
+	public void deleteCenovnik(Long id ){
+
+		getOne(id);
+
+		remove(id);
+
+	}
+
 }

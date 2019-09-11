@@ -57,6 +57,9 @@ export class SearchGetComponent implements OnInit {
     this.route.queryParams.subscribe(param => {
       this.params = param;
 
+      if (param.res){
+        this.reservationPassed = param.res;
+      }
 
       let params = new HttpParams();
       params = params.append('locationp',param.locationp);
@@ -83,6 +86,8 @@ export class SearchGetComponent implements OnInit {
     });
 
   }
+
+
 
   initForm(){
 
@@ -117,7 +122,7 @@ export class SearchGetComponent implements OnInit {
     }
 
     this.resChoose = reservation;
-    this.router.navigate(['travel/rentacar/reservation']).then(()=>{
+    this.router.navigate(['reservation']).then(()=>{
         this.communicationService.reservationChange(resTemp);
     });
 
@@ -204,6 +209,17 @@ export class SearchGetComponent implements OnInit {
     });
 
 
+
+  }
+
+  onChangePrice(value){
+
+  if (value=='min'){
+      this.reservations.sort(((a, b) => a.cena - b.cena));
+
+    }else if (value=='max'){
+      this.reservations.sort(((a, b) => b.cena - a.cena));
+    }
 
   }
 

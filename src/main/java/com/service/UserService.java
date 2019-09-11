@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import com.dto.RentACarDTO;
 import com.model.user.Friend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,6 +72,9 @@ public class UserService {
         
     }
 
+
+
+
     public User getOne(Long id){
 	    Optional<User> optionalUser = findOne(id);
         if (!optionalUser.isPresent()) {
@@ -109,6 +113,7 @@ public class UserService {
         temp.setReset(tempu.isReset());
         temp.setCity(tempu.getCity());
         temp.setPhone(tempu.getPhone());
+        temp.setPassport(tempu.getBrojPasosa());
         temp.setLastPasswordResetDate(tempu.getLastPasswordResetDate());
 
         return temp;
@@ -122,6 +127,31 @@ public class UserService {
         if (!user.isReset()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+
+    }
+
+    public RentACarDTO getRentACar(Long id){
+
+	    User user = getOne(id);
+
+        if(user.getRentACar()==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        return new RentACarDTO(user.getRentACar());
+
+    }
+
+    public RentACarDTO getUserRentACar(){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = getByUsername(auth.getName());
+
+        if(user.getRentACar()==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        return new RentACarDTO(user.getRentACar());
 
     }
     

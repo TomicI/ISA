@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../model';
 import { ConfirmPasswordValidator } from './confirm-pass.validator';
@@ -25,9 +25,10 @@ export class SignUpModalComponent implements OnInit {
   ngOnInit() {
 
     this.signUpForm = this.formBuilder.group({
-      firstName: [''],
+      firstName: new FormControl('', [Validators.minLength(3), Validators.required]),
       lastName: [''],
       city:[''],
+      passport:[''],
       phone:[''],
       username: [''],
       email: [''],

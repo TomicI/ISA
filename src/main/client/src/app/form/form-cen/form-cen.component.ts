@@ -95,4 +95,10 @@ export class FormCenComponent implements OnInit {
 
   }
 
+  onDateSelected(){
+
+    this.cenovnikFormGroup.controls['CenovnikRent'].patchValue({doDatuma:this.calendar.getNext(this.cenovnikFormGroup.get('CenovnikRent').get('odDatuma').value, 'd', 1)});
+
+  }
+
 }

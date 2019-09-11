@@ -49,7 +49,7 @@ public class RezervacijaController {
             rezervacijaDTO.add(new RezervacijaDTO(s));
         }
 
-        return new ResponseEntity<List<RezervacijaDTO>>(rezervacijaDTO, HttpStatus.OK);
+        return new ResponseEntity<>(rezervacijaDTO, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)

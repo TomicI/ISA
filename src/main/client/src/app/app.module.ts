@@ -88,6 +88,7 @@ import { BrzeRezervacijeListaComponent } from './brze-rezervacije-lista/brze-rez
 import { LetDetailsComponent } from './let-details/let-details.component';
 
 import { CallbackPipe } from "./reservation-overview/callback.pipe";
+import { StatsComponent } from './stats/stats.component';
 
 
 @NgModule({
@@ -161,7 +162,8 @@ import { CallbackPipe } from "./reservation-overview/callback.pipe";
     CallbackPipe,
     AviokomapnijaProfilComponent,
     BrzeRezervacijeListaComponent,
-    LetDetailsComponent
+    LetDetailsComponent,
+    StatsComponent
   ],
   imports: [
     BrowserModule,

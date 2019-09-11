@@ -24,8 +24,9 @@
 
       <div *ngIf="lista.length>0" class="card">
 
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between">
           <h5>Friend requests</h5>
+
         </div>
 
         <div class="list-group list-group-flush">
@@ -60,8 +61,19 @@
 
       <div *ngIf="listaF.length>0" class="card">
 
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between ">
           <h5>Friends</h5>
+
+          <div class="form-group">
+            <select class="form-control form-control-sm" id="groupNameSelect" (change)="onChangeName($event.target.value)">
+              <option value="all">...</option>
+              <option value="asc">First Name asc</option>
+              <option value="des">First Name des</option>
+              <option value="ascl">Last Name asc</option>
+              <option value="desl">Last Name des</option>
+            </select>
+          </div>
+
         </div>
 
         <div class="list-group list-group-flush">

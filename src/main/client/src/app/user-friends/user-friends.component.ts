@@ -48,5 +48,22 @@ export class UserFriendsComponent implements OnInit {
     })
   }
 
+  onChangeName(value){
+    if (value=='all'){
+      this.ngOnInit();
+    }else if (value=='asc'){
+      this.listaF.sort(((a, b) => a.firstName.localeCompare(b.firstName)));
+
+    }else if (value=='des'){
+      this.listaF.sort(((a, b) => b.firstName.localeCompare(a.firstName)));
+    }else if (value=='ascl'){
+      this.listaF.sort(((a, b) => a.lastName.localeCompare(b.lastName)));
+
+    }else if (value=='desl'){
+      this.listaF.sort(((a, b) => b.lastName.localeCompare(a.lastName)));
+    }
+
+  }
+
 
 }

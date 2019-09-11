@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild, HostListener} from '@angular/core';
 import { ReservationService } from '../services/reservation.service';
 import { TokenService } from '../auth/token.service';
 import { Router } from '@angular/router';
@@ -6,6 +6,8 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {CommunicationService} from "../services/communication.service";
 import {Rezervacija} from "../model";
+import {Observable, of} from "rxjs";
+import {DialogService} from "../security/dialog.service";
 
 @Component({
   selector: 'app-res-detail',
@@ -24,6 +26,7 @@ export class ResDetailComponent implements OnInit {
 
   test;
 
+  clicked:boolean;
 
   message = '';
 
@@ -32,7 +35,8 @@ export class ResDetailComponent implements OnInit {
               private communicationService:CommunicationService,
               private reservationService: ReservationService ,
               private router: Router,private modalService: NgbModal,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              public dialogService: DialogService) {
 
 
       this.communicationService.reservationEmitted$.subscribe(data=>{
@@ -46,6 +50,20 @@ export class ResDetailComponent implements OnInit {
 
       });
 
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+
+    if (!this.clicked){
+      return this.dialogService.confirm('Discard reservation?');
+    }
+    return false;
+
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  canLeavePage($event: any): Observable<boolean> {
+    return this.dialogService.confirm('Discard reservation?');
   }
 
   ngOnInit() {
@@ -63,6 +81,7 @@ export class ResDetailComponent implements OnInit {
           this.reservationService.addRes(this.reservation).subscribe(data=>{
 
             this.message='Reservation was added!';
+            this.clicked = true;
 
             setTimeout(() => {
               this.message = '';
@@ -75,6 +94,7 @@ export class ResDetailComponent implements OnInit {
         this.reservationService.saveRes(this.res).then(data => {
 
           this.message='Reservation was made!';
+          this.clicked = true;
 
           setTimeout(() => {
             this.message = '';
@@ -96,6 +116,8 @@ export class ResDetailComponent implements OnInit {
       
     }
   }
+
+
 
 
 

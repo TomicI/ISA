@@ -50,6 +50,7 @@ import {ResDetailComponent} from "./res-detail/res-detail.component";
 import {AviokomapnijaProfilComponent} from "./aviokomapnija-profil/aviokomapnija-profil.component"
 import {BrzeRezervacijeListaComponent} from "./brze-rezervacije-lista/brze-rezervacije-lista.component";
 import {LetDetailsComponent} from "./let-details/let-details.component";
+import {CanDeactivateService} from "./security/can-deactivate.service";
 
 const routes: Routes = [
   {path: '', redirectTo: '/travel', pathMatch: 'full'},
@@ -58,6 +59,12 @@ const routes: Routes = [
     path: 'travel', component: HomeComponent,
     children: [
       {path: '', redirectTo: 'flights', pathMatch: 'full'},
+      {path: 'flights', component: SearchLetComponent,
+        children:[
+          {path: '', component: SearchLetComponent},
+          {path: 'tickets/:id', component: BrzeRezervacijeListaComponent}
+        ]
+      },
       {
         path: 'rentacar', component: SearchRentComponent,
         children: [
@@ -65,20 +72,16 @@ const routes: Routes = [
           {path: 'branch', component: FilijalaComponent},
           {path: 'search', component: SearchGetComponent},
           {path: 'vehicle', component: VehicleComponent},
-          {path: 'reservation', component: ResDetailComponent},
+
         ]
       },
-      {path: 'flights', component: SearchLetComponent,
-        children:[
-          {path: '', component: SearchLetComponent},
-          {path: 'tickets/:id', component: BrzeRezervacijeListaComponent}
-        ]
-      },
+
 
 
     ]
 
   },
+  {path: 'reservation', component: ResDetailComponent,canDeactivate:[CanDeactivateService]},
 
 
   {
@@ -169,7 +172,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [CanDeactivateService]
 })
 export class AppRoutingModule {
 }

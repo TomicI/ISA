@@ -46,25 +46,7 @@ public class CenovnikRentACarController {
 	@PreAuthorize("hasRole('ADMIN_RENT')")
 	public ResponseEntity<CenovnikRentACarDTO> editCenovnik(@RequestBody CenovnikRentACarDTO cenovnikDTO){
 
-		
-		Optional<CenovnikRentACar> optCenovnik = cenovnikService.findOne(cenovnikDTO.getId());
-
-		if (!optCenovnik.isPresent()){
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
-		}
-
-		
-		CenovnikRentACar rent = optCenovnik.get();
-
-		
-		rent.setOdDatuma(cenovnikDTO.getOdDatuma());
-		rent.setDoDatuma(cenovnikDTO.getDoDatuma());
-		rent.setCena(cenovnikDTO.getCena());
-		
-		rent = cenovnikService.save(rent);
-		
-		return new ResponseEntity<>(new CenovnikRentACarDTO(rent),HttpStatus.CREATED);
-		
+		return new ResponseEntity<>(cenovnikService.edit(cenovnikDTO),HttpStatus.OK);
 	}
 
 
@@ -82,16 +64,10 @@ public class CenovnikRentACarController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@PreAuthorize("hasRole('ADMIN_RENT')")
-	public ResponseEntity<Void> deleteCenovnik(@PathVariable Long id) {
+	public ResponseEntity<?> deleteCenovnik(@PathVariable Long id) {
 
-		Optional<CenovnikRentACar> optionalCenovnik = cenovnikService.findOne(id);
-
-		if (optionalCenovnik.isPresent()) {
-			cenovnikService.remove(id);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		cenovnikService.deleteCenovnik(id);
+		return new  ResponseEntity<>(HttpStatus.OK);
 
 	}
 

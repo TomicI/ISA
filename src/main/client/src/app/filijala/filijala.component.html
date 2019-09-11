@@ -4,7 +4,7 @@
 
   <div class="row">
 
-    <div *ngIf="reservationsRent.length!=0" class="col-4">
+    <div *ngIf="reservationsRent.length!=0" >
 
       <div   class="card mt-4" >
 
@@ -37,7 +37,7 @@
 
     </div>
 
-    <div *ngIf="reservationsRent" class="col-8">
+    <div *ngIf="reservationsRent" >
 
       <div *ngIf="filijale" class="card-deck">
         <div *ngFor="let fil of filijale">

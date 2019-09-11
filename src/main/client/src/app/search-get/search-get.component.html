@@ -5,13 +5,24 @@
   </div>
   <div class="row" *ngIf="resView">
 
-    <div *ngIf="resBool" class="col-sm-6">
+    <div *ngIf="resBool" >
 
 
-      <div class="card mt-4" style="width: 15rem">
+      <div class="card mt-4 mr-1" style="width: 15rem">
 
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between">
           <h6>Filters</h6>
+
+          <div class="form-group">
+            <select class="form-control form-control-sm" id="groupAirSelect"
+                    (change)="onChangePrice($event.target.value)">
+              <option value="all">...</option>
+              <option value="max">Price high</option>
+              <option value="min">Price low</option>
+            </select>
+          </div>
+
+
         </div>
 
         <div class="card-body">
@@ -102,7 +113,7 @@
 
     </div>
 
-    <div class="col-sm-6">
+    <div >
 
       <div *ngIf="criBool">
         <h3>No result for this criteria!</h3>

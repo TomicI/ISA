@@ -3,6 +3,7 @@ import {Aviokompanija, RentACar} from "../model";
 import {RentacarService} from "../services/rentacar.service";
 import {AviokompanijaService} from "../aviokompanija/aviokompanija.service";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-list',
@@ -15,7 +16,12 @@ export class ListComponent implements OnInit {
   rentACars: RentACar[];
   avio:Aviokompanija[];
 
-  constructor(private rentACarService: RentacarService,private aviokompanijaService: AviokompanijaService) {
+  params:any;
+
+  constructor(private rentACarService: RentacarService,
+              private aviokompanijaService: AviokompanijaService,
+              private route: ActivatedRoute,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -65,7 +71,30 @@ export class ListComponent implements OnInit {
 
     }else if (value=='des'){
       this.avio.sort(((a, b) => b.naziv.localeCompare(a.naziv)));
+    }else if (value=='min'){
+      this.avio.sort(((a, b) => a.prosecnaOcena - b.prosecnaOcena));
+
+    }else if (value=='max'){
+      this.avio.sort(((a, b) => b.prosecnaOcena - a.prosecnaOcena));
     }
+
+  }
+
+  rentLink(rnt){
+
+    console.log(rnt);
+    this.params ={
+      'id': rnt.id,
+      'rent':rnt.naziv
+    };
+    this.router.navigate(['travel/rentacar/branch'], { queryParams: this.params });
+
+
+  }
+
+  avioLink(avio){
+
+    this.router.navigate(['aviokompanija/',avio.id]);
 
   }
 

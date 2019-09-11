@@ -25,6 +25,8 @@ public class SignUpForm {
 
     private String city;
 
+    private String passport;
+
     @NotBlank
     @Size(max = 60)
     @Email
@@ -110,5 +112,13 @@ public class SignUpForm {
 
     public void setLastPasswordResetDate(Date lastPasswordResetDate) {
         this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    public String getPassport() {
+        return passport;
+    }
+
+    public void setPassport(String passport) {
+        this.passport = passport;
     }
 }

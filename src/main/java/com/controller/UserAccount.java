@@ -41,9 +41,6 @@ public class UserAccount {
     UserRepository userRepository;
 
     @Autowired
-    RentACarController rentACarController;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -61,32 +58,14 @@ public class UserAccount {
     @RequestMapping(value = "/getRent/{id}", method = RequestMethod.GET)
     public ResponseEntity<RentACarDTO> getUserRentACar(@PathVariable Long id) {
 
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isPresent()) {
-            RentACar rentACar = optionalUser.get().getRentACar();
-            if (rentACar != null) {
-                return new ResponseEntity<>(new RentACarDTO(rentACar), HttpStatus.OK);
-            } else
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(userService.getRentACar(id),HttpStatus.OK);
     }
 
     @RequestMapping("/getRentACar")
     @PreAuthorize("hasRole('ADMIN_RENT')")
-    public ResponseEntity<RentACarDTO> user(Principal user) {
+    public ResponseEntity<RentACarDTO> userRentACar() {
 
-        Optional<User> optionalUser = userRepository.findByUsername(user.getName());
-
-        if (optionalUser.isPresent()) {
-            RentACar rentACar = optionalUser.get().getRentACar();
-            if (rentACar != null) {
-                return new ResponseEntity<>(new RentACarDTO(rentACar), HttpStatus.OK);
-            } else
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(userService.getUserRentACar(),HttpStatus.OK);
 
     }
 
@@ -105,83 +84,6 @@ public class UserAccount {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-    @RequestMapping(value = "/getResVeh",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('USER_REG')")
-    public ResponseEntity<?> getResVeh(Principal user) {
-        System.out.println("Preuzima REZ");
-
-        Optional<User> optionalUser = userRepository.findByUsername(user.getName());
-
-        /*if (!optionalUser.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        Set<RezervacijaRentACar> rez = optionalUser.get().getRezervacije();*/
-
-        List<RezervacijaRentACarDTO> rezDTO = new ArrayList<RezervacijaRentACarDTO>();
-
-        /*for (RezervacijaRentACar r : rez) {
-
-            Date dropOff=r.getDatumVracanja();
-
-            if (dropOff.after(new Date())){
-                if (!r.getOtkazana()){
-                    RezervacijaRentACarDTO rtemp = new RezervacijaRentACarDTO(r);
-                    rezDTO.add(rtemp);
-                }
-                
-            }
-            
-        }*/
-
-        return new ResponseEntity<>(rezDTO, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/getResVehHist",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('USER_REG')")
-    public ResponseEntity<?> getResVehHist(Principal user) {
-        System.out.println("Preuzima REZ");
-
-        /*int broj = 0;
-        int drugi = 0;
-
-        for (int i =0;i<24;i++){
-            System.out.println(i+":"+drugi);
-            drugi+=30;
-            System.out.println(i+":"+drugi);
-            drugi-=30;
-        }*/
-
-        Optional<User> optionalUser = userRepository.findByUsername(user.getName());
-
-        if (!optionalUser.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        //Set<RezervacijaRentACar> rez = optionalUser.get().getRezervacije();
-
-        List<RezervacijaRentACarDTO> rezDTO = new ArrayList<RezervacijaRentACarDTO>();
-
-        /*for (RezervacijaRentACar r : rez) {
-
-            Date dropOff=r.getDatumVracanja();
-
-            if (dropOff.before(new Date())){
-                
-                RezervacijaRentACarDTO rtemp = new RezervacijaRentACarDTO(r);
-                rezDTO.add(rtemp);
-            }
-
-            if (r.getOtkazana()){
-                RezervacijaRentACarDTO rtemp = new RezervacijaRentACarDTO(r);
-                rezDTO.add(rtemp);
-            }
-            
-        }*/
-
-        return new ResponseEntity<>(rezDTO, HttpStatus.OK);
-    }
 
     @RequestMapping(value = "/search/{s}",method = RequestMethod.GET)
     @PreAuthorize("hasRole('USER_REG')")
