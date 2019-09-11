@@ -6,6 +6,7 @@ package com.example.demo.unit.rentacar;
 import com.model.RentACar;
 import com.repository.RentACarRepository;
 import com.service.RentACarService;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -38,6 +39,22 @@ public class RentACarServiceTest {
         Mockito.when(rentACarRepository.findById(1L)).thenReturn(Optional.of(rentACar));
         RentACar rentACar = rentACarService.getOne(1L);
         assertEquals(rentACar.getNaziv(),"Hertz");
+
+
+    }
+
+
+    @Test
+    public void saveRent(){
+
+        RentACar rentACarT = new RentACar(20L,"RENT","Novosadski");
+
+        Mockito.when(rentACarRepository.save(rentACarT)).thenReturn(rentACarT);
+
+        RentACar created = rentACarService.save(rentACarT);
+
+        assertEquals(created.getNaziv(),rentACarT.getNaziv());
+
 
 
     }

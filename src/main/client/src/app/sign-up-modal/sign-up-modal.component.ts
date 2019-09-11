@@ -45,7 +45,8 @@ export class SignUpModalComponent implements OnInit {
     this.authService.signUp(this.signUpForm.value).subscribe(
       data => {
         this.isSignedUp = true;
-        this.isSignUpFailed = false;
+        this.isSignUpFailed = false
+        alert('User registered!');
       }, error => {
         this.errorMessage = error.error.message;
         this.isSignUpFailed = true;
