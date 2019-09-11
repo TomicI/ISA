@@ -149,6 +149,8 @@ export class SearchLetComponent implements OnInit {
       this.formSearch.setValue({vrstaLeta : VrstaLeta.POVRATNI});
     if(value==3)
       this.formSearch.setValue({vrstaLeta : VrstaLeta.VISE_DESTINACIJA});
+
+
   }
 
   onSubmit(){
@@ -219,5 +221,7 @@ export class SearchLetComponent implements OnInit {
 
       this.rezultat.sort((a, b) => this.getCena(a.konfiguracijaLeta.id).localeCompare(this.getCena(b.konfiguracijaLeta.id)));
     }
+
+
   }
 }

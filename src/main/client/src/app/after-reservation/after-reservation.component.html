@@ -3,7 +3,7 @@
     <button (click)="zavrsiRez()">Zavrsi rezervaciju</button>
   </div>
 
-  <div class="col-sm-6">
+  <div class="col-sm-6" *ngIf="rezervisanHotel==false">
     <div *ngFor="let rez of hoteli">
 
 
@@ -48,7 +48,7 @@
           <div class="card-footer">
             <div class="d-flex">
               <div class="ml-auto">
-                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="sledeciKorakR(rez)">Details</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="sledeciKorakR(rez.id, rez.naziv)">Details</button>
               </div>
             </div>
           </div>

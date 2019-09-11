@@ -37,10 +37,11 @@ public class Lokacija {
 	@JsonIgnore
 	@OneToMany(mappedBy = "lokacija", orphanRemoval=true)
 	private Set<Aerodrom> aerodrom;
-
+	@JsonIgnore
 	@OneToMany(mappedBy = "destinacija", orphanRemoval=true)
 	private Set<Let> letovi;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "lokacija", orphanRemoval=true)
 	private List<Filijala> rentService;
 

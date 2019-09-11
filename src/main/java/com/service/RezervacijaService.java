@@ -295,34 +295,35 @@ public class RezervacijaService {
 			message.setSubject("You reservation is created!");
 			String textMessage="Reservation details: \n";
 
-			if(r.get().getKarta().getPopust()>0){
-				textMessage+="Old price: " + r.get().getKarta().getCena()+"\n";
-				textMessage+="Price with discount: "+ r.get().getKarta().getPopust()+"\n";
-			}else{
-				textMessage+="Price: "+ r.get().getKarta().getCena()+"\n";
-			}
-			textMessage+="From: "+r.get().getKarta().getLet().getAerodrom().getNaziv()+" at " + r.get().getKarta().getLet().getVremePolaska() +"\n"
-					+"To: "+r.get().getKarta().getLet().getDestinacija().getGrad()+","+ r.get().getKarta().getLet().getDestinacija().getDrzava() +" at " + r.get().getKarta().getLet().getVremeDolaska()+"\n"
-					+"You have " + r.get().getKarta().getSedista().size();
-			List<Sediste> sedistes=new ArrayList<>(r.get().getKarta().getSedista());
-			int i=1;
-			if(r.get().getKarta().getSedista().size()>1){
-				textMessage+= " seats\n";
-				for(Sediste s: sedistes){
-					textMessage+= "Seat "+i +" with number "+  s.getKolona()+"/"+s.getRed()+"/"+s.getSegment().getRedniBroj()+ " for ";
-					if(s.getPutnik().getUser()==r.get().getUser())
-						textMessage+="you.\n";
-					else if(s.getPutnik().getUser()==null)
-						textMessage+=s.getPutnik().getIme()+" "+s.getPutnik().getPrezime()+"\n";
-					else if(s.getPutnik().getUser()!=null)
-						textMessage+="your friend "+s.getPutnik().getIme()+" "+s.getPutnik().getPrezime()+"\n";
-					i++;
+			if(r.get().getKarta()!=null) {
+				if (r.get().getKarta().getPopust() > 0) {
+					textMessage += "Old price: " + r.get().getKarta().getCena() + "\n";
+					textMessage += "Price with discount: " + r.get().getKarta().getPopust() + "\n";
+				} else {
+					textMessage += "Price: " + r.get().getKarta().getCena() + "\n";
 				}
-			}else{
+				textMessage += "From: " + r.get().getKarta().getLet().getAerodrom().getNaziv() + " at " + r.get().getKarta().getLet().getVremePolaska() + "\n"
+						+ "To: " + r.get().getKarta().getLet().getDestinacija().getGrad() + "," + r.get().getKarta().getLet().getDestinacija().getDrzava() + " at " + r.get().getKarta().getLet().getVremeDolaska() + "\n"
+						+ "You have " + r.get().getKarta().getSedista().size();
+				List<Sediste> sedistes = new ArrayList<>(r.get().getKarta().getSedista());
+				int i = 1;
+				if (r.get().getKarta().getSedista().size() > 1) {
+					textMessage += " seats\n";
+					for (Sediste s : sedistes) {
+						textMessage += "Seat " + i + " with number " + s.getKolona() + "/" + s.getRed() + "/" + s.getSegment().getRedniBroj() + " for ";
+						if (s.getPutnik().getUser() == r.get().getUser())
+							textMessage += "you.\n";
+						else if (s.getPutnik().getUser() == null)
+							textMessage += s.getPutnik().getIme() + " " + s.getPutnik().getPrezime() + "\n";
+						else if (s.getPutnik().getUser() != null)
+							textMessage += "your friend " + s.getPutnik().getIme() + " " + s.getPutnik().getPrezime() + "\n";
+						i++;
+					}
+				} else {
 
-				textMessage+= " seat with number " +  sedistes.get(0).getKolona()+"/"+sedistes.get(0).getRed()+"/"+sedistes.get(0).getSegment().getRedniBroj()+"\n";
+					textMessage += " seat with number " + sedistes.get(0).getKolona() + "/" + sedistes.get(0).getRed() + "/" + sedistes.get(0).getSegment().getRedniBroj() + "\n";
+				}
 			}
-
 			if(r.get().getRezervacijaRentACar()!=null){
 				textMessage+="\n";
 				textMessage+="Car " + r.get().getRezervacijaRentACar().getVozilo().getMarka() + " " + r.get().getRezervacijaRentACar().getVozilo().getModel() +"\n";
