@@ -166,6 +166,7 @@ public class VoziloService {
 	}
 
 
+
 	public boolean ratePermission(Long resid,Long vehid){
 
         Rezervacija rezervacija = rezervacijaService.getOne(resid);

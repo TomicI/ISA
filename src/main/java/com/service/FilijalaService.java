@@ -577,6 +577,93 @@ public class FilijalaService {
         return filijalaDTOS;
     }
 
+    public double getIncome(Date from,Date to){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        RentACar rentACar = rentACarService.getOne(user.getRentACar().getId());
+
+        System.out.println("Od " +from);
+        System.out.println("Do " +to);
+
+        double income = 0.0;
+
+        for (Filijala f:rentACar.getFilijale()){
+            for(RezervacijaRentACar r:f.getRezervacije()){
+                if (!r.getOtkazana()){
+
+                    if (r.getDatumPreuz().after(from) && r.getDatumVracanja().before(to) ){
+                        System.out.println("Cena " +r.getCena());
+
+                        income+=r.getCena();
+
+                    }
+                }
+            }
+        }
+
+        return income;
+
+
+    }
+
+    public int getDailyVeh(Date pick,int opt){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByUsername(auth.getName());
+
+        RentACar rentACar = rentACarService.getOne(user.getRentACar().getId());
+
+        int num = 0 ;
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(pick);
+
+        if (opt==2){
+            calendar.add(Calendar.WEEK_OF_MONTH, 1);
+
+        }else if (opt==3){
+
+            calendar.add(Calendar.MONTH, 1);
+        }
+
+
+        Date to = calendar.getTime();
+
+        System.out.println(to);
+
+        for (Filijala f:rentACar.getFilijale()){
+            for(RezervacijaRentACar r:f.getRezervacije()){
+                if (!r.getOtkazana()){
+
+                    if (opt == 0){
+                        if (pick.equals(r.getDatumPreuz()) || pick.after(r.getDatumPreuz()) ){
+                            if (pick.before(r.getDatumVracanja()) || pick.equals(r.getDatumVracanja())){
+
+                                num+=1;
+
+                            }
+                        }
+                    }else {
+
+                        if (r.getDatumPreuz().after(pick) && r.getDatumVracanja().before(to)) {
+
+                            num += 1;
+
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return num;
+
+    }
+
+
+
     public Filijala save(Filijala f) {
         return filijalaRepository.save(f);
     }

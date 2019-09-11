@@ -77,7 +77,7 @@ export class FilijalaComponent implements OnInit {
 
     console.log(resTemp);
 
-    this.router.navigate(['travel/rentacar/reservation']).then(()=>{
+    this.router.navigate(['reservation']).then(()=>{
       this.communicationService.reservationChange(resTemp);
     });
 

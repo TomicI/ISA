@@ -167,7 +167,11 @@ public class RezervacijaRentACarService {
 
         rezervacijaService.save(rezervacija);
 
-        return new RezervacijaDTO(rezervacija);
+        RezervacijaDTO rezervacijaDTO1 = new RezervacijaDTO(rezervacija);
+
+        rezervacijaService.sendEMail(rezervacijaDTO1);
+
+        return rezervacijaDTO;
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
@@ -243,7 +247,13 @@ public class RezervacijaRentACarService {
             rezervacija.setRezervacijaSobe(null);
             rezervacijaService.save(rezervacija);
             save(rez);
-            return new RezervacijaDTO(rezervacija);
+
+            RezervacijaDTO rezervacijaDTO1 = new RezervacijaDTO(rezervacija);
+
+            rezervacijaService.sendEMail(rezervacijaDTO1);
+
+            return rezervacijaDTO1;
+
         } else {
 
             rez.setNaPopustu(true);

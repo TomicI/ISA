@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Filijala, Vozilo } from '../model';
@@ -39,6 +39,26 @@ export class FilijalaService {
 
   getallRez(): Observable<any>{
     return this.http.get(`${this.FilijalaURL}/rezadmin`);
+  }
+
+  getIncome(params):Observable<any>{
+
+    let param = new HttpParams();
+
+    param = param.append('from',params.from);
+    param = param.append('to',params.to);
+
+    return this.http.get(`${this.FilijalaURL}/income`,{params:param});
+  }
+
+  getDaily(params):Observable<any>{
+
+    let param = new HttpParams();
+
+    param = param.append('pick',params.pick);
+    param = param.append('opt',params.opt);
+
+    return this.http.get(`${this.FilijalaURL}/dailyVeh`,{params:param});
   }
 
 }

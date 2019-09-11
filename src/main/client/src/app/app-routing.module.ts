@@ -52,6 +52,7 @@ import {BrzeRezervacijeListaComponent} from "./brze-rezervacije-lista/brze-rezer
 import {LetDetailsComponent} from "./let-details/let-details.component";
 import {AfterReservationComponent} from "./after-reservation/after-reservation.component";
 import {CanDeactivateService} from "./security/can-deactivate.service";
+import {StatsComponent} from "./stats/stats.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/travel', pathMatch: 'full'},
@@ -124,6 +125,13 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: {roles: ['ROLE_ADMIN_RENT', 'ROLE_ADMIN_AVIO', 'ROLE_ADMIN_HOTEL']}
       },
+      {
+        path: 'stats',
+        component: StatsComponent,
+        canActivate: [AuthGuard],
+        data: {roles: ['ROLE_ADMIN_RENT', 'ROLE_ADMIN_AVIO', 'ROLE_ADMIN_HOTEL']}
+      },
+
     ]
   },
   {
